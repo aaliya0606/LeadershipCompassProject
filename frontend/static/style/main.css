@@ -1,0 +1,688 @@
+:root {
+  --brand-dark: #00284B;
+  --brand-green: #64BC28;
+  --brand-light-green: #96DA5F;
+  --brand-surface: #FFFFFF;
+  --brand-muted: #E5E8E8;
+  --brand-text: #10263A;
+}
+
+body {
+  background: #E5E8E8;
+  font-family: 'Montserrat', Arial, sans-serif;
+  color: var(--brand-text);
+}
+
+/* Center everything */
+.auth-body {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+/* Card container */
+.auth-card {
+  width: 100%;
+  max-width: 400px;
+  padding: 30px;
+  border-radius: 16px;
+  background: white;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+}
+
+.dashboard-card {
+  background: white;
+  padding: 30px;
+  border-radius: 14px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.10);
+}
+
+/* Improve inputs */
+.form-control {
+  border-radius: 8px;
+  padding: 10px;
+}
+
+/* Button style */
+.btn {
+  border-radius: 8px;
+  padding: 10px;
+}
+
+/* Small text spacing */
+p {
+  font-size: 14px;
+}
+
+.hero-card {
+  background: linear-gradient(135deg, rgba(0, 40, 75, 0.95), rgba(100, 188, 40, 0.95));
+  color: white;
+}
+
+.hero-card h1,
+.hero-card .eyebrow,
+.hero-card p {
+  color: white;
+}
+
+.hero-card .lead {
+  opacity: 0.9;
+}
+
+.eyebrow {
+  display: inline-block;
+  font-size: 0.85rem;
+  letter-spacing: 0.2em;
+  opacity: 0.85;
+}
+
+.hero-panel {
+  background: var(--brand-light-green);
+  color: var(--brand-dark);
+}
+
+.hero-panel h5 {
+  color: var(--brand-dark);
+}
+
+.hero-panel .plan-highlights li {
+  padding: 0.6rem 0;
+  border-bottom: 1px solid rgba(0, 40, 75, 0.08);
+  color: var(--brand-dark);
+}
+
+.plan-highlights li:last-child {
+  border-bottom: none;
+}
+
+.overview-card {
+  border: 1px solid rgba(0, 40, 75, 0.12);
+  background: white;
+}
+
+.overview-label {
+  display: inline-block;
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--brand-green);
+}
+
+.section-header h4 {
+  margin-bottom: 0.5rem;
+}
+
+.week-card,
+.module-card {
+  border: 1px solid rgba(0, 40, 75, 0.08);
+  box-shadow: 0 12px 30px rgba(0, 40, 75, 0.06);
+}
+
+.week-card .list-group-item,
+.module-card .list-group-item {
+  border: none;
+  padding-left: 0;
+  padding-right: 0;
+}
+
+.btn-hero {
+  background: var(--brand-light-green);
+  border-color: var(--brand-dark);
+  color: var(--brand-dark);
+}
+
+.btn-hero:hover,
+.btn-hero:focus {
+  background: var(--brand-green);
+  border-color: var(--brand-green);
+  color: var(--brand-surface);
+}
+
+.badge-soft-primary {
+  background: rgba(0, 40, 75, 0.1);
+  color: var(--brand-dark);
+}
+
+.badge-soft-secondary {
+  background: rgba(100, 188, 40, 0.12);
+  color: var(--brand-dark);
+}
+
+.badge-soft-success {
+  background: rgba(150, 218, 95, 0.2);
+  color: var(--brand-dark);
+}
+
+.badge-soft-info {
+  background: rgba(0, 112, 192, 0.14);
+  color: var(--brand-dark);
+}
+
+.badge-soft-warning {
+  background: rgba(255, 193, 7, 0.12);
+  color: #5a5a00;
+}
+
+.card .btn-outline-primary {
+  border-color: rgba(0, 40, 75, 0.15);
+  color: var(--brand-dark);
+}
+
+.card .btn-outline-primary:hover,
+.card .btn-outline-primary:focus {
+  background: rgba(100, 188, 40, 0.1);
+  border-color: var(--brand-green);
+}
+
+.form-control,
+.form-select {
+  border-radius: 12px;
+  border: 1px solid rgba(0, 40, 75, 0.12);
+}
+
+.btn-light {
+  background: var(--brand-surface);
+  color: var(--brand-dark);
+  border: 1px solid rgba(0, 40, 75, 0.12);
+}
+
+#resourceContainer .card {
+  min-height: 220px;
+}
+
+.badge {
+  font-family: 'Montserrat', sans-serif;
+}
+
+.custom-navbar {
+  background: linear-gradient(90deg, var(--brand-dark), var(--brand-green));
+  border-bottom: 4px solid var(--brand-light-green);
+}
+
+.brand-title {
+  font-family: 'Anton', sans-serif;
+  letter-spacing: 0.05em;
+  color: white;
+}
+
+.navbar-logo {
+  width: 36px;
+  height: 36px;
+}
+
+.navbar-brand {
+  color: white;
+}
+
+h1, h4, h5, h6 {
+  font-family: 'Anton', sans-serif;
+  color: var(--brand-dark);
+}
+
+.dashboard-card,
+.card {
+  background: var(--brand-surface);
+  border: 1px solid rgba(0, 40, 75, 0.08);
+}
+
+.card-header {
+  background: var(--brand-light-green);
+  color: var(--brand-dark);
+  border-bottom: 1px solid rgba(0, 40, 75, 0.12);
+}
+
+.card-body {
+  color: var(--brand-text);
+}
+
+.btn-primary {
+  background: var(--brand-green);
+  border-color: var(--brand-green);
+  color: var(--brand-surface);
+}
+
+.btn-primary:hover,
+.btn-primary:focus {
+  background: #5AA823;
+  border-color: #5AA823;
+}
+
+.btn-light {
+  background: var(--brand-surface);
+  color: var(--brand-dark);
+  border: 1px solid rgba(0, 40, 75, 0.12);
+}
+
+.form-control,
+.form-select {
+  border-radius: 12px;
+  border: 1px solid rgba(0, 40, 75, 0.12);
+}
+
+#resourceContainer .card {
+  min-height: 220px;
+}
+
+
+/* BACKGROUND IMAGE */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+html, body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.hero-text {
+    position: absolute;
+    top: 140px;
+    left: 30px;
+    z-index: 10;
+    max-width: 850px;
+}
+.hero-title {
+    font-family: 'Conthrax', sans-serif;
+    font-weight: 600;
+    font-size: clamp(22px, 2.8vw, 42px);
+    text-transform: uppercase;
+    color: #ffffff;
+    line-height: 1.3;
+    margin-bottom: 24px;
+}
+
+.hero-subtitle {
+    font-family: 'Conthrax', sans-serif;
+    font-size: clamp(14px, 1.4vw, 20px);
+    margin-top: 50px;
+    color: #ffffff;
+    font-style: italic;
+    font-weight: 400;
+}
+
+/* start-up page */
+.hero {
+  background-image: url('../img/startup-new.png');
+  background-size: cover;
+  background-position: center;
+  height: 100vh;
+  margin: 0;
+  padding: 0;
+}
+
+/* login page */
+.login {
+    display: flex;
+    height: 100vh;
+    padding-top: 80px;
+    background-image: url('../img/login-signup page.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+/* login page */
+.sign-up {
+    display: flex;
+    height: 100vh;
+    padding-top: 80px;
+    background-image: url('../img/login-signup page.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+/* signup page */
+
+
+/* Start-up Button */
+.hero-btn {
+    display: inline-block;
+    margin-top: 50px;
+    padding: 14px 40px
+    background: #64BC28;
+    color: #ffffff;
+    font-family: 'Conthrax', sans-serif;
+    font-size: 20px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    text-decoration: none;
+    border-radius: 6px;
+    transition: background 0.2s;
+}
+
+.hero-btn:hover {
+    background: #55a82c;
+    color: #ffffff;
+}
+
+/* Conthrax Font*/
+
+@font-face {
+    font-family: 'Conthrax';
+    src: url('../fonts/conthrax/Conthrax-SemiBold.otf') format('opentype');
+    font-weight: 600;
+}
+
+/* Top Left Logo */
+.logo-left {
+    position: absolute;
+    top: 30px;
+    left: 0px;
+    width: 100px;
+    height: auto;
+    z-index: 10;
+}
+
+/* Top Center Logo - Anton */
+.logo-center {
+    position: absolute;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 200px;
+    height: auto;
+    z-index: 10;
+}
+
+/* Top Right Logo */
+.social-icons {
+    position: absolute;
+    top: -8px;
+    right: 24px;
+    width: 220px;
+    height: auto;
+    z-index: 10;
+}
+
+/* login button - return to startup */
+.return-btn {
+    position: absolute;
+    top: 850px;
+    left: 1325px;
+    font-family: 'Conthrax', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: #ffffff;
+    text-decoration: none;
+    z-index: 10;
+}
+
+.return-btn:hover {
+    color: #6abf3a;
+}
+
+/* MAIN CONFIGURATION - LOGIN */
+
+.login-form {
+    position: absolute;
+    top: 400px;
+    left: 1180px;
+    transform; translateY(-50%);
+    width: 380px;
+}
+
+.sign-up-form {
+    position: absolute;
+    top: 190px;
+    left: 1180px;
+    transform; translateY(-50%);
+    width: 380px;
+}
+
+
+.signin-title {
+    font-family: 'Conthrax', sans-serif;
+    font-size: 28px;
+    font-weight: 600;
+    color: #ffffff;
+    margin-bottom: 36px;
+    width: 100%;
+}
+
+.field-group {
+    width: 100%;
+    margin-bottom: 20px;
+}
+
+.field-label {
+    display: block;
+    font-size: 14px;
+    font-weight: 600;
+    color: #ffffff;
+    margin-bottom: 10px;
+    font-family: 'Conthrax', sans-serif;
+    letter-spacing: 1px;
+}
+
+.field-input {
+    width: 100%;
+    background: #ffffff;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 10px;
+    padding: 16px 20px;
+    font-size: 15px;
+    color: #3333333;
+    outline: none;
+    transition: border-color 0.2;
+}
+
+.field-input::placeholder {
+    color: #aaaaaa;
+}
+
+.field-input:focus {
+    border-color: #6abf3a;
+    outline: 2px solid rgba(106, 191, 58, 0.3);
+}
+
+.forgot-link{
+    text-align: right;
+    width: 100%;
+    margin-top: -12px;
+    margin-bottom: 24px;
+}
+
+.forgot-link a {
+    font-size: 12px;
+    color: rgba(106, 191, 58, 0.8);
+    text-decoration: none;
+    letter-spacing: 1px;
+}
+
+.forgot-link a:hover {
+    color: #6abf3a;
+}
+
+.left-panel {
+    flex: 1;
+    position: relative;
+    overflow: hidden;
+}
+
+/* login button - return to startup AND go to sign Up */
+.btn-login {
+    width: 100%;
+    padding: 16px;
+    background: #64bc28;
+    border: none;
+    border-radius: 10px;
+    font-family: 'Conthrax', sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    color: #ffffff;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.btn-login:hover {
+    color: #55a82c;
+}
+
+.signup-link {
+    text-align: center;
+    margin-top: 690px;
+    margin-left: 1230px;
+    font-size: 13px;
+    color: rgba(255, 255, 255, 0.7);
+    font-family: 'Conthrax', sans-serif;
+}
+
+.signup-link a {
+    color: #6abf3a;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.signup-link:hover {
+    text-decoration: underline;
+}
+
+
+/* SIGN UP CONFIGURATION */
+.login-link {
+    text-align: center;
+    margin-top: 735px;
+    margin-left: 1230px;
+    font-size: 13px;
+    color: rgba(255, 255, 255, 0.7);
+    font-family: 'Conthrax', sans-serif;
+}
+
+.login-link a {
+    color: #6abf3a;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.login-link:hover {
+    text-decoration: underline;
+}
+
+
+.badge {
+  font-family: 'Montserrat', sans-serif;
+}
+
+.survey-body {
+  height: 90vh;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start; 
+  flex-direction: column;
+}
+
+.survey-container {
+  background: #96DA5F;
+  border-radius: 1vh;
+  box-shadow: 40px 40px 0px -5px #64BC28, 50px 50px 10px -5px rgba(0, 0, 0, 0.2), 10px 10px 10px 0px rgba(0, 0, 0, 0.2);
+  min-width: 55%;
+  max-width: 55%;
+  min-height: 45%; 
+  max-height: 45%;
+  justify-content: center;
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  margin: auto;
+  gap: 1em; 
+  padding: 1vh; 
+}
+
+.survey-container-heading {
+  width: 100%;
+  min-height: 10%;
+  font-size: 5vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.survey-container-p-text {
+  font-size: 2.5vh;
+  font-family: 'Montserrat', sans-serif;
+  text-align: center;
+}
+
+.survey-button {
+  border-radius: 8vh;
+  background-color: #00284B;
+  color: #E5E8E8;
+  box-shadow: 2px 2px 5px 0px rgba(0, 0, 0, 0.2); 
+  border: none;
+  min-width: 10rem;
+  min-height: 3rem;
+}
+
+.survey-button:hover {
+  background-color:#E5E8E8;
+  color: #00284B;
+  border-color: #00284B;
+  transition: 0.7s;
+}
+
+.progress-bar {
+  width: 80%;
+  min-height: 5%;
+}
+
+.survey-progress-wrapper {
+  width: 100%;
+  max-width: 80%;
+  margin: 0 auto 1.75rem auto;
+  padding: 0 0.25rem;
+}
+
+.survey-progress-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 0.45rem;
+}
+
+.survey-progress-label {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.78rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #6b7280;
+}
+
+.survey-progress-count {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.78rem;
+  font-weight: 500;
+  color: #9ca3af;
+}
+
+.survey-progress-track {
+  width: 100%;
+  height: 8px;
+  background: #6b7280;
+  border-radius: 99px;
+  overflow: hidden;
+}
+
+.survey-progress-fill {
+  height: 100%;
+  border-radius: 99px;
+  background: linear-gradient(90deg, #16a34a 0%, #22c55e 100%);
+  width: 0%;
+  transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+
+
+
+

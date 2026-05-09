@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Log in | Leadership Compass</title>
+    <link rel="stylesheet" href="static/style/main.css" />
+</head>
+<body>
+<div class="sign-up">
+
+    <! -- TOP LEFT -->
+    <img src="static/img/TGG-logo.png" alt="TGG" class="logo-left" />
+
+    <! -- TOP CENTER -->
+    <img src="static/img/anton-guinea-logo-img.png" alt="Anton" class="logo-center" />
+
+    <! TOP RIGHT -->
+    <img src="static/img/social.png" alt="Social Icons" class="social-icons" />
+
+
+    <! -- BUTTON sits right after subtitle -->
+    <a href="startup.html" class="return-btn">return</a>
+
+    <! -- RIGHT PANEL -->
+    <form class="sign-up-form" id="registerForm">
+        <h2 class="signin-title">Sign Up</h2>
+
+        <!-- FIRST NAME -->
+        <div class="field-group">
+            <label for="registerFirstName" class="field-label">First Name</label>
+            <input type="text" id="registerFirstName" class="field-input" placeholder="Enter first name"/>
+        </div>
+
+        <!-- LAST NAME -->
+        <div class="field-group">
+            <label for="registerLastName" class="field-label">Last Name</label>
+            <input type="text" id="registerLastName" class="field-input" placeholder="Enter last name"/>
+        </div>
+
+
+        <! -- EMAIL -->
+        <div class="field-group">
+            <label for="registerEmail" class="field-label">Email</label>
+            <input type="email" id="registerEmail" class="field-input" placeholder="Enter email" />
+        </div>
+
+        <! -- PASSWORD -->
+        <div class="field-group">
+            <label for="registerPassword" class="field-label">Password</label>
+            <input type="password" id="registerPassword" class="field-input" placeholder="Enter password" />
+        </div>
+
+        <! -- RE-ENTER PASSWORD -->
+        <div class="field-group">
+            <label for="confirmPassword" class="field-label">Re-enter Password</label>
+            <input type="password" id="confirmPassword" class="field-input" placeholder="Re-enter your password" />
+        </div>
+
+        <input type="hidden" id="registerRole" value="USER"/>
+
+        <button type="submit" class="btn-login">Sign Up</button>
+
+        <p id="registerMessage"></p>
+    </form>
+
+    <! -- ALREADY HAVE AN ACCOUNT -->
+    <p class="login-link">Already have an account? <a href="login.html">Sign In</a></p>
+</div>
+
+<script src="static/js/auth.js"></script>
+</body>
+</html>

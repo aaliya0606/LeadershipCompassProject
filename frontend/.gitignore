@@ -1,0 +1,9 @@
+# Mac
+.DS_Store
+
+# Logs
+*.log
+
+# Node (if you ever use React later)
+node_modules/
+dist/
