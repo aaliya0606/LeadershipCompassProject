@@ -1,0 +1,16 @@
+# IntelliJ
+.idea/
+*.iml
+
+# Mac
+.DS_Store
+
+# Build files
+/target/
+build/
+
+# Logs
+*.log
+
+# Environment files
+.env
