@@ -30,6 +30,22 @@
         <java.version>17</java.version>
     </properties>
     <dependencies>
+        <!-- Thymeleaf template engine -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-thymeleaf</artifactId>
+        </dependency>
+        <!-- Converts HTML to PDF -->
+        <dependency>
+            <groupId>com.openhtmltopdf</groupId>
+            <artifactId>openhtmltopdf-pdfbox</artifactId>
+            <version>1.0.10</version>
+        </dependency>
+        <dependency>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+            <scope>runtime</scope>
+        </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-h2console</artifactId>
@@ -76,12 +92,6 @@
             <artifactId>jjwt-jackson</artifactId>
             <version>0.12.6</version>
             <scope>runtime</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>com.h2database</groupId>
-            <artifactId>h2</artifactId>
-            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.postgresql</groupId>
