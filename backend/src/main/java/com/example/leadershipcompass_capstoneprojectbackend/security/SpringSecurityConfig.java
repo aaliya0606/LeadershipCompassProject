@@ -33,6 +33,8 @@ public class SpringSecurityConfig {
                                 "/api/auth/register",
                                 "/api/auth/login",
                                 "/h2-console/**",
+                                "/api/reports/dummy",
+                                "/test-download.html",
 
                                 // Swagger UI for API endpoints testing
                                 "/v3/api-docs/**",
