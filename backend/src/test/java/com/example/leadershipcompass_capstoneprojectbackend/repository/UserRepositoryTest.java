@@ -21,6 +21,17 @@ import org.springframework.test.context.ActiveProfiles;
 // Imports assertion methods used for checking expected results
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * Repository test class for testing UserRepository database operations.
+ *
+ * <p>This class uses Spring Boot's @DataJpaTest annotation to load only
+ * JPA-related components and test repository functionality against the
+ * H2 in-memory database configured in the test profile.</p>
+ *
+ * <p>The tests validate that users can be saved, searched, and checked
+ * for existence correctly within the database.</p>
+ */
+
 // Loads only JPA-related components for lightweight database testing
 @DataJpaTest
 
@@ -32,6 +43,18 @@ class UserRepositoryTest {
     // Injects the real UserRepository into the test class
     @Autowired
     private UserRepository userRepository;
+
+    /**
+     * Tests whether a User entity can be successfully saved into the database.
+     *
+     * <p>This test verifies that:
+     * <ul>
+     *     <li>The user is stored successfully</li>
+     *     <li>An ID is automatically generated</li>
+     *     <li>The saved email matches the expected value</li>
+     * </ul>
+     * </p>
+     */
 
     // Marks this method as a test case
     @Test
@@ -55,6 +78,14 @@ class UserRepositoryTest {
         assertEquals("tori@test.com", savedUser.getEmail());
     }
 
+    /**
+     * Tests whether a user can be retrieved using their email address.
+     *
+     * <p>This test verifies that the findByEmail() repository method
+     * correctly returns a user when a matching email exists
+     * in the database.</p>
+     */
+
     @Test
     void shouldFindUserByEmail() {
 
@@ -69,6 +100,15 @@ class UserRepositoryTest {
 
         assertTrue(userRepository.findByEmail("tori@test.com").isPresent());
     }
+
+    /**
+     * Tests whether the repository correctly identifies
+     * an existing email address.
+     *
+     * <p>This test verifies that the existsByEmail() method
+     * returns true when a user with the provided email
+     * already exists in the database.</p>
+     */
 
     @Test
     void shouldReturnTrueWhenEmailExists() {

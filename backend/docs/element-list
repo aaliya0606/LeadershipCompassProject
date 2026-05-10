@@ -1,0 +1,8 @@
+com.example.leadershipcompass_capstoneprojectbackend
+com.example.leadershipcompass_capstoneprojectbackend.config
+com.example.leadershipcompass_capstoneprojectbackend.controller
+com.example.leadershipcompass_capstoneprojectbackend.dto
+com.example.leadershipcompass_capstoneprojectbackend.model
+com.example.leadershipcompass_capstoneprojectbackend.repository
+com.example.leadershipcompass_capstoneprojectbackend.security
+com.example.leadershipcompass_capstoneprojectbackend.service
