@@ -10,15 +10,14 @@ import com.example.leadershipcompass_capstoneprojectbackend.dto.SurveySubmission
 
 import lombok.RequiredArgsConstructor;
 
-import com.example.leadershipcompass_capstoneprojectbackend.dto.SurveyQuestions;
-import com.example.leadershipcompass_capstoneprojectbackend.dto.SurveyResult;
-import com.example.leadershipcompass_capstoneprojectbackend.dto.SurveyService;
-import com.example.leadershipcompass_capstoneprojectbackend.dto.SurveyResultResponse;
+import com.example.leadershipcompass_capstoneprojectbackend.model.SurveyQuestions;
+import com.example.leadershipcompass_capstoneprojectbackend.model.SurveyResult;
+import com.example.leadershipcompass_capstoneprojectbackend.service.SurveyService;
 
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
+
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
+
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
@@ -37,7 +36,7 @@ public class SurveyController {
     @PostMapping("/submit")
     public ResponseEntity<SurveyResultResponse> submitSurvey(
             @RequestBody SurveySubmissionRequest request,
-            @AuthenticationPrincipal UserDetials userDetails){
+            @AuthenticationPrincipal UserDetails userDetails){
 
         try {
             SurveyResultResponse response = 
@@ -53,7 +52,7 @@ public class SurveyController {
             @AuthenticationPrincipal UserDetails userDetails){
                 
                 return ResponseEntity.ok(
-                    surveyService.getSurveyHistoryForUser(userDetails.getUsername()));
+                    surveyService.getHistoryForUser(userDetails.getUsername()));
     
 
     }  
@@ -78,15 +77,15 @@ public class SurveyController {
 
     
     @PutMapping("/admin/questions/{id}")
-    public ResponseEntity<SurveyQuestions> addQuestion(
-        @PathVariable in id,
+    public ResponseEntity<SurveyQuestions> editQuestion(
+        @PathVariable int id,
         @RequestBody Map<String, String> body) {
         
         try{
             return ResponseEntity.ok(
-                surveyService.editQuestion(id, body.get("questionText"))
+                surveyService.editQuestion(id, body.get("questionText")));
             } catch (jakarta.persistence.EntityNotFoundException ex) {
-                return ResponseEntity.notFound().build()
+                return ResponseEntity.notFound().build();
             }
     }
 

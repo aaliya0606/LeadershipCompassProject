@@ -1,31 +1,21 @@
-
-package com.example.leadershipcompass_capstoneprojectbackend.controller;
+package com.example.leadershipcompass_capstoneprojectbackend.service;
 
 import com.example.leadershipcompass_capstoneprojectbackend.dto.SurveyResultResponse;
 import com.example.leadershipcompass_capstoneprojectbackend.dto.SurveySubmissionRequest;
+import com.example.leadershipcompass_capstoneprojectbackend.model.SurveyQuestions;
+import com.example.leadershipcompass_capstoneprojectbackend.model.SurveyResult;
+import com.example.leadershipcompass_capstoneprojectbackend.repository.SurveyQuestionsRepository;
+import com.example.leadershipcompass_capstoneprojectbackend.repository.SurveyResultRepository;
 import com.example.leadershipcompass_capstoneprojectbackend.repository.UserRepository;
-
 import jakarta.persistence.EntityNotFoundException;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-
-import com.example.leadershipcompass_capstoneprojectbackend.dto.SurveyQuestions;
-import com.example.leadershipcompass_capstoneprojectbackend.dto.SurveyResult;
-import com.example.leadershipcompass_capstoneprojectbackend.dto.SurveyService;
-import com.example.leadershipcompass_capstoneprojectbackend.dto.SurveyResultResponse;
-
-import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.example.leadershipcompass_capstoneprojectbackend.model.User;
 
 import java.util.List;
 import java.util.Map;
-
 
 @Service
 @RequiredArgsConstructor
@@ -69,7 +59,7 @@ public class SurveyService{
             .receivingValueScore(rvScore)
             .actsOfSupportScore(asScore)
             .wordsOfRecognitionScore(wrScore)
-            .pychologicalTouchScore(ptScore)
+            .psychologicalTouchScore(ptScore)  
             .build();
 
         result.generateResult();
@@ -77,7 +67,7 @@ public class SurveyService{
 
         SurveyResult saved = surveyResultRepository.save(result);
 
-        return buildResponse(saved, ctScore, asScore, wrScore, ptScore);
+        return buildResponse(saved, ctScore, rvScore, asScore, wrScore, ptScore);
 
     }
 
@@ -87,6 +77,12 @@ public class SurveyService{
                 .orElseThrow(() -> new EntityNotFoundException("User not found: " + email));
         return surveyResultRepository.findByUserOrderByGenerateDateDesc(user);
 
+    }
+
+    @Transactional
+    public SurveyQuestions addQuestion(String questionText, String category){
+        validateCategory(category);
+        return surveyQuestionsRepository.save(new SurveyQuestions(questionText, category, 1));
     }
 
     @Transactional
@@ -100,7 +96,7 @@ public class SurveyService{
 
     @Transactional
     public void removeQuestion(int questionId){
-        if (!surveyQuestionsRepository.existById(questionId)){
+        if (surveyQuestionsRepository.findById(questionId).isEmpty()){
             throw new EntityNotFoundException("Question not found:" + questionId);
         }
         surveyQuestionsRepository.deleteById(questionId);
@@ -179,7 +175,7 @@ public class SurveyService{
 
         SurveyResultResponse response = new SurveyResultResponse();
         response.setResultId(saved.getResultId()); 
-        response.setOverallScore(saved.getResultId());
+        response.setOverallScore(saved.getOverallScore());
         response.setOverallBand(saved.getScoreBand());
         response.setSummary(saved.getSummary());
 

@@ -26,6 +26,7 @@ public class SurveyQuestions {
     private String category;
 
     @Column(name = "weight", nullable = false)
+    @Builder.Default
     private int weight = 1;
 
     public SurveyQuestions(String questionText, String category, int weight) {
