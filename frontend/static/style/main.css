@@ -344,7 +344,7 @@ html, body {
 .hero-btn {
     display: inline-block;
     margin-top: 50px;
-    padding: 14px 40px
+    padding: 14px 40px;
     background: #64BC28;
     color: #ffffff;
     font-family: 'Conthrax', sans-serif;
@@ -354,7 +354,7 @@ html, body {
     letter-spacing: 2px;
     text-decoration: none;
     border-radius: 6px;
-    transition: background 0.2s;
+    transition: 0.2s;
 }
 
 .hero-btn:hover {
@@ -426,7 +426,7 @@ html, body {
     position: absolute;
     top: 400px;
     left: 1180px;
-    transform; translateY(-50%);
+    transform: translateY(-50%);
     width: 380px;
 }
 
@@ -434,7 +434,7 @@ html, body {
     position: absolute;
     top: 190px;
     left: 1180px;
-    transform; translateY(-50%);
+    transform: translateY(-50%);
     width: 380px;
 }
 
@@ -470,7 +470,7 @@ html, body {
     border-radius: 10px;
     padding: 16px 20px;
     font-size: 15px;
-    color: #3333333;
+    color: #333333;
     outline: none;
     transition: border-color 0.2;
 }
@@ -522,7 +522,7 @@ html, body {
     color: #ffffff;
     text-transform: uppercase;
     cursor: pointer;
-    transition: background 0.2s;
+    transition: 0.2s;
 }
 
 .btn-login:hover {
@@ -622,6 +622,7 @@ html, body {
   border: none;
   min-width: 10rem;
   min-height: 3rem;
+  cursor: pointer;
 }
 
 .survey-button:hover {
@@ -630,6 +631,80 @@ html, body {
   border-color: #00284B;
   transition: 0.7s;
 }
+
+.survey-question-container {
+  background: #96DA5F;
+  border-radius: 1vh;
+  min-width: 40%;
+  max-width: 40%;
+  height: auto;
+  display: flex;
+  flex-direction: column;
+  margin: auto;
+  gap: 1em;
+  padding: 1vh;
+  box-shadow: 2px 2px 5px 0px rgba(0, 0, 0, 0.2);
+}
+
+.question-category {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 1rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: black;
+}
+
+.question-text {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #00284B;
+}
+
+.rating-btn {
+  width: 100%;
+  min-height: 4.5rem;
+  background: #D9D9D9;
+  box-shadow: 2px 2px 5px 0px rgba(0, 0, 0, 0.2);
+  border-radius: 1vh;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  /* justify-content: center; */
+  gap: 6rem;
+  padding: 1rem;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 1.3rem;
+  font-weight: 500;
+  color: #00284B;
+}
+
+.material-symbols-outlined {
+  color: #00284B;
+  font-size: 3rem;
+}
+
+.rating-btn:hover .material-symbols-outlined {
+  color: #D9D9D9;
+}
+
+.rating-btn:hover {
+  background-color: #00284B;
+  color: #D9D9D9;
+  border-color: transparent; 
+  transition: 0.7s;
+}
+
+.rating-container {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 1em;
+}
+
 
 .progress-bar {
   width: 80%;
