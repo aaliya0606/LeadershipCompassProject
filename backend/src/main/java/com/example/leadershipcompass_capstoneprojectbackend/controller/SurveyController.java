@@ -19,7 +19,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.userdetails.UserDetails;
+//import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -33,14 +33,38 @@ public class SurveyController {
 
     private final SurveyService surveyService;
 
+    // @PostMapping("/submit")
+    // public ResponseEntity<SurveyResultResponse> submitSurvey(
+    //         @RequestBody SurveySubmissionRequest request,
+    //         @AuthenticationPrincipal UserDetails userDetails){
+
+    //     try {
+    //         SurveyResultResponse response = 
+    //                 surveyService.submitSurvey(request, userDetails.getUsername());
+    //         return ResponseEntity.status(HttpStatus.CREATED).body(response);
+    //     } catch (IllegalArgumentException ex) {
+    //         return ResponseEntity.badRequest().build();
+    //     }
+    // }
+
+    // @GetMapping("/history")
+    // public ResponseEntity<List<SurveyResult>> getSurveyHistory(
+    //         @AuthenticationPrincipal UserDetails userDetails){
+                
+    //             return ResponseEntity.ok(
+    //                 surveyService.getHistoryForUser(userDetails.getUsername()));
+    
+
+    // }  
+
     @PostMapping("/submit")
     public ResponseEntity<SurveyResultResponse> submitSurvey(
-            @RequestBody SurveySubmissionRequest request,
-            @AuthenticationPrincipal UserDetails userDetails){
+        @RequestBody SurveySubmissionRequest request,
+        @AuthenticationPrincipal String email) {
 
         try {
-            SurveyResultResponse response = 
-                    surveyService.submitSurvey(request, userDetails.getUsername());
+            SurveyResultResponse response =
+                    surveyService.submitSurvey(request, email);
             return ResponseEntity.status(HttpStatus.CREATED).body(response);
         } catch (IllegalArgumentException ex) {
             return ResponseEntity.badRequest().build();
@@ -49,13 +73,11 @@ public class SurveyController {
 
     @GetMapping("/history")
     public ResponseEntity<List<SurveyResult>> getSurveyHistory(
-            @AuthenticationPrincipal UserDetails userDetails){
-                
-                return ResponseEntity.ok(
-                    surveyService.getHistoryForUser(userDetails.getUsername()));
-    
+        @AuthenticationPrincipal String email) {
 
-    }  
+        return ResponseEntity.ok(
+                surveyService.getHistoryForUser(email));
+    }
 
     @GetMapping("/questions")
     public ResponseEntity<List<SurveyQuestions>> getQuestions() {

@@ -22,27 +22,26 @@ public class InsightGenerator {
     public String generateInsights(SurveyResult result){
         StringBuilder sb = new StringBuilder();
         sb.append(generateSummary(result)).append("\n\n");
-        sb.append("Stengths: ")
-            .append(String.join(",", identifyStrengths(result)))
+        sb.append("Strengths: ")
+            .append(String.join(", ", identifyStrengths(result)))
             .append("\n");
         sb.append("Areas to develop: ")
-            .append(String.join(",", identifyWeaknesses(result)))
+            .append(String.join(", ", identifyWeaknesses(result)))
             .append("\n\n");
-            sb.append(generateRecommendations(result));
-            return sb.toString();
+        sb.append(generateRecommendations(result));
+        return sb.toString();
     }
 
     public String generateSummary(SurveyResult result){
         Map<String, Integer> scores = categoryScores(result);
         return String.format(
             "Your overall leadership score is %d out of 250 (%s). "
-            + "Your strongest leadership langaue is %s, where you demonstrate consistant practice"
-            + "The area with the most opportunity for growth is %s",
+            + "Your strongest leadership language is %s, where you demonstrate consistent practice. "
+            + "The area with the most opportunity for growth is %s.",
             result.getOverallScore(),
             result.getScoreBand(),
             highestCategory(scores),
             lowestCategory(scores)
-
         );
     }
 
@@ -52,36 +51,36 @@ public class InsightGenerator {
             if (score >= STRENGTH_THRESHOLD) strengths.add(category);
         });
         if (strengths.isEmpty()) {
-            strengths.add("No category currently meets the high performance threshold -" +
-                "Some adice placeholder");
+            strengths.add("No category currently meets the high performance threshold. "
+                + "Focus on consistency across all areas.");
         }
         return strengths;
     }
 
-     public List<String> identifyWeaknesses(SurveyResult result){
+    public List<String> identifyWeaknesses(SurveyResult result){
         List<String> weaknesses = new ArrayList<>();
         categoryScores(result).forEach((category, score) -> {
             if (score < WEAKNESS_THRESHOLD) weaknesses.add(category);
         });
         if (weaknesses.isEmpty()) {
-            weaknesses.add("No critical weaknesses detected -" +
-                "Some advice placeholder.");
+            weaknesses.add("No critical weaknesses detected. "
+                + "Continue building on your existing strengths.");
         }
         return weaknesses;
     }
 
     public String generateRecommendations(SurveyResult result){
-        StringBuilder sb = new StringBuilder("Recommend next steps:\n");
+        StringBuilder sb = new StringBuilder("Recommended next steps:\n");
         categoryScores(result).forEach((category, score) -> {
             if (score < WEAKNESS_THRESHOLD){
-                sb.append("-").append(recommendationFor(category, score)).append("\n");
+                sb.append("- ").append(recommendationFor(category, score)).append("\n");
             }
         });
         if (sb.toString().equals("Recommended next steps:\n")){
-            sb.append("Review the Action Plans for your lowest-scoring categories and")
-            .append("commit to one new habit per week to move from 'Strong intent' to 'High'.\n");
+            sb.append("Review the Action Plans for your lowest-scoring categories and ")
+              .append("commit to one new habit per week to move from 'Strong intent' to 'High'.\n");
         }
-         return sb.toString().trim();
+        return sb.toString().trim();
     }
 
     private Map<String, Integer> categoryScores(SurveyResult result){
@@ -96,33 +95,28 @@ public class InsightGenerator {
 
     private String highestCategory(Map<String, Integer> scores){
         return scores.entrySet().stream()
+            .max(Map.Entry.comparingByValue())
+            .map(Map.Entry::getKey)
+            .orElse("Unknown");
+    }
+
+    private String lowestCategory(Map<String, Integer> scores){
+        return scores.entrySet().stream()
             .min(Map.Entry.comparingByValue())
             .map(Map.Entry::getKey)
             .orElse("Unknown");
     }
 
-
-    private String lowestCategory(Map<String, Integer> scores) {
-    return scores.entrySet().stream()
-        .min(Map.Entry.comparingByValue())
-        .map(Map.Entry::getKey)
-        .orElse("Unknown");
-    }
-
+    // advice
     private String recommendationFor(String category, int score){
         String urgency = score < 20 ? "urgent" : "developing";
         return switch (category){
-            case CT -> "(" + urgency +") placeholder advice here";
-            case RV -> "(" + urgency +") placeholder advice here";
-            case AS -> "(" + urgency +") placeholder advice here";
-            case WR -> "(" + urgency +") placeholder advice here";
-            case PT -> "(" + urgency +") placeholder advice here";
-            default -> "(" + urgency +") placeholder advice here";
-            
+            case CT -> "(" + urgency + ") Schedule and protect regular one-on-one meetings with each team member.";
+            case RV -> "(" + urgency + ") Practice active listening and follow up on team feedback consistently.";
+            case AS -> "(" + urgency + ") Proactively identify and remove blockers hindering your team's performance.";
+            case WR -> "(" + urgency + ") Deliver timely, specific recognition tied to concrete actions and results.";
+            case PT -> "(" + urgency + ") Check in on team members' emotional wellbeing and build psychological safety.";
+            default -> "(" + urgency + ") Review your Action Plan for this category and commit to one new habit this week.";
         };
     }
-
-
-
-
 }
