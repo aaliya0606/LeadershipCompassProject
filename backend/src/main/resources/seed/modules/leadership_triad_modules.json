@@ -1,0 +1,318 @@
+{
+  "modules": [
+    {
+      "category": "Psychological Touch",
+      "book": "The Leadership Triad",
+      "title": "Mindset is the Multiplier",
+      "description": "Leadership ROI equals mindset multiplied by skillset multiplied by teamset. A weak mindset caps every other investment a leader makes in their capabilities and their team. This module teaches leaders to identify their limiting beliefs, replace them with performance beliefs, and install them through a structured 30-day repetition process. It matters because no skill or team strategy will outperform the mental ceiling a leader places on themselves.",
+      "displayOrder": 1,
+      "active": true,
+      "sourceChapters": [
+        "Part I — Upgrade Your Mindset: Chapter 1 — Why Mindset is the Multiplier"
+      ],
+      "checklist": [
+        "Identify the belief behind your last three moments of leadership hesitation — write each one down as a specific sentence.",
+        "Rewrite each limiting belief as a performance belief that drives bold, decisive action (e.g. 'I need every detail' becomes '80% certainty is enough to act').",
+        "Link each new belief to a specific behaviour change: write what you will do differently the next time this belief is triggered.",
+        "Review your performance beliefs every morning for 30 days — make it the first intentional act of your leadership day.",
+        "After 30 days, rate yourself 1–10 on each belief and replace any that still feel weak."
+      ],
+      "quotesAndConcepts": [
+        "Leadership ROI = Mindset × Skillset × Teamset. If your mindset is a 5 out of 10, it doesn't matter if your skills and team are both at 10 — you'll still deliver at half your potential. — Anton Guinea, The Leadership Triad",
+        "Mindset isn't about positive thinking. It's about building the mental readiness to move decisively when opportunity appears. — Anton Guinea, The Leadership Triad",
+        "Concept: The Failure Pivot Formula has three steps — Why? (get to root cause, not surface excuse), What could I have done better? (own 100% of your controllables), and How will I ensure it never repeats? (install the process, habit, or system that closes the gap). Applied consistently after every setback, it converts failure into resilience.",
+        "Concept: The Mindset Shift Map is a five-step tool: identify the limiting belief, replace it with a performance belief, link it to a behaviour change, install it daily, and audit after 30 days. The discipline is in the installation — identifying a better belief without daily repetition changes nothing."
+      ],
+      "activities": [
+        "Mindset Shift Map (30 min this week): Think about the last three times you hesitated as a leader. For each, write the belief that drove the hesitation, a replacement performance belief, and one specific behaviour change that belief will produce. Put all three on a card or phone note and review them every morning for the next 30 days.",
+        "Failure Pivot Formula Application (after every setback this week): The next time something goes wrong, apply the three questions in writing within 48 hours: Why did this happen at the root level? What could I have done better? What process, habit, or system will I install to prevent recurrence? File the answers — review them monthly.",
+        "30-Day Belief Audit (schedule now): Set a calendar reminder for 30 days from today. On that day, rate yourself 1–10 on each of your installed performance beliefs. Replace anything below 7 with a sharper version. Share the results with your coach or a trusted peer."
+      ]
+    },
+    {
+      "category": "Caring Time",
+      "book": "The Leadership Triad",
+      "title": "Engineer Your Future Backwards",
+      "description": "Most leaders have vague visions — broad aspirations with no scoreboard attached. High-performance leaders start from the measurable outcome they are committed to achieving and build backwards through milestones, monthly actions, and named accountabilities. This module introduces the Outcome-Backwards Map as a weekly leadership discipline. It matters because leaders who own their scoreboard control their future; those who don't get controlled by it.",
+      "displayOrder": 1,
+      "active": true,
+      "sourceChapters": [
+        "Part I — Upgrade Your Mindset: Chapter 2 — The Future Focus Formula"
+      ],
+      "checklist": [
+        "Define your single non-negotiable leadership outcome for the next 12 months — make it measurable, not directional.",
+        "Break the outcome into four quarterly milestones that prove you are on track.",
+        "Assign three monthly actions to each quarterly milestone — specific, time-bound, with a name attached.",
+        "Review your Outcome-Backwards Map at the start of every week to orient your priorities.",
+        "When someone offers an opportunity, evaluate it against your map first: does it accelerate or distract from your non-negotiable outcome?"
+      ],
+      "quotesAndConcepts": [
+        "Future focus is a mindset discipline. Leaders who own their scoreboard control their future; those who don't get controlled by it. — Anton Guinea, The Leadership Triad",
+        "Concept: Outcome-Backwards Thinking has four components: define the non-negotiable outcome (measurable, not vague), identify milestones (quarterly checkpoints that prove you are on track), break into actions (quarterly to monthly to weekly), and assign accountability by name, not department. Vague vision is the enemy of intentional leadership.",
+        "Concept: The 24-Hour Commitment principle — committing to high-value opportunities quickly, despite incomplete information — is what separates leaders who shape their futures from those who watch opportunities close. Speed of commitment, informed by a clear outcome map, is a competitive advantage."
+      ],
+      "activities": [
+        "Build Your 12-Month Outcome-Backwards Map (45 min this week): Write your single non-negotiable outcome for the next 12 months. Break it into four quarterly milestones. For each milestone, write three monthly actions. Put a name next to every action. Review the map every Monday morning before opening your inbox.",
+        "Weekly Scoreboard Check (start this week, 10 min every Monday): At the start of each week, open your map and answer three questions: Am I on track for this quarter's milestone? What is the one action this week that most advances my outcome? What do I need to stop doing that is not on the map? Use the answers to set your week's priorities.",
+        "Opportunity Filter (ongoing): The next three times you are offered a new opportunity, commitment, or project, run it through the map before saying yes: Does this accelerate my non-negotiable outcome? If not, what will I trade off to take it? Make the map the decision filter, not your gut alone."
+      ]
+    },
+    {
+      "category": "Receiving Value",
+      "book": "The Leadership Triad",
+      "title": "Use Failure as Fuel",
+      "description": "Leaders who make surface fixes after failures relive the same mistakes. Leaders who run a structured debrief within 48 hours extract the lesson, install the safeguard, and re-engage without lingering. This module builds the Fail-Forward Grid as a post-failure practice that converts setbacks into resilience and prevents the most expensive form of leadership waste — repeating the same mistake. It matters because failure only becomes fuel when leaders choose to process it rather than bury it.",
+      "displayOrder": 1,
+      "active": true,
+      "sourceChapters": [
+        "Part I — Upgrade Your Mindset: Chapter 3 — Failure as Fuel"
+      ],
+      "checklist": [
+        "After every significant setback, run the Post-Failure Sprint within 48 hours: debrief immediately, extract the lesson, install a safeguard, and re-engage.",
+        "Complete the Fail-Forward Grid for your last five setbacks — three columns: Failure/Event, Lesson, Safeguard Installed.",
+        "Share your Fail-Forward Grid with your coach or a trusted peer: accountability to the learning is what prevents repeat failures.",
+        "When a team member fails, use the Failure Pivot Formula with them: What happened? What could you do better? What will we change so it does not recur?",
+        "Distinguish publicly between surface fixes (changing the symptom) and root-cause corrections (changing the system or belief that produced the failure)."
+      ],
+      "quotesAndConcepts": [
+        "A high-performance mindset doesn't avoid failure — it weaponises it. — Anton Guinea, The Leadership Triad",
+        "Concept: The Post-Failure Sprint is a four-step sequence: debrief within 48 hours, extract the documented lessons, install safeguards that prevent recurrence, and re-engage without lingering in recovery. Leaders who skip the sprint — who jump straight to re-engaging — guarantee they will face the same failure again.",
+        "Concept: The Repeat Offender Trap is the pattern of surface fixes: changing the visible symptom without addressing the root cause or installing a new system. It is the most common and expensive leadership failure mode. The Fail-Forward Grid is the antidote — it forces documentation of the lesson and the safeguard, creating an institutional record of what changed."
+      ],
+      "activities": [
+        "Fail-Forward Grid (30 min this week): Create a three-column table: Failure/Event | Lesson | Safeguard Installed. Fill it with your last five professional setbacks. For each safeguard, write what specifically changed — a process, a habit, a decision rule. If you cannot name the safeguard, the lesson has not been fully extracted.",
+        "Post-Failure Sprint Practice (next failure or near-miss): The next time something goes wrong, block 30 minutes within 48 hours to run the sprint in writing. Share the output with one person who can hold you accountable to the safeguard. Do not skip the re-engage step — note the exact moment you commit to moving forward.",
+        "Team Failure Debrief (after next team setback): Use the Failure Pivot Formula with your team: What happened at the root level? What could we collectively have done better? What are we changing so this does not recur? Make it a learning conversation, not a blame conversation. Document the safeguards and publish them to the team."
+      ]
+    },
+    {
+      "category": "Caring Time",
+      "book": "The Leadership Triad",
+      "title": "Lead Under Pressure: Stabilise, Simplify, Strike",
+      "description": "Pressure moments reveal the true quality of a leader's mindset — not their plan. When stakes are high, strong leaders do three things in sequence: stabilise their state, simplify the problem to its core decision, and strike with speed and commitment. This module builds the Pressure Rehearsal as a deliberate practice so the Stabilise-Simplify-Strike sequence becomes automatic rather than aspirational. It matters because a leader who panics under pressure transmits that panic instantly to every person watching them.",
+      "displayOrder": 2,
+      "active": true,
+      "sourceChapters": [
+        "Part I — Upgrade Your Mindset: Chapter 4 — Lead Under Pressure"
+      ],
+      "checklist": [
+        "Before entering any high-stakes conversation or decision, use the 3-Phase Pressure Lens: stabilise (control breathing, tone, and language), simplify (strip to the core decision), strike (decide, communicate, execute).",
+        "Identify the three scenarios that most commonly rattle you as a leader — practise the sequence mentally before they occur.",
+        "When pressure hits, control your first three words and your first sentence — this sets the emotional register for everyone in the room.",
+        "After every high-pressure moment, debrief: which phase did you execute well? Which phase broke down first?",
+        "Communicate your decisions in calm, direct language during pressure — avoid hedging, qualifying, or reassessing publicly once the call is made."
+      ],
+      "quotesAndConcepts": [
+        "In high stakes, strong leaders stabilise, simplify, and strike. — Anton Guinea, The Leadership Triad",
+        "Pressure moments reveal the quality of your mindset more than your plan. — Anton Guinea, The Leadership Triad",
+        "Concept: The 3-Phase Pressure Lens — Stabilise (control breathing, tone, and language), Simplify (strip the problem to its core decision), Strike (decide, communicate, execute) — is not a reactive checklist. It is a rehearsed sequence. Leaders who practise it in low-stakes simulations execute it in high-stakes reality. Leaders who wait to use it for the first time in a crisis do not.",
+        "Concept: Calm is contagious, and so is panic. In a crisis, your team's emotional state will match yours within minutes. The most powerful leadership act in a pressure moment is not the decision itself — it is the emotional tone with which the decision is communicated."
+      ],
+      "activities": [
+        "Pressure Rehearsal (30 min this week): Identify the scenario that most reliably rattles you as a leader — a specific type of conflict, a performance issue, a high-stakes presentation. Write out what typically happens to your breathing, tone, and language when it occurs. Then rehearse the three-phase sequence for that exact scenario until the response feels automatic rather than effortful.",
+        "Pressure Debrief Log (after each high-stakes moment this week): For every high-pressure situation, write three sentences: Which phase did I execute well? Where did the sequence break down? What will I do differently next time? Review the log at the end of the week and identify your most consistent breakdown point.",
+        "First-Words Practice (this week): Before your next three difficult conversations, write your opening sentence in advance. Make it calm, direct, and clear. Read it aloud. Note whether it stabilises or escalates the emotional register of the conversation — then adjust."
+      ]
+    },
+    {
+      "category": "Psychological Touch",
+      "book": "The Leadership Triad",
+      "title": "Know Your Leadership Style and Align to It",
+      "description": "Self-awareness is not a soft skill — it is a strategic advantage. A leader who knows their style can leverage their strengths, offset their blind spots, and align their role to where they add the most value. This module introduces the JT Leadership Profile (Visionary Driver, Strategic Operator, Relational Coach, Tactical Specialist) and the Style Audit as tools for deliberate role alignment. It matters because the wrong leader in the wrong seat — even a talented one — consistently underperforms.",
+      "displayOrder": 2,
+      "active": true,
+      "sourceChapters": [
+        "Part I — Upgrade Your Mindset: Chapter 5 — Know Your Leadership Style"
+      ],
+      "checklist": [
+        "Identify your primary JT Leadership Profile: Visionary Driver (big-picture, risk-tolerant), Strategic Operator (process-driven, detail-focused), Relational Coach (people-first, high-empathy), or Tactical Specialist (deep expertise, risk of micromanagement).",
+        "List three strengths of your profile to consciously leverage this week.",
+        "List three weaknesses or blind spots of your profile — and name one partner, system, or hire that currently covers each.",
+        "Assess whether your current role is aligned to your profile: are you doing the work your style does best, or are you fighting your natural strengths?",
+        "Share your profile with your team and invite them to name one area where they experience your strengths most — and one where they experience your blind spots."
+      ],
+      "quotesAndConcepts": [
+        "Knowing your style allows you to lead with intention, maximising the mindset pillar. — Anton Guinea, The Leadership Triad",
+        "Concept: The JT Leadership Profile identifies four styles. Visionary Drivers are big-picture and risk-tolerant; their blind spot is detail and follow-through. Strategic Operators are process-driven and precise; their blind spot is speed and inspiration. Relational Coaches are people-first and high-empathy; their blind spot is accountability and hard calls. Tactical Specialists have deep expertise; their blind spot is micromanagement and inability to scale.",
+        "Concept: Role misalignment is one of the most common and expensive leadership problems. A Visionary Driver running daily operations, or a Tactical Specialist managing a large team without systems, will consistently underperform regardless of individual talent. The Style Audit is the tool that surfaces this misalignment before it causes damage."
+      ],
+      "activities": [
+        "Style Audit (30 min this week): Identify your primary JT Leadership Profile. Write three strengths to leverage and three weaknesses to offset. For each weakness, name the partner, hire, system, or process currently covering that gap — and identify any gaps that are not yet covered. Commit to one action to close the most critical blind spot.",
+        "Role Alignment Check (20 min this week): List the five tasks that consumed the most of your leadership time this week. For each, ask: Is this the highest-value use of my specific profile? If a Strategic Operator is doing Visionary work, or a Visionary Driver is doing Tactical work, name what needs to change and who needs to take that work instead.",
+        "Profile Share (next team meeting or 1-on-1): Tell your team your primary profile in plain language: what you are best at, what you are not naturally strong at, and what you are actively working on. Ask them: 'Where do you see my strengths most clearly? Where do you feel my blind spots?' Use what you hear to update your Style Audit."
+      ]
+    },
+    {
+      "category": "Acts of Support",
+      "book": "The Leadership Triad",
+      "title": "Conscious Control: Decide Faster, Lead Clearer",
+      "description": "Indecision is leadership debt. Every day a leader delays a decision, they confuse their team, lose momentum, and signal uncertainty — and their team will match whichever energy shows up first. This module builds the 3-Phase Decision Lens (Speed, Clarity, Commitment) as a repeatable framework that eliminates decision fog and replaces it with decisive, communicated, committed action. It matters because most high-performing teams are not waiting for a better strategy — they are waiting for a clearer decision.",
+      "displayOrder": 1,
+      "active": true,
+      "sourceChapters": [
+        "Part II — Upskill Your Leadership: Chapter 6 — Conscious Control"
+      ],
+      "checklist": [
+        "Apply the three-phase rule to every pending decision: Speed (if 80% certain, act), Clarity (explain the 'why' in one sentence), Commitment (once the decision is made, stop second-guessing publicly).",
+        "Identify the five decisions you have been delaying — list them, apply the Decision Lens to each, and make them this week.",
+        "After every decision, communicate the 'why' to the relevant people in one clear sentence before moving to the how.",
+        "Never revisit a communicated decision in public unless new facts have materially changed the situation.",
+        "Track your decision speed over 30 days: note decisions you made within 24 hours and decisions that took longer — and examine what caused the delays."
+      ],
+      "quotesAndConcepts": [
+        "Indecision is leadership debt. Every day you delay a decision, you confuse your team, lose momentum, and signal uncertainty. — Anton Guinea, The Leadership Triad",
+        "Your team will match your certainty or your hesitation — whichever shows up first. — Anton Guinea, The Leadership Triad",
+        "Concept: The 3-Phase Decision Lens is: Speed (if you are 80% sure, act — speed beats perfection), Clarity (explain the why in one sentence — your team needs the reason, not the full analysis), and Commitment (once the decision is made, stop second-guessing — public doubt after a decision is more damaging than a bad decision made confidently).",
+        "Concept: Decision debt compounds. A leader with five pending decisions does not have five small problems — they have one large leadership credibility problem. Teams stop bringing their best thinking to leaders who consistently defer, qualify, or reverse. Speed of decision is a form of respect."
+      ],
+      "activities": [
+        "Decision Speed Test (this week): List every decision you have been delaying — professional and leadership. Apply the 3-Phase Lens to each: Are you 80% sure? Yes — decide. Can you explain the why in one sentence? Write it. Are you committed to not second-guessing it once communicated? Decide, communicate, and move. Complete the full list before the end of the week.",
+        "Decision Communication Practice (next three decisions): For each of the next three decisions you make, write and deliver a one-sentence 'why' to the relevant person or team before explaining the how. Note their response — does clarity of rationale change their engagement level?",
+        "30-Day Decision Speed Audit (start this week): Keep a log of every significant decision and how long it took from emergence to commitment. At the end of 30 days, calculate your average decision speed and identify the most common cause of delay. Design one rule or trigger that addresses that cause."
+      ]
+    },
+    {
+      "category": "Caring Time",
+      "book": "The Leadership Triad",
+      "title": "High Care, High Control: The Leadership Paradox",
+      "description": "High care without high control produces a friendly but underperforming team. High control without high care produces a fear-driven culture with high turnover. The leaders whose teams trust them most and perform hardest operate with both simultaneously — and make their non-negotiable standards visible to everyone. This module builds the Leader Standards Card as a tool that makes expectations explicit, consistent, and shared. It matters because a team cannot rise to standards they have never been told.",
+      "displayOrder": 3,
+      "active": true,
+      "sourceChapters": [
+        "Part II — Upskill Your Leadership: Chapter 7 — High-Care Factor, High-Control Factor"
+      ],
+      "checklist": [
+        "Write your five non-negotiable leadership standards — specific, observable behaviours you will hold yourself and your team to without exception.",
+        "Share your Leader Standards Card with your team in your next meeting: say what the standards are and that you hold yourself to them first.",
+        "For every standard you hold your team to, identify one moment this week where you modelled it visibly.",
+        "Schedule at least one genuine care conversation this week — a 1-on-1 where the agenda is the person, not the task.",
+        "When a team member falls below a standard, address it promptly and specifically: name the behaviour, name the impact, name the expectation, and offer support."
+      ],
+      "quotesAndConcepts": [
+        "High Care / Low Control → A friendly but underperforming team. Low Care / High Control → A fear-driven culture with high turnover. High Care / High Control → High trust and high performance. — Anton Guinea, The Leadership Triad",
+        "Concept: The Leader Standards Card is a written, shared, and consistently enforced list of five non-negotiable leadership standards. Writing them makes them real. Sharing them makes them a contract. Holding yourself to them first makes them credible. The most common failure is leaders who share standards they do not personally model — the team notices every time.",
+        "Concept: Care and control are not opposing forces — they are complementary ones. Genuine care without standards produces comfort, not growth. Standards without care produce compliance, not commitment. The leader who can hold both simultaneously is the leader whose team will run through walls for them."
+      ],
+      "activities": [
+        "Leader Standards Card (30 min this week): Write your five non-negotiable standards — behaviours you will expect of yourself and every team member without exception. Make them specific and observable (not 'be honest' but 'if you commit to a deadline, you meet it or flag it before it passes'). Print or save the card where you will see it daily.",
+        "Standards Share (next team meeting): Present your Leader Standards Card to your team. Explain each standard, why it matters, and how you will hold yourself to it. Ask them: 'What standards would you add from your perspective?' Listen and incorporate at least one. This is not a lecture — it is a contract.",
+        "Care Conversation (schedule one this week): Book a 15-minute 1-on-1 with a team member where your only agenda is to understand how they are going — not a performance check, not a task update. Ask: 'How are you tracking? What's making work hard right now? What do you need from me?' Listen, take one action based on what you hear."
+      ]
+    },
+    {
+      "category": "Psychological Touch",
+      "book": "The Leadership Triad",
+      "title": "The EQ Edge: Read the Room, Lead the Outcome",
+      "description": "Emotional intelligence is the skill that amplifies every other leadership capability. A leader who can read what is being said, understand the story underneath it, and choose the optimal strategic response has a level of influence that no technical skill can replicate. This module builds the 3-Level Read (Surface, Story, Strategy) as a daily debrief practice that sharpens EQ through deliberate reflection. It matters because EQ is what makes decisions resonate — and what separates compliance from genuine buy-in.",
+      "displayOrder": 3,
+      "active": true,
+      "sourceChapters": [
+        "Part II — Upskill Your Leadership: Chapter 8 — The EQ Edge"
+      ],
+      "checklist": [
+        "After every significant conversation today, apply the 3-Level Read: Surface (what was said and shown), Story (the motives and fears underneath), Strategy (the best response to achieve the goal).",
+        "Before a high-stakes conversation, spend two minutes identifying the other person's likely Story — what are they afraid of, what do they want, what is their unstated agenda?",
+        "When someone says no or pushes back, ask a question before advocating: 'Help me understand what's behind that for you.'",
+        "Complete the Daily EQ Debrief every day for one week: recall one key conversation, write the Surface, Story, and Strategy, and name one improvement for the next interaction.",
+        "Identify your most common EQ blind spot — the emotional trigger or conversation type where your read most frequently breaks down — and design a specific counter-response."
+      ],
+      "quotesAndConcepts": [
+        "EQ links mindset and skillset. It is the capability that makes your decisions resonate and stick with your team and stakeholders. — Anton Guinea, The Leadership Triad",
+        "Empathy doesn't mean agreeing. It means understanding the other person's position well enough to influence effectively. — Anton Guinea, The Leadership Triad",
+        "Concept: The 3-Level Read operates on three layers: Surface (observable facts — what the person said, their body language, their tone), Story (the motives, fears, and needs that are driving the surface behaviour — often unstated), and Strategy (the specific response that best achieves the leader's goal given what they now know about both levels). Leaders who only operate at the Surface level consistently misread their teams and their stakeholders.",
+        "Concept: Tactical Empathy is not sympathy and not agreement — it is the strategic use of understanding. When a negotiation, difficult conversation, or team conflict stalls, the most effective move is rarely to push harder. It is to ask a question that surfaces the Story layer, and then address that story directly."
+      ],
+      "activities": [
+        "Daily EQ Debrief (every day for one week, 5 min): At the end of each day, select one significant conversation. Write three lines: Surface — what was said and shown. Story — what was actually going on underneath. Strategy — what you did, and what you could have done better. After seven days, review the log and identify your most consistent blind spot.",
+        "Pre-Conversation Story Analysis (before your next high-stakes interaction): Write down the other person's likely Story before the conversation begins. What are they afraid of? What do they want that they may not say directly? What past experience might be shaping their position? Use the analysis to shape your opening question, not your opening statement.",
+        "Turn a No Into a Conversation (next resistance you encounter): The next time a team member, peer, or stakeholder pushes back or says no, respond with one question before advocating: 'Help me understand what's behind that.' Listen without defending. Then address the Story layer directly and observe whether the position shifts."
+      ]
+    },
+    {
+      "category": "Acts of Support",
+      "book": "The Leadership Triad",
+      "title": "Build Your Bandwidth: Stop Being the Bottleneck",
+      "description": "Leaders who cling to work their team should own cannot scale — and neither can their teams. Every task a leader holds onto out of habit, ego, or mistrust is a task their team is not developing through. This module builds the Delegate-Upgrade Model as a systematic approach to freeing leadership bandwidth for vision, relationships, and high-stakes decisions. It matters because the leader who is always busy doing is never available to actually lead.",
+      "displayOrder": 2,
+      "active": true,
+      "sourceChapters": [
+        "Part III — Uplift Your Teams: Chapter 9 — Bandwidth Building"
+      ],
+      "checklist": [
+        "Complete the 7-Day Time Tracking Challenge: log every task you do for one week and categorise each as 'Only I Can Do It,' 'Train to Transfer,' or 'Offload Now.'",
+        "Begin delegating in order: offload the 'Offload Now' tasks first, then systematically train to transfer the next tier.",
+        "For every task you are training to transfer, document the process and schedule at least one coaching conversation with the person taking it on.",
+        "Identify the highest-value use of the time you are freeing up — and block it before the calendar fills with other people's priorities.",
+        "Review your task categories monthly: what has moved from 'Train to Transfer' to 'Only I Can Do It' for your successor?"
+      ],
+      "quotesAndConcepts": [
+        "Leaders can't scale if they cling to work their team should own. Holding on to tasks out of habit, ego, or mistrust robs the organisation of growth. — Anton Guinea, The Leadership Triad",
+        "Concept: The Delegate-Upgrade Model has three tiers: Only You Can Do It (vision, key relationships, high-stakes calls — the work only your specific role and experience can deliver), Train to Transfer (skills you can teach over time — the work that grows your team when you let go of it), and Offload Now (tasks that should have been delegated already — the work that is actively preventing you from leading). Most leaders have far less in the first tier than they believe.",
+        "Concept: The Time Theft Problem is not about working too hard — it is about working on the wrong things. A leader spending hours on scheduling, vendor calls, and daily problem-solving is not leading — they are operating. The switch from operator to leader is made one delegated task at a time."
+      ],
+      "activities": [
+        "7-Day Time Tracking Challenge (start this week): Log every task you complete for seven days. At the end of the week, categorise each as Only I Can Do It, Train to Transfer, or Offload Now. Calculate the percentage of your time in each category. Identify the three highest-value tasks in Offload Now and begin delegating them immediately.",
+        "Delegation Conversation (this week, with one team member): Identify one task from your Offload Now list. Have a 15-minute conversation with the person who will take it on: explain the task, why it matters, what good looks like, and that you will be available for questions. Document the handover. Follow up once in week two — then let it go.",
+        "Bandwidth Reinvestment Plan (20 min this week): Calculate how many hours per week you are committing to free up through the Delegate-Upgrade process. For each freed hour, name the highest-value leadership activity that will fill it — strategic thinking, key relationship building, team development, or high-stakes decisions. Block those activities in your calendar before anything else."
+      ]
+    },
+    {
+      "category": "Words of Recognition",
+      "book": "The Leadership Triad",
+      "title": "Role Model ROI: Your Habits Are the Culture",
+      "description": "Culture is not what a leader says — it is what a leader does. Every habit a leader models becomes a permission structure for the team: if the leader cuts corners, the team cuts deeper. If the leader overdelivers, the team stretches too. This module builds the Mirror Check as a weekly practice of measuring personal behaviour against stated values — and owning violations publicly when they occur. It matters because a leader who talks about standards but does not live them has already lost the culture.",
+      "displayOrder": 1,
+      "active": true,
+      "sourceChapters": [
+        "Part III — Uplift Your Teams: Chapter 10 — Role Model ROI"
+      ],
+      "checklist": [
+        "Write your top three leadership values — the ones you most want your team to associate with how you lead.",
+        "Track your own behaviour against those values every day for one week — not your intentions, your actual observable actions.",
+        "When you violate one of your stated values, correct it publicly: name what you committed to, what you did instead, and what you are doing to close the gap.",
+        "Walk your team's space at least once this week with the sole intent of noticing, thanking, and connecting — not inspecting or problem-solving.",
+        "Identify one small habit you are modelling this month that you would not want your team to replicate — and change it before asking the team to change anything."
+      ],
+      "quotesAndConcepts": [
+        "Your habits are contagious. If you cut corners, they'll cut deeper. If you overdeliver, they'll stretch too. — Anton Guinea, The Leadership Triad",
+        "Your team will rise — or sink — to the standard you live, not the one you talk about. — Anton Guinea, The Leadership Triad",
+        "Concept: The Culture Mirror principle holds that in both crisis and routine, leader behaviour sets the emotional and performance baseline for the entire team. In crisis, a calm leader produces a focused team; a panicking leader produces a panicking team. In routine, a disciplined leader produces disciplined habits; a sloppy leader produces sloppy defaults. The leader's behaviour is not one input into culture — it is the primary input.",
+        "Concept: The Mirror Check is not a self-congratulation exercise. It is a values accountability practice. Leaders write their top three values, track their actual behaviour against them for a week, and correct violations publicly. The public correction is non-negotiable — it is what makes the values real to the team."
+      ],
+      "activities": [
+        "Mirror Check (start this week, 5 min each morning): Write your top three leadership values on a card or note. Each morning, review what you did the previous day and rate your behaviour against each value: 1 (violated it), 2 (neutral), 3 (lived it). At the end of the week, identify your lowest-rated value and one specific behaviour change to make the following week.",
+        "Public Correction (next opportunity): The next time you behave in a way that contradicts one of your stated values — miss a commitment, react poorly, cut a corner — own it out loud to the relevant person or team: 'I said I would do X. I did Y instead. That is not the standard I hold myself to. Here is what I am doing about it.' Then do it.",
+        "Presence Walk (this week, 30 min): Spend 30 minutes walking your team's space with no agenda except to notice, connect, and thank. Ask one person what is going well. Ask one person what is getting in their way. Find one thing worth recognising and name it specifically. Do not problem-solve, inspect, or follow up on tasks during this walk."
+      ]
+    },
+    {
+      "category": "Acts of Support",
+      "book": "The Leadership Triad",
+      "title": "Deal with Difficulty: Facts, Speed, Control",
+      "description": "Avoided conversations do not resolve themselves — they compound. Every week a difficult conversation is delayed, the problem grows roots: morale erodes, performance drifts, and the team loses confidence in the leader's willingness to protect standards. This module builds the Crisis Conversation Template (Issue, Impact, Expectation, Support) as a repeatable framework for addressing conflict with facts, speed, and control. It matters because one clear, direct conversation can undo months of drift in a single hour.",
+      "displayOrder": 3,
+      "active": true,
+      "sourceChapters": [
+        "Part III — Uplift Your Teams: Chapter 11 — Dealing with Difficulty"
+      ],
+      "checklist": [
+        "Identify the difficult conversation you have been avoiding longest — commit to having it within 72 hours using the Crisis Conversation Template.",
+        "Before every difficult conversation, write the four components: Issue (what happened, factually), Impact (how it affects the mission or team), Expectation (what must change specifically), Support (how you will help the person meet that expectation).",
+        "Strip all opinion and assumption from your Issue statement — use only verifiable, observable facts.",
+        "Address issues at speed: the longer a performance or behaviour problem goes unaddressed, the more the team interprets the delay as acceptance.",
+        "After the conversation, document what was agreed, what support you committed to, and when you will follow up — then follow through."
+      ],
+      "quotesAndConcepts": [
+        "The JT Conflict Equation: Facts + Speed + Control = Resolution. — Anton Guinea, The Leadership Triad",
+        "One clear, direct conversation fixed it in a week — but the delay had already cost the team. — Anton Guinea, The Leadership Triad",
+        "Concept: The Crisis Conversation Template structures difficult conversations into four components: Issue ('Here is what happened' — factual only), Impact ('Here is how it affects the mission'), Expectation ('Here is what must change'), and Support ('Here is how I will help you meet that expectation'). Every difficult conversation that does not include all four components leaves something critical unsaid.",
+        "Concept: Control in a difficult conversation means managing three things simultaneously: your tone (stay flat and factual, not heated or cold), your language (concrete and specific, not vague or loaded), and your outcome (keep the focus on resolution, not on winning the argument or distributing blame)."
+      ],
+      "activities": [
+        "Difficult Conversation Script (this week): Identify the conversation you have been avoiding. Write all four components of the Crisis Conversation Template: Issue (facts only — no opinions), Impact (specific effect on the team or mission), Expectation (precise change required — what it looks like when they meet it), Support (what you will provide). Practise your opening sentence out loud. Have the conversation within 72 hours.",
+        "Conflict Equation Audit (20 min this week): Think of the last difficult situation you handled. Rate each element: Facts (did I use only verifiable truths?), Speed (did I address it promptly?), Control (did I stay calm and focused on resolution?). Identify the weakest element and name one behaviour that would strengthen it in the next conversation.",
+        "Follow-Through Record (after every difficult conversation): Immediately after the conversation, document in writing: what was agreed, what support you committed to deliver, and the date of your follow-up check-in. Send the summary to the other person within 24 hours. Follow through on every commitment you made — this is where difficult conversations either build trust or destroy it."
+      ]
+    }
+  ]
+}

@@ -1,0 +1,170 @@
+{
+  "modules": [
+    {
+      "category": "Psychological Touch",
+      "book": "Upgrade Your Mindset",
+      "title": "Build Your Emotional Intelligence",
+      "description": "Emotional intelligence — the ability to name, regulate, and respond to emotions rather than react to them — is more predictive of leadership success than IQ. This module takes leaders through the four-stage EQ process: emotional self-awareness, self-regulation, social awareness, and social regulation. It matters because without conscious emotional control, leaders operate on autopilot and their teams feel the consequences.",
+      "displayOrder": 1,
+      "active": true,
+      "sourceChapters": [
+        "Skill I: Develop Your Emotional Intelligence — Learning Emotional Literacy",
+        "Skill I: Develop Your Emotional Intelligence — Getting Help Before You Need It",
+        "Skill I: Develop Your Emotional Intelligence — Lean Into Men's Health"
+      ],
+      "checklist": [
+        "At least once today, stop and name the specific emotion you are feeling before reacting to a situation.",
+        "Practise reflection after a difficult interaction: write down what happened, what you felt, and what you would do differently — do not ruminate, reframe.",
+        "In the next challenging conversation, practise introspection: ask 'What am I feeling right now, and why?' before speaking.",
+        "Model vulnerability with at least one team member this week by using an 'I feel' or 'I am experiencing' statement.",
+        "When a team member is struggling, practise being present: use 'Tell me more' and resist the urge to fix, redirect, or change the topic."
+      ],
+      "quotesAndConcepts": [
+        "EQ is more important than IQ when people and their emotions are involved. Aka: Leadership. — Anton Guinea, Upgrade Your Mindset",
+        "...we aren't ever done with the odd business of becoming an emotionally mature person. All adults would recognise that they inevitably required continuing education of an emotional kind. — Alain De Botton, The School of Life (cited in Upgrade Your Mindset)",
+        "Concept: The EQ process is a learnable sequence — emotional self-awareness, then self-regulation, then social awareness, then social regulation. The first step is simply asking: 'What emotion am I feeling right now, and why?' Leaders who skip this step react; leaders who practise it respond.",
+        "Concept: Compassion is not a feeling — it is taking action. Empathy without compassion is sympathy. Real EQ requires moving from understanding what someone feels to doing something that makes their situation better."
+      ],
+      "activities": [
+        "Emotion Naming Log (this week, daily, 2 min): Each morning and after each high-stakes interaction, write down the specific emotion you are experiencing. Use a feelings wheel if needed. The goal is precision — 'frustrated' is different from 'embarrassed' or 'anxious.' At the end of the week, identify your most common emotional trigger.",
+        "Reflection Practice (5 min after difficult interactions): When something goes sideways, write three sentences: what happened, what you felt, and one thing you would do differently. Resist the pull to ruminate — set a 5-minute timer and stop when it rings.",
+        "Presence Conversation (schedule one this week, 15 min): Have a 1-on-1 with a team member who seems to be struggling, with the sole intent of listening. Use only 'Tell me more,' 'Talk me through it,' and 'What I'm hearing is…' Do not offer solutions unless asked."
+      ]
+    },
+    {
+      "category": "Receiving Value",
+      "book": "Upgrade Your Mindset",
+      "title": "Develop a Positive Perspective",
+      "description": "How a leader interprets setbacks, failures, and pressure directly shapes their team's culture and resilience. This module teaches leaders to shift from rumination to reflection, from covert to overt ownership, and from fear (false expectations appearing real) to PEAR (positive expectations appearing real). It matters because a leader's default perspective becomes the team's default perspective.",
+      "displayOrder": 1,
+      "active": true,
+      "sourceChapters": [
+        "Skill II: Develop a Positive Perspective — How I Got Out of My Depth Too Quickly",
+        "Skill II: Develop a Positive Perspective — How To Develop Your Relationship With Failure",
+        "Skill II: Develop a Positive Perspective — How To Retain Your Top Talent",
+        "Skill II: Develop a Positive Perspective — False Expectations Appearing Real",
+        "Skill II: Develop a Positive Perspective — How To Elevate Your LMX"
+      ],
+      "checklist": [
+        "When something goes wrong, resist rumination: give yourself a defined reflection window (5–10 minutes), extract the learning, then shift forward.",
+        "Practise overt ownership: go to your leader or team with an action plan, not just the problem or mistake.",
+        "Identify one belief or expectation that is holding you back this week — ask: 'Is this FEAR (false expectations appearing real) or a real risk?'",
+        "Audit your in-group and out-group: identify a team member receiving lower-quality exchanges (LMX) and deliberately invest in that relationship this week.",
+        "Name one retention risk on your team and take one proactive action — a check-in, a flexibility offer, a recognition moment — before the week ends."
+      ],
+      "quotesAndConcepts": [
+        "Turn Fears into Pears — positive expectations appearing real. Imagine how good it'll be to get to the top of your next mountain climb. — Anton Guinea, Upgrade Your Mindset",
+        "Concept: Rumination is negative self-talk that keeps you stuck in the past. Reflection is a positive forward-facing review of what happened and what you can learn. They feel similar but move in opposite directions.",
+        "Concept: Overt ownership means doing everything in your power to remedy a situation — not just admitting it to your leader. Covert ownership is handing the issue to someone else while calling it accountability. The difference shows up in whether you arrive with a problem or an action plan.",
+        "Concept: LMX (Leader-Member Exchange) theory shows that leaders subconsciously sort their team into an in-group and out-group, and treat them differently. Higher LMX leads to career conversations, idea generation, and candid feedback. The leader's job is to consciously elevate the quality of exchange with every team member, not just the ones they rely on most."
+      ],
+      "activities": [
+        "Failure Reframe Exercise (30 min this week): Think of a recent failure or mistake. Write your answers to three questions: What can I learn from this? What will I do to make it right? What will I change going forward? This is the three-step process — resist rumination, overt ownership, future focus — applied in writing.",
+        "LMX Audit (20 min this week): List your team members. For each, rate the quality of your exchanges 1–5 on honesty, openness, and mutual support. Identify your lowest-rated relationship. Plan one specific investment in that relationship this week — a career conversation, an honest check-in, or a candid piece of feedback.",
+        "FEAR-to-PEAR Reframe (ongoing this week): Each time you catch yourself avoiding something, write down the fear. Then write its positive opposite. Ask: 'What's the best realistic outcome if I just do it?' Use the positive expectation as your anchor and take the action."
+      ]
+    },
+    {
+      "category": "Psychological Touch",
+      "book": "Upgrade Your Mindset",
+      "title": "Think About Your Thoughts",
+      "description": "Metacognition — thinking about how you think — is one of the most underused leadership skills. This module teaches leaders to use introspection, identify their core beliefs and biases (including narcissistic tendencies), find their leadership 'why', and develop conscious leadership through vision, virtue, and people-first strategy. It matters because leaders who understand their own thinking patterns can change them; leaders who don't are led by them.",
+      "displayOrder": 2,
+      "active": true,
+      "sourceChapters": [
+        "Skill III: Think About Your Thoughts — How To Use Metacognition To Be A Better Leader",
+        "Skill III: Think About Your Thoughts — How To Be A Conscious Leader, And Why",
+        "Skill III: Think About Your Thoughts — Anton, I'm Not A Narcissist, Am I?",
+        "Skill III: Think About Your Thoughts — Simon Sinek Is Onto Something With Finding Your Why",
+        "Skill III: Think About Your Thoughts — How To Have A Real Conversation With Your Leadership Coach"
+      ],
+      "checklist": [
+        "Use 'what' and 'how' questions rather than 'why' questions when reflecting on your leadership: 'What am I feeling?' and 'How will I respond?' rather than 'Why did this happen to me?'",
+        "Identify at least one thought pattern this week that is serving your team, and one that is hurting them — write both down.",
+        "Complete the 'I believe' exercise: write your leadership beliefs starting with those two words, finish the sentence at least three times, and share the result with one team member.",
+        "Audit your leadership for narcissistic tendencies: honestly answer whether your intent is to help or to be right, whether your delivery does harm, and whether you can genuinely empathise with others.",
+        "Identify your top three leadership beliefs and check whether your actions this week align with them."
+      ],
+      "quotesAndConcepts": [
+        "Your team doesn't buy into what you do or how you do it. They buy into why you do it. — Simon Sinek (cited in Upgrade Your Mindset)",
+        "Conscious leadership is a powerful invitation to shift our mindset from the win/lose games of war to the community-building virtues of love, authenticity, and integrity. — cited in Upgrade Your Mindset",
+        "Concept: Metacognition is described as 'thinking about thinking.' For leaders, it means identifying which thought patterns are helping the team and which are harming it. Thinking patterns that go unexamined become habits that shape culture.",
+        "Concept: The three elements of conscious leadership are vision and virtue (purpose-first, lead with love, act with integrity), mindset and strategy (win-win-win thinking, long-term perspective), and people and culture (constantly evolving and growing the team). Without conscious self-awareness, leaders default to unconscious self-interest.",
+        "Concept: Narcissism exists on a spectrum. The key leadership questions are: Is my intent good? Is my delivery doing harm? Can I empathise with others? Leaders who can honestly answer all three have the foundation for growth."
+      ],
+      "activities": [
+        "Find Your Why (30 min this week): Grab a pen and paper. Start with the two words 'I believe.' Write the sentence at least three times. Then feel it — notice which beliefs create energy and which create tension. Share your 'why' with your team in your next 1-on-1 or team meeting.",
+        "Metacognition Journalling (10 min, three mornings this week): Before the day begins, write: 'One thought pattern I notice in myself this week is… It helps my team by… It could be hurting my team by…' Review all three entries on Friday and identify one pattern to consciously change.",
+        "Conscious Leadership Self-Assessment (20 min this week): Rate yourself 1–5 on each of the three elements: vision and virtue (do you lead with purpose and integrity?), mindset and strategy (do you think win-win-win?), and people and culture (do you actively grow your team?). Write one action to improve your lowest score."
+      ]
+    },
+    {
+      "category": "Caring Time",
+      "book": "Upgrade Your Mindset",
+      "title": "Lead Under Pressure",
+      "description": "BOOM moments — crises, conflicts, sudden failures — reveal the real leader. This module equips leaders with the intrapersonal, interpersonal, and informational skills to lead through pressure: rethinking stress as a resource, restating purpose for the team, empowering rather than controlling, and using language intentionally when it matters most. It matters because how a leader shows up in a BOOM moment defines their reputation, their team's safety, and the outcome.",
+      "displayOrder": 1,
+      "active": true,
+      "sourceChapters": [
+        "Skill IV: Lead Under Pressure — How To Empower Others Like Larry Page",
+        "Skill IV: Lead Under Pressure — How To Be An Expert In Leadership Languaging",
+        "Skill IV: Lead Under Pressure — The Story Of The King And His Wild Dogs",
+        "Skill IV: Lead Under Pressure — Don't Let The Pressure Win",
+        "Skill IV: Lead Under Pressure — How To Cope With Pressure When Things Go BOOM",
+        "Skill IV: Lead Under Pressure — How To Talk To People That Don't Listen"
+      ],
+      "checklist": [
+        "When pressure hits, orient around three focuses in order: future focus (what does better look like?), people focus (who needs support right now?), then self-focus (how am I managing my own state?).",
+        "Rethink pressure as a resource: before your next high-stakes event, remind yourself that pressure heightens senses and sharpens focus — reframe it as 'I'm ready' not 'I'm stressed.'",
+        "In BOOM moments, draw on others rather than taking everything on yourself: ask for ideas, allocate tasks, and let empowerment be a response to pressure, not a casualty of it.",
+        "Audit your language under pressure: identify your most common trigger words (words that produce emotional reactions in others) and replace at least one with a less charged alternative this week.",
+        "Give at least one team member greater meaning, impact, or self-determination in their role this week — a decision deferred to them, a project given to them, or a voice invited in."
+      ],
+      "quotesAndConcepts": [
+        "Leading under pressure means not taking on everything yourself. It means drawing on others for support — which helps you, and empowers them. — Anton Guinea, Upgrade Your Mindset",
+        "It's not the stress itself, but how we think about the stress, that matters. — Kelly McGonigal (cited in Upgrade Your Mindset)",
+        "Talented people are attracted to Google because we empower them to change the world. — Larry Page (cited in Upgrade Your Mindset)",
+        "Concept: Psychological empowerment has four dimensions: meaning (work aligned with personal values), impact (contribution to something bigger), competence (feeling capable), and self-determination (autonomy over how the work is done). Leaders who invest in all four during calm periods create teams that can sustain themselves during BOOM events.",
+        "Concept: Language is most important under pressure — and most neglected. Every word is a potential trigger. Think fast, talk slow: be acutely aware of the emotional state of others in the conversation and adapt your tone, volume, and language to meet the situation, not your own urgency."
+      ],
+      "activities": [
+        "BOOM Preparation Plan (30 min this week): Identify the most likely BOOM event in your current role — a team conflict, a missed deadline, a customer crisis. Write your plan for each of the three focuses: future focus (what will 'better' look like?), people focus (who will need care and connection?), and self-focus (how will you manage your own state?). Do this before the crisis, not during it.",
+        "Empowerment Audit (20 min this week): For each team member, rate how high they are on meaning, impact, competence, and self-determination (1–5 each). For anyone scoring below 3 on any dimension, identify one action you can take this week to elevate that dimension.",
+        "Language Under Pressure Review (15 min this week): Recall your last high-pressure conversation. Write down the exact words you used. Identify any trigger words — 'no,' 'you're wrong,' 'but,' 'that's not how we do it.' For each, write a replacement phrase. Practise the replacement in your next challenging interaction."
+      ]
+    },
+    {
+      "category": "Acts of Support",
+      "book": "Upgrade Your Mindset",
+      "title": "Know Your Leadership Style",
+      "description": "Leaders who do not understand their own style cannot adapt it — and the inability to adapt is the single biggest reason good people leave. This module introduces DiSC profiling, the spectrum of leadership styles from transformational to conscious, the importance of active learning over passive consumption, and the cost of being 'crazy busy.' It matters because self-knowledge is the starting point for every leadership improvement that follows.",
+      "displayOrder": 1,
+      "active": true,
+      "sourceChapters": [
+        "Skill V: Know Your Leadership Style — What Leadership Style Am I?",
+        "Skill V: Know Your Leadership Style — Why Your DiSC Profile Is More Important Than You Might Think",
+        "Skill V: Know Your Leadership Style — Every Day Is A School Day...Or Is It?",
+        "Skill V: Know Your Leadership Style — Have You Noticed That We're Now Crazy Busy, Not Just Busy?",
+        "Skill V: Know Your Leadership Style — My 28th Explosion Anniversary"
+      ],
+      "checklist": [
+        "Complete a DiSC profile (or revisit yours if already done) and identify your top one development opportunity from it this week.",
+        "Share your DiSC profile — specifically your improvement opportunity — with at least one team member and invite them to hold you accountable.",
+        "Move from passive to active learning: identify one topic you want to develop in and schedule a specific learning block (minimum 30 minutes) for it this week — in your calendar, not just your intentions.",
+        "Audit your busyness: identify two meetings or tasks this week that are low-value relative to time cost. Remove, reduce, or delegate at least one.",
+        "Reflect on your own leadership origin story: what shaped how you lead today? Write one belief that came from that story — and ask whether it is still serving you."
+      ],
+      "quotesAndConcepts": [
+        "When you understand yourself, and others, your world changes. — Anton Guinea, Upgrade Your Mindset",
+        "Concept: DiSC profiling maps four behavioural styles — Dominant (direct, results-focused), Influential (persuasive, relationship-focused), Steady (collaborative, team-focused), and Conscientious (detail-focused, quality-driven). Understanding your style explains how you communicate under pressure, and understanding others' styles reveals why your default approach does not land equally with everyone.",
+        "Concept: Every day is a school day — but only if learning is active. Passive consumption (news, scrolling, listening without applying) is not leadership development. Active learning involves selecting a topic, engaging with it deliberately, and committing to a behaviour change as a result.",
+        "Concept: Being 'crazy busy' is not a badge of honour — it is a leadership risk. When leaders are at capacity, their emotional regulation degrades, their team gets less of them, and their decision quality declines. Breathing, down time, and sleep are not luxuries; they are performance inputs."
+      ],
+      "activities": [
+        "DiSC Profile Action Plan (this week): Read your DiSC profile fully. Identify the one improvement opportunity that would most change how your team experiences you. Write it down, share it with your team at your next meeting, and ask them to let you know when they notice you working on it — or not.",
+        "Active Learning Block (schedule this week, 30–60 min): Choose one topic you want to develop — a leadership concept, a communication skill, a psychology principle. Schedule a blocked learning session in your calendar. Read, watch, or listen — then write one behaviour you will practise as a result. Make this a weekly recurring block.",
+        "Leadership Origin Reflection (20 min this week): Write a short answer to: 'What experience most shaped how I lead today?' Then ask: 'What belief did it create in me?' Then ask: 'Is that belief serving my team right now — or is it time to upgrade it?' Share the answer with your coach, a peer, or your journal."
+      ]
+    }
+  ]
+}

@@ -1,0 +1,163 @@
+{
+  "modules": [
+    {
+      "category": "Acts of Support",
+      "book": "The Art of Facilitation",
+      "title": "Facilitation as a Leadership Superpower",
+      "description": "Most leaders have sat through workshops that wasted everyone's time — and avoid running them as a result. This module reframes facilitation as a core leadership discipline using the 5P framework: Purpose, Process, People, Performance, and Polish. It matters because a leader who can design and run intentional, structured conversations has a tool that builds alignment, accountability, and momentum in any team, on any challenge.",
+      "displayOrder": 1,
+      "active": true,
+      "sourceChapters": [
+        "Introduction: Why Workshops Matter",
+        "Why I Believe Facilitation is the Most Important Skill I've Ever Learned"
+      ],
+      "checklist": [
+        "Before scheduling any workshop, write a one-sentence SMART purpose statement: specific, measurable, achievable, relevant, and time-bound.",
+        "Design a structured agenda with timed blocks before every workshop — send it to participants at least 48 hours in advance.",
+        "Invite only the people essential to the outcome: identify who owns the numbers, who brings the data, and who will implement the decisions.",
+        "During facilitation, stay objective — your role is to help the group make good decisions, not to make the decisions for them.",
+        "Close every session with a clear summary: decisions made, actions assigned, owners named, and timelines confirmed. Send a close-out report the next day."
+      ],
+      "quotesAndConcepts": [
+        "Becoming a facilitative leader means changing how you think in order to change the consequences you help create. — Roger Schwarz, The Skilled Facilitator (cited in The Art of Facilitation)",
+        "Facilitation isn't just about running a meeting. It's about creating an environment where progress is inevitable. Where people feel heard. Where decisions get made. Where momentum builds. — Anton Guinea, The Art of Facilitation",
+        "Facilitation isn't a soft skill. It's a power skill. When you learn to lead the room, you learn to lead the business. — Anton Guinea, The Art of Facilitation",
+        "Concept: The 5P framework — Purpose (why we're here), Process (how we'll work), People (who needs to be in the room), Performance (how to facilitate effectively), and Polish (how to capture and close out) — is the complete design architecture for any workshop. Leaders who skip any of the five steps produce workshops that feel good but change nothing."
+      ],
+      "activities": [
+        "5P Workshop Audit (20 min this week): Think of the last team meeting or workshop you ran. Score it 1–5 on each of the five Ps: Did you have a clear purpose? Was the process structured? Were the right people there? Did you facilitate or just present? Did you close out with actions and owners? Identify your lowest P and design one improvement for your next session.",
+        "Purpose Statement Practice (10 min before your next team session): Write a SMART purpose statement for your next team meeting. Example: 'To agree on our three Q3 priorities and assign an owner to each by end of session.' Use this as the opening line of your invitation — watch how engagement shifts.",
+        "Close-Out Report Habit (after your next session): Within 24 hours of your next team meeting, send a one-page summary covering: decisions made, actions allocated, owners assigned, and deadlines set. Do this consistently for four weeks and note the change in follow-through."
+      ]
+    },
+    {
+      "category": "Caring Time",
+      "book": "The Art of Facilitation",
+      "title": "Run a Goal Setting Workshop That Actually Sticks",
+      "description": "Goals set by a leader for a team produce compliance. Goals co-created with a team produce ownership. This module teaches leaders how to design and facilitate a goal setting workshop that builds genuine buy-in, strategic alignment, and accountability from the people who will do the work. It matters because when people help set the goals, they are far more likely to pursue them with energy and commitment.",
+      "displayOrder": 1,
+      "active": true,
+      "sourceChapters": [
+        "1. Goal Setting Workshops — Purpose: Define Direction, Build Buy-In",
+        "1. Goal Setting Workshops — Process: Set the Structure Before You Start",
+        "1. Goal Setting Workshops — People: Invite the Right Brains",
+        "1. Goal Setting Workshops — Performance: Facilitate With Purpose",
+        "1. Goal Setting Workshops — Polish: Close With Confidence"
+      ],
+      "checklist": [
+        "Use a goal setting workshop at the start of every new year, quarter, or major project phase — not as an ad hoc event, but as a scheduled leadership discipline.",
+        "Have pre-conversations with two or three key attendees before the session: ask what success looks like for them and use what you learn to shape the agenda.",
+        "Balance voices in the room: actively prompt quieter contributors and diplomatically manage dominant speakers who crowd out others.",
+        "Use a parking lot on a whiteboard to capture valuable but off-topic contributions — this signals respect without derailing the agenda.",
+        "Close with an explicit check against the purpose statement: 'Did we achieve what we came here to do?' Summarise, assign owners, set timelines, and book a follow-up check-in 4–6 weeks out."
+      ],
+      "quotesAndConcepts": [
+        "These workshops are some of the most energising and hopeful moments a business can have. It's the beginning of what's possible. — Anton Guinea, The Art of Facilitation",
+        "Concept: A goal setting workshop is not just about targets — it is about creating focus, momentum, and ownership. The process of co-creation matters as much as the output. People own what they helped build.",
+        "Concept: The facilitator's job is not to make the decisions — it is to help the group make them well. Energy, curiosity, and the ability to guide without dominating are the three core performance qualities in any goal setting session.",
+        "Concept: The close-out is as important as the session itself. Momentum dies when outputs are not captured, assigned, and followed up. A clear close-out report sent the next day is what turns a good conversation into real change."
+      ],
+      "activities": [
+        "Goal Setting Workshop Design (45 min this week): Using the 5P framework, plan a goal setting session for your team for the next quarter. Write a SMART purpose statement, draft a timed agenda, list the attendees and why each is essential, note three facilitation challenges you might face and how you will manage them, and design your close-out process.",
+        "Pre-Workshop Conversations (before your next session): Have a 10-minute conversation with two or three key participants before the session. Ask: 'What does success look like for you from this session?' and 'Is there anything we should make sure we cover?' Use what you hear to refine the agenda and identify potential tensions to manage on the day.",
+        "Goal Setting Questions Practice (15 min): Review the ten goal setting questions from the book. Choose the three you would be most likely to skip — the ones that feel uncomfortable or too direct. Practise asking each one out loud, then commit to using all three in your next goal setting session."
+      ]
+    },
+    {
+      "category": "Words of Recognition",
+      "book": "The Art of Facilitation",
+      "title": "Facilitate Innovation: Running an Idea Generation Workshop",
+      "description": "Most teams have more good ideas than they will ever be asked for. The leader's job is to create the conditions where those ideas feel safe to share, are seriously considered, and are shaped into action. This module teaches leaders how to design and run an idea generation workshop that unlocks creativity, celebrates diverse thinking, and converts raw ideas into structured next steps. It matters because the best part of your team's thinking is almost certainly still inside their heads.",
+      "displayOrder": 1,
+      "active": true,
+      "sourceChapters": [
+        "2. Idea Generation Workshops — Purpose: Unlock Innovation",
+        "2. Idea Generation Workshops — Process: Capture the Chaos",
+        "2. Idea Generation Workshops — People: Bring the Creators",
+        "2. Idea Generation Workshops — Performance: Facilitate Like a Muse",
+        "2. Idea Generation Workshops — Polish: Curate the Gold"
+      ],
+      "checklist": [
+        "Open every idea generation session by making psychological safety explicit: tell the group there are no bad ideas and that all contributions are welcome.",
+        "Layer the brainstorming in three stages: individual ideation first (silent writing), then pair sharing, then full group discussion — never jump straight to open group brainstorming.",
+        "Use at least one creative constraint during the session: 'What would we do if we had 10% of our usual budget?' or 'What would our boldest competitor do here?'",
+        "Celebrate wild ideas explicitly during the session — highlight unexpected or imaginative contributions to signal that creative risk-taking is valued.",
+        "After the session, collate all ideas, group them by theme, and send a summary pack to all attendees within 48 hours with proposed next steps."
+      ],
+      "quotesAndConcepts": [
+        "The best part? Your team already has the ideas. They just need a space and a signal that it's safe to share them. — Anton Guinea, The Art of Facilitation",
+        "Concept: Structure liberates creativity. Idea generation workshops are not free-for-alls — they are carefully designed containers. Breaking the session into segments (brainstorm, analyse, prioritise) prevents the chaos of open-ended ideation while still making space for genuinely novel thinking.",
+        "Concept: Bring variety into the room. Different perspectives fuel creativity — product developers, marketers, customer service reps, and a 'wild card' from another part of the business all see different things. Diversity of experience is not a nicety in an idea generation workshop; it is the mechanism by which better ideas emerge.",
+        "Concept: Let silence do the work. Facilitators who rush to fill pauses cut off the thinking that produces the best contributions. Give people space to sit with a question before jumping in — this is especially important for introverted and deep-thinking team members."
+      ],
+      "activities": [
+        "Idea Generation Workshop Design (45 min this week): Plan an idea generation session for one real challenge your team is currently facing. Write the purpose statement, design a three-segment agenda (product/service ideas, process improvements, or customer experience ideas — choose what fits), identify five to seven participants including at least one 'wild card,' and prepare three creative constraint questions to use on the day.",
+        "Layered Brainstorm Practice (next team meeting, 20 min): Try a mini version of layered brainstorming on any current topic. Give everyone 3 minutes to write their ideas individually (no discussion), then 3 minutes to share with one partner, then open to the full group. Debrief: what ideas emerged that would not have surfaced in a standard open discussion?",
+        "Idea Summary Pack (after your next session): Within 48 hours of any idea generation session, send participants a one-page summary with all ideas grouped by theme, a short note on which ideas will progress, and an invitation to add further thoughts via a shared document. Keeping the creativity loop open after the session captures ideas that people think of on the way home."
+      ]
+    },
+    {
+      "category": "Acts of Support",
+      "book": "The Art of Facilitation",
+      "title": "Facilitate Solutions: Running a Problem Solving Workshop",
+      "description": "When something goes wrong, the worst response is blame — and the second worst is a quick fix that addresses symptoms without touching causes. This module teaches leaders how to design and run a structured problem solving workshop using root cause tools (Root Cause Tree, Fishbone Diagram, 5 Whys) that get to the real issue and produce prevention plans that last. It matters because problems that are properly diagnosed do not return.",
+      "displayOrder": 2,
+      "active": true,
+      "sourceChapters": [
+        "3. Problem Solving Workshops — Purpose: Fix the Real Problem",
+        "3. Problem Solving Workshops — Process: Uncover the Truth",
+        "3. Problem Solving Workshops — People: Get the Experts",
+        "3. Problem Solving Workshops — Performance: Facilitate With Grit",
+        "3. Problem Solving Workshops — Polish: Document the Path Forward"
+      ],
+      "checklist": [
+        "Set clear ground rules at the start of every problem solving workshop: the goal is understanding and improvement, not blame or defence.",
+        "Invite the people who use the system, fix it, and designed it — anyone who can speak to the full life cycle of the problem.",
+        "Use structured root cause tools (Root Cause Tree, Fishbone Diagram, or 5 Whys) rather than open discussion — let the team build the logic visually on a whiteboard.",
+        "Stay neutral throughout: do not take sides, do not offer your own theory of the cause, and redirect blame-focused contributions to observable facts and timelines.",
+        "Document everything — root causes, evidence, diagrams, action plans with owners and deadlines — and produce a report that could be reviewed by senior leaders."
+      ],
+      "quotesAndConcepts": [
+        "These workshops create some of the biggest returns I've seen in business. Fix the failure, and you'll fix the future. — Anton Guinea, The Art of Facilitation",
+        "Concept: Problem solving workshops demand rigour, emotional intelligence, and control. The facilitator is dealing with issues that may carry blame, frustration, or organisational history. Their job is not to solve the problem — it is to keep the group calm, constructive, and focused on the evidence rather than the emotion.",
+        "Concept: The 5 Whys technique — asking 'why?' repeatedly until the root cause is reached — prevents the common trap of fixing the symptom rather than the source. Most problems that recur were never solved at the root level; they were managed at the surface.",
+        "Concept: Break big issues into components and tackle them one at a time. Overwhelm in a problem solving session produces paralysis and blame. Structure gives the group the confidence that a complex problem can be worked through systematically."
+      ],
+      "activities": [
+        "Problem Solving Workshop Design (45 min this week): Identify a real recurring problem in your team or business. Write a SMART purpose statement for a workshop to address it. Draft the agenda using the three-stage structure: root cause mapping, impact assessment, prevention planning. Identify who must be in the room and what pre-work they should do before arriving.",
+        "5 Whys Practice (15 min this week): Take any recent mistake, near-miss, or repeated issue. Ask 'Why did this happen?' Write the answer, then ask 'Why?' again. Repeat five times. At the end, compare your first answer to your fifth — note how much deeper the root cause is. Share the process with one team member to build their problem solving vocabulary.",
+        "Ground Rules Card (before your next problem solving session): Write a set of five session ground rules on a whiteboard or flip chart before participants arrive. Include: we focus on the problem, not the person; we use facts and timelines, not assumptions; all perspectives are valid; we commit to actions before we leave. Open the session by reading them aloud and asking for agreement."
+      ]
+    },
+    {
+      "category": "Psychological Touch",
+      "book": "The Art of Facilitation",
+      "title": "The Questions That Lead the Room",
+      "description": "Great facilitation is not about having the right answers — it is about asking the right questions. This module equips leaders with the 30 best facilitation questions across all three workshop types, and develops the deeper skill of question sequencing: knowing when to open up, when to probe, and when to bring the group to a decision. It matters because the quality of the questions a leader asks is the single biggest determinant of the quality of thinking a team produces.",
+      "displayOrder": 1,
+      "active": true,
+      "sourceChapters": [
+        "Bonus Section: The 30 Best Questions for Facilitation Success",
+        "Final Thoughts: Now It's Your Turn"
+      ],
+      "checklist": [
+        "Before every workshop, write down the three to five most important questions you want the group to answer — not your talking points, your questions.",
+        "Use opening questions that expand possibility (What does success look like? What are we not yet considering?) before narrowing questions that drive to decision.",
+        "When a conversation stalls, use a probing question rather than offering your own view: 'What do you think is underneath that?' or 'What evidence do we have for that?'",
+        "After a key discussion, use a convergence question to test for alignment: 'Based on what we've heard, what do we all agree on?' before moving to next steps.",
+        "Build a personal bank of 10 go-to facilitation questions that work for your team — ones that reliably open up honest, productive conversation."
+      ],
+      "quotesAndConcepts": [
+        "Facilitation is powered by great questions. The quality of the questions you ask will determine the quality of the insights you get. — Anton Guinea, The Art of Facilitation",
+        "You don't have to be perfect. You just have to be present, prepared, and willing to listen deeply. — Anton Guinea, The Art of Facilitation",
+        "Concept: Facilitation questions fall into three functional types: opening questions that expand the conversation (What ideas haven't we tried?), probing questions that deepen it (What's causing that?), and converging questions that bring the group to a decision (What are we all agreeing to?). Skilled facilitators move deliberately through all three — they do not live only in the opening phase.",
+        "Concept: The most powerful facilitation move is often the pause. Silence after a question signals to the group that the facilitator is genuinely listening and that the question deserves a real answer — not the first safe response that comes to mind. Leaders who rush to fill silence consistently get shallower answers."
+      ],
+      "activities": [
+        "Question Bank Build (30 min this week): Using the 30 questions from the book as a starting point, select your ten personal favourites — five for goal setting and strategy conversations, three for creative and idea generation moments, and two for problem solving and root cause work. Write them on a card or note you can reference before sessions. Add to the bank over time as you discover what works.",
+        "Question-Led Meeting (your next team meeting): Run the first 20 minutes of your next team meeting using only questions — no statements, no opinions, no answers from you. Open with a purpose question, probe with follow-ups, and use silence deliberately. At the end of 20 minutes, summarise what the group said back to them in two sentences. Notice how the quality of the conversation changes.",
+        "Post-Session Question Review (after each workshop this month): After every session you facilitate, write down: Which question produced the most energy or insight? Which question fell flat? What question did I wish I had asked? Build this into a running reflection log and review it before each new session you design."
+      ]
+    }
+  ]
+}
