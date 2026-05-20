@@ -1,0 +1,149 @@
+{
+  "modules": [
+    {
+      "category": "Caring Time",
+      "book": "Let's Talk About Safety",
+      "title": "There Is No Time Not to Work Safely",
+      "description": "The belief that safety takes too much time is one of the most dangerous and common attitudes on any worksite. This module helps leaders challenge that belief directly and personally — in toolbox talks, 1-on-1s, and field conversations — by reframing safety time as the investment that prevents the far greater cost of injury, recovery, and loss. It matters because a leader who lets time-pressure excuses slide is silently endorsing the risk.",
+      "displayOrder": 1,
+      "active": true,
+      "sourceChapters": [
+        "Chapter 1: Anton, I just don't have time to work safely; we have to get the job done."
+      ],
+      "checklist": [
+        "When a team member rushes a job, ask: 'If this goes wrong, how long will it take to recover?' Use the answer to reframe the time investment in safety.",
+        "Before each shift or task, model brief pre-work planning out loud: 'Before we start, let's spend two minutes on how we're doing this safely.'",
+        "Challenge perceived pressure when you see it: ask whether the urgency is real or self-generated, and name the difference with your team.",
+        "Never visibly reward or praise speed if safety steps were skipped to achieve it — this signals that time matters more than people.",
+        "When safety paperwork is resisted, reframe it explicitly: 'This isn't admin. This is you planning how to get home tonight.'"
+      ],
+      "quotesAndConcepts": [
+        "Mate, you don't have the time not to work safely. It is part of your job to work safely and exercise a duty of care to yourself and others. — Anton Guinea, Let's Talk About Safety",
+        "So mate, you really don't need to rush that job. It will take you a lot longer to recover than it will to do it safely now. — Anton Guinea, Let's Talk About Safety",
+        "Concept: Beliefs drive behaviours. The belief that safety is a waste of time is not just an attitude — it is a predictor of injury. A leader who understands this does not dismiss the belief; they engage it directly with evidence and empathy.",
+        "Concept: Some of the pressure a worker feels to rush is not from the boss — it is perceived pressure from within. Leaders who name this distinction help their teams think more clearly under time stress and make better safety choices."
+      ],
+      "activities": [
+        "The Recovery Time Conversation (use at next toolbox talk, 10 min): Ask your team: 'Think of one injury you've seen or heard about in this industry. How long did the person take to recover?' Then ask: 'How long would the safe version of that job have taken?' Let the contrast do the work. Do not lecture — let them reach the conclusion.",
+        "Pre-Task Planning Model (this week, before 3 jobs): Before starting each of three tasks this week, spend 2 minutes explicitly planning how the job will be done safely — out loud, with whoever is doing the work. Name the hazards, name the controls, then start. Track whether the jobs take measurably longer.",
+        "Pressure Audit (15 min this week): Identify the three most common time-pressure situations on your site or team. For each, write: Is this pressure real or perceived? Who is driving it? What is the actual risk if we take the shortcut? Share your findings in your next team safety conversation."
+      ]
+    },
+    {
+      "category": "Acts of Support",
+      "book": "Let's Talk About Safety",
+      "title": "From Compliance to Commitment: Making Procedures Work",
+      "description": "When workers see safety procedures as obstacles rather than tools, they mentally opt out — ticking boxes without engaging their thinking. This module equips leaders to shift their team from surface-level compliance to genuine procedural commitment, by helping people understand that procedures exist not to slow them down but to keep them thinking about hazards. It matters because a compliant-only workforce is one distracted moment away from a serious incident.",
+      "displayOrder": 1,
+      "active": true,
+      "sourceChapters": [
+        "Chapter 2: Anton, I never follow procedure because they're all wrong or not worth using."
+      ],
+      "checklist": [
+        "When a procedure is questioned, engage the concern rather than dismissing it: ask 'What part doesn't seem right to you, and why?'",
+        "Involve at least one frontline worker in reviewing or updating a procedure this quarter — people commit to what they helped create.",
+        "Distinguish between compliance (doing it because you have to) and commitment (doing it because you understand why) in your next safety conversation.",
+        "If a worker has found a safer way to do a job, help them formalise it through the procedure update process — don't let safer shortcuts become invisible.",
+        "Regularly remind your team that procedures are designed to help them avoid complacency, not to question their competence."
+      ],
+      "quotesAndConcepts": [
+        "So mate, don't just be compliant, be committed to the safety processes. — Anton Guinea, Let's Talk About Safety",
+        "Safety procedures were put in place to keep you safe. If you find a safer way to do the job, update the procedure. — Anton Guinea, Let's Talk About Safety",
+        "Concept: Compliance mode means ticking boxes without thinking. Commitment mode means actively using safety systems to plan, identify hazards, and protect yourself and your workmates. Only committed engagement with procedures delivers real safety value — compliance alone leaves people vulnerable the moment the paperwork is done.",
+        "Concept: Procedure resistance is often rooted in one of three things: feeling excluded from the development process, believing the procedure is outdated, or resisting being told how to do a job they know well. Leaders who diagnose which is operating can respond with the right conversation, not a generic instruction to comply."
+      ],
+      "activities": [
+        "Procedure Engagement Conversation (this week, in a 1-on-1 or small group): Ask your team: 'Are there any procedures here that you think are outdated or don't reflect how we actually do the job safely?' Listen without defending. Identify one that can be reviewed and commit to a timeline for updating it.",
+        "Compliance vs Commitment Discussion (next toolbox talk, 10 min): Describe the difference between doing safety because you have to and doing it because you understand why. Ask: 'When do each of us slip into compliance mode? What triggers that?' Use the conversation to surface real barriers without blame.",
+        "Procedure Walk-Through (this week, for one key task): Walk through a critical safe work procedure with the team member who is most resistant to it. Ask them to explain to you what the procedure is trying to prevent. Listen. Where they have gaps, fill them; where they have insights, capture them and pursue a formal update."
+      ]
+    },
+    {
+      "category": "Psychological Touch",
+      "book": "Let's Talk About Safety",
+      "title": "Safety Starts at the Top: Aligning Words and Actions",
+      "description": "When workers believe that production is secretly prioritised over safety, they stop trusting the safety system — and start making their own risk calculations. This module helps leaders identify and close the gap between what they say about safety and what their behaviour actually signals to the team. It matters because a leader who preaches safety but rewards speed has already lost the safety culture, whether they know it or not.",
+      "displayOrder": 1,
+      "active": true,
+      "sourceChapters": [
+        "Chapter 3: Anton, they always put production before safety here... they say one thing, but do another."
+      ],
+      "checklist": [
+        "When production pressure is visible on site, name it explicitly: 'I know we're behind, and I need you to know that your safety still comes first — tell me if you're feeling pushed.'",
+        "Audit one recent decision you made under pressure: did your behaviour signal safety first, or production first? Be honest.",
+        "When a worker raises a safety concern about pace or workload, act on it visibly and quickly — inaction is the loudest signal a leader can send.",
+        "Never make a worker feel that raising a safety concern will cost them standing, pace, or favour.",
+        "Model the right response to perceived pressure: 'I am not comfortable doing this unsafely. Let's find another way.'"
+      ],
+      "quotesAndConcepts": [
+        "You are responsible for the choices you make — you cannot be forced to do something that is unsafe. — Anton Guinea, Let's Talk About Safety",
+        "Nothing comes before your safety, and if it seems like it does, it may not be real pressure — only perceived. Always make sure you put your safety first. — Anton Guinea, Let's Talk About Safety",
+        "Concept: The gap between stated safety values and observed leader behaviour is the exact gap that erodes safety culture. Workers are expert observers — they notice when a manager who preaches safety also celebrates a deadline achieved through corner-cutting. Closing that gap requires leaders to make their safety commitment visible, especially under pressure.",
+        "Concept: Some production pressure is real and comes from management. Some is perceived — workers accelerating themselves out of an eagerness to look productive. Leaders who distinguish between these, and name the distinction with their team, help workers make better decisions at critical moments."
+      ],
+      "activities": [
+        "Words vs Actions Audit (20 min this week): Write down three safety messages you have communicated to your team in the past month. For each, honestly assess: did your behaviour in the same period support or contradict the message? Identify the biggest gap and write one action to close it.",
+        "The Safety First Conversation (use in next team meeting or toolbox talk): Say explicitly: 'I want to be someone whose safety commitment you can see in how I act, not just hear in what I say. If you ever feel like I'm — consciously or unconsciously — signalling that production matters more than your safety, I want you to tell me.' Then mean it.",
+        "Perceived Pressure Debrief (after a high-pressure week): After a busy or high-pressure period, ask your team in a small group: 'Did any of you feel unsafe this week but push through anyway? What was driving that?' Listen without defending. Use what you hear to change one visible behaviour."
+      ]
+    },
+    {
+      "category": "Receiving Value",
+      "book": "Let's Talk About Safety",
+      "title": "Complacency Kills: Challenging the 'It Won't Happen to Me' Belief",
+      "description": "Experience is one of the greatest assets on a worksite — and one of the greatest safety risks. This module helps leaders have honest, empathetic conversations with experienced workers who believe their track record makes them immune to injury. It matters because complacency — working on autopilot, failing to notice changing hazards — is a leading cause of serious incidents among the most experienced workers, not the newest ones.",
+      "displayOrder": 1,
+      "active": true,
+      "sourceChapters": [
+        "Chapter 4: Anton, it won't happen to me. Look, I know how to do my job. I've been doing it this way for years."
+      ],
+      "checklist": [
+        "When an experienced worker dismisses a hazard, engage the conversation directly: 'I hear you know this job well. Can we just check together what's changed today?'",
+        "Acknowledge experience as an asset before challenging complacency — never make a veteran feel their knowledge is being dismissed.",
+        "Regularly change the angle of pre-job hazard discussions: instead of asking 'what are the hazards?', ask 'what's different today compared to last time?'",
+        "Share relevant industry incident stories involving experienced workers — not to frighten, but to demonstrate that a clean record is not a guarantee.",
+        "Encourage workers to actively look for a safer or more efficient way to do any job they have done many times — make improvement a sign of expertise, not doubt."
+      ],
+      "quotesAndConcepts": [
+        "Safety incidents and injuries do not discriminate — older workers with years of experience get injured at work as frequently as the young and inexperienced. The only real thing that determines whether employees get hurt is their decision to work safely or to ignore safety. — Anton Guinea, Let's Talk About Safety",
+        "Concept: Complacency is working on autopilot and not noticing what is going on around you. An incident-free track record does not mean there cannot be a safer way to do the job — it can mean the worker has simply been lucky that conditions have not changed until now.",
+        "Concept: The belief that experience equals immunity is reinforced by years without incident. Leaders challenge this belief not by undermining experience, but by introducing the concept that conditions change constantly — the job may be the same, but the environment, the team, the equipment, and the worker's own state of alertness are never exactly the same twice.",
+        "Concept: Changing mindset requires the worker to genuinely open up to the possibility of injury — not as a threat, but as a reality check. Leaders who share genuine incident stories (especially involving experienced workers) with empathy and respect are far more effective than those who issue warnings or invoke rules."
+      ],
+      "activities": [
+        "The 'What's Different Today?' Pre-Job Prompt (use this week, on every pre-job discussion): Replace the standard hazard checklist question with: 'What is different about this job today compared to the last time we did it?' Even on routine tasks. Track what comes up — often, something is different. Use the findings to debrief with the team.",
+        "Incident Story Conversation (next toolbox talk, 10 min): Find a real, publicly available incident report involving an experienced worker in your industry. Share the story briefly — focus on the person and what they lost, not just what went wrong procedurally. Ask: 'What did this person probably think the morning they came to work?' Let the silence do the work.",
+        "Experience as a Safety Asset (1-on-1 this week, with your most experienced team member): Ask them: 'Given everything you've seen over your career, what are the two biggest hazards in this job that younger workers just don't respect enough yet?' Listen carefully. Use their answer in your next team safety discussion — and credit them for it."
+      ]
+    },
+    {
+      "category": "Words of Recognition",
+      "book": "Let's Talk About Safety",
+      "title": "Safety Is Everyone's Job: Building an Interdependent Safety Culture",
+      "description": "The belief that safety is the company's responsibility — not the individual worker's — is the belief that produces the most dangerous workplaces. This module helps leaders move their teams along the Bradley Curve from dependent and independent safety behaviours to true interdependence: where every person actively looks out for their workmates, not just themselves. It matters because on an interdependent team, someone is far more likely to catch a hazard before it causes harm.",
+      "displayOrder": 1,
+      "active": true,
+      "sourceChapters": [
+        "Chapter 5: Anton, safety is not my responsibility; it is the company's responsibility."
+      ],
+      "checklist": [
+        "When a worker defers safety responsibility to 'management', redirect respectfully: 'The company sets the systems, but only you can choose how to use them in the moment.'",
+        "Acknowledge and recognise every instance of a worker looking out for a workmate's safety — make interdependent behaviour visible and valued.",
+        "Discuss the three worker types — dependent, independent, interdependent — with your team and ask them to identify where they currently sit.",
+        "When someone raises a safety concern about a workmate, treat it as an act of care, not an act of dobbing — explicitly name the courage it took.",
+        "Model interdependent safety yourself: when you see a hazard that affects others, act on it — do not wait for someone else's job title to make it their problem."
+      ],
+      "quotesAndConcepts": [
+        "There is only one person responsible for your safety, and that is you. — Anton Guinea, Let's Talk About Safety",
+        "So mate, look after yourself, but do remember that the actions of your workmates affect your safety. Take the interdependent approach and ask them to consider your safety, as well as theirs. — Anton Guinea, Let's Talk About Safety",
+        "Concept: The Bradley Curve describes three stages of safety maturity: dependent (relying on the company to keep you safe), independent (taking responsibility for your own safety only), and interdependent (actively looking out for the safety of your workmates). The interdependent stage is the most protective — and the hardest to achieve, because it requires genuine care factor and a degree of courage.",
+        "Concept: Your actions speak louder than words on a worksite. A worker who works safely does more than protect themselves — they influence every person watching them. A leader who recognises and names interdependent safety behaviour makes it contagious. A leader who ignores it lets the culture drift back toward compliance."
+      ],
+      "activities": [
+        "Bradley Curve Team Discussion (next toolbox talk, 15 min): Briefly describe the three stages — dependent, independent, interdependent. Ask: 'As a team, where do you think we sit right now? What would it take to move to the next level?' Do not answer for them. Capture what they say and commit to one visible action based on the discussion.",
+        "Interdependent Safety Recognition (ongoing this week): Every time you observe a worker doing something that protects a workmate's safety — calling out a hazard, adjusting a process, speaking up — acknowledge it specifically and publicly: 'I noticed what you did there. That's exactly the kind of safety culture we're building.' Do this at least three times this week.",
+        "Personal Responsibility Conversation (1-on-1 this week, with one team member): Ask: 'If something went wrong for you on this site, who do you think would be most affected?' Let them answer. Then: 'Who do you think has the most control over whether that happens?' Use the conversation to help them own their safety decision-making, without blame or pressure."
+      ]
+    }
+  ]
+}
