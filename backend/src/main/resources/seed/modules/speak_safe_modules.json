@@ -1,0 +1,319 @@
+{
+  "modules": [
+    {
+      "category": "Words of Recognition",
+      "book": "Speak Safe",
+      "title": "The Words That Build or Break Safety",
+      "description": "Leaders discover that every word they use — and every silence they keep — either reinforces psychological safety or triggers fear. This module teaches intentional language that opens conversation, invites input, and repairs trust when things go wrong. It matters because a single phrase can shut a team down for weeks, or open it up for good.",
+      "displayOrder": 1,
+      "active": true,
+      "sourceChapters": ["Chapter 1: What You Say Matters"],
+      "checklist": [
+        "Open every team meeting or pre-start with a welcoming phrase, not a task-first statement (e.g. 'Thanks for making the time' rather than 'Let's get this over with').",
+        "Use at least one invitation phrase per meeting: 'What's your take on this?' or 'What do we haven't considered?'",
+        "When someone shares bad news, respond with curiosity before judgment: 'Thanks for being upfront — let's talk about what we learned.'",
+        "Interrupt meetings positively: pause to highlight a team member's contribution before moving on.",
+        "When you say something wrong, own it out loud and invite the person back into the conversation."
+      ],
+      "quotesAndConcepts": [
+        "Every message you send — verbally or non-verbally — is doing one of two things: reinforcing psychological safety, or triggering fear. There is no neutral. — Anton Guinea, Speak Safe",
+        "Concept: A leader's voice is their leadership signature. Intentional language is not politeness — it is the mechanism by which teams decide whether it is safe to speak.",
+        "Concept: Recovery matters as much as the original message. Owning a misstep publicly repairs more trust than a perfect delivery would have built."
+      ],
+      "activities": [
+        "Leadership Language Audit (30 min this week): Write down your three default phrases — your opening line in meetings, your response when someone disagrees, and your reaction to bad news. Assess each: does it create safety or kill it? Draft one replacement for each.",
+        "Before You Speak Filter (ongoing, 2 min before key conversations): Ask yourself 'What do I want this person to walk away thinking?' and 'How do I want them to feel?' Then build your language backwards from those answers.",
+        "Positive Interruption Practice (next team meeting): Deliberately pause the meeting once to highlight something a team member said. Use: 'Can we pause there? That idea deserves more airtime.'"
+      ]
+    },
+    {
+      "category": "Caring Time",
+      "book": "Speak Safe",
+      "title": "The Four Drivers of Psychological Safety",
+      "description": "Psychological safety does not emerge by accident — it is built through four deliberate leadership behaviours: trust, respect, consistency, and care. This module walks leaders through the four stages of safety (inclusion, learner, contributor, challenger) and the specific actions that move a team through each stage. It matters because understanding where your team is stuck is the first step to unlocking their performance.",
+      "displayOrder": 1,
+      "active": true,
+      "sourceChapters": ["Chapter 2: The Drivers of Psychological Safety"],
+      "checklist": [
+        "Begin every team meeting with a genuine check-in question before moving to agenda items.",
+        "Learn and consistently use each team member's preferred communication style.",
+        "Follow through on every commitment made in 1-on-1s — same week, no exceptions.",
+        "Deliberately invite quieter voices and underrepresented perspectives into discussions.",
+        "When a team member raises a concern or mistake, respond with curiosity rather than correction first."
+      ],
+      "quotesAndConcepts": [
+        "Psychological safety is a belief that one will not be punished or humiliated for speaking up with ideas, questions, concerns, or mistakes. — Amy Edmondson (cited in Speak Safe)",
+        "Concept: Timothy R. Clark's four stages — inclusion safety, learner safety, contributor safety, and challenger safety — each require a specific leader behaviour. Skipping a stage leaves teams permanently stuck.",
+        "Concept: Safety is built in daily micro-moments: the check-in, the follow-through, the pause before reacting. These compound over time into either trust or cynicism."
+      ],
+      "activities": [
+        "Stage Diagnostic (20 min this week): Map each of your team members against the four stages of psychological safety. For anyone stuck at inclusion or learner safety, identify one specific action you will take with them this week.",
+        "Check-In Design (before your next team meeting): Replace your standard opener with a check-in question: 'On a scale of 1–10, how are you showing up today — and what would make it a 10?' Note who answers freely and who deflects.",
+        "Follow-Through Tracker (ongoing): At the end of each 1-on-1 this week, write down your one commitment. Review the list on Friday. Every open item is a trust debt — close it."
+      ]
+    },
+    {
+      "category": "Acts of Support",
+      "book": "Speak Safe",
+      "title": "Know the Hazards: Your Legal and Human Duty",
+      "description": "Psychological safety is not just a culture aspiration — it is a legal obligation. This module introduces the 14 psychosocial hazards defined by Safe Work Australia and equips leaders to identify, name, and act on them in their teams. It matters because unnamed hazards become unmanaged risks, and the consequences are legal, reputational, and profoundly human.",
+      "displayOrder": 1,
+      "active": true,
+      "sourceChapters": ["Chapter 3: The Compliance and Legal Aspects of Psychological Safety"],
+      "checklist": [
+        "Download and read the Safe Work Australia psychosocial hazards code of practice (or your local equivalent).",
+        "Self-assess your team against the 14 psychosocial hazard categories — identify at least 1–2 areas of visible risk.",
+        "Name a hazard in a team conversation this month: 'I've noticed we might be at risk here, and I want us to be proactive.'",
+        "Document actions taken on psychosocial hazards — not for legal cover, but to demonstrate to your team that you take their safety seriously.",
+        "Raise any physical environment safety concerns (comfort, temperature, basic conditions) and fix them promptly as a baseline act of care."
+      ],
+      "quotesAndConcepts": [
+        "Concept: If you don't name it, you can't change it. Most workplaces carry several active psychosocial hazards. The leader's role is not to be a psychologist — it is to be a protector who can spot, name, and act.",
+        "Concept: The consequences of unmanaged psychosocial risk go beyond performance — they are legal, reputational, and human. Leaders who wait for a formal complaint have already failed their duty of care."
+      ],
+      "activities": [
+        "14-Hazard Team Audit (45 min this week): Using the Safe Work Australia list, rate your team's exposure to each of the 14 psychosocial hazards on a 1–5 scale. Identify your top 2 risks and write one initial action for each.",
+        "Proactive Safety Conversation (schedule within 7 days): Book a 15-minute team discussion framed as: 'I want to make sure we're being proactive about our wellbeing, not just reactive. Here's what I'm seeing — what are you seeing?' Document the key points.",
+        "Environment Walk (this week, 10 min): Walk your workspace and note any physical conditions that could compromise comfort or safety. Fix at least one thing immediately to signal that basics matter."
+      ]
+    },
+    {
+      "category": "Caring Time",
+      "book": "Speak Safe",
+      "title": "Lead the Individual, Not the Role",
+      "description": "One-size-fits-all leadership is one of the fastest ways to destroy psychological safety. This module challenges leaders to see each team member as a distinct person with different personality, motivators, values, and capacity — and to adapt their approach accordingly. It matters because when people feel led as individuals, they perform and contribute as individuals.",
+      "displayOrder": 2,
+      "active": true,
+      "sourceChapters": ["Chapter 4: Everyone Is Different"],
+      "checklist": [
+        "Ask each team member individually: 'How do you prefer to receive feedback — written, in person, direct, or with context first?'",
+        "Identify one team member this week whose approach, style, or pace differs significantly from yours, and plan a conversation to understand them better.",
+        "Adjust your communication style deliberately for at least two different team members in your next round of 1-on-1s.",
+        "Avoid applying a team-wide solution to what is actually an individual need.",
+        "Record one new thing you learned about a team member's working style this week."
+      ],
+      "quotesAndConcepts": [
+        "You can't treat everyone the same and expect them to perform the same. — Anton Guinea, Speak Safe",
+        "Concept: Adapting leadership style is not inconsistency — it is precision. The leader who leads everyone identically is not being fair; they are being lazy.",
+        "Concept: Understanding someone's motivators, values, and capacity is an act of respect before it is a performance strategy. People who feel seen as individuals are far more likely to feel safe."
+      ],
+      "activities": [
+        "Team Personality Mapping (30 min this week): Write down the name of each team member and beside each name note: their dominant communication style, what motivates them, and what stresses them. Identify gaps in your knowledge and fill them through 1-on-1 conversation this week.",
+        "Tailored Check-In Round (next 1-on-1 cycle): Ask each person a slightly different opening question based on what you know about them. Note the difference in engagement versus your standard opener.",
+        "One Adaptive Leadership Move (this week): Identify one situation where your default approach has not been landing with a specific person. Try a different approach deliberately and observe the result."
+      ]
+    },
+    {
+      "category": "Words of Recognition",
+      "book": "Speak Safe",
+      "title": "Making Space for Every Voice",
+      "description": "The loudest voices in a room are rarely the most important ones. This module teaches leaders how to actively create space for quieter, underrepresented, and hesitant contributors — not through forced participation, but through genuine curiosity and structured inclusion. It matters because the ideas that save teams are often the ones that never got airtime.",
+      "displayOrder": 2,
+      "active": true,
+      "sourceChapters": ["Chapter 5: All Voices Should Be Heard"],
+      "checklist": [
+        "Before each team meeting, identify who you have not heard from recently and plan one direct question for them.",
+        "Use the prompt 'Tell me more' at least once per meeting when a quieter team member contributes.",
+        "Run at least one 60-second roundtable this week: every person gets 60 seconds uninterrupted to share their view.",
+        "Publicly recognise a team member specifically for their voice or perspective, not just their output.",
+        "Rotate meeting facilitation across the team over the next month."
+      ],
+      "quotesAndConcepts": [
+        "It's easy to listen to the loudest. It takes leadership to hear the quietest. — Anton Guinea, Speak Safe",
+        "Concept: Inclusion is not just about who is in the room — it is about who gets airtime. A leader who only hears confident speakers is curating their own blind spots.",
+        "Concept: A quiet team member is not a disengaged one. Cam's story illustrates that a single well-timed question — 'What have you noticed that we haven't?' — can unlock insights that reshape how a team works."
+      ],
+      "activities": [
+        "Who Haven't I Heard From? List (10 min this week): Write your team roster. Circle the names you hear from often. Star the names you haven't heard from in the last 30 days. Book a 15-minute conversation with one starred person and ask: 'What's something we should be talking about that we aren't?'",
+        "60-Second Roundtable (next team meeting): Pick one agenda topic and give every person exactly 60 seconds to share their view — no interruptions, no crosstalk. Debrief: what surprised you?",
+        "Praise Ping (this week): Publicly recognise one person specifically for something they said, not something they did. Use: 'I really appreciated what [Name] raised — let's all take note of that framing.'"
+      ]
+    },
+    {
+      "category": "Acts of Support",
+      "book": "Speak Safe",
+      "title": "Boundaries as a Leadership Discipline",
+      "description": "Boundaries are not a sign of weakness or aloofness — they are a framework for sustainable respect. This module teaches leaders how to model and enable healthy boundaries for themselves and their teams, so that people can protect their time, wellbeing, and values without fear. It matters because a team that cannot say 'I'm overloaded' is not psychologically safe — it is compliant.",
+      "displayOrder": 2,
+      "active": true,
+      "sourceChapters": ["Chapter 6: Boundaries Are Important"],
+      "checklist": [
+        "Set and communicate your core working hours to your team this week — and hold to them.",
+        "Decline at least one low-value meeting this week and explain why to model intentional time use.",
+        "Ask your team directly: 'Do you feel like you can say no to me when you're overloaded?' and listen without defence.",
+        "Identify one area where you are consistently saying yes when the honest answer is 'not right now'.",
+        "When a team member sets a limit or flags overload, respond with support rather than pressure."
+      ],
+      "quotesAndConcepts": [
+        "Concept: Boundaries aren't barriers — they are frameworks for respect. They tell your team: you are allowed to protect your time, your wellbeing, and your values.",
+        "Concept: When leaders model poor boundaries — always available, never saying no — they inadvertently signal that overwork is the price of belonging. The result is burnout disguised as commitment.",
+        "Concept: Safety is not just about speaking up with ideas. It is also about being able to say 'I need help,' 'I'm at capacity,' and 'That's outside my role right now' without consequence."
+      ],
+      "activities": [
+        "Boundary Inventory (15 min this week): Write down three areas where you are consistently over-extended or saying yes out of obligation. For each, write one action that would restore a healthier boundary — then take it.",
+        "Team Boundary Conversation (schedule within 7 days): In a 1-on-1 or small team setting, ask: 'Is there anything you've been holding back on because you didn't feel it was okay to say no or push back?' Listen. Don't fix immediately.",
+        "Core Hours Announcement (this week): Communicate your focused work hours to your team. Be explicit that you will not respond to non-urgent messages outside those hours, and that you do not expect them to either."
+      ]
+    },
+    {
+      "category": "Psychological Touch",
+      "book": "Speak Safe",
+      "title": "Leading from What You Stand For",
+      "description": "A leader without clear personal values makes decisions that feel inconsistent, reactive, and unsafe to those around them. This module guides leaders through identifying their three core values and using them as a practical leadership GPS — especially in difficult moments. It matters because when your team knows what you stand for, they know where they stand.",
+      "displayOrder": 1,
+      "active": true,
+      "sourceChapters": ["Chapter 7: Leading From Your Values"],
+      "checklist": [
+        "Identify and write down your three core personal leadership values — not company values, your own.",
+        "In the next difficult decision you face, explicitly check it against your values before acting.",
+        "Share your values with your team in a 1-on-1 or team meeting this month and invite them to share theirs.",
+        "Identify one area of current tension and ask: 'Is there a values conflict driving this?'",
+        "When you give feedback, anchor it to a specific value — not just a performance standard."
+      ],
+      "quotesAndConcepts": [
+        "When your values are clear, your decisions are easier. — Anton Guinea, Speak Safe",
+        "Radical Candor is measured not at your mouth, but at the other person's ear. — Kim Scott (cited in Speak Safe)",
+        "Concept: Values are not corporate wallpaper — they are a leadership GPS. They guide behaviour under pressure, and their absence is felt by teams long before a leader notices.",
+        "Concept: Avoiding a hard decision is not kindness — it is comfort. Anna's story shows that values alignment ultimately made a painful but necessary leadership decision possible."
+      ],
+      "activities": [
+        "Values Identification Exercise (30 min this week): Search for a 'core personal values list.' Circle 10 that resonate. Narrow to 3. For each, complete: 'To me this value means… I live it by… When I violate it, I feel…'",
+        "Values Share (next 1-on-1 or team meeting): Say: 'I've been reflecting on the values that drive how I lead. I'd like to share them — and I'd love to hear what values matter to you too.' Build a team value charter from the conversation.",
+        "Alignment Audit (20 min this week): Identify one decision you're wrestling with and one relationship that feels off. For each, ask: 'Is there a values conflict here?' Write what you find and identify one step toward alignment."
+      ]
+    },
+    {
+      "category": "Receiving Value",
+      "book": "Speak Safe",
+      "title": "Earning Trust, Showing Respect",
+      "description": "Trust and respect are the oxygen of psychologically safe teams — and neither can be faked or inherited through a job title. This module equips leaders with the practical tools to build trust through consistency, own its loss through accountability, and repair it through deliberate action. It matters because when trust breaks, performance doesn't just dip — people stop telling the truth.",
+      "displayOrder": 1,
+      "active": true,
+      "sourceChapters": ["Chapter 8: Enabling Trust and Respect"],
+      "checklist": [
+        "Follow through on every commitment made to a team member this week — no exceptions, no silent drops.",
+        "Own at least one mistake or miss this week out loud, without deflecting to context or blame.",
+        "When asking for feedback, mean it — say: 'I want you to be honest with me, even if it's uncomfortable.'",
+        "Acknowledge a team member's contribution specifically and publicly at least once this week.",
+        "Identify one relationship where trust has slipped and schedule a reset conversation within 7 days."
+      ],
+      "quotesAndConcepts": [
+        "You don't inherit trust — you earn it. And you don't get respect just because you have a title — you show it first. — Anton Guinea, Speak Safe",
+        "Concept: Trust is built through small repeated actions: the follow-through, the acknowledgement, the honest response under pressure. Dean's story shows that 'that's his thing' — consistent follow-through — can be the entire foundation of a team's safety.",
+        "Concept: Respect is the front door of psychological safety. When people feel disrespected — interrupted, dismissed, overlooked — they stop contributing. Rebuilding it requires deliberate, consistent behaviour over time."
+      ],
+      "activities": [
+        "Trust Audit Self-Assessment (15 min this week): Rate yourself 1–5 on: following through on promises, owning mistakes without excuses, protecting others' dignity under pressure, asking for feedback and meaning it, showing up predictably. Any score below 20 — pick the lowest item and commit to one visible change this week.",
+        "Respect Mapping (20 min this week): Choose three team members. For each, answer: When did I last acknowledge their work? Have I ever cut them off or dismissed them? What is one way I can show more respect this week? Act on all three.",
+        "The Rebuild Conversation (this week): Identify one person whose trust you may have lost or shaken. Write your opening line for a reset conversation. Schedule it within 7 days. Don't wait."
+      ]
+    },
+    {
+      "category": "Psychological Touch",
+      "book": "Speak Safe",
+      "title": "Integrity: Doing What You Said You Would",
+      "description": "Integrity is not about being perfect — it is about alignment between values, words, and actions. When leaders keep their word consistently, they build the credibility that makes psychological safety possible. This module helps leaders identify and close integrity gaps, own their misses, and build the reputation of being a leader whose team says: 'That's their thing — they always follow through.'",
+      "displayOrder": 2,
+      "active": true,
+      "sourceChapters": ["Chapter 9: Living with Integrity"],
+      "checklist": [
+        "Set a weekly review — every Friday, check every commitment made during the week and close any open items.",
+        "When you miss the mark, acknowledge it explicitly and publicly: 'I said I'd do that, I didn't, and here's what I'm doing about it.'",
+        "Audit your team's experience of your 'open door' policy: do you actually have conversations when people come through?",
+        "Check for integrity gaps: places where you advocate for psychological safety but behave in ways that undermine it.",
+        "Identify one commitment you have been avoiding and act on it this week."
+      ],
+      "quotesAndConcepts": [
+        "Leadership without integrity is like a safety harness with a frayed rope. It might look the part, but when pressure hits — it snaps. — Anton Guinea, Speak Safe",
+        "Amy Edmondson notes that leader credibility starts with integrity. If you promise safety but punish honesty, you lose integrity. — paraphrased from Speak Safe",
+        "Concept: Integrity is quiet — it doesn't show off. But it is deeply noticed by teams. When a leader is consistently aligned between what they say and what they do, their team builds a profile: 'You can count on her. He means it when he says it.'",
+        "Concept: Integrity gaps are rarely loud. They show up subtly — in the 'open door' that is never actually open, the feedback culture that shuts down uncomfortable input, the commitment that quietly disappears."
+      ],
+      "activities": [
+        "Integrity Gap Audit (30 min this week): List three things you regularly say or advocate for as a leader. For each, honestly assess whether your consistent behaviour matches your words. Identify one gap and write one corrective action.",
+        "Commitment Tracking Practice (start this week): After every team meeting and 1-on-1, write down your commitments in a single running list. Review every Friday. Close every open item before the end of the following week.",
+        "The Owning It Moment (next opportunity): The next time you fail to follow through on something, acknowledge it explicitly in front of the affected person or team: say what you committed to, what happened, and what you are doing about it now."
+      ]
+    },
+    {
+      "category": "Psychological Touch",
+      "book": "Speak Safe",
+      "title": "Leading with Empathy: Seeing What Others See",
+      "description": "Empathy in leadership is not softness — it is the strategic ability to understand what is driving behaviour before reacting to it. This module teaches leaders how to take perspective deliberately, de-escalate tension through curiosity, and connect before correcting. It matters because most 'difficult behaviour' is not about attitude — it is about an unmet need, a miscommunication, or a felt injustice the leader has not yet seen.",
+      "displayOrder": 3,
+      "active": true,
+      "sourceChapters": ["Chapter 10: Understanding Perspectives"],
+      "checklist": [
+        "Before reacting to a team member's behaviour or silence, ask: 'What might be true for them right now that I haven't considered?'",
+        "In your next tense or difficult conversation, ask one empathy question before offering a solution: 'Help me understand what's been going on for you.'",
+        "Run a perspective-taking exercise in a team conflict: ask each party to write down what they think the other person is worried about.",
+        "Replace 'they're being difficult' with a specific description of the behaviour: what are they actually doing, and when?",
+        "Connect with at least one team member this week on a non-task topic — just to understand how they are doing."
+      ],
+      "quotesAndConcepts": [
+        "Connection is why we're here. — Brené Brown (cited in Speak Safe, Chapter 10)",
+        "Concept: Most of your team's 'bad behaviour' isn't about you. The eye roll, the resistance, the silence — these might be fatigue, frustration, fear, or misunderstanding. Dismissing someone's experience as invalid is the fastest way to lose your ability to influence it.",
+        "Concept: Perspective-taking is a core skill of emotional intelligence. Alicia and Tom's coaching story shows that once two leaders could name what the other was worried about, empathy entered the room — and the team stopped walking on eggshells."
+      ],
+      "activities": [
+        "Perspective-Taking Exercise (20 min this week): Think of one difficult dynamic on your team. Write down what you think the other person is worried about, frustrated by, or afraid of. Then write what they might say about what you are worried about. Notice what shifts.",
+        "Empathy-First Conversation (next relevant 1-on-1): Before raising any issue, open with: 'Before we get into it — how are you actually doing with everything?' Give them 5 minutes. Don't redirect until they have finished.",
+        "The 'What Else Could Be True?' Pause (ongoing this week): When a team member does something that triggers frustration, pause before responding and ask yourself: 'What else could be true about why they did that?' Act on the most generous plausible interpretation first."
+      ]
+    },
+    {
+      "category": "Caring Time",
+      "book": "Speak Safe",
+      "title": "The Mindful Leader: Calm as a Leadership Strategy",
+      "description": "Stress and pressure are unavoidable in leadership. How a leader responds to them — whether they react impulsively or respond intentionally — shapes the psychological safety of everyone around them. This module gives leaders practical mindfulness tools to interrupt reactive patterns, model calm under pressure, and stay present when it matters most. It matters because a leader who is grounded gives their team permission to breathe.",
+      "displayOrder": 3,
+      "active": true,
+      "sourceChapters": ["Chapter 11: Mindfulness for Stress Management"],
+      "checklist": [
+        "Use the 3-Breath Reset before every difficult or high-stakes conversation this week.",
+        "Take a 60-second intentional pause before leading any team meeting — ask yourself: 'How do I want to show up right now?'",
+        "When you notice a BOOM moment (racing heart, tunnel vision, reactive urge), pause physically before speaking.",
+        "Model calm explicitly: name when you are taking a breath or pausing, so your team sees it as a leadership behaviour.",
+        "At the end of each day, spend 2 minutes noting one moment where you responded rather than reacted — and one where you did not."
+      ],
+      "quotesAndConcepts": [
+        "Mindfulness gives you the space between stimulus and response. — Daniel Goleman (cited in Speak Safe)",
+        "Emotional regulation is the first form of self-leadership. — Timothy R. Clark (cited in Speak Safe)",
+        "Amy Edmondson notes that psychological safety requires leaders to model calm, especially during uncertainty. — paraphrased from Speak Safe",
+        "Concept: In a BOOM moment, the emotional brain grabs the wheel. Mindfulness interrupts that pattern — not by suppressing emotion, but by creating a conscious pause between the trigger and the response. Caleb's story shows that two mindful breaths can visibly change how a team experiences their leader."
+      ],
+      "activities": [
+        "30-Second Pre-Talk Ritual (start this week): Before every toolbox talk, team meeting, or difficult conversation, practise: one slow breath in through the nose, hold for four counts, exhale slowly, repeat twice, ground your feet, then speak. Do this for five consecutive days and note any change in how your team responds to you.",
+        "BOOM Moment Log (this week): Each time you notice yourself triggered, record what happened, what you felt, and what you did. At the end of the week, identify your most common trigger and design one interruption strategy for it.",
+        "Presence Check-In (next team meeting): Open the meeting with: 'Before we start, let's take one breath together.' Debrief the experience briefly. Ask: 'What would help us all be fully present right now?'"
+      ]
+    },
+    {
+      "category": "Acts of Support",
+      "book": "Speak Safe",
+      "title": "Navigating Difficult Colleagues with the CARE Model",
+      "description": "Every leader eventually faces a colleague or team member whose behaviour is disruptive, draining, or damaging to the team. This module provides a structured, humane approach to those dynamics using the CARE Model (Clarify, Acknowledge, Request, Empathise) — so leaders can address difficult behaviour without losing either their professionalism or their empathy. It matters because unaddressed interpersonal conflict silently erodes the psychological safety of everyone around it.",
+      "displayOrder": 3,
+      "active": true,
+      "sourceChapters": ["Chapter 12: Dealing with Difficult Colleagues"],
+      "checklist": [
+        "When describing difficult behaviour, use observable, CCTV-camera language — what specifically are they doing? — rather than labels like 'toxic' or 'difficult'.",
+        "Before your next hard conversation, write down the specific behaviour, its impact on the team, and your clear request for change.",
+        "Use the CARE Model structure (Clarify, Acknowledge, Request, Empathise) in the next challenging interpersonal conversation.",
+        "Identify one conversation you have been avoiding with a difficult colleague and schedule it within 7 days.",
+        "If behaviour is crossing into bullying, harassment, or discrimination, document it and escalate through appropriate channels — do not manage it informally."
+      ],
+      "quotesAndConcepts": [
+        "Psychological safety doesn't mean avoiding hard conversations. It means having them — with care, clarity, and courage. — Anton Guinea, Speak Safe",
+        "Concept: The CARE Model — Clarify the behaviour (objectively), Acknowledge the impact, Request a specific change, Empathise and explore — turns emotionally charged confrontations into structured, productive conversations.",
+        "Concept: Difficult colleagues are not always bad people. Their behaviour often reflects unmet needs, stress, or unresolved tension. Empathy does not excuse the behaviour — it helps you understand and solve it together.",
+        "Concept: Clear is kind. A vague hint that something needs to change is not leadership — it is avoidance with good intentions."
+      ],
+      "activities": [
+        "CARE Model Preparation (before your next difficult conversation): Write out your four CARE steps in advance. What is the specific observable behaviour? What is its impact? What is your precise request? What empathy question will you close with? Use the written plan as your guide in the conversation.",
+        "Reaction Reflection (15 min this week): Think of the colleague who triggers you most. Write: what specifically triggers you, what might be underneath that behaviour for them, and how you can ground yourself before your next interaction with them.",
+        "Boundary Reset Conversation (schedule within 7 days): Identify one boundary you need to reinstate or clarify with a colleague. Write your opening line — keep it specific and respectful. Have the conversation this week. As Anton Guinea notes, you will feel lighter the moment it is done."
+      ]
+    }
+  ]
+}
