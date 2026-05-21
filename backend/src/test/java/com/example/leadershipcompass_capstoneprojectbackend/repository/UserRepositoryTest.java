@@ -3,6 +3,8 @@ package com.example.leadershipcompass_capstoneprojectbackend.repository;
 // Imports the Role enum from the model package
 import com.example.leadershipcompass_capstoneprojectbackend.model.Role;
 
+import org.springframework.boot.jdbc.test.autoconfigure.AutoConfigureTestDatabase;
+
 // Imports the User entity from the model package
 import com.example.leadershipcompass_capstoneprojectbackend.model.User;
 
@@ -37,6 +39,8 @@ import static org.junit.jupiter.api.Assertions.*;
 
 // Uses the "test" profile so H2 database settings are applied
 @ActiveProfiles("test")
+
+@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 
 class UserRepositoryTest {
 
