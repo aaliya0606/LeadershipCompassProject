@@ -5,6 +5,10 @@ import lombok.*;
 
 @Entity
 @Table(name = "survey_questions")
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 
 public class SurveyQuestion {
 
