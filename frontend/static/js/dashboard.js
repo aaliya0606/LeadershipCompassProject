@@ -15,7 +15,7 @@ if (surveyBtn) {
 }
 
 if (!token) {
-  window.location.href = "index.html";
+  window.location.href = "index.html"; 
 } else {
   tokenStatus.textContent = "JWT token found: " + token.substring(0, 40) + "...";
   userRole.textContent = role || "USER";
@@ -47,3 +47,46 @@ logoutBtn.addEventListener("click", function () {
   localStorage.removeItem("role");
   window.location.href = "index.html";
 });
+
+// leadership wheel
+const segments = [
+  { name: "Words of Recognition", desc: "Verbal affirmation and praise" },
+  { name: "Caring Time",          desc: "Intentional presence with your team" },
+  { name: "Acts of Support",      desc: "Remove blockers, enable great work" },
+  { name: "Psychological Touch",  desc: "Emotional safety and connection" },
+  { name: "Receiving Value",      desc: "Recognising others' contributions" },
+];
+
+const wheel = new Chart(document.getElementById("leadershipWheel"), {
+  type: "doughnut",
+  data: {
+    labels: segments.map(s => s.name),
+    datasets: [{
+      data: [1, 1, 1, 1, 1],
+      backgroundColor: ["#64BC28", "#4A9E1A", "#96DA5F", "#2E7D0E", "#B8ED85"],
+      borderColor: "#013664",
+      borderWidth: 3,
+      hoverOffset: 18,
+    }]
+  },
+  options: {
+    plugins: {
+      legend: { display: false },
+      tooltip: { enabled: false },
+    },
+    onHover: (event, elements) => {
+      if (elements.length > 0) {
+        const i = elements[0].index;
+        document.getElementById("wheelName").textContent = segments[i].name;
+        document.getElementById("wheelDesc").textContent = segments[i].desc;
+      } else {
+        document.getElementById("wheelName").textContent = "Hover a segment";
+        document.getElementById("wheelDesc").textContent = "";
+      }
+    }
+  }
+});
+
+
+
+
