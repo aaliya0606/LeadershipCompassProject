@@ -79,6 +79,7 @@ function updateProgress() {
 // Render current category part
 // -------------------------------------------------------------------------
 function renderPart() {
+    window.scrollTo(0, 0);
   updateProgress();
 
   if (currentPart > categories.length) {
