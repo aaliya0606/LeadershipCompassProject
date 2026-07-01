@@ -24,13 +24,63 @@ async function startSurvey() {
   questionContainer.style.display = "flex"; 
 }
 
-async function selectRating() {
-  questionContainer.style.display = "none"; 
-  resultsContainer.style.display = "flex"; 
-  document.getElementById('progressFill').style.width = '100%';
-  document.getElementById('progressLabel').textContent = 'Complete';
-  document.getElementById('progressCount').textContent = '5 of 5 parts';
-  initSidebarNav(); 
+// -------------------------------------------------------------------------
+// Render current category part
+// -------------------------------------------------------------------------
+function renderPart() {
+    window.scrollTo(0, 0);
+  updateProgress();
+
+  if (currentPart > categories.length) {
+    submitSurvey();
+    return;
+  }
+
+  const category = categories[currentPart - 1];
+  const categoryQuestions = questions.filter(q => q.category === category.prefix);
+
+  let html = `
+    <div class="survey-category">
+      <h2 class="survey-category-title">${category.label}</h2>
+      <p class="survey-category-subtitle">Rate yourself from 1 (Rarely) to 5 (Consistently)</p>
+      <div class="survey-questions">
+  `;
+
+  categoryQuestions.forEach((q, index) => {
+    const questionKey = category.prefix + "_" + q.questionId;
+    html += `
+      <div class="survey-question" id="q-${questionKey}">
+        <p class="survey-question-text">${index + 1}. ${q.questionText}</p>
+        <div class="survey-options">
+          ${[1, 2, 3, 4, 5].map(score => `
+            <label class="survey-option">
+              <input type="radio" name="${questionKey}" value="${score}" 
+                ${answers[questionKey] === score ? "checked" : ""} />
+              <span class="survey-option-label">${score}</span>
+            </label>
+          `).join("")}
+        </div>
+        <div class="survey-scale-labels">
+          <span>Rarely</span>
+          <span>Consistently</span>
+        </div>
+      </div>
+    `;
+  });
+
+  html += `
+      </div>
+      <div class="survey-nav">
+        ${currentPart > 1 ? `<button class="survey-btn-back" onclick="goBack()">Back</button>` : ""}
+        <button class="survey-btn-next" onclick="goNext('${category.prefix}')">
+          ${currentPart === categories.length ? "Submit Survey" : "Next"}
+        </button>
+      </div>
+    </div>
+  `;
+
+  surveyContainer.innerHTML = html;
+  progressWrapper.style.display = "block";
 }
 
 // THIS WILL BE UPDATED TO FETCH ADVICE BASED ON REAL SURVEY RESULTS

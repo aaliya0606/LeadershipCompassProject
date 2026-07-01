@@ -54,12 +54,10 @@ if (registerForm) {
     event.preventDefault();
 
     //const fullName = document.getElementById("registerFullName").value;
-    // const firstName = document.getElementById("registerFirstName").value;
-    // const lastName = document.getElementById("registerLastName").value;
-    // const fullName = `${firstName} ${lastName}`.trim();
 
-    const fullName = document.getElementById("registerFullName").value;
-
+    const firstName = document.getElementById("registerFirstName").value;
+    const lastName = document.getElementById("registerLastName").value;
+    const fullName = `${firstName} ${lastName}`.trim();
 
     const email = document.getElementById("registerEmail").value;
     const password = document.getElementById("registerPassword").value;

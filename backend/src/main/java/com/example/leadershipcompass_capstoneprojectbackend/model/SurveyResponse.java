@@ -18,7 +18,7 @@ public class SurveyResponse {
 
     @ManyToOne
     @JoinColumn(name = "question_id")
-    private SurveyQuestion question;
+    private SurveyQuestions question;
 
     private Integer answerValue;
 
