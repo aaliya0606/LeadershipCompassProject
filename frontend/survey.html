@@ -15,17 +15,27 @@
 
 <body>
   <!-- Navigation Bar -->
-  <nav class="navbar navbar-dark px-4 custom-navbar">
-    <a href="dashboard.html" class="navbar-brand d-flex align-items-center gap-2">
-      <img src="static/img/image-1778063971066.png" alt="TGG Logo" class="navbar-logo" />
-      <span class="brand-title"> Leadership Compass </span>
-    </a>
-    <div>
-      <a href="dashboard.html" class="btn btn-light me-2">Dashboard</a>
-      <a href="5weekplan.html" class="btn btn-light">Development Plan</a>
-    </div>
-  </nav>
+  <header class="navbar-dark px-4 custom-navbar">
+      <a href="survey.html" class="navbar-brand d-flex align-items-center gap-2">
+          <img src="static/img/TGG-logo.png" alt="TGG Logo" class="navbar-logo" />
+          <span class="brand-title"> Leadership Compass </span>
+      </a>
 
+      <nav class="nav-links-inline" id="navLinks">
+          <a class="nav-link" href="dashboard.html">Dashboard</a>
+          <a class="nav-link" href="5weekplan.html">5 Week Plan</a>
+          <a class="nav-link" href="survey.html">Survey</a>
+          <a class="nav-link" href="resource-library.html">Resource Library</a>
+          <a class="nav-link" href="">My Account</a>
+          <a class="nav-link logout" id="logoutBtn">Logout</a>
+      </nav>
+
+      <button class="hamburger" id="hamburgerBtn" aria-label="Toggle menu">
+          <span></span>
+          <span></span>
+          <span></span>
+      </button>
+  </header>
   <main class="survey-body">
 
     <!-- Survey Welcome Screen -->
@@ -38,227 +48,6 @@
       </p>
       <button class="survey-button" id="startBtn">Get Started</button>
     </div>
-
-    <!-- Survey Question Screen -->
-    <!-- This will be updated to dynamically load using js -->
-    <div class="survey-question-container" id="surveyQuestionContainer" style="display: none;">
-      <div class="question-category" id="questionCategory"> Category </div>
-      <h2 class="question-text" id="questionText"> This is a question </h2>
-      <div class="rating-container" id="ratingContainer">
-        <button class="rating-btn" data-value="1">
-          <span class="material-symbols-outlined">counter_1</span>
-          Not at all
-        </button>
-        <button class="rating-btn" data-value="2">
-          <span class="material-symbols-outlined">counter_2</span>
-          Occasionally
-        </button>
-        <button class="rating-btn" data-value="3">
-          <span class="material-symbols-outlined">counter_3</span>
-          Sometimes
-        </button>
-        <button class="rating-btn" data-value="4">
-          <span class="material-symbols-outlined">counter_4</span>
-          Often
-        </button>
-        <button class="rating-btn" data-value="5">
-          <span class="material-symbols-outlined">counter_5</span>
-          Always
-        </button>
-      </div>
-      <div class="survey-navigation">
-        <button class="survey-button" id="backBtn"> Previous</button>
-      </div>
-    </div>
-
-    <!-- Results Screen -->
-    <!-- Hard-coded results for now - will be dynamically set using survey results  -->
-    <div class="survey-results-container" id="surveyResultsContainer" style="display: none;">
-      <div style="display: flex; flex-direction: row; gap: 1em; align-items: center; position: relative;">
-        <div style="display: flex; gap: 0.7em; position: absolute; left: -50%; transform: translateX(-65%)">
-          <a href="dashboard.html" class="survey-button">Go To Dashboard</a>
-          <button class="survey-button">Print Results</button>
-        </div>
-        <div class="survey-container-heading" style="flex: 1; text-align: center;">
-          <h1 class="survey-container-heading" style="font-size: 0.8em;">Your Leadership Profile</h1>
-        </div>
-      </div>
-      <!-- Score bars -->
-      <div class="question-category" style="color: #00284B;"> Your Results </div>
-      <div class="results-bars">
-        <div class="result-bar-row">
-          <span class="result-bar-label">Caring Time</span>
-          <div class="result-bar-track">
-            <div class="result-bar-fill" id="barCT" style="width: 70%;">
-              <span class="result-bar-pct" id="pctCT">70%</span>
-            </div>
-          </div>
-        </div>
-        <div class="result-bar-row">
-          <span class="result-bar-label">Receiving Value</span>
-          <div class="result-bar-track">
-            <div class="result-bar-fill" id="barRV" style="width: 40%;">
-              <span class="result-bar-pct" id="pctRV">40%</span>
-            </div>
-          </div>
-        </div>
-        <div class="result-bar-row">
-          <span class="result-bar-label">Acts of Support</span>
-          <div class="result-bar-track">
-            <div class="result-bar-fill" id="barAS" style="width: 10%;">
-              <span class="result-bar-pct" id="pctAS">10%</span>
-            </div>
-          </div>
-        </div>
-        <div class="result-bar-row">
-          <span class="result-bar-label">Words of Recognition</span>
-          <div class="result-bar-track">
-            <div class="result-bar-fill" id="barWR" style="width: 80%;">
-              <span class="result-bar-pct" id="pctWR">80%</span>
-            </div>
-          </div>
-        </div>
-        <div class="result-bar-row">
-          <span class="result-bar-label">Psychological Touch</span>
-          <div class="result-bar-track">
-            <div class="result-bar-fill" id="barPT" style="width: 35%;">
-              <span class="result-bar-pct" id="pctPT">35%</span>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Sidebar + Panels -->
-       <div class="question-category" style="color: #00284B;"> What This Means </div>
-        <div class="results-layout">
-          <!-- Left nav -->
-          <aside class="survey-sidebar">
-            <p class="sidebar-label">Categories</p>
-
-            <div class="nav-item active" data-panel="ct">
-              <span class="nav-dot"></span>
-              Caring Time
-              <span class="nav-score" id="navScoreCT">70%</span>
-            </div>
-            <div class="nav-item" data-panel="rv">
-              <span class="nav-dot"></span>
-              Receiving Value
-              <span class="nav-score" id="navScoreRV">40%</span>
-            </div>
-            <div class="nav-item" data-panel="as">
-              <span class="nav-dot"></span>
-              Acts of Support
-              <span class="nav-score" id="navScoreAS">10%</span>
-            </div>
-            <div class="nav-item" data-panel="wr">
-              <span class="nav-dot"></span>
-              Words of Recognition
-              <span class="nav-score" id="navScoreWR">80%</span>
-            </div>
-            <div class="nav-item" data-panel="pt">
-              <span class="nav-dot"></span>
-              Psychological Touch
-              <span class="nav-score" id="navScorePT">35%</span>
-            </div>
-          </aside>
-
-          <!-- Right panels -->
-
-          <!-- Caring Time -->
-          <div class="content-panel active" id="panel-ct">
-            <span class="panel-tag">Caring Time</span>
-            <p class="panel-title">Quality presence & dedicated attention</p>
-            <p class="panel-desc">You show strong intent but can improve presence and prioritisation of Caring Time.
-            </p>
-            <p class="section-label">Strengths</p>
-            <div class="chip-list">
-              <span class="chip">Building trust and connection</span>
-              <span class="chip">1-on-1 connection</span>
-              <span class="chip">Presence over productivity</span>
-            </div>
-            <p class="section-label">Growth Tips</p>
-            <div class="chip-list">
-              <span class="chip">Review the Action Plan for Caring Time</span>
-              <span class="chip">Seek feedback from your team to align on Caring Time preferences</span>
-            </div>
-          </div>
-
-          <!-- Receiving Value -->
-          <div class="content-panel" id="panel-rv">
-            <span class="panel-tag">Receiving Value</span>
-            <p class="panel-title">Acknowledging contributions & worth</p>
-            <p class="panel-desc">Your practice needs strengthening; risks exist for team disengagement and mistrust.
-            </p>
-            <p class="section-label">Strengths</p>
-            <div class="chip-list">
-              <span class="chip">Recognising effort</span>
-              <span class="chip">Gratitude in action</span>
-            </div>
-            <p class="section-label">Growth Tips</p>
-            <div class="chip-list">
-              <span class="chip">Reflect on low-scoring areas and incorporate practices from the Action Plan for Receiving Value</span>
-              <span class="chip">Build routines to make Receiving Value a consistent leadership habit</span>
-            </div>
-          </div>
-
-          <!-- Acts of Support -->
-          <div class="content-panel" id="panel-as">
-            <span class="panel-tag">Acts of Support</span>
-            <p class="panel-title">Showing up through action</p>
-            <p class="panel-desc">Acts of Support is an urgent development area to avoid team burnout and underperformance
-            </p>
-            <p class="section-label">Strengths</p>
-            <div class="chip-list">
-              <span class="chip">Resourcefulness</span>
-            </div>
-            <p class="section-label">Growth Tips</p>
-            <div class="chip-list">
-              <span class="chip">Review the detailed Action Plan for Acts of Support</span>
-              <span class="chip">Schedule regular team check-ins</span>
-              <span class="chip">Clarify roles and expectations transparently</span>
-            </div>
-          </div>
-
-          <!-- Words of Recognition -->
-          <div class="content-panel" id="panel-wr">
-            <span class="panel-tag">Words of Recognition</span>
-            <p class="panel-title">Verbal encouragement & affirmation</p>
-            <p class="panel-desc">You consistently deliver meaningful Words of Recognition that motivate and build loyalty.
-            </p>
-            <p class="section-label">Strengths</p>
-            <div class="chip-list">
-              <span class="chip">Strong communicator</span>
-              <span class="chip">Builds team confidence</span>
-              <span class="chip">Creates positive environments</span>
-              <span class="chip">Encourages collaboration</span>
-            </div>
-            <p class="section-label">Growth Tips</p>
-            <div class="chip-list">
-              <span class="chip">Review the Action Plan for Words of Recognition</span>
-              <span class="chip">Introduce structured peer recognition practices</span>
-            </div>
-          </div>
-
-          <!-- Psychological Touch -->
-          <div class="content-panel" id="panel-pt">
-            <span class="panel-tag">Psychological Touch</span>
-            <p class="panel-title">Emotional safety & empathy</p>
-            <p class="panel-desc">Psychological safety may be significantly compromised; 
-              urgent focus on emotional connection and safety is required.
-            </p>
-            <p class="section-label">Strengths</p>
-            <div class="chip-list">
-              <span class="chip">Empathy</span>
-            </div>
-            <p class="section-label">Growth Tips</p>
-            <div class="chip-list">
-              <span class="chip">Engage with The Action Plan for Psychological Touch</span>
-              <span class="chip">Consider emotional intelligence training</span>
-            </div>
-          </div>
-
-        </div><!-- /.results-layout -->
-    </div><!-- /#surveyResultsContainer -->
 
     <!-- Progress bar -->
     <div class="survey-progress-wrapper" id="surveyProgressWrapper">

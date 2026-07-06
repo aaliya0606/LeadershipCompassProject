@@ -31,6 +31,31 @@ const progressCount   = document.getElementById("progressCount");
 const progressFill    = document.getElementById("progressFill");
 const progressTrack   = document.getElementById("progressTrack");
 const getStartedBtn   = document.querySelector(".survey-button");
+const navBurgerBtn    = document.getElementById('hamburgerBtn');
+
+// -------------------------------------------------------------------------
+// Initialise Navigation Bar
+// -------------------------------------------------------------------------
+async function initSidebarNav() {
+  items.forEach(function (item) {
+    item.addEventListener('click', function () {
+      items.forEach(function (i) { i.classList.remove('active'); });
+      panels.forEach(function (p) { p.classList.remove('active'); });
+
+      item.classList.add('active');
+
+      var panelId = 'panel-' + item.getAttribute('data-panel');
+      var panel = document.getElementById(panelId);
+      if (panel) panel.classList.add('active');
+    });
+  });
+}
+
+// Hamburger Button 
+document.getElementById('hamburgerBtn').addEventListener('click', function () {
+  document.getElementById('navLinks').classList.toggle('open');
+  this.classList.toggle('open');
+});
 
 // -------------------------------------------------------------------------
 // Load questions from backend on page load
@@ -124,7 +149,7 @@ function renderPart() {
       <div class="survey-nav">
         ${currentPart > 1 ? `<button class="survey-btn-back" onclick="goBack()">Back</button>` : ""}
         <button class="survey-btn-next" onclick="goNext('${category.prefix}')">
-          ${currentPart === categories.length ? "Submit Survey" : "Next"}
+          ${currentPart === categories.length ? "Submit" : "Next"}
         </button>
       </div>
     </div>
@@ -225,12 +250,31 @@ function showResults(result) {
         ${renderCategoryResult("Words of Recognition",result.wordsOfRecognitionScore,result.wordsOfRecognitionBand,result.wordsOfRecognitionMessage,bandColor)}
         ${renderCategoryResult("Psychological Touch", result.psychologicalTouchScore, result.psychologicalTouchBand, result.psychologicalTouchMessage, bandColor)}
       </div>
-      <button class="survey-button" onclick="window.location.href='dashboard.html'">Back to Dashboard</button>
+      <button class="survey-button" onclick="window.location.href='dashboard.html'">Dashboard</button>
     </div>
   `;
 
   surveyContainer.innerHTML = html;
   window.scrollTo(0, 0);
+
+  // Animate bars in after the DOM has painted at width:0%
+  requestAnimationFrame(() => {
+    document.querySelectorAll('.result-bar-fill').forEach(fill => {
+      fill.style.width = fill.dataset.targetWidth;
+    });
+  });
+}
+
+function renderResultBar(label, score, max, color) {
+  const pct = Math.max(0, Math.min(100, (score / max) * 100));
+  const fillStyle = color ? `background:${color};` : '';
+  return `
+    <div class="result-bar-row">
+      <div class="result-bar-track">
+        <div class="result-bar-fill" data-target-width="${pct}%" //style="width:0%;${fillStyle}">${score}</div>
+      </div>
+    </div>
+  `;
 }
 
 function renderCategoryResult(name, score, band, message, bandColor) {
@@ -240,6 +284,7 @@ function renderCategoryResult(name, score, band, message, bandColor) {
         <h3>${name}</h3>
         <span class="survey-band" style="background:${bandColor[band] || '#6c757d'}">${band}</span>
       </div>
+      ${renderResultBar(name, score, 50, bandColor[band])}
       <p class="survey-category-score">Score: <strong>${score} / 50</strong></p>
       <p class="survey-category-message">${message}</p>
     </div>

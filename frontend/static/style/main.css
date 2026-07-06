@@ -196,24 +196,131 @@ p {
   font-family: 'Montserrat', sans-serif;
 }
 
-.custom-navbar {
-  background: linear-gradient(90deg, var(--brand-dark), var(--brand-green));
-  border-bottom: 4px solid var(--brand-light-green);
-}
-
 .brand-title {
   font-family: 'Anton', sans-serif;
   letter-spacing: 0.05em;
   color: white;
 }
 
-.navbar-logo {
-  width: 36px;
-  height: 36px;
+/* NAVBAR */
+.custom-navbar {
+  background: linear-gradient(90deg, #00284B, #64BC28);
+  border-bottom: 4px solid #96DA5F;
+  padding: 2px 40px;
+  display: flex;
+  align-items: center;
+  gap: 0;
+  position: relative;
 }
 
 .navbar-brand {
-  color: white;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-shrink: 0;
+}
+
+.navbar-logo {
+  height: 38px;
+  width: auto;
+}
+
+.brand-title {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 700;
+  font-size: 1.1rem;
+  color: #e5e8e8;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.nav-links-inline {
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  max-width: 0;
+  opacity: 0;
+  transition: max-width 0.5s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.35s ease;
+  white-space: nowrap;
+  flex: 1;
+  padding-left: 120px;
+}
+
+.nav-links-inline.open {
+  max-width: 1000px;
+  opacity: 1;
+}
+
+.nav-link {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: rgba(229, 232, 232, 0.75);
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  text-decoration: none;
+  padding: 20px 16px;
+  border-bottom: 3px solid transparent;
+  flex-shrink: 0;
+  transition: color 0.2s ease, border-color 0.2s ease;
+  background: none;
+  border-top: none;
+  border-left: none;
+  border-right: none;
+  cursor: pointer;
+}
+
+.nav-link:hover {
+  color: #96DA5F;
+  border-bottom-color: #96DA5F;
+}
+
+.nav-link.logout {
+  color: rgba(229, 232, 232, 0.6);
+  border-left: 1px solid rgba(255, 255, 255, 0.15);
+  padding-left: 18px;
+  margin-left: 4px;
+}
+
+.nav-link.logout:hover {
+  color: #ff8a8a;
+  border-bottom-color: #ff8a8a;
+}
+
+.hamburger {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 15px;
+  margin-left: auto;
+  flex-shrink: 0;
+}
+
+.hamburger span {
+  display: block;
+  width: 28px;
+  height: 3px;
+  background: #fff;
+  border-radius: 2px;
+  transition: all 0.35s ease;
+}
+
+.hamburger.open span:nth-child(1) {
+  transform: translateY(8px) rotate(45deg);
+}
+
+.hamburger.open span:nth-child(2) {
+  opacity: 0;
+  transform: scaleX(0);
+}
+
+.hamburger.open span:nth-child(3) {
+  transform: translateY(-8px) rotate(-45deg);
 }
 
 h1, h4, h5, h6 {
