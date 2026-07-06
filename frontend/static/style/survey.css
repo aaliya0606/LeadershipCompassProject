@@ -451,12 +451,26 @@ html {
   margin-bottom: 1.5rem;
 }
 
+.survey-questions {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  flex-shrink: 0;
+}
+
+.survey-category {
+  width: 100%;
+  flex-shrink: 0;
+}
+
 .survey-question {
   background: rgba(255, 255, 255, 0.5);
   box-shadow: 2px 2px 5px 0px rgba(0, 0, 0, 0.2);
   border-radius: 8px;
   padding: 1rem;
   margin-bottom: 1rem;
+  width: 100%;
+  box-sizing: border-box;
   /* Increases scale on hover */
   transform: scale(0.99) translateZ(0); 
   transition: transform 0.3s ease;
@@ -472,6 +486,8 @@ html {
   font-size: 0.95rem;
   font-weight: 500;
   margin-bottom: 0.5rem;
+  overflow-wrap: break-word;
+  word-break: break-word;
 }
 
 .survey-options {
@@ -493,12 +509,13 @@ html {
   cursor: pointer;
   width: 18px;
   height: 18px;
+  accent-color: #00284B;
 }
 
 .survey-option-label {
   font-size: 0.85rem;
   font-weight: 600;
-  color: var(--brand-dark);
+  color: #00284B;
 }
 
 .survey-scale-labels {
@@ -648,7 +665,7 @@ html {
   background-color: #FFFFFF;
   border: 4px solid #96DA5F;
   padding: 1.5vh;
-  border-radius: 1vh;
+  border-radius: 0.5vh;
   box-shadow: 2px 2px 5px 0px rgba(0, 0, 0, 0.2);
 }
 
@@ -656,35 +673,32 @@ html {
   display: flex;
   flex-direction: column;
   gap: 5px;
+  position: relative;
+  padding-top: 2.2rem; /* room for the marker above the track */
 }
 
-.result-bar-label {
-  font-family: 'Montserrat', sans-serif;
-  font-size: 0.75rem;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.07em;
-  color: #00284B;
+.result-bar-marker {
+  position: absolute;
+  top: 0;
+  left: 0; /* set dynamically via inline style */
+  transform: translateX(-50%);
+  white-space: nowrap;
+  transition: left 1s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.result-bar-track {
-  width: 100%;
-  height: 4vh;
-  background: #f1f5f9;
-  border-radius: 99px;
-  overflow: hidden;
-  box-shadow: 2px 2px 5px 0px rgba(0, 0, 0, 0.2);
+.result-bar-marker .survey-band {
+  display: inline-block;
 }
 
-.result-bar-fill {
-  height: 100%;
-  border-radius: 99px;
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  padding-right: 12px;
-  min-width: 48px;
-  width: 0%;
-  transition: width 1s cubic-bezier(0.4, 0, 0.2, 1);
-  background: linear-gradient(135deg, rgba(0, 40, 75, 0.95), rgba(0, 97, 182, 0.95));
+/* little pointer triangle under the badge, pointing at the bar */
+.result-bar-marker::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: -5px;
+  transform: translateX(-50%);
+  border-left: 5px solid transparent;
+  border-right: 5px solid transparent;
+  border-top: 5px solid currentColor;
 }
+

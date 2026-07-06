@@ -240,7 +240,7 @@ function showResults(result) {
       <h2 class="survey-results-title">Your Leadership Profile</h2>
       <div class="survey-overall">
         <p class="survey-overall-score">Overall Score: <strong>${result.overallScore} / 250</strong></p>
-        <span class="survey-band" style="background:${bandColor[result.overallBand] || '#6c757d'}">${result.overallBand}</span>
+        <span class="survey-band" style="background:#00284B">${result.overallBand}</span>
       </div>
       <p class="survey-summary">${result.summary}</p>
       <div class="survey-category-results">
@@ -257,22 +257,28 @@ function showResults(result) {
   surveyContainer.innerHTML = html;
   window.scrollTo(0, 0);
 
-  // Animate bars in after the DOM has painted at width:0%
   requestAnimationFrame(() => {
     document.querySelectorAll('.result-bar-fill').forEach(fill => {
       fill.style.width = fill.dataset.targetWidth;
     });
+    document.querySelectorAll('.result-bar-marker').forEach(marker => {
+      marker.style.left = marker.dataset.targetLeft;
+    });
   });
 }
 
-function renderResultBar(label, score, max, color) {
+function renderResultBar(label, score, max, band, color) {
   const pct = Math.max(0, Math.min(100, (score / max) * 100));
-  const fillStyle = color ? `background:${color};` : '';
+  // const fillStyle = color ? `background:${color};` : '';
+
   return `
-    <div class="result-bar-row">
-      <div class="result-bar-track">
-        <div class="result-bar-fill" data-target-width="${pct}%" //style="width:0%;${fillStyle}">${score}</div>
-      </div>
+  <div class="result-bar-row">
+    <div class="result-bar-marker" data-target-left="${pct}%" style="left:0%; color:#00284B;">
+      <span class="survey-band" style="background:#00284B;">${band}</span>
+    </div>
+    <div class="result-bar-track">
+      <div class="result-bar-fill" data-target-width="${pct}%" style="width:0%;">${score}</div>
+    </div>
     </div>
   `;
 }
@@ -280,11 +286,8 @@ function renderResultBar(label, score, max, color) {
 function renderCategoryResult(name, score, band, message, bandColor) {
   return `
     <div class="survey-category-result">
-      <div class="survey-category-result-header">
-        <h3>${name}</h3>
-        <span class="survey-band" style="background:${bandColor[band] || '#6c757d'}">${band}</span>
-      </div>
-      ${renderResultBar(name, score, 50, bandColor[band])}
+      <span class="result-bar-label" style="text-align:center;">${name}</span>
+      ${renderResultBar(name, score, 50, band, bandColor[band])}
       <p class="survey-category-score">Score: <strong>${score} / 50</strong></p>
       <p class="survey-category-message">${message}</p>
     </div>
