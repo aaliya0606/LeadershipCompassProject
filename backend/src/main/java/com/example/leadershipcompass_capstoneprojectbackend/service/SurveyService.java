@@ -45,7 +45,7 @@ public class SurveyService{
         validateAnswers(answers);
 
         User user = userRepository.findByEmail(email)
-            .orElseThrow(() -> new EntityNotFoundException("User npt found:" + email));
+            .orElseThrow(() -> new EntityNotFoundException("User not found:" + email));
         
         int ctScore = sumCategory(answers, PREFIX_CT);
         int rvScore = sumCategory(answers, PREFIX_RV);
@@ -132,6 +132,7 @@ public class SurveyService{
         return "Blind spot";
     }
 
+    /// Only have placeholder values for feedback :
     private String message(String categoryName, int score){
         if (score >= 40){
             return "placeholder: feedback on high score";
@@ -156,7 +157,7 @@ public class SurveyService{
             if (score < MIN_SCORE || score > MAX_SCORE){
                 throw new IllegalArgumentException(
                     "Score for" + entry.getKey() + "is" + score
-                    + ". Allowed range: " + MIN_SCORE + "-" + "MAX_SCORE" + ".");
+                    + ". Allowed range: " + MIN_SCORE + "-" + MAX_SCORE + ".");
                 
             }
         }
