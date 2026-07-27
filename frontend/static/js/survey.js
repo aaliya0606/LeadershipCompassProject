@@ -93,7 +93,7 @@ function renderPart() {
   let html = `
     <div class="survey-category">
       <h2 class="survey-category-title">${category.label}</h2>
-      <p class="survey-category-subtitle">Rate yourself from 1 (Rarely) to 5 (Consistently)</p>
+      <p class="survey-category-subtitle">Instructions: Reflect honestly on how well you invest focused, undistracted time with your team-which builds trust, connection, and psychological safety. For each statement, rate yourself on a scale from 1 (Rarely/Not at all) to 5 (Consistently/Always).</p>
       <div class="survey-questions">
   `;
 
