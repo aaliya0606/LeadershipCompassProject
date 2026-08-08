@@ -6,11 +6,18 @@ const userRole = document.getElementById("userRole");
 const logoutBtn = document.getElementById("logoutBtn");
 const backendResponse = document.getElementById("backendResponse");
 const surveyBtn = document.getElementById("surveyBtn");
+const planPocBtn = document.getElementById("planPocBtn");
 
 if (surveyBtn) {
   surveyBtn.addEventListener("click", function() {
     window.location.href = "survey.html";
 
+  });
+}
+
+if (planPocBtn) {
+  planPocBtn.addEventListener("click", function() {
+    window.location.href = "ai-plan-poc.html";
   });
 }
 

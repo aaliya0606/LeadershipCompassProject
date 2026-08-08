@@ -21,4 +21,11 @@ public interface ModulesRepository extends JpaRepository<Modules, Long> {
      * @return matching module when present
      */
     Optional<Modules> findByBookAndTitle(String book, String title);
+
+    /**
+     * Returns all active modules ordered for learner presentation.
+     *
+     * @return active module list sorted by display order then id
+     */
+    java.util.List<Modules> findByActiveTrueOrderByDisplayOrderAscIdAsc();
 }
