@@ -197,6 +197,9 @@ public class DevelopmentPlanService {
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Authenticated user not found."));
     }
 
+    /**
+     * Attempts AI generation first, then falls back to the score-weighted rule planner.
+     */
     private List<PlannedWeek> generateWeeks(
             String fullName,
             String conversationId,
@@ -206,6 +209,12 @@ public class DevelopmentPlanService {
                 .orElseGet(() -> buildFallbackPlan(scoreSnapshot, activeModules));
     }
 
+    /**
+     * Calls {@link AiBrainService}, parses the JSON plan answer, and reshapes weeks
+     * into score-weighted category slots.
+     *
+     * @return planned weeks when AI succeeds; empty when AI is disabled or unusable
+     */
     private Optional<List<PlannedWeek>> tryGenerateWithAi(
             String fullName,
             String conversationId,
@@ -240,6 +249,9 @@ public class DevelopmentPlanService {
         }
     }
 
+    /**
+     * Builds the JSON-only planning prompt sent to the AI-Brain.
+     */
     private String buildAiPrompt(AiPromptPayload payload) throws JsonProcessingException {
         List<String> weakestCategories = payload.weakestCategories();
         List<String> weekTargets = payload.weekCategoryTargets();
@@ -262,6 +274,9 @@ public class DevelopmentPlanService {
                 objectMapper.writeValueAsString(payload));
     }
 
+    /**
+     * Parses an AI answer into a structured plan, stripping markdown fences if present.
+     */
     private AiGeneratedPlan parseAiPlan(String answer) throws JsonProcessingException {
         String json = extractJsonBlob(answer);
         return objectMapper.readValue(json, AiGeneratedPlan.class);
@@ -280,6 +295,9 @@ public class DevelopmentPlanService {
         return cleaned;
     }
 
+    /**
+     * Maps AI week suggestions onto real modules, then applies score-weighted slotting.
+     */
     private List<PlannedWeek> reconcileAiPlan(
             AiGeneratedPlan generatedPlan,
             ScoreSnapshot scoreSnapshot,
@@ -343,12 +361,16 @@ public class DevelopmentPlanService {
                 scoreSnapshot.psychologicalTouchScore());
     }
 
+    /**
+     * Builds a plan using only the score-weighted fallback (no AI call).
+     */
     private List<PlannedWeek> buildFallbackPlan(ScoreSnapshot scoreSnapshot, List<Modules> activeModules) {
         return reshapeToWeightedSlots(List.of(), scoreSnapshot, activeModules);
     }
 
     /**
      * Builds a 5-week plan where weaker categories receive more weeks based on score gaps.
+     * Reuses AI focus/rationale/actions when a matching module is available.
      */
     private List<PlannedWeek> reshapeToWeightedSlots(
             List<PlannedWeek> candidateWeeks,
@@ -442,6 +464,8 @@ public class DevelopmentPlanService {
     /**
      * Allocates week slots across categories, giving more weeks to lower scores.
      * When all scores are equal, each category receives one week.
+     *
+     * @return ordered category names, one entry per week slot
      */
     private List<String> buildWeightedCategorySlots(ScoreSnapshot scoreSnapshot) {
         List<CategoryScore> rankedCategories = scoreSnapshot.toRankedCategories();
@@ -471,6 +495,9 @@ public class DevelopmentPlanService {
         return slots;
     }
 
+    /**
+     * Distributes {@code totalSlots} across categories using largest-remainder weighting.
+     */
     private int[] allocateSlotCounts(List<Integer> weights, int totalSlots) {
         int weightSum = weights.stream().mapToInt(Integer::intValue).sum();
         int[] slotCounts = new int[weights.size()];
@@ -581,6 +608,9 @@ public class DevelopmentPlanService {
                 .toList();
     }
 
+    /**
+     * Builds a default rationale that reflects whether the category is weak, strong, or balanced.
+     */
     private String buildDefaultRationale(Modules module, ScoreSnapshot scoreSnapshot) {
         String category = module.getCategory();
         int score = scoreSnapshot.scoreForCategory(category);
@@ -628,7 +658,7 @@ public class DevelopmentPlanService {
     }
 
     /**
-     * Reject AI/fallback copy that calls a category "lower/weaker" when it is not
+     * Rejects AI/fallback copy that calls a category "lower/weaker" when it is not
      * among the user's weakest scores (or when all scores are tied).
      */
     private boolean isMisleadingScoreRationale(String rationale, Modules module, ScoreSnapshot scoreSnapshot) {
@@ -703,6 +733,9 @@ public class DevelopmentPlanService {
         return value.length() <= maxLength ? value : value.substring(0, maxLength) + "...";
     }
 
+    /**
+     * Immutable score snapshot used while building a plan.
+     */
     private record ScoreSnapshot(
             int caringTimeScore,
             int receivingValueScore,
@@ -710,6 +743,7 @@ public class DevelopmentPlanService {
             int wordsOfRecognitionScore,
             int psychologicalTouchScore) {
 
+        /** Builds a snapshot from a persisted survey result. */
         static ScoreSnapshot from(SurveyResult surveyResult) {
             return new ScoreSnapshot(
                     defaultScore(surveyResult.getCaringTimeScore()),
@@ -719,6 +753,7 @@ public class DevelopmentPlanService {
                     defaultScore(surveyResult.getPsychologicalTouchScore()));
         }
 
+        /** Builds a snapshot from a POC preview request. */
         static ScoreSnapshot fromRequest(DevelopmentPlanPreviewRequest request) {
             return new ScoreSnapshot(
                     defaultScore(request.getCaringTimeScore()),
@@ -728,6 +763,7 @@ public class DevelopmentPlanService {
                     defaultScore(request.getPsychologicalTouchScore()));
         }
 
+        /** Returns categories sorted ascending by score (weakest first). */
         List<CategoryScore> toRankedCategories() {
             List<CategoryScore> categories = new ArrayList<>();
             categories.add(new CategoryScore("Caring Time", caringTimeScore));
@@ -739,6 +775,7 @@ public class DevelopmentPlanService {
             return categories;
         }
 
+        /** Looks up the score for a leadership language category name. */
         int scoreForCategory(String category) {
             return switch (category == null ? "" : category.trim().toLowerCase(Locale.ROOT)) {
                 case "caring time" -> caringTimeScore;
@@ -755,12 +792,15 @@ public class DevelopmentPlanService {
         }
     }
 
+    /** Category name paired with its score for ranking. */
     private record CategoryScore(String category, int score) {
     }
 
+    /** Compact module metadata included in the AI prompt. */
     private record AiModuleSummary(Long id, String category, String title) {
     }
 
+    /** Structured prompt payload serialised into the AI-Brain query. */
     private record AiPromptPayload(
             String fullName,
             ScoreSnapshot scores,
@@ -769,10 +809,12 @@ public class DevelopmentPlanService {
             List<AiModuleSummary> availableModules) {
     }
 
+    /** Parsed AI JSON root containing weekly recommendations. */
     @JsonIgnoreProperties(ignoreUnknown = true)
     private record AiGeneratedPlan(List<AiGeneratedWeek> weeks) {
     }
 
+    /** One week object as returned (or partially returned) by the AI-Brain. */
     @JsonIgnoreProperties(ignoreUnknown = true)
     private record AiGeneratedWeek(
             Integer weekNumber,
@@ -784,6 +826,7 @@ public class DevelopmentPlanService {
             List<String> actions) {
     }
 
+    /** Internal week representation before persistence or DTO mapping. */
     private record PlannedWeek(
             Integer weekNumber,
             Modules module,

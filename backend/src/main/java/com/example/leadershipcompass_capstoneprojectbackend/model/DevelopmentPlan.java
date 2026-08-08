@@ -38,10 +38,12 @@ import lombok.Setter;
 @Setter
 public class DevelopmentPlan {
 
+    /** Surrogate primary key for this plan snapshot. */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    /** User who owns this plan. */
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
@@ -74,6 +76,7 @@ public class DevelopmentPlan {
     @Column(nullable = false)
     private Instant generatedAt = Instant.now();
 
+    /** Ordered week rows that make up this plan snapshot. */
     @OneToMany(mappedBy = "developmentPlan", cascade = CascadeType.ALL, orphanRemoval = true)
     @OrderBy("weekNumber ASC")
     private List<DevelopmentPlanWeek> weeks = new ArrayList<>();

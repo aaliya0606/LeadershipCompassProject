@@ -30,14 +30,17 @@ import lombok.Setter;
 @Setter
 public class DevelopmentPlanWeek {
 
+    /** Surrogate primary key. */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    /** Parent plan that owns this week. */
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "development_plan_id", nullable = false)
     private DevelopmentPlan developmentPlan;
 
+    /** Week number within the plan (1–5). */
     @Column(nullable = false)
     private Integer weekNumber;
 
@@ -45,18 +48,23 @@ public class DevelopmentPlanWeek {
     @Column(nullable = false)
     private Long moduleId;
 
+    /** Leadership language category denormalised at generation time. */
     @Column(nullable = false, length = 120)
     private String category;
 
+    /** Module title denormalised at generation time. */
     @Column(nullable = false, length = 200)
     private String moduleTitle;
 
+    /** Short focus statement for the week. */
     @Column(length = 1000)
     private String focus;
 
+    /** Explanation of why this module was recommended. */
     @Column(length = 2000)
     private String rationale;
 
+    /** Ordered practical action items for the learner. */
     @ElementCollection
     @CollectionTable(name = "development_plan_week_actions", joinColumns = @JoinColumn(name = "development_plan_week_id"))
     @Column(name = "action_item", length = 1000)
