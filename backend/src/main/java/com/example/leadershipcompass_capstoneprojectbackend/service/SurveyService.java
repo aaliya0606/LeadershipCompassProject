@@ -19,8 +19,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.example.leadershipcompass_capstoneprojectbackend.dto.ProgressEntryResponse;
-import com.example.leadershipcompass_capstoneprojectbackend.dto.ProgressEntryResponse;
-import java.util.ArrayList;
+
 
 @Service
 @RequiredArgsConstructor
@@ -232,16 +231,6 @@ public class SurveyService{
 
     }
 
-    //public lookup
-    @Transactional(readOnly = true)
-    public SurveyResult getResultById(Long resultId){
-        SurveyResult result = surveyResultRepository.findById(resultId)
-            .orElseThrow(() -> new EntityNotFoundException("Result not found: " + resultId));
-
-        result.getUser().getFullName();
-
-        return result;
-    }
 
     @Transactional(readOnly = true)
     public List<ProgressEntryResponse> getProgressOverTime(String email) {
