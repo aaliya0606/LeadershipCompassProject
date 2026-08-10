@@ -12,5 +12,4 @@ public interface SurveyResultRepository extends JpaRepository<SurveyResult, Long
 
     List<SurveyResult> findByUserOrderByGenerateDateDesc(User user);
 
-    List<SurveyResult> findByUserOrderByGenerateDateAsc(User user);
 }

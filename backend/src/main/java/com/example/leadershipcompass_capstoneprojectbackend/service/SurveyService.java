@@ -14,13 +14,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.example.leadershipcompass_capstoneprojectbackend.model.User;
 
-import java.util.ArrayList;
+
 import java.util.List;
 import java.util.Map;
 
-import com.example.leadershipcompass_capstoneprojectbackend.dto.ProgressEntryResponse;
-import com.example.leadershipcompass_capstoneprojectbackend.dto.ProgressEntryResponse;
-import java.util.ArrayList;
 
 @Service
 @RequiredArgsConstructor
@@ -243,28 +240,5 @@ public class SurveyService{
         return result;
     }
 
-    @Transactional(readOnly = true)
-    public List<ProgressEntryResponse> getProgressOverTime(String email) {
-        User user = userRepository.findByEmail(email)
-            .orElseThrow(() -> new EntityNotFoundException("User not found: " + email));
-
-        List<SurveyResult> history = surveyResultRepository.findByUserOrderByGenerateDateAsc(user);
-
-        List<ProgressEntryResponse> progress = new ArrayList<>();
-        for (SurveyResult result : history) {
-            progress.add(new ProgressEntryResponse(
-                result.getGenerateDate(),
-                result.getOverallScore(),
-                result.getScoreBand(),
-                result.getCaringTimeScore(),
-                result.getReceivingValueScore(),
-                result.getActsOfSupportScore(),
-                result.getWordsOfRecognitionScore(),
-                result.getPsychologicalTouchScore()
-            ));
-        }
-        return progress;
-    }
-
-
+    
 }
