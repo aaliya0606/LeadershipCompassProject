@@ -18,6 +18,17 @@
             padding: 15px;
             border: 1px solid #ccc;
         }
+
+        .score-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 6px 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .score-label {
+            font-weight: bold;
+        }
     </style>
 </head>
 <body>
@@ -27,13 +38,39 @@
 <p><strong>Role:</strong> <span th:text="${role}"></span></p>
 
 <div class="section">
+    <h2>Overall Result</h2>
+    <p><strong>Score:</strong> <span th:text="${overallScore}"></span> / 250</p>
+    <p><strong>Band:</strong> <span th:text="${overallBand}"></span></p>
+</div>
+
+<div class="section">
+    <h2>Category Scores</h2>
+    <div class="score-row">
+        <span class="score-label">Caring Time</span>
+        <span th:text="${caringTimeScore}"></span>
+    </div>
+    <div class="score-row">
+        <span class="score-label">Receiving Value</span>
+        <span th:text="${receivingValueScore}"></span>
+    </div>
+    <div class="score-row">
+        <span class="score-label">Acts of Support</span>
+        <span th:text="${actsOfSupportScore}"></span>
+    </div>
+    <div class="score-row">
+        <span class="score-label">Words of Recognition</span>
+        <span th:text="${wordsOfRecognitionScore}"></span>
+    </div>
+    <div class="score-row">
+        <span class="score-label">Psychological Touch</span>
+        <span th:text="${psychologicalTouchScore}"></span>
+    </div>
+</div>
+
+<div class="section">
     <h2>Leadership Summary</h2>
     <p th:text="${summary}"></p>
 </div>
 
-<div class="section">
-    <h2>Development Focus</h2>
-    <p th:text="${developmentFocus}"></p>
-</div>
 </body>
 </html>

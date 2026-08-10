@@ -1,5 +1,6 @@
 package com.example.leadershipcompass_capstoneprojectbackend.service;
 
+import com.example.leadershipcompass_capstoneprojectbackend.model.SurveyResult;
 import com.openhtmltopdf.pdfboxout.PdfRendererBuilder;
 import org.springframework.stereotype.Service;
 import org.thymeleaf.TemplateEngine;
@@ -36,6 +37,34 @@ public class PdfService {
 
             return outputStream.toByteArray();
 
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to generate PDF", e);
+        }
+    }
+
+    public byte[] generateReportPdf(SurveyResult result) {
+        try {
+            Context context = new Context();
+            context.setVariable("name", result.getUser().getFullName());
+            context.setVariable("role", result.getUser().getRole());
+            context.setVariable("summary", result.getSummary());
+            context.setVariable("overallScore", result.getOverallScore());
+            context.setVariable("overallBand", result.getScoreBand());
+            context.setVariable("caringTimeScore", result.getCaringTimeScore());
+            context.setVariable("receivingValueScore", result.getReceivingValueScore());
+            context.setVariable("actsOfSupportScore", result.getActsOfSupportScore());
+            context.setVariable("wordsOfRecognitionScore", result.getWordsOfRecognitionScore());
+            context.setVariable("psychologicalTouchScore", result.getPsychologicalTouchScore());
+
+            String htmlContent = templateEngine.process("report-template", context);
+
+            ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+            PdfRendererBuilder builder = new PdfRendererBuilder();
+            builder.useFastMode();
+            builder.withHtmlContent(htmlContent, null);
+            builder.toStream(outputStream);
+            builder.run();
+            return outputStream.toByteArray();
         } catch (Exception e) {
             throw new RuntimeException("Failed to generate PDF", e);
         }
