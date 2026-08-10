@@ -40,7 +40,7 @@ public class DevelopmentPlanWeek {
     @JoinColumn(name = "development_plan_id", nullable = false)
     private DevelopmentPlan developmentPlan;
 
-    /** Week number within the plan (1–5). */
+    /** Week number within the plan (1–5). Also the recommended completion order. */
     @Column(nullable = false)
     private Integer weekNumber;
 

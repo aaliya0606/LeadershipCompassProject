@@ -251,19 +251,23 @@ public class DevelopmentPlanService {
 
     /**
      * Builds the JSON-only planning prompt sent to the AI-Brain.
+     * Asks for both module selection and the order those modules should be completed.
      */
     private String buildAiPrompt(AiPromptPayload payload) throws JsonProcessingException {
         List<String> weakestCategories = payload.weakestCategories();
         List<String> weekTargets = payload.weekCategoryTargets();
         return """
                 Return ONLY valid JSON. Do not include markdown fences or commentary.
-                Schema: {"weeks":[{"weekNumber":1,"moduleId":2,"focus":"personalized focus sentence","rationale":"personalized rationale sentence"}]}
+                Schema: {"weeks":[{"weekNumber":1,"moduleId":2,"focus":"personalized focus sentence","rationale":"why this module and why it comes at this point in the sequence"}]}
                 Requirements:
                 - Exactly 5 weeks with weekNumber 1 through 5
+                - weekNumber is the completion order: the learner must finish week 1 first, then week 2, through week 5
                 - Use only module IDs from availableModules
                 - One unique module per week
-                - Match each week to the target category for that week (weaker scores get more weeks): %s
+                - Choose both which modules to include and the best order to complete them
+                - Put weaker score categories earlier in the sequence when scores differ. Suggested category sequence: %s
                 - Prioritize modules in these weaker categories: %s
+                - Each rationale must explain module fit AND why it belongs at that step in the order
                 - Keep focus and rationale practical and personalized
 
                 Planning data:
@@ -296,7 +300,9 @@ public class DevelopmentPlanService {
     }
 
     /**
-     * Maps AI week suggestions onto real modules, then applies score-weighted slotting.
+     * Maps AI week suggestions onto real modules and preserves the AI completion order
+     * when a full valid sequence is returned. Incomplete AI output is completed with the
+     * score-weighted fallback while keeping any valid AI-ordered prefix.
      */
     private List<PlannedWeek> reconcileAiPlan(
             AiGeneratedPlan generatedPlan,
@@ -311,10 +317,15 @@ public class DevelopmentPlanService {
             moduleById.put(module.getId(), module);
         }
 
+        List<AiGeneratedWeek> orderedAiWeeks = generatedPlan.weeks().stream()
+                .filter(week -> week != null && week.moduleId() != null)
+                .sorted(Comparator.comparingInt(week -> week.weekNumber() == null ? Integer.MAX_VALUE : week.weekNumber()))
+                .toList();
+
         Set<Long> usedModules = new LinkedHashSet<>();
         List<PlannedWeek> plannedWeeks = new ArrayList<>();
-        for (AiGeneratedWeek aiWeek : generatedPlan.weeks()) {
-            if (aiWeek == null || aiWeek.moduleId() == null || usedModules.contains(aiWeek.moduleId())) {
+        for (AiGeneratedWeek aiWeek : orderedAiWeeks) {
+            if (usedModules.contains(aiWeek.moduleId())) {
                 continue;
             }
 
@@ -336,7 +347,51 @@ public class DevelopmentPlanService {
             }
         }
 
-        return reshapeToWeightedSlots(plannedWeeks, scoreSnapshot, activeModules);
+        if (plannedWeeks.size() == MAX_WEEKS) {
+            // Preserve AI-chosen modules and completion order.
+            return plannedWeeks;
+        }
+
+        // Keep the AI prefix order, then fill remaining weeks with weighted fallback modules.
+        return completeOrderedPlan(plannedWeeks, scoreSnapshot, activeModules);
+    }
+
+    /**
+     * Appends score-weighted fallback weeks after any AI-ordered prefix until five weeks exist.
+     */
+    private List<PlannedWeek> completeOrderedPlan(
+            List<PlannedWeek> orderedPrefix,
+            ScoreSnapshot scoreSnapshot,
+            List<Modules> activeModules) {
+        Set<Long> usedModules = new LinkedHashSet<>();
+        List<PlannedWeek> completed = new ArrayList<>();
+        for (PlannedWeek week : orderedPrefix) {
+            usedModules.add(week.module().getId());
+            completed.add(new PlannedWeek(
+                    completed.size() + 1,
+                    week.module(),
+                    week.focus(),
+                    week.rationale(),
+                    week.actions(),
+                    week.generatedByAi()));
+        }
+
+        for (PlannedWeek fallbackWeek : buildFallbackPlan(scoreSnapshot, activeModules)) {
+            if (!usedModules.add(fallbackWeek.module().getId())) {
+                continue;
+            }
+            completed.add(new PlannedWeek(
+                    completed.size() + 1,
+                    fallbackWeek.module(),
+                    fallbackWeek.focus(),
+                    fallbackWeek.rationale(),
+                    fallbackWeek.actions(),
+                    false));
+            if (completed.size() == MAX_WEEKS) {
+                break;
+            }
+        }
+        return completed;
     }
 
     private List<String> weakestCategories(ScoreSnapshot scoreSnapshot) {

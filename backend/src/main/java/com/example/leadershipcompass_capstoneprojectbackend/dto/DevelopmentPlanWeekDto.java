@@ -10,7 +10,7 @@ import lombok.Data;
 @Data
 public class DevelopmentPlanWeekDto {
 
-    /** Week number within the plan (1–5). */
+    /** Week number within the plan (1–5). Also the completion order: finish lower numbers first. */
     private Integer weekNumber;
 
     /** Module library id selected for this week. */

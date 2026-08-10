@@ -83,14 +83,15 @@ async function loadCurrentPlan() {
 }
 
 function renderPlan(plan) {
-  const weeks = Array.isArray(plan.weeks) ? plan.weeks : [];
-  if (weeks.length === 0) {
+  const weeksRaw = Array.isArray(plan.weeks) ? plan.weeks : [];
+  if (weeksRaw.length === 0) {
     weeksContainer.innerHTML = emptyState("No weekly recommendations were returned.", "Generate the plan again after survey data is available.");
     return;
   }
 
-  planMeta.textContent = `Generated ${formatTimestamp(plan.generatedAt)} using ${formatGenerationSource(plan.generationSource)}.`;
+  planMeta.textContent = `Generated ${formatTimestamp(plan.generatedAt)} using ${formatGenerationSource(plan.generationSource)}. Complete modules in week order (1 → 5).`;
 
+  const weeks = [...weeksRaw].sort((a, b) => (a.weekNumber || 0) - (b.weekNumber || 0));
   weeksContainer.innerHTML = weeks
     .map((week) => {
       const actions = (week.actions || [])
@@ -106,7 +107,10 @@ function renderPlan(plan) {
                   <h5>Week ${week.weekNumber}: ${escapeHtml(week.moduleTitle)}</h5>
                   <p class="text-muted mb-0">${escapeHtml(week.category)}</p>
                 </div>
-                <span class="badge text-bg-light">Module ${week.moduleId ?? "-"}</span>
+                <div class="text-end">
+                  <span class="badge text-bg-secondary d-block mb-1">Step ${week.weekNumber} of 5</span>
+                  <span class="badge text-bg-light">Module ${week.moduleId ?? "-"}</span>
+                </div>
               </div>
               <p><strong>Focus:</strong> ${escapeHtml(week.focus || "No focus provided.")}</p>
               <p class="text-muted">${escapeHtml(week.rationale || "No rationale provided.")}</p>

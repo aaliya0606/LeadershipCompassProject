@@ -59,9 +59,10 @@ if (form) {
 }
 
 function renderPlan(plan) {
-  planSummary.textContent = `Plan generated ${formatTimestamp(plan.generatedAt)} using ${formatGenerationSource(plan.generationSource)}.`;
+  planSummary.textContent = `Plan generated ${formatTimestamp(plan.generatedAt)} using ${formatGenerationSource(plan.generationSource)}. Complete modules in week order (1 → 5).`;
 
-  previewWeeksContainer.innerHTML = (plan.weeks || [])
+  const weeks = [...(plan.weeks || [])].sort((a, b) => (a.weekNumber || 0) - (b.weekNumber || 0));
+  previewWeeksContainer.innerHTML = weeks
     .map((week) => {
       const actions = (week.actions || [])
         .map((action) => `<li class="list-group-item">${escapeHtml(action)}</li>`)
@@ -71,7 +72,10 @@ function renderPlan(plan) {
         <div class="col-md-6">
           <div class="card week-card h-100">
             <div class="card-body">
-              <h5>Week ${week.weekNumber}: ${escapeHtml(week.moduleTitle)}</h5>
+              <div class="d-flex justify-content-between align-items-start gap-2 mb-2">
+                <h5 class="mb-0">Week ${week.weekNumber}: ${escapeHtml(week.moduleTitle)}</h5>
+                <span class="badge text-bg-secondary">Step ${week.weekNumber} of 5</span>
+              </div>
               <p class="text-muted mb-2">${escapeHtml(week.category)}</p>
               <p><strong>Focus:</strong> ${escapeHtml(week.focus || "No focus provided.")}</p>
               <p class="text-muted">${escapeHtml(week.rationale || "No rationale provided.")}</p>
