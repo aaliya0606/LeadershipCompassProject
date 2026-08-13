@@ -8,13 +8,12 @@ import lombok.Data;
 /**
  * API representation of a generated 5-week development plan.
  * <p>
- * Returned by current/history-detail/generate endpoints, and by the
- * non-persisted POC preview endpoint (where {@link #id} may be {@code null}).
+ * Returned by current/history-detail/generate endpoints.
  */
 @Data
 public class DevelopmentPlanDto {
 
-    /** Persisted plan id, or {@code null} for preview-only responses. */
+    /** Persisted plan id. */
     private Long id;
 
     /** When this plan snapshot was created. */

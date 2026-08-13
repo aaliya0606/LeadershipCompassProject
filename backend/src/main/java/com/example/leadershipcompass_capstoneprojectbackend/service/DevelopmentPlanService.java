@@ -1,7 +1,6 @@
 package com.example.leadershipcompass_capstoneprojectbackend.service;
 
 import com.example.leadershipcompass_capstoneprojectbackend.dto.DevelopmentPlanDto;
-import com.example.leadershipcompass_capstoneprojectbackend.dto.DevelopmentPlanPreviewRequest;
 import com.example.leadershipcompass_capstoneprojectbackend.dto.DevelopmentPlanSummaryDto;
 import com.example.leadershipcompass_capstoneprojectbackend.dto.DevelopmentPlanWeekDto;
 import com.example.leadershipcompass_capstoneprojectbackend.model.DevelopmentPlan;
@@ -133,7 +132,7 @@ public class DevelopmentPlanService {
     @Transactional
     public DevelopmentPlanDto generatePlan(String userEmail) {
         User user = getUserByEmail(userEmail);
-        SurveyResult surveyResult = surveyResultRepository.findFirstByUserIdOrderByIdDesc(user.getId())
+        SurveyResult surveyResult = surveyResultRepository.findFirstByUserOrderByGenerateDateDesc(user)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "No survey result found for user."));
         List<Modules> activeModules = modulesRepository.findByActiveTrueOrderByDisplayOrderAscIdAsc();
         if (activeModules.isEmpty()) {
@@ -155,41 +154,6 @@ public class DevelopmentPlanService {
         plan.replaceWeeks(toEntities(plannedWeeks));
 
         return toDto(developmentPlanRepository.save(plan));
-    }
-
-    /**
-     * Builds a non-persisted plan preview from mock scores for POC testing.
-     *
-     * @param request mock score payload
-     * @return preview development plan
-     */
-    @Transactional(readOnly = true)
-    public DevelopmentPlanDto previewPlan(DevelopmentPlanPreviewRequest request) {
-        List<Modules> activeModules = modulesRepository.findByActiveTrueOrderByDisplayOrderAscIdAsc();
-        if (activeModules.isEmpty()) {
-            throw new ResponseStatusException(HttpStatus.CONFLICT, "No active modules are available.");
-        }
-
-        ScoreSnapshot scoreSnapshot = ScoreSnapshot.fromRequest(request);
-        String fullName = request.getFullName() != null && !request.getFullName().isBlank()
-                ? request.getFullName().trim()
-                : "POC User";
-        List<PlannedWeek> plannedWeeks = generateWeeks(
-                fullName,
-                buildPreviewConversationId(scoreSnapshot),
-                scoreSnapshot,
-                activeModules);
-
-        DevelopmentPlanDto dto = new DevelopmentPlanDto();
-        dto.setGeneratedAt(Instant.now());
-        dto.setGenerationSource(plannedWeeks.stream().anyMatch(PlannedWeek::generatedByAi) ? AI_SOURCE : FALLBACK_SOURCE);
-        dto.setCaringTimeScore(scoreSnapshot.caringTimeScore());
-        dto.setReceivingValueScore(scoreSnapshot.receivingValueScore());
-        dto.setActsOfSupportScore(scoreSnapshot.actsOfSupportScore());
-        dto.setWordsOfRecognitionScore(scoreSnapshot.wordsOfRecognitionScore());
-        dto.setPsychologicalTouchScore(scoreSnapshot.psychologicalTouchScore());
-        dto.setWeeks(toWeekDtos(plannedWeeks));
-        return dto;
     }
 
     private User getUserByEmail(String userEmail) {
@@ -266,6 +230,7 @@ public class DevelopmentPlanService {
                 - One unique module per week
                 - Choose both which modules to include and the best order to complete them
                 - Put weaker score categories earlier in the sequence when scores differ. Suggested category sequence: %s
+                - You MUST include at least one module from every weaker category listed. Do not omit the lowest-scoring category
                 - Prioritize modules in these weaker categories: %s
                 - Each rationale must explain module fit AND why it belongs at that step in the order
                 - Keep focus and rationale practical and personalized
@@ -348,12 +313,15 @@ public class DevelopmentPlanService {
         }
 
         if (plannedWeeks.size() == MAX_WEEKS) {
-            // Preserve AI-chosen modules and completion order.
-            return plannedWeeks;
+            // Preserve AI order, but never drop the weakest score categories.
+            return enforceScoreWeightedCoverage(plannedWeeks, scoreSnapshot, activeModules);
         }
 
         // Keep the AI prefix order, then fill remaining weeks with weighted fallback modules.
-        return completeOrderedPlan(plannedWeeks, scoreSnapshot, activeModules);
+        return enforceScoreWeightedCoverage(
+                completeOrderedPlan(plannedWeeks, scoreSnapshot, activeModules),
+                scoreSnapshot,
+                activeModules);
     }
 
     /**
@@ -394,6 +362,108 @@ public class DevelopmentPlanService {
         return completed;
     }
 
+    /**
+     * Keeps the AI completion order where possible, but injects modules for
+     * score-weighted categories the AI omitted (for example a 10/50 Psychological Touch).
+     * Extra weeks from stronger categories are dropped so the plan stays at five weeks.
+     */
+    private List<PlannedWeek> enforceScoreWeightedCoverage(
+            List<PlannedWeek> orderedWeeks,
+            ScoreSnapshot scoreSnapshot,
+            List<Modules> activeModules) {
+        List<String> requiredSlots = buildWeightedCategorySlots(scoreSnapshot);
+        Map<String, Integer> requiredCounts = new LinkedHashMap<>();
+        for (String slot : requiredSlots) {
+            requiredCounts.merge(normalizeCategory(slot), 1, Integer::sum);
+        }
+
+        List<PlannedWeek> weeks = new ArrayList<>(orderedWeeks);
+        Map<String, List<Modules>> modulesByCategory = indexModulesByCategory(activeModules);
+        Set<Long> usedModules = new LinkedHashSet<>();
+        for (PlannedWeek week : weeks) {
+            usedModules.add(week.module().getId());
+        }
+
+        List<PlannedWeek> injected = new ArrayList<>();
+        Map<String, Integer> coveredCounts = countCategories(weeks);
+        for (String slot : requiredSlots) {
+            String key = normalizeCategory(slot);
+            int needed = requiredCounts.getOrDefault(key, 0);
+            int have = coveredCounts.getOrDefault(key, 0);
+            while (have < needed) {
+                Modules module = modulesByCategory.getOrDefault(key, List.of()).stream()
+                        .filter(candidate -> !usedModules.contains(candidate.getId()))
+                        .findFirst()
+                        .orElse(null);
+                if (module == null) {
+                    break;
+                }
+                usedModules.add(module.getId());
+                injected.add(new PlannedWeek(
+                        0,
+                        module,
+                        defaultFocus(module),
+                        buildDefaultRationale(module, scoreSnapshot),
+                        buildDefaultActions(module),
+                        false));
+                have++;
+                coveredCounts.put(key, have);
+            }
+        }
+
+        weeks.addAll(0, injected);
+        while (weeks.size() > MAX_WEEKS) {
+            int dropIndex = indexOfMostDispensableWeek(weeks, requiredCounts, scoreSnapshot);
+            weeks.remove(dropIndex);
+        }
+
+        List<PlannedWeek> renumbered = new ArrayList<>();
+        for (PlannedWeek week : weeks) {
+            renumbered.add(new PlannedWeek(
+                    renumbered.size() + 1,
+                    week.module(),
+                    week.focus(),
+                    week.rationale(),
+                    week.actions(),
+                    week.generatedByAi()));
+        }
+        return renumbered;
+    }
+
+    private Map<String, Integer> countCategories(List<PlannedWeek> weeks) {
+        Map<String, Integer> counts = new LinkedHashMap<>();
+        for (PlannedWeek week : weeks) {
+            counts.merge(normalizeCategory(week.module().getCategory()), 1, Integer::sum);
+        }
+        return counts;
+    }
+
+    /**
+     * Drops a stronger-category week first so injected weak-category weeks can stay.
+     */
+    private int indexOfMostDispensableWeek(
+            List<PlannedWeek> weeks,
+            Map<String, Integer> requiredCounts,
+            ScoreSnapshot scoreSnapshot) {
+        Map<String, Integer> actualCounts = countCategories(weeks);
+        int bestIndex = weeks.size() - 1;
+        int bestScore = Integer.MIN_VALUE;
+        for (int index = weeks.size() - 1; index >= 0; index--) {
+            String key = normalizeCategory(weeks.get(index).module().getCategory());
+            int required = requiredCounts.getOrDefault(key, 0);
+            int actual = actualCounts.getOrDefault(key, 0);
+            if (actual <= required) {
+                continue;
+            }
+            int categoryScore = scoreSnapshot.scoreForCategory(weeks.get(index).module().getCategory());
+            if (categoryScore > bestScore) {
+                bestScore = categoryScore;
+                bestIndex = index;
+            }
+        }
+        return bestIndex;
+    }
+
     private List<String> weakestCategories(ScoreSnapshot scoreSnapshot) {
         List<CategoryScore> rankedCategories = scoreSnapshot.toRankedCategories();
         int lowestScore = rankedCategories.get(0).score();
@@ -405,15 +475,6 @@ public class DevelopmentPlanService {
             categories.add(categoryScore.category());
         }
         return categories;
-    }
-
-    private String buildPreviewConversationId(ScoreSnapshot scoreSnapshot) {
-        return "development-plan-preview-%d-%d-%d-%d-%d".formatted(
-                scoreSnapshot.caringTimeScore(),
-                scoreSnapshot.receivingValueScore(),
-                scoreSnapshot.actsOfSupportScore(),
-                scoreSnapshot.wordsOfRecognitionScore(),
-                scoreSnapshot.psychologicalTouchScore());
     }
 
     /**
@@ -806,16 +867,6 @@ public class DevelopmentPlanService {
                     defaultScore(surveyResult.getActsOfSupportScore()),
                     defaultScore(surveyResult.getWordsOfRecognitionScore()),
                     defaultScore(surveyResult.getPsychologicalTouchScore()));
-        }
-
-        /** Builds a snapshot from a POC preview request. */
-        static ScoreSnapshot fromRequest(DevelopmentPlanPreviewRequest request) {
-            return new ScoreSnapshot(
-                    defaultScore(request.getCaringTimeScore()),
-                    defaultScore(request.getReceivingValueScore()),
-                    defaultScore(request.getActsOfSupportScore()),
-                    defaultScore(request.getWordsOfRecognitionScore()),
-                    defaultScore(request.getPsychologicalTouchScore()));
         }
 
         /** Returns categories sorted ascending by score (weakest first). */

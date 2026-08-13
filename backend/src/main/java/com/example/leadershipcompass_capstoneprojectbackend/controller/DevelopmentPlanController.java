@@ -1,10 +1,8 @@
 package com.example.leadershipcompass_capstoneprojectbackend.controller;
 
 import com.example.leadershipcompass_capstoneprojectbackend.dto.DevelopmentPlanDto;
-import com.example.leadershipcompass_capstoneprojectbackend.dto.DevelopmentPlanPreviewRequest;
 import com.example.leadershipcompass_capstoneprojectbackend.dto.DevelopmentPlanSummaryDto;
 import com.example.leadershipcompass_capstoneprojectbackend.service.DevelopmentPlanService;
-import jakarta.validation.Valid;
 import java.security.Principal;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -14,7 +12,6 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -83,16 +80,5 @@ public class DevelopmentPlanController {
     public ResponseEntity<DevelopmentPlanDto> generatePlan(Principal principal) {
         DevelopmentPlanDto plan = developmentPlanService.generatePlan(principal.getName());
         return ResponseEntity.status(HttpStatus.CREATED).body(plan);
-    }
-
-    /**
-     * Returns a non-persisted plan preview using mock survey scores (POC).
-     *
-     * @param request mock score payload
-     * @return preview plan DTO
-     */
-    @PostMapping("/preview")
-    public DevelopmentPlanDto previewPlan(@Valid @RequestBody DevelopmentPlanPreviewRequest request) {
-        return developmentPlanService.previewPlan(request);
     }
 }

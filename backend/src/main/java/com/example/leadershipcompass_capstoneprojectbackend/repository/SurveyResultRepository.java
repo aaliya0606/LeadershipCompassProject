@@ -1,23 +1,18 @@
 package com.example.leadershipcompass_capstoneprojectbackend.repository;
 
 import com.example.leadershipcompass_capstoneprojectbackend.model.SurveyResult;
-import java.util.Optional;
+import com.example.leadershipcompass_capstoneprojectbackend.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
-/**
- * Persistence access for {@link SurveyResult} records.
- * <p>
- * Development-plan generation uses {@link #findFirstByUserIdOrderByIdDesc(Long)}
- * to read the learner's latest score snapshot. Survey capture/update remains
- * owned by the survey feature.
- */
+import java.util.List;
+import java.util.Optional;
+
+@Repository
 public interface SurveyResultRepository extends JpaRepository<SurveyResult, Long> {
 
-    /**
-     * Finds the most recently stored survey result for a user.
-     *
-     * @param userId user id
-     * @return latest survey result when present
-     */
-    Optional<SurveyResult> findFirstByUserIdOrderByIdDesc(Long userId);
+    List<SurveyResult> findByUserOrderByGenerateDateDesc(User user);
+
+    /** Latest saved survey result for a user; used by development-plan generation. */
+    Optional<SurveyResult> findFirstByUserOrderByGenerateDateDesc(User user);
 }
