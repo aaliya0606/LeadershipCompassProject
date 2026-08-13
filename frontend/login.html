@@ -2,24 +2,38 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Log in | Leadership Compass</title>
+    <title>The Guinea Group | Leadership Compass</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="static/style/startup.css" />
     <link rel="stylesheet" href="static/style/main.css" />
 </head>
+
 <body>
+
+<header class="navbar-dark px-4 custom-navbar-new">
+    <img src="static/img/TGG-logo.png" alt="TGG Logo" class="navbar-logo-new" />
+    <span class="brand-title-new">Leadership Compass</span>
+    <div class="social-icons">
+        <a href="https://www.facebook.com/theguineagrouptgg/" target="_blank">
+            <img src="static/img/facebook.png" alt="Facebook" />
+        </a>
+        <a href="https://www.instagram.com/anton_guinea/" target="_blank">
+            <img src="static/img/instagram.png" alt="Instagram" />
+        </a>
+        <a href="https://www.youtube.com/@theguineagrouptgg6042" target="_blank">
+            <img src="static/img/youtube.png" alt="YouTube" />
+        </a>
+        <a href="https://www.tiktok.com/@antonguinea" target="_blank">
+            <img src="static/img/tiktok.png" alt="TikTok" />
+        </a>
+    </div>
+</header>
+
 <div class="login">
-
-    <! -- TOP LEFT -->
-    <img src="static/img/TGG-logo.png" alt="TGG" class="logo-left" />
-
-    <! -- TOP CENTER -->
-    <img src="static/img/anton-guinea-logo-img.png" alt="Anton" class="logo-center" />
-
-    <! TOP RIGHT -->
-    <img src="static/img/social.png" alt="Social Icons" class="social-icons" />
-
 
     <! -- BUTTON sits right after subtitle -->
     <a href="startup.html" class="return-btn">return</a>
+    <a href="adminLogin.html" class="adminlogin-btn">Log in as Admin</a>
 
     <! -- RIGHT PANEL -->
     <form class="login-form" id="loginForm">
@@ -41,13 +55,13 @@
             <a href="#">Forgot password?</a>
         </div>
 
-        <button class="btn-login">Sign In</button>
+        <button type="button" class="btn-login" onclick="handleLogin()">Sign In</button>
         <p id="loginMessage"></p>
     </form>
     <! -- ALREADY HAVE AN ACCOUNT -->
     <p class="signup-link">Don't have an account? <a href="sign-up.html">Sign Up</a></p>
 </div>
 
-<script src="static/js/auth.js"></script>
+<script src="static/js/auth-test.js"></script>
 </body>
 </html>
