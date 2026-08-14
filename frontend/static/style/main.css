@@ -722,6 +722,12 @@ html, body {
   transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
+/* Admin module modal: scroll long add/edit forms */
+#moduleModal .modal-body {
+  max-height: min(70vh, calc(100vh - 12rem));
+  overflow-y: auto;
+}
+
 
 /* ############################################################################################################# */
 
