@@ -127,7 +127,8 @@ public class SurveyService{
         return total;
     }
 
-    private String band(int score){
+    // CHANGED: made public so PdfService can reuse this logic
+    public String band(int score){
         if (score >= 40) return "High";
         if (score >= 30) return "Strong intent";
         if (score >= 20) return "Needs attention";
@@ -136,7 +137,8 @@ public class SurveyService{
 
     /// Only have placeholder values for feedback :
     // this can be refactored to: message() + band()
-    private String message(String categoryName, int score){
+    // CHANGED: made public so PdfService can reuse this logic 
+    public String message(String categoryName, int score){
     switch (categoryName) {
         case "Caring Time":
             if (score >= 40) return "You consistently practice high-quality Caring Time, deeply investing in trust and team connection.";

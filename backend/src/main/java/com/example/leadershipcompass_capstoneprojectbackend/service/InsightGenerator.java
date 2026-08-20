@@ -24,10 +24,10 @@ public class InsightGenerator {
         sb.append(generateSummary(result)).append("\n\n");
         sb.append("Strengths: ")
             .append(String.join(", ", identifyStrengths(result)))
-            .append("\n");
+            .append(".\n");
         sb.append("Areas to develop: ")
             .append(String.join(", ", identifyWeaknesses(result)))
-            .append("\n\n");
+            .append(".\n\n");
         sb.append(generateRecommendations(result));
         return sb.toString();
     }
