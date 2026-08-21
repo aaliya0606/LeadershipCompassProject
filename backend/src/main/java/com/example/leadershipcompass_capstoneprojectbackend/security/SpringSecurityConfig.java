@@ -9,6 +9,7 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.http.HttpMethod;
 
 import java.util.List;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
@@ -46,7 +47,20 @@ public class SpringSecurityConfig {
                         .requestMatchers("/api/admin/**").hasRole("ADMIN")
                         .requestMatchers("/api/dashboard/admin").hasRole("ADMIN")
                         .requestMatchers("/api/dashboard/user").hasAnyRole("USER", "ADMIN")
-                        .anyRequest().authenticated()
+                        
+                        // Users and admins may view resource metadata
+                        .requestMatchers(HttpMethod.GET, "/api/resources/**")
+                        .hasAnyRole("USER", "ADMIN")
+
+                        //Resource management is admin-only
+                        .requestMatchers(HttpMethod.POST, "/api/resources/**")
+                        .hasRole("ADMIN")
+                        
+                        .requestMatchers(HttpMethod.PUT, "/api/resources/**")
+                        .hasRole("ADMIN")
+
+                        .requestMatchers(HttpMethod.DELETE, "/api/resources/**")
+                        .hasRole("ADMIN")
                 )
                 .headers(headers -> headers
                         .frameOptions(frame -> frame.disable())
