@@ -17,6 +17,11 @@ import com.example.leadershipcompass_capstoneprojectbackend.model.User;
 import java.util.List;
 import java.util.Map;
 
+import com.example.leadershipcompass_capstoneprojectbackend.dto.ModuleDto;
+
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+
 @Service
 @RequiredArgsConstructor
 //SurveyManager in UML Class Diagram
@@ -37,6 +42,8 @@ public class SurveyService{
     private final SurveyQuestionsRepository surveyQuestionsRepository;
     private final UserRepository userRepository;
     private final InsightGenerator insightGenerator;
+
+    private final ModulesService modulesService;
 
     @Transactional
     public SurveyResultResponse submitSurvey(SurveySubmissionRequest request, String email){
@@ -225,5 +232,56 @@ public class SurveyService{
 
         return response;
 
+    }
+
+    private static final int NEEDS_ATTENTION_THRESHOLD = 30;
+
+    @Transactional(readOnly = true)
+    public List<ModuleDto> getSuggestedLearningPath(String email) {
+        User user = userRepository.findByEmail(email)
+            .orElseThrow(() -> new EntityNotFoundException("User not found: " + email));
+
+        SurveyResult latest = surveyResultRepository.findFirstByUserOrderByGenerateDateDesc(user)
+            .orElseThrow(() -> new EntityNotFoundException("No survey result found for user: " + email));
+
+        List<String> weakestCategories = determineWeakestCategories(
+            latest.getCaringTimeScore(),
+            latest.getReceivingValueScore(),
+            latest.getActsOfSupportScore(),
+            latest.getWordsOfRecognitionScore(),
+            latest.getPsychologicalTouchScore()
+        );
+
+        List<ModuleDto> suggested = new ArrayList<>();
+        for (String category : weakestCategories) {
+            suggested.addAll(modulesService.findActiveByCategory(category));
+        }
+        return suggested;
+    }
+
+    private List<String> determineWeakestCategories(int ct, int rv, int as_, int wr, int pt) {
+        Map<String, Integer> scores = new LinkedHashMap<>();
+        scores.put("Caring Time", ct);
+        scores.put("Receiving Value", rv);
+        scores.put("Acts of Support", as_);
+        scores.put("Words of Recognition", wr);
+        scores.put("Psychological Touch", pt);
+
+        List<String> belowThreshold = scores.entrySet().stream()
+            .filter(e -> e.getValue() < NEEDS_ATTENTION_THRESHOLD)
+            .sorted(Map.Entry.comparingByValue())
+            .map(Map.Entry::getKey)
+            .toList();
+
+        if (!belowThreshold.isEmpty()) {
+            return belowThreshold;
+        }
+
+        int minScore = scores.values().stream().min(Integer::compareTo).orElse(0);
+
+        return scores.entrySet().stream()
+            .filter(e -> e.getValue() == minScore)
+            .map(Map.Entry::getKey)
+            .toList();
     }
 }
