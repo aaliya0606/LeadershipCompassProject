@@ -127,6 +127,7 @@ function renderPart() {
     html += `
       <div class="survey-question" id="q-${questionKey}">
         <p class="survey-question-text">${index + 1}. ${q.questionText}</p>
+        <div style="width: max-content; padding-right: 1rem;">
         <div class="survey-options">
           ${[1, 2, 3, 4, 5].map(score => `
             <label class="survey-option">
@@ -135,10 +136,11 @@ function renderPart() {
               <span class="survey-option-label">${score}</span>
             </label>
           `).join("")}
-        </div>
-        <div class="survey-scale-labels">
-          <span>Rarely</span>
-          <span>Consistently</span>
+          </div>
+          <div class="survey-scale-labels">
+            <span>Rarely</span>
+            <span>Consistently</span>
+          </div>
         </div>
       </div>
     `;
@@ -251,6 +253,7 @@ function showResults(result) {
         ${renderCategoryResult("Psychological Touch", result.psychologicalTouchScore, result.psychologicalTouchBand, result.psychologicalTouchMessage, bandColor)}
       </div>
       <button class="survey-button" onclick="window.location.href='dashboard.html'">Dashboard</button>
+      <button class="survey-button" style="margin: 1rem;">Print Results</button> 
     </div>
   `;
 
