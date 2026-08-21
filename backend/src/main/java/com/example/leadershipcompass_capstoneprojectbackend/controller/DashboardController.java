@@ -54,6 +54,7 @@ import com.example.leadershipcompass_capstoneprojectbackend.service.SurveyServic
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
+import com.example.leadershipcompass_capstoneprojectbackend.dto.PeerComparisonResponse;
 
 import java.util.List;
 
@@ -75,5 +76,11 @@ public class DashboardController {
     @GetMapping("/api/dashboard/admin")
     public String adminDashboard() {
         return "Welcome ADMIN. You have access to the admin dashboard.";
+    }
+
+    @GetMapping("/api/dashboard/peer-comparison")
+    public PeerComparisonResponse peerComparison(Authentication authentication){
+        String email = authentication.getName();
+        return surveyService.getPeerComparison(email);
     }
 }
