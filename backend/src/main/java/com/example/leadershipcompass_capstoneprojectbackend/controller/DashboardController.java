@@ -50,6 +50,7 @@
 package com.example.leadershipcompass_capstoneprojectbackend.controller;
 
 import com.example.leadershipcompass_capstoneprojectbackend.dto.ProgressEntryResponse;
+import com.example.leadershipcompass_capstoneprojectbackend.repository.SurveyResultRepository;
 import com.example.leadershipcompass_capstoneprojectbackend.service.SurveyService;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -57,6 +58,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.leadershipcompass_capstoneprojectbackend.dto.PeerComparisonResponse;
 
 import java.util.List;
+
 
 @RestController
 public class DashboardController {
@@ -83,4 +85,6 @@ public class DashboardController {
         String email = authentication.getName();
         return surveyService.getPeerComparison(email);
     }
+
+
 }
