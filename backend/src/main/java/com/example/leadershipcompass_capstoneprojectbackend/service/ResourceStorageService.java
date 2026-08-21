@@ -28,16 +28,41 @@ import java.io.IOException;
 @Service
 @RequiredArgsConstructor
 public class ResourceStorageService {
+
     private final ResourceRepository resourceRepository;
 
+    private final Path storageLocation = resolveStorageLocation();
+
     /**
-     * Root directory for locally stored Resource Library files.
+     * Resolves the Resource Library storage directory consistently whether
+     * the backend is launched from the repository root or the backend folder.
      *
-     * <p>The directory is intentionally outside the application database.
-     * Confidential resource files should not be committed to source control.</p>
+     * @return absolute path to backend/resource-storage
      */
-    private final Path storageLocation =
-            Paths.get("resource-storage").toAbsolutePath().normalize();
+    private static Path resolveStorageLocation() {
+        Path workingDirectory =
+                Paths.get("").toAbsolutePath().normalize();
+
+        // Backend started from the backend folder
+        if (Files.exists(workingDirectory.resolve("pom.xml"))) {
+            return workingDirectory
+                    .resolve("resource-storage")
+                    .normalize();
+        }
+
+        // Backend started from the repository root / IDE
+        Path backendDirectory = workingDirectory.resolve("backend");
+
+        if (Files.exists(backendDirectory.resolve("pom.xml"))) {
+            return backendDirectory
+                    .resolve("resource-storage")
+                    .normalize();
+        }
+
+        throw new IllegalStateException(
+                "Could not locate backend Resource Library storage directory"
+        );
+    }
     //method that safely resolves a filename inside resource-storage
 
     public Path getFilePath(String fileName) {
@@ -196,6 +221,24 @@ public class ResourceStorageService {
 
         } catch (IOException e) {
             throw new RuntimeException("Could not store uploaded resource", e);
+        }
+    }
+
+    /**
+     * Deletes a locally stored Resource Library file.
+     *
+     * @param storageKey relative storage path of the file
+     * @throws RuntimeException if the file cannot be deleted
+     */
+    public void deleteFile(String storageKey) {
+        try {
+            Path filePath = getFilePath(storageKey);
+            Files.deleteIfExists(filePath);
+        } catch (IOException e) {
+            throw new RuntimeException(
+                    "Could not delete resource file: " + storageKey,
+                    e
+            );
         }
     }
 }

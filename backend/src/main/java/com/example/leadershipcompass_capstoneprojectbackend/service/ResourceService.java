@@ -5,6 +5,7 @@ import com.example.leadershipcompass_capstoneprojectbackend.repository.ResourceR
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+
 import java.util.List;
 
 /**
@@ -26,6 +27,8 @@ import java.util.List;
 public class ResourceService {
 
     private final ResourceRepository resourceRepository;
+
+    private final ResourceStorageService resourceStorageService;
 
     /**
      * Returns all resource records, including inactive resources.
@@ -99,19 +102,18 @@ public class ResourceService {
     }
 
     /**
-     * Removes a resource record from the application library.
+     * Deletes a resource from both local file storage and the database.
      *
-     * <p>The physical file is intentionally preserved in storage to reduce the
-     * risk of permanently deleting confidential source material by accident.</p>
-     *
-     * @param id identifier of the resource record to remove
+     * @param id identifier of the resource to delete
      * @throws RuntimeException if the resource does not exist
      */
-
     public void deleteResource(Long id) {
-        if (!resourceRepository.existsById(id)) {
-            throw new RuntimeException("Resource not found");
+        Resource resource = getResourceById(id);
+
+        if (resource.getStorageKey() != null) {
+            resourceStorageService.deleteFile(resource.getStorageKey());
         }
-        resourceRepository.deleteById(id);
+
+        resourceRepository.delete(resource);
     }
 }
