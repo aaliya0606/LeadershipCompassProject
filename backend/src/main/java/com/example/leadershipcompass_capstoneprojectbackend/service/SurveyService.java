@@ -45,7 +45,7 @@ public class SurveyService{
         validateAnswers(answers);
 
         User user = userRepository.findByEmail(email)
-            .orElseThrow(() -> new EntityNotFoundException("User npt found:" + email));
+            .orElseThrow(() -> new EntityNotFoundException("User not found:" + email));
         
         int ctScore = sumCategory(answers, PREFIX_CT);
         int rvScore = sumCategory(answers, PREFIX_RV);
@@ -132,19 +132,43 @@ public class SurveyService{
         return "Blind spot";
     }
 
+    /// Only have placeholder values for feedback :
+    // this can be refactored to: message() + band()
     private String message(String categoryName, int score){
-        if (score >= 40){
-            return "placeholder: feedback on high score";
-        }
-        if (score >= 30){
-             return "placeholder: feedback on mid score";
-        }
-        if (score >= 20){
-             return "placeholder: feedback on low score";
-        }
-        return categoryName + "may be a leadership blind spot"
-        + "prioritise this action plan....";
+    switch (categoryName) {
+        case "Caring Time":
+            if (score >= 40) return "You consistently practice high-quality Caring Time, deeply investing in trust and team connection.";
+            if (score >= 30) return "You show strong intent but can improve presence and prioritisation of Caring Time.";
+            if (score >= 20) return "Your Caring Time habits need attention to avoid disconnection and erosion of psychological safety.";
+            return "Caring Time may be a blind spot; boosting it can dramatically improve your leadership impact.";
 
+        case "Receiving Value":
+            if (score >= 40) return "You consistently practice Receiving Value and create a culture of psychological safety and trust.";
+            if (score >= 30) return "You show good intent but have opportunities to deepen active listening and follow-up habits.";
+            if (score >= 20) return "Your practice needs strengthening; risks exist for team disengagement and mistrust.";
+            return "Receiving Value may be a leadership blind spot; focus urgently on building authentic listening skills.";
+
+        case "Acts of Support":
+            if (score >= 40) return "You consistently demonstrate Acts of Support, enabling your team to thrive and grow.";
+            if (score >= 30) return "You show good intent, with opportunities to increase proactive support and clarity.";
+            if (score >= 20) return "Your support may be inconsistent, risking team frustration and disengagement.";
+            return "Acts of Support is an urgent development area to avoid team burnout and underperformance.";
+
+        case "Words of Recognition":
+            if (score >= 40) return "You consistently deliver meaningful Words of Recognition that motivate and build loyalty.";
+            if (score >= 30) return "You recognise well but have room to increase specificity, timeliness, and variety.";
+            if (score >= 20) return "Your recognition habits may be inconsistent or generic, risking diminished motivation.";
+            return "Words of Recognition require urgent development to unlock team engagement and trust.";
+
+        case "Psychological Touch":
+            if (score >= 40) return "You consistently embody Psychological Touch, cultivating deep trust, safety, and authentic connection in your team.";
+            if (score >= 30) return "Strong awareness with areas for growth in emotional courage, empathy, or tailored communication.";
+            if (score >= 20) return "Psychological Touch needs deliberate development to avoid ambient fear, silence, or disengagement.";
+            return "Psychological safety may be significantly compromised; urgent focus on emotional connection and safety is required.";
+
+        default:
+            return "No feedback available for this category.";
+    }
     }
 
     private void validateAnswers(Map<String, Integer> answers){
@@ -156,7 +180,7 @@ public class SurveyService{
             if (score < MIN_SCORE || score > MAX_SCORE){
                 throw new IllegalArgumentException(
                     "Score for" + entry.getKey() + "is" + score
-                    + ". Allowed range: " + MIN_SCORE + "-" + "MAX_SCORE" + ".");
+                    + ". Allowed range: " + MIN_SCORE + "-" + MAX_SCORE + ".");
                 
             }
         }
@@ -197,7 +221,7 @@ public class SurveyService{
 
         response.setPsychologicalTouchScore(pt);
         response.setPsychologicalTouchBand(band(pt));
-        response.setPsychologicalTouchMessage(message("Psychological", pt));
+        response.setPsychologicalTouchMessage(message("Psychological Touch", pt));
 
         return response;
 
