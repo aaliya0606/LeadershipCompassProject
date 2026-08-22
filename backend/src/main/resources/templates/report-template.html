@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <title>Leadership Compass Survey Results Report</title>
+    <style>
+        * { box-sizing: border-box; }
+        @page { size: A4; margin: 18mm 16mm; }
+        :root {
+            --brand-dark: #00284B;
+            --brand-green: #64BC28;
+            --brand-light-green: #96DA5F;
+            --brand-surface: #FFFFFF;
+            --brand-muted: #E5E8E8;
+            --brand-text: #10263A;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #ffffff;
+            color: #212529;
+            margin: 0;
+            padding: 0;
+        }
+        .report {
+            max-width: 700px;
+            margin: 0 auto;
+            background: #ffffff;
+            border-radius: 0;
+            padding: 24px 28px;
+            box-shadow: none;
+        }
+
+        /* CHANGED: display:table/table-cell instead of CSS Grid - more reliable in OpenHTMLtoPDF */
+        .report-header {
+            display: table;
+            width: 100%;
+            border-bottom: 3px solid #64BC28;
+            padding-bottom: 14px;
+            margin-bottom: 20px;
+        }
+        .logo-cell {
+            display: table-cell;
+            width: 80px;
+            vertical-align: middle;
+        }
+        .header-text {
+            display: table-cell;
+            vertical-align: middle;
+            text-align: center;
+        }
+        .header-spacer {
+            display: table-cell;
+            width: 80px;
+        }
+        .logo {
+            width: 60px;
+            height: auto;
+        }
+
+        .report-header h1 {
+            margin: 0;
+            font-size: 28px; /* CHANGED: 32px -> 28px, helps title fit on one line */
+            color: #00284B;
+            letter-spacing: 0.5px;
+        }
+        .report-header p {
+            margin: 6px 0 0;
+            font-size: 12px;
+            color: #6c757d;
+        }
+        .respondent {
+            text-align: center;
+            margin-bottom: 20px;
+            padding-bottom: 14px;
+            border-bottom: 3px solid #64BC28;
+        }
+        .respondent-name {
+            margin: 0;
+            font-size: 16px;
+            font-weight: bold;
+            color: #212529;
+        }
+        .respondent-role {
+            margin: 2px 0 0;
+            font-size: 12.5px;
+            color: #6c757d;
+        }
+        .overall { text-align: center; margin-bottom: 8px; }
+        .overall-score { font-size: 18px; margin: 0 0 8px; }
+        .band {
+            display: inline-block;
+            padding: 4px 16px;
+            border-radius: 12px;
+            color: #fff;
+            font-size: 13px;
+            font-weight: bold;
+            background: rgba(0, 40, 75, 0.95);
+        }
+        .summary {
+            text-align: center;
+            color: #495057;
+            font-size: 13.5px;
+            line-height: 1.6;
+            margin: 16px auto 0;
+            max-width: 560px;
+        }
+
+        /* CHANGED: text-align instead of flex - flex centering wasn't reliable in this renderer */
+        .chart-section {
+            text-align: center;
+            margin: 32px 0 8px;
+        }
+        .chart-legend {
+            text-align: center;
+            margin: 0 0 32px;
+        }
+        .chart-legend-item {
+            display: inline-block;
+            font-size: 11.5px;
+            color: #495057;
+        }
+        .chart-legend-dot {
+            width: 9px;
+            height: 9px;
+            border-radius: 50%;
+            background: #00284B;
+            margin-right: 6px;
+            display: inline-block;
+            vertical-align: middle;
+        }
+
+        .category-results {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+        .category-result {
+            border: 3px solid #64BC28;
+            border-radius: 8px;
+            padding: 14px 18px;
+            page-break-inside: avoid;
+        }
+        .category-result-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 6px;
+        }
+        .category-result-header h3 {
+            margin: 0;
+            font-size: 14.5px;
+            color: #10263A;
+        }
+        .category-score {
+            margin: 0 0 4px;
+            font-size: 12.5px;
+            color: #495057;
+        }
+        .category-message {
+            margin: 0;
+            font-size: 12.5px;
+            color: #495057;
+            line-height: 1.5;
+        }
+        .report-footer {
+            margin-top: 32px;
+            text-align: center;
+            font-size: 10px;
+            color: #adb5bd;
+        }
+    </style>
+</head>
+<body>
+<div class="report">
+
+    <div class="report-header">
+        <div class="logo-cell">
+            <img th:src="'data:image/png;base64,' + ${logoImage}" alt="TGG Logo" class="logo" />
+        </div>
+        <div class="header-text">
+            <h1>The 5 Leadership Languages</h1>
+            <p>Survey Results Report</p>
+        </div>
+        <div class="header-spacer"></div>
+    </div>
+
+    <div class="respondent">
+        <p class="respondent-name" th:text="${name}"></p>
+        <p class="respondent-role" th:text="${role}"></p>
+    </div>
+
+    <div class="overall">
+        <p class="overall-score">
+            Overall Score: <strong th:text="${overallScore} + ' / 250'"></strong>
+        </p>
+        <span class="band" th:text="${overallBand}"></span>
+    </div>
+
+    <p class="summary" th:text="${summary}"></p>
+
+    <div class="chart-section">
+        <img th:src="'data:image/png;base64,' + ${chartImage}" style="max-width: 500px;" />
+    </div>
+
+    <div class="chart-legend">
+        <span class="chart-legend-item"><span class="chart-legend-dot"></span>Score out of 50 per category</span>
+    </div>
+
+    <div class="category-results">
+
+        <div class="category-result">
+            <div class="category-result-header">
+                <h3>Caring Time</h3>
+                <span class="band" th:text="${caringTimeBand}"></span>
+            </div>
+            <p class="category-score">Score: <strong th:text="${caringTimeScore} + ' / 50'"></strong></p>
+            <p class="category-message" th:text="${caringTimeMessage}"></p>
+        </div>
+
+        <div class="category-result">
+            <div class="category-result-header">
+                <h3>Receiving Value</h3>
+                <span class="band" th:text="${receivingValueBand}"></span>
+            </div>
+            <p class="category-score">Score: <strong th:text="${receivingValueScore} + ' / 50'"></strong></p>
+            <p class="category-message" th:text="${receivingValueMessage}"></p>
+        </div>
+
+        <div class="category-result">
+            <div class="category-result-header">
+                <h3>Acts of Support</h3>
+                <span class="band" th:text="${actsOfSupportBand}"></span>
+            </div>
+            <p class="category-score">Score: <strong th:text="${actsOfSupportScore} + ' / 50'"></strong></p>
+            <p class="category-message" th:text="${actsOfSupportMessage}"></p>
+        </div>
+
+        <div class="category-result">
+            <div class="category-result-header">
+                <h3>Words of Recognition</h3>
+                <span class="band" th:text="${wordsOfRecognitionBand}"></span>
+            </div>
+            <p class="category-score">Score: <strong th:text="${wordsOfRecognitionScore} + ' / 50'"></strong></p>
+            <p class="category-message" th:text="${wordsOfRecognitionMessage}"></p>
+        </div>
+
+        <div class="category-result">
+            <div class="category-result-header">
+                <h3>Psychological Touch</h3>
+                <span class="band" th:text="${psychologicalTouchBand}"></span>
+            </div>
+            <p class="category-score">Score: <strong th:text="${psychologicalTouchScore} + ' / 50'"></strong></p>
+            <p class="category-message" th:text="${psychologicalTouchMessage}"></p>
+        </div>
+
+    </div>
+
+    <div class="section" style="margin-top: 80px;">
+        <h2>Suggested Learning Path</h2>
+        <p class="category-message" th:utext="${#strings.replace(learningPath, '&#10;', '&lt;br/&gt;')}"></p>
+
+        <div th:if="${suggestedResources != null and !suggestedResources.isEmpty()}" style="margin-top: 20px;">
+            <h3 style="font-size: 13px; color: #10263A; margin-bottom: 10px;">Recommended Resources</h3>
+            <div th:each="resource : ${suggestedResources}" class="category-result" style="margin-bottom: 10px;">
+                <div class="category-result-header">
+                    <h3 th:text="${resource.title}"></h3>
+                    <span class="band" th:text="${resource.leadershipLanguage}"></span>
+                </div>
+                <p class="category-score" th:text="${resource.resourceType}"></p>
+                <p class="category-message" th:text="${resource.description}"></p>
+            </div>
+        </div>
+    </div>
+
+    <div class="report-footer">
+        Generated by Leadership Compass for The Guinea Group (TGG)
+    </div>
+
+</div>
+</body>
+</html>
