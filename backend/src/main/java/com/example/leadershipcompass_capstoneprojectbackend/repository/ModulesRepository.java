@@ -23,5 +23,4 @@ public interface ModulesRepository extends JpaRepository<Modules, Long> {
      */
     Optional<Modules> findByBookAndTitle(String book, String title);
 
-    List<Modules> findByCategoryAndActiveTrueOrderByDisplayOrderAsc(String category);
 }

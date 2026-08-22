@@ -160,13 +160,4 @@ public class ModulesService {
         }
         return Sort.Direction.ASC;
     }
-
-    @Transactional(readOnly = true)
-    public List<ModuleDto> findActiveByCategory(String category) {
-        return modulesRepository
-            .findByCategoryAndActiveTrueOrderByDisplayOrderAsc(category)
-            .stream()
-            .map(this::toDto)
-            .toList();
-    }
 }

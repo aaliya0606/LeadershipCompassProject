@@ -48,6 +48,10 @@ public class ResourceService {
         return resourceRepository.findByActiveTrueOrderByDisplayOrderAsc();
     }
 
+    public List<Resource> getActiveResourcesByLeadershipLanguage(String leadershipLanguage) {
+        return resourceRepository.findByLeadershipLanguageIgnoreCaseAndActiveTrueOrderByDisplayOrderAsc(leadershipLanguage);
+    }
+
     /**
      * Returns the resource with the specified ID, or throws an exception if not found.
      *

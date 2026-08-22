@@ -57,5 +57,9 @@ public interface ResourceRepository extends JpaRepository<Resource, Long> {
      */
 
     List<Resource> findByTitleContainingIgnoreCase(String title);
+
+
+    //
+    List<Resource> findByLeadershipLanguageIgnoreCaseAndActiveTrueOrderByDisplayOrderAsc(String leadershipLanguage);
     
 }

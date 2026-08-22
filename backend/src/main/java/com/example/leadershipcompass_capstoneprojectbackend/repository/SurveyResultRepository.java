@@ -7,8 +7,14 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
+import java.util.Optional;
+
+
+
 @Repository
 public interface SurveyResultRepository extends JpaRepository<SurveyResult, Long> {
 
     List<SurveyResult> findByUserOrderByGenerateDateDesc(User user);
+
+    Optional<SurveyResult> findFirstByUserOrderByGenerateDateDesc(User user);
 }

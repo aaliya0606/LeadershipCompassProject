@@ -25,7 +25,6 @@ public class SpringSecurityConfig {
 
         http
                 .csrf(csrf -> csrf.disable())
-                // .cors(cors -> {})
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .sessionManagement(session ->
                         session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
@@ -47,7 +46,8 @@ public class SpringSecurityConfig {
                         .requestMatchers("/api/admin/**").hasRole("ADMIN")
                         .requestMatchers("/api/dashboard/admin").hasRole("ADMIN")
                         .requestMatchers("/api/dashboard/user").hasAnyRole("USER", "ADMIN")
-                        
+                        .requestMatchers("/api/dashboard/suggested-modules").hasAnyRole("USER", "ADMIN")
+
                         // Users and admins may view resource metadata
                         .requestMatchers(HttpMethod.GET, "/api/resources/**")
                         .hasAnyRole("USER", "ADMIN")
@@ -55,7 +55,7 @@ public class SpringSecurityConfig {
                         //Resource management is admin-only
                         .requestMatchers(HttpMethod.POST, "/api/resources/**")
                         .hasRole("ADMIN")
-                        
+
                         .requestMatchers(HttpMethod.PUT, "/api/resources/**")
                         .hasRole("ADMIN")
 

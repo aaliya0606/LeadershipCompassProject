@@ -22,6 +22,8 @@ import com.example.leadershipcompass_capstoneprojectbackend.dto.ModuleDto;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 
+import com.example.leadershipcompass_capstoneprojectbackend.model.Resource;
+
 @Service
 @RequiredArgsConstructor
 //SurveyManager in UML Class Diagram
@@ -43,7 +45,9 @@ public class SurveyService{
     private final UserRepository userRepository;
     private final InsightGenerator insightGenerator;
 
-    private final ModulesService modulesService;
+    private final ResourceService resourceService;
+    private static final int NEEDS_ATTENTION_THRESHOLD = 30;
+
 
     @Transactional
     public SurveyResultResponse submitSurvey(SurveySubmissionRequest request, String email){
@@ -234,10 +238,10 @@ public class SurveyService{
 
     }
 
-    private static final int NEEDS_ATTENTION_THRESHOLD = 30;
+    
 
     @Transactional(readOnly = true)
-    public List<ModuleDto> getSuggestedLearningPath(String email) {
+    public List<Resource> getSuggestedLearningPath(String email) {
         User user = userRepository.findByEmail(email)
             .orElseThrow(() -> new EntityNotFoundException("User not found: " + email));
 
@@ -252,9 +256,26 @@ public class SurveyService{
             latest.getPsychologicalTouchScore()
         );
 
-        List<ModuleDto> suggested = new ArrayList<>();
-        for (String category : weakestCategories) {
-            suggested.addAll(modulesService.findActiveByCategory(category));
+        List<Resource> suggested = new ArrayList<>();
+        for (String language : weakestCategories) {
+            suggested.addAll(resourceService.getActiveResourcesByLeadershipLanguage(language));
+        }
+        return suggested;
+    }
+
+    @Transactional(readOnly = true)
+    public List<Resource> getSuggestedLearningPath(SurveyResult result) {
+        List<String> weakestCategories = determineWeakestCategories(
+            result.getCaringTimeScore(),
+            result.getReceivingValueScore(),
+            result.getActsOfSupportScore(),
+            result.getWordsOfRecognitionScore(),
+            result.getPsychologicalTouchScore()
+        );
+
+        List<Resource> suggested = new ArrayList<>();
+        for (String language : weakestCategories) {
+            suggested.addAll(resourceService.getActiveResourcesByLeadershipLanguage(language));
         }
         return suggested;
     }
@@ -284,4 +305,5 @@ public class SurveyService{
             .map(Map.Entry::getKey)
             .toList();
     }
+ 
 }
