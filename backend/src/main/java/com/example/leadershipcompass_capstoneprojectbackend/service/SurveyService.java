@@ -14,14 +14,13 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.example.leadershipcompass_capstoneprojectbackend.model.User;
 
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.example.leadershipcompass_capstoneprojectbackend.dto.ModuleDto;
-
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-
+import com.example.leadershipcompass_capstoneprojectbackend.dto.ProgressEntryResponse;
+import com.example.leadershipcompass_capstoneprojectbackend.dto.PeerComparisonResponse;
 import com.example.leadershipcompass_capstoneprojectbackend.model.Resource;
 
 @Service
@@ -238,7 +237,70 @@ public class SurveyService{
 
     }
 
-    
+    //Progress over time
+    @Transactional(readOnly = true)
+    public List<ProgressEntryResponse> getProgressOverTime(String email) {
+        User user = userRepository.findByEmail(email)
+            .orElseThrow(() -> new EntityNotFoundException("User not found: " + email));
+
+        List<SurveyResult> history = surveyResultRepository.findByUserOrderByGenerateDateAsc(user);
+
+        List<ProgressEntryResponse> progress = new ArrayList<>();
+        for (SurveyResult result : history) {
+            progress.add(new ProgressEntryResponse(
+                result.getGenerateDate(),
+                result.getOverallScore(),
+                result.getScoreBand(),
+                result.getCaringTimeScore(),
+                result.getReceivingValueScore(),
+                result.getActsOfSupportScore(),
+                result.getWordsOfRecognitionScore(),
+                result.getPsychologicalTouchScore()
+            ));
+        }
+        return progress;
+    }
+
+    //Peer comaprisons by percentile
+    @Transactional(readOnly = true)
+    public PeerComparisonResponse getPeerComparison(String email) {
+        User user = userRepository.findByEmail(email)
+            .orElseThrow(() -> new EntityNotFoundException("User not found: " + email));
+
+        SurveyResult latest = surveyResultRepository.findFirstByUserOrderByGenerateDateDesc(user)
+            .orElseThrow(() -> new EntityNotFoundException("No survey result found for user: " + email));
+
+        PeerComparisonResponse response = new PeerComparisonResponse();
+
+        response.setYourCaringTimeScore(latest.getCaringTimeScore());
+        response.setCaringTimePercentile(calculatePercentile(latest.getCaringTimeScore(),
+            surveyResultRepository.findAllCaringTimeScores()));
+
+        response.setYourReceivingValueScore(latest.getReceivingValueScore());
+        response.setReceivingValuePercentile(calculatePercentile(latest.getReceivingValueScore(),
+            surveyResultRepository.findAllReceivingValueScores()));
+
+        response.setYourActsOfSupportScore(latest.getActsOfSupportScore());
+        response.setActsOfSupportPercentile(calculatePercentile(latest.getActsOfSupportScore(),
+            surveyResultRepository.findAllActsOfSupportScores()));
+
+        response.setYourWordsOfRecognitionScore(latest.getWordsOfRecognitionScore());
+        response.setWordsOfRecognitionPercentile(calculatePercentile(latest.getWordsOfRecognitionScore(),
+            surveyResultRepository.findAllWordsOfRecognitionScores()));
+
+        response.setYourPsychologicalTouchScore(latest.getPsychologicalTouchScore());
+        response.setPsychologicalTouchPercentile(calculatePercentile(latest.getPsychologicalTouchScore(),
+            surveyResultRepository.findAllPsychologicalTouchScores()));
+
+        return response;
+    }
+
+    // NEW: calculates what % of all scores are at or below the given score
+    private int calculatePercentile(int userScore, List<Integer> allScores) {
+        if (allScores.isEmpty()) return 0;
+        long countAtOrBelow = allScores.stream().filter(s -> s <= userScore).count();
+        return (int) Math.round((countAtOrBelow / (double) allScores.size()) * 100);
+    }
 
     @Transactional(readOnly = true)
     public List<Resource> getSuggestedLearningPath(String email) {
@@ -314,6 +376,5 @@ public class SurveyService{
         result.getUser().getFullName(); // ensures user is loaded
 
         return result;
-}
- 
+    }
 }
