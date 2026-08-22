@@ -136,7 +136,7 @@ public class SurveyService{
         return total;
     }
 
-    private String band(int score){
+    public String band(int score){
         if (score >= 40) return "High";
         if (score >= 30) return "Strong intent";
         if (score >= 20) return "Needs attention";
@@ -145,7 +145,7 @@ public class SurveyService{
 
     /// Only have placeholder values for feedback :
     // this can be refactored to: message() + band()
-    private String message(String categoryName, int score){
+    public String message(String categoryName, int score){
     switch (categoryName) {
         case "Caring Time":
             if (score >= 40) return "You consistently practice high-quality Caring Time, deeply investing in trust and team connection.";
@@ -305,5 +305,15 @@ public class SurveyService{
             .map(Map.Entry::getKey)
             .toList();
     }
+
+    @Transactional(readOnly = true)
+    public SurveyResult getResultById(Long resultId) {
+        SurveyResult result = surveyResultRepository.findById(resultId)
+            .orElseThrow(() -> new EntityNotFoundException("Result not found: " + resultId));
+
+        result.getUser().getFullName(); // ensures user is loaded
+
+        return result;
+}
  
 }
