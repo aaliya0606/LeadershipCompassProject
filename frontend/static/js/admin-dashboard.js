@@ -1,794 +1,731 @@
 // ============================================================
-// ADMIN DASHBOARD - DUMMY DATA
-// ============================================================
-// This data is structured to resemble the data that will
-// eventually come from the Spring Boot backend / PostgreSQL.
-//
-// Users
-// Survey Results
-// Development Plans
+// ADMIN DASHBOARD
 // ============================================================
 
+const API_BASE_URL = "http://localhost:8080";
 
-const dashboardData = {
-
-    // ========================================================
-    // USERS
-    // ========================================================
-
-    users: [
-
-        {
-            id: 1,
-            fullName: "Alex Johnson",
-            department: "IT",
-            role: "USER"
-        },
-
-        {
-            id: 2,
-            fullName: "Sarah Williams",
-            department: "IT",
-            role: "USER"
-        },
-
-        {
-            id: 3,
-            fullName: "James Smith",
-            department: "Sales",
-            role: "USER"
-        },
-
-        {
-            id: 4,
-            fullName: "Emily Brown",
-            department: "Sales",
-            role: "USER"
-        },
-
-        {
-            id: 5,
-            fullName: "Michael Jones",
-            department: "Executive",
-            role: "USER"
-        },
-
-        {
-            id: 6,
-            fullName: "Olivia Davis",
-            department: "Executive",
-            role: "USER"
-        },
-
-        {
-            id: 7,
-            fullName: "Daniel Wilson",
-            department: "IT",
-            role: "USER"
-        },
-
-        {
-            id: 8,
-            fullName: "Sophie Taylor",
-            department: "Sales",
-            role: "USER"
-        }
-    ],
+let leadershipProfileChart = null;
+let skillGapChart = null;
+let progressChart = null;
 
 
-    // ========================================================
-    // SURVEY RESULTS
-    // ========================================================
-    // Each result belongs to a user through userId.
-    //
-    // Each Leadership Compass area is scored out of 50.
-    // Overall score is out of 250.
-    //
-    // User 8 has not completed the assessment yet.
-    // ========================================================
+// ============================================================
+// LOAD DASHBOARD
+// ============================================================
 
-    surveyResults: [
+async function loadDashboard(department = "all") {
 
-        {
-            resultId: 1,
-            userId: 1,
+    try {
 
-            caringTimeScore: 38,
-            receivingValueScore: 42,
-            actsOfSupportScore: 35,
-            wordsOfRecognitionScore: 40,
-            psychologicalTouchScore: 37,
+        let url = `${API_BASE_URL}/api/admin/dashboard`;
 
-            overallScore: 192,
-            scoreBand: "Strong intent",
-
-            generateDate: "2026-07-01"
-        },
-
-        {
-            resultId: 2,
-            userId: 2,
-
-            caringTimeScore: 32,
-            receivingValueScore: 36,
-            actsOfSupportScore: 31,
-            wordsOfRecognitionScore: 34,
-            psychologicalTouchScore: 30,
-
-            overallScore: 163,
-            scoreBand: "Strong intent",
-
-            generateDate: "2026-07-02"
-        },
-
-        {
-            resultId: 3,
-            userId: 3,
-
-            caringTimeScore: 28,
-            receivingValueScore: 34,
-            actsOfSupportScore: 30,
-            wordsOfRecognitionScore: 36,
-            psychologicalTouchScore: 29,
-
-            overallScore: 157,
-            scoreBand: "Strong intent",
-
-            generateDate: "2026-07-03"
-        },
-
-        {
-            resultId: 4,
-            userId: 4,
-
-            caringTimeScore: 35,
-            receivingValueScore: 39,
-            actsOfSupportScore: 33,
-            wordsOfRecognitionScore: 38,
-            psychologicalTouchScore: 34,
-
-            overallScore: 179,
-            scoreBand: "Strong intent",
-
-            generateDate: "2026-07-04"
-        },
-
-        {
-            resultId: 5,
-            userId: 5,
-
-            caringTimeScore: 42,
-            receivingValueScore: 44,
-            actsOfSupportScore: 40,
-            wordsOfRecognitionScore: 43,
-            psychologicalTouchScore: 41,
-
-            overallScore: 210,
-            scoreBand: "High",
-
-            generateDate: "2026-07-05"
-        },
-
-        {
-            resultId: 6,
-            userId: 6,
-
-            caringTimeScore: 39,
-            receivingValueScore: 41,
-            actsOfSupportScore: 37,
-            wordsOfRecognitionScore: 40,
-            psychologicalTouchScore: 38,
-
-            overallScore: 195,
-            scoreBand: "Strong intent",
-
-            generateDate: "2026-07-06"
-        },
-
-        {
-            resultId: 7,
-            userId: 7,
-
-            caringTimeScore: 30,
-            receivingValueScore: 33,
-            actsOfSupportScore: 29,
-            wordsOfRecognitionScore: 31,
-            psychologicalTouchScore: 28,
-
-            overallScore: 151,
-            scoreBand: "Strong intent",
-
-            generateDate: "2026-07-07"
+        // Add department filter if selected
+        if (department && department !== "all") {
+            url += `?department=${encodeURIComponent(department)}`;
         }
 
-    ],
+        // Get JWT token
+        const token = localStorage.getItem("token");
 
+        if (!token) {
 
-    // ========================================================
-    // DEVELOPMENT PLANS
-    // ========================================================
-    //
-    // Development plan completion is calculated from:
-    //
-    // completedTasks / totalTasks * 100
-    //
-    // ========================================================
+            console.error("No authentication token found.");
 
-    developmentPlans: [
+            window.location.href = "login.html";
 
-        {
-            planId: 1,
-            userId: 1,
-            completedTasks: 8,
-            totalTasks: 10
-        },
-
-        {
-            planId: 2,
-            userId: 2,
-            completedTasks: 7,
-            totalTasks: 10
-        },
-
-        {
-            planId: 3,
-            userId: 3,
-            completedTasks: 5,
-            totalTasks: 10
-        },
-
-        {
-            planId: 4,
-            userId: 4,
-            completedTasks: 10,
-            totalTasks: 10
-        },
-
-        {
-            planId: 5,
-            userId: 5,
-            completedTasks: 9,
-            totalTasks: 10
-        },
-
-        {
-            planId: 6,
-            userId: 6,
-            completedTasks: 6,
-            totalTasks: 10
+            return;
         }
-    ]
 
-};
+        console.log("Loading dashboard:", url);
+        console.log("Token found:", true);
 
 
-// ============================================================
-// CALCULATION FUNCTIONS
-// ============================================================
+        // ----------------------------------------------------
+        // API REQUEST
+        // ----------------------------------------------------
 
-//Calculates the average value for a specific field across a collection of survey results.
-function calculateAverage(results, field) {
+        const response = await fetch(url, {
 
-    if (results.length === 0) {
-        return 0;
+            method: "GET",
+
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${token}`
+            }
+
+        });
+
+
+        console.log(
+            "Dashboard response status:",
+            response.status
+        );
+
+
+        // ----------------------------------------------------
+        // HANDLE ERROR
+        // ----------------------------------------------------
+
+        if (!response.ok) {
+
+            const errorText = await response.text();
+
+            console.error(
+                "Backend error response:",
+                errorText
+            );
+
+            throw new Error(
+                `Dashboard request failed: ${response.status} ${response.statusText}`
+            );
+        }
+
+
+        // ----------------------------------------------------
+        // READ RESPONSE
+        // ----------------------------------------------------
+
+        const data = await response.json();
+
+        console.log(
+            "Dashboard data received:",
+            data
+        );
+
+
+        // ----------------------------------------------------
+        // UPDATE DASHBOARD
+        // ----------------------------------------------------
+
+        updateDashboard(data);
+
     }
 
-    const total = results.reduce(
-        (sum, result) => sum + result[field],
-        0
-    );
+    catch (error) {
 
-    return total / results.length;
-}
-
-//Gets survey results belonging in a specific department.
-function getDepartmentResults(department) {
-
-    const departmentUsers =
-        dashboardData.users.filter(
-            user => user.department === department
+        console.error(
+            "Failed to load dashboard:",
+            error
         );
 
-    const userIds =
-        departmentUsers.map(user => user.id);
+        showDashboardError();
 
-    return dashboardData.surveyResults.filter(
-        result => userIds.includes(result.userId)
-    );
-}
-
-
-/**
- * Gets users belonging to a specific department.
- */
-function getDepartmentUsers(department) {
-
-    return dashboardData.users.filter(
-        user => user.department === department
-    );
-
-}
-
-
-/**
- * Calculates all dashboard metrics.
- */
-function calculateDashboardMetrics(results, users, developmentPlans) {
-
-    // --------------------------------------------------------
-    // TOTAL USERS
-    // --------------------------------------------------------
-
-    const totalUsers = users.length;
-
-
-    // --------------------------------------------------------
-    // ASSESSMENT COMPLETION
-    // --------------------------------------------------------
-
-    const completedAssessments = results.length;
-
-    const completionRate =
-        totalUsers > 0
-            ? (completedAssessments / totalUsers) * 100
-            : 0;
-
-
-    // --------------------------------------------------------
-    // AVERAGE OVERALL LEADERSHIP SCORE
-    // --------------------------------------------------------
-
-    const averageScore =
-        calculateAverage(
-            results,
-            "overallScore"
-        );
-
-
-    // --------------------------------------------------------
-    // FIVE LEADERSHIP COMPASS AREAS
-    // --------------------------------------------------------
-
-    const leadershipProfiles = {
-
-        "Caring Time":
-            calculateAverage(
-                results,
-                "caringTimeScore"
-            ),
-
-        "Receiving Value":
-            calculateAverage(
-                results,
-                "receivingValueScore"
-            ),
-
-        "Acts of Support":
-            calculateAverage(
-                results,
-                "actsOfSupportScore"
-            ),
-
-        "Words of Recognition":
-            calculateAverage(
-                results,
-                "wordsOfRecognitionScore"
-            ),
-
-        "Psychological Touch":
-            calculateAverage(
-                results,
-                "psychologicalTouchScore"
-            )
-    };
-
-
-    // --------------------------------------------------------
-    // DEVELOPMENT PLAN COMPLETION
-    // --------------------------------------------------------
-
-    const totalTasks =
-        developmentPlans.reduce(
-            (total, plan) =>
-                total + plan.totalTasks,
-            0
-        );
-
-
-    const completedTasks =
-        developmentPlans.reduce(
-            (total, plan) =>
-                total + plan.completedTasks,
-            0
-        );
-
-
-    const planCompletion =
-        totalTasks > 0
-            ? (completedTasks / totalTasks) * 100
-            : 0;
-
-
-    // --------------------------------------------------------
-    // RETURN DASHBOARD DATA
-    // --------------------------------------------------------
-
-    return {
-
-        totalUsers,
-
-        completionRate,
-
-        averageScore,
-
-        planCompletion,
-
-        leadershipProfiles
-
-    };
+    }
 
 }
 
 
 // ============================================================
-// INITIAL DASHBOARD CALCULATION
+// UPDATE DASHBOARD
 // ============================================================
 
-let currentDepartment = "All Departments";
+function updateDashboard(data) {
 
-let currentResults =
-    dashboardData.surveyResults;
-
-let currentUsers =
-    dashboardData.users;
-
-let currentDevelopmentPlans =
-    dashboardData.developmentPlans;
-
-
-let dashboardMetrics =
-    calculateDashboardMetrics(
-        currentResults,
-        currentUsers,
-        currentDevelopmentPlans
+    console.log(
+        "Updating dashboard with:",
+        data
     );
 
 
+    // ========================================================
+    // KPI CARDS
+    // ========================================================
+
+    /*
+     * These names match the fields currently being returned
+     * by your AdminDashboardResponse.
+     */
+
+    setText(
+        "totalUsers",
+        data.totalUsers ?? 0
+    );
+
+
+    setText(
+        "completionRate",
+        formatPercentage(
+            data.assessmentCompletionRate
+        )
+    );
+
+
+    setText(
+        "averageScore",
+        formatNumber(
+            data.averageLeadershipScore
+        )
+    );
+
+
+    /*
+     * Development plan completion is not currently shown
+     * in your backend response.
+     *
+     * This will display 0% until you add the calculation.
+     */
+
+    setText(
+        "planCompletion",
+        formatPercentage(
+            data.planCompletion
+        )
+    );
+
+
+    // ========================================================
+    // LEADERSHIP PROFILE
+    // ========================================================
+
+    updateLeadershipProfileChart(data);
+
+
+    // ========================================================
+    // SKILL GAPS
+    // ========================================================
+
+    updateSkillGapChart(data);
+
+
+    // ========================================================
+    // PROGRESS
+    // ========================================================
+
+    updateProgressChart(data);
+
+}
+
+
 // ============================================================
-// DISPLAY DASHBOARD METRICS
+// TEXT HELPER
 // ============================================================
 
+function setText(elementId, value) {
 
-document.getElementById("totalUsers").textContent =
-    dashboardMetrics.totalUsers;
+    const element =
+        document.getElementById(elementId);
 
+    if (!element) {
 
-document.getElementById("completionRate").textContent =
-    dashboardMetrics.completionRate.toFixed(1) + "%";
+        console.warn(
+            `Element not found: ${elementId}`
+        );
 
+        return;
+    }
 
-document.getElementById("averageScore").textContent =
-    dashboardMetrics.averageScore.toFixed(1);
+    element.textContent = value;
 
-
-document.getElementById("planCompletion").textContent =
-    dashboardMetrics.planCompletion.toFixed(1) + "%";
+}
 
 
 // ============================================================
-// LEADERSHIP AREAS CHART
+// FORMAT PERCENTAGE
 // ============================================================
 
+function formatPercentage(value) {
 
-new Chart(
-    document.getElementById("leadershipProfileChart"),
-    {
+    if (
+        value === null ||
+        value === undefined ||
+        isNaN(value)
+    ) {
 
-        type: "bar",
+        return "0%";
+    }
 
-        data: {
+    return `${Number(value).toFixed(1)}%`;
 
-            labels:
-                Object.keys(
-                    dashboardMetrics.leadershipProfiles
-                ),
+}
 
-            datasets: [
 
-                {
+// ============================================================
+// FORMAT NUMBER
+// ============================================================
 
-                    label: "Average Score",
+function formatNumber(value) {
 
-                    data:
-                        Object.values(
-                            dashboardMetrics.leadershipProfiles
-                        ),
+    if (
+        value === null ||
+        value === undefined ||
+        isNaN(value)
+    ) {
 
-                    borderWidth: 1
+        return "0";
+    }
 
-                }
+    return Number(value).toFixed(1);
 
-            ]
+}
 
-        },
 
-        options: {
+// ============================================================
+// LEADERSHIP PROFILE CHART
+// ============================================================
 
-            responsive: true,
+function updateLeadershipProfileChart(data) {
 
-            scales: {
+    const canvas =
+        document.getElementById(
+            "leadershipProfileChart"
+        );
 
-                y: {
 
-                    beginAtZero: true,
+    if (!canvas) {
 
-                    max: 50,
+        console.warn(
+            "leadershipProfileChart canvas not found."
+        );
 
-                    title: {
+        return;
+    }
 
-                        display: true,
 
-                        text: "Average Score / 50"
+    if (typeof Chart === "undefined") {
+
+        console.error(
+            "Chart.js has not loaded."
+        );
+
+        return;
+    }
+
+
+    const ctx =
+        canvas.getContext("2d");
+
+
+    // Destroy existing chart
+
+    if (leadershipProfileChart) {
+
+        leadershipProfileChart.destroy();
+
+    }
+
+
+    // --------------------------------------------------------
+    // LEADERSHIP AREAS
+    // --------------------------------------------------------
+
+    const labels = [
+
+        "Caring Time",
+
+        "Receiving Value",
+
+        "Acts of Support",
+
+        "Words of Recognition",
+
+        "Psychological Touch"
+
+    ];
+
+
+    // --------------------------------------------------------
+    // GET REAL SCORES FROM BACKEND
+    // --------------------------------------------------------
+
+    const values = [
+
+        data.averageCaringTimeScore ?? 0,
+
+        data.averageReceivingValueScore ?? 0,
+
+        data.averageActsOfSupportScore ?? 0,
+
+        data.averageWordsOfRecognitionScore ?? 0,
+
+        data.averagePsychologicalTouchScore ?? 0
+
+    ];
+
+
+    console.log(
+        "Leadership profile scores:",
+        values
+    );
+
+
+    // --------------------------------------------------------
+    // CREATE CHART
+    // --------------------------------------------------------
+
+    leadershipProfileChart =
+        new Chart(ctx, {
+
+            type: "bar",
+
+            data: {
+
+                labels: labels,
+
+                datasets: [
+
+                    {
+
+                        label:
+                            "Average Score",
+
+                        data:
+                            values,
+
+                        borderWidth: 1
+
+                    }
+
+                ]
+
+            },
+
+
+            options: {
+
+                responsive: true,
+
+                maintainAspectRatio: false,
+
+
+                plugins: {
+
+                    legend: {
+
+                        display: false
+
+                    }
+
+                },
+
+
+                scales: {
+
+                    y: {
+
+                        beginAtZero: true,
+
+                        max: 50,
+
+                        ticks: {
+
+                            precision: 0
+
+                        }
 
                     }
 
                 }
 
-            },
-
-            plugins: {
-
-                legend: {
-
-                    display: false
-
-                }
-
             }
 
-        }
+        });
 
-    }
-);
-
-
-// ============================================================
-// SKILL GAPS
-// ============================================================
-//
-// For now, skill gaps are based on the five Leadership
-// Compass areas with the lowest average scores.
-//
-// Later this can be changed to use individual survey
-// question averages if required.
-// ============================================================
-
-
-const skillGaps = {
-
-    "Caring Time":
-        dashboardMetrics.leadershipProfiles["Caring Time"],
-
-    "Receiving Value":
-        dashboardMetrics.leadershipProfiles["Receiving Value"],
-
-    "Acts of Support":
-        dashboardMetrics.leadershipProfiles["Acts of Support"],
-
-    "Words of Recognition":
-        dashboardMetrics.leadershipProfiles["Words of Recognition"],
-
-    "Psychological Touch":
-        dashboardMetrics.leadershipProfiles["Psychological Touch"]
-
-};
-
-
-// Sort areas from lowest to highest score.
-
-const sortedSkillGaps =
-    Object.entries(skillGaps)
-        .sort((a, b) => a[1] - b[1])
-        .slice(0, 3);
-
-
-// Convert back into an object for Chart.js.
-
-const skillGapLabels =
-    sortedSkillGaps.map(
-        item => item[0]
-    );
-
-
-const skillGapValues =
-    sortedSkillGaps.map(
-        item => item[1]
-    );
+}
 
 
 // ============================================================
 // SKILL GAP CHART
 // ============================================================
 
+function updateSkillGapChart(data) {
 
-new Chart(
-    document.getElementById("skillGapChart"),
-    {
+    const canvas =
+        document.getElementById(
+            "skillGapChart"
+        );
 
-        type: "bar",
 
-        data: {
+    if (!canvas) {
 
-            labels: skillGapLabels,
+        console.warn(
+            "skillGapChart canvas not found."
+        );
 
-            datasets: [
+        return;
+    }
 
-                {
 
-                    label: "Average Score",
+    if (typeof Chart === "undefined") {
 
-                    data: skillGapValues,
+        console.error(
+            "Chart.js has not loaded."
+        );
 
-                    borderWidth: 1
+        return;
+    }
 
-                }
 
-            ]
+    const ctx =
+        canvas.getContext("2d");
 
-        },
 
-        options: {
+    if (skillGapChart) {
 
-            responsive: true,
+        skillGapChart.destroy();
 
-            scales: {
+    }
 
-                y: {
 
-                    beginAtZero: true,
+    /*
+     * Currently your backend returns:
+     *
+     * skillGaps: {}
+     *
+     * Therefore we temporarily calculate the skill gaps
+     * from the five leadership scores.
+     *
+     * Lower score = larger development gap.
+     */
 
-                    max: 50,
 
-                    title: {
+    const skillGaps = {
 
-                        display: true,
+        "Caring Time":
+            data.averageCaringTimeScore ?? 0,
 
-                        text: "Average Score / 50"
+        "Receiving Value":
+            data.averageReceivingValueScore ?? 0,
+
+        "Acts of Support":
+            data.averageActsOfSupportScore ?? 0,
+
+        "Words of Recognition":
+            data.averageWordsOfRecognitionScore ?? 0,
+
+        "Psychological Touch":
+            data.averagePsychologicalTouchScore ?? 0
+
+    };
+
+
+    // Sort lowest score first
+
+    const sorted =
+        Object.entries(skillGaps)
+            .sort((a, b) => a[1] - b[1]);
+
+
+    const labels =
+        sorted.map(item => item[0]);
+
+
+    const scores =
+        sorted.map(item => item[1]);
+
+
+    console.log(
+        "Skill gaps:",
+        skillGaps
+    );
+
+
+    skillGapChart =
+        new Chart(ctx, {
+
+            type: "bar",
+
+            data: {
+
+                labels: labels,
+
+                datasets: [
+
+                    {
+
+                        label:
+                            "Average Score",
+
+                        data:
+                            scores,
+
+                        borderWidth: 1
+
+                    }
+
+                ]
+
+            },
+
+
+            options: {
+
+                indexAxis: "y",
+
+                responsive: true,
+
+                maintainAspectRatio: false,
+
+
+                plugins: {
+
+                    legend: {
+
+                        display: false
+
+                    }
+
+                },
+
+
+                scales: {
+
+                    x: {
+
+                        beginAtZero: true,
+
+                        max: 50,
+
+                        ticks: {
+
+                            precision: 0
+
+                        }
 
                     }
 
                 }
 
-            },
-
-            plugins: {
-
-                legend: {
-
-                    display: false
-
-                }
-
             }
 
-        }
+        });
 
-    }
-);
-
-
-// ============================================================
-// PROGRESS DATA
-// ============================================================
-//
-// This is temporary dummy data for the progress chart.
-//
-// Eventually this should come from multiple SurveyResult
-// records taken at different points in time.
-//
-// Example:
-// Initial assessment
-// Week 1
-// Week 2
-// ...
-// Week 5
-// ============================================================
-
-
-const progress = {
-
-    labels: [
-
-        "Initial Assessment",
-
-        "Week 1",
-
-        "Week 2",
-
-        "Week 3",
-
-        "Week 4",
-
-        "Week 5"
-
-    ],
-
-    scores: [
-
-        168,
-
-        170,
-
-        174,
-
-        178,
-
-        183,
-
-        188
-
-    ]
-
-};
+}
 
 
 // ============================================================
 // PROGRESS CHART
 // ============================================================
 
+function updateProgressChart(data) {
 
-new Chart(
-    document.getElementById("progressChart"),
-    {
+    const canvas =
+        document.getElementById(
+            "progressChart"
+        );
 
-        type: "line",
 
-        data: {
+    if (!canvas) {
 
-            labels:
-                progress.labels,
+        console.warn(
+            "progressChart canvas not found."
+        );
 
-            datasets: [
+        return;
+    }
 
-                {
 
-                    label:
-                        "Average Leadership Score",
+    if (typeof Chart === "undefined") {
 
-                    data:
-                        progress.scores,
+        console.error(
+            "Chart.js has not loaded."
+        );
 
-                    tension: 0.3,
+        return;
+    }
 
-                    fill: false,
 
-                    borderWidth: 2
+    const ctx =
+        canvas.getContext("2d");
 
-                }
 
-            ]
+    if (progressChart) {
 
-        },
+        progressChart.destroy();
 
-        options: {
+    }
 
-            responsive: true,
 
-            scales: {
+    /*
+     * Your backend does not currently return historical
+     * progress data.
+     *
+     * Therefore we use the current average score as the
+     * initial assessment point.
+     */
 
-                y: {
 
-                    beginAtZero: false,
+    const labels = [
 
-                    min: 100,
+        "Current Assessment"
 
-                    max: 250,
+    ];
 
-                    title: {
 
-                        display: true,
+    const scores = [
 
-                        text: "Overall Score / 250"
+        data.averageLeadershipScore ?? 0
+
+    ];
+
+
+    console.log(
+        "Progress:",
+        {
+            labels: labels,
+            scores: scores
+        }
+    );
+
+
+    progressChart =
+        new Chart(ctx, {
+
+            type: "line",
+
+            data: {
+
+                labels: labels,
+
+                datasets: [
+
+                    {
+
+                        label:
+                            "Average Leadership Score",
+
+                        data:
+                            scores,
+
+                        fill: false,
+
+                        tension: 0.3,
+
+                        borderWidth: 2,
+
+                        pointRadius: 5
+
+                    }
+
+                ]
+
+            },
+
+
+            options: {
+
+                responsive: true,
+
+                maintainAspectRatio: false,
+
+
+                plugins: {
+
+                    legend: {
+
+                        display: true
+
+                    }
+
+                },
+
+
+                scales: {
+
+                    y: {
+
+                        beginAtZero: true,
+
+                        max: 250
 
                     }
 
@@ -796,175 +733,95 @@ new Chart(
 
             }
 
-        }
+        });
 
-    }
-);
+}
 
 
 // ============================================================
-// DEPARTMENT FILTER
-// ============================================================
-//
-// If your HTML has a select with:
-// id="departmentFilter"
-// this will allow the dashboard to filter by department.
-//
-// Example options:
-//
-// All Departments
-// IT
-// Sales
-// Executive
-//
+// ERROR HANDLING
 // ============================================================
 
+function showDashboardError() {
 
-const departmentFilter =
-    document.getElementById(
-        "departmentFilter"
+    setText(
+        "totalUsers",
+        "--"
     );
 
+    setText(
+        "completionRate",
+        "--"
+    );
 
-if (departmentFilter) {
+    setText(
+        "averageScore",
+        "--"
+    );
 
-    departmentFilter.addEventListener(
-        "change",
-        function () {
-
-            currentDepartment =
-                this.value;
-
-
-            // ------------------------------------------------
-            // Get users for selected department
-            // ------------------------------------------------
-
-            if (
-                currentDepartment ===
-                "All Departments"
-            ) {
-
-                currentUsers =
-                    dashboardData.users;
-
-                currentResults =
-                    dashboardData.surveyResults;
-
-                currentDevelopmentPlans =
-                    dashboardData.developmentPlans;
-
-            } else {
-
-                currentUsers =
-                    getDepartmentUsers(
-                        currentDepartment
-                    );
-
-
-                currentResults =
-                    getDepartmentResults(
-                        currentDepartment
-                    );
-
-
-                const userIds =
-                    currentUsers.map(
-                        user => user.id
-                    );
-
-
-                currentDevelopmentPlans =
-                    dashboardData.developmentPlans
-                        .filter(
-                            plan =>
-                                userIds.includes(
-                                    plan.userId
-                                )
-                        );
-
-            }
-
-
-            // ------------------------------------------------
-            // Recalculate dashboard
-            // ------------------------------------------------
-
-            dashboardMetrics =
-                calculateDashboardMetrics(
-                    currentResults,
-                    currentUsers,
-                    currentDevelopmentPlans
-                );
-
-
-            // ------------------------------------------------
-            // Update dashboard cards
-            // ------------------------------------------------
-
-            document.getElementById(
-                "totalUsers"
-            ).textContent =
-                dashboardMetrics.totalUsers;
-
-
-            document.getElementById(
-                "completionRate"
-            ).textContent =
-                dashboardMetrics.completionRate.toFixed(1)
-                + "%";
-
-
-            document.getElementById(
-                "averageScore"
-            ).textContent =
-                dashboardMetrics.averageScore.toFixed(1);
-
-
-            document.getElementById(
-                "planCompletion"
-            ).textContent =
-                dashboardMetrics.planCompletion.toFixed(1)
-                + "%";
-
-
-            console.log(
-                "Dashboard updated for:",
-                currentDepartment
-            );
-
-        }
+    setText(
+        "planCompletion",
+        "--"
     );
 
 }
 
 
 // ============================================================
-// DEBUGGING
-// ============================================================
-//
-// You can open the browser console to see the calculated
-// dashboard values.
-//
+// DEPARTMENT FILTER
 // ============================================================
 
+document.addEventListener(
+    "DOMContentLoaded",
+    function () {
 
-console.log(
-    "Dashboard Metrics:",
-    dashboardMetrics
-);
 
-console.log(
-    "Users:",
-    dashboardData.users
-);
+        console.log(
+            "Admin dashboard loaded."
+        );
 
-console.log(
-    "Survey Results:",
-    dashboardData.surveyResults
-);
 
-console.log(
-    "Development Plans:",
-    dashboardData.developmentPlans
+        // ----------------------------------------------------
+        // Department dropdown
+        // ----------------------------------------------------
+
+        const departmentFilter =
+            document.getElementById(
+                "departmentFilter"
+            );
+
+
+        if (departmentFilter) {
+
+            departmentFilter.addEventListener(
+                "change",
+                function () {
+
+                    const department =
+                        departmentFilter.value;
+
+
+                    console.log(
+                        "Department selected:",
+                        department
+                    );
+
+
+                    loadDashboard(
+                        department
+                    );
+
+                }
+            );
+
+        }
+
+
+        // ----------------------------------------------------
+        // Initial dashboard load
+        // ----------------------------------------------------
+
+        loadDashboard("all");
+
+    }
 );

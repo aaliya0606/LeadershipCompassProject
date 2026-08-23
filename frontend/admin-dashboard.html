@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Admin Dashboard | Leadership Compass</title>
+
+    <!-- Bootstrap -->
+    <link
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+        rel="stylesheet"
+    >
+
+    <!-- Your existing stylesheet -->
+    <link rel="stylesheet" href="static/style/main.css">
+
+    <style>
+        /* ================================
+           Dashboard Layout
+        ================================= */
+
+        .dashboard-page {
+            padding: 40px;
+        }
+
+        .dashboard-header {
+            margin-bottom: 30px;
+        }
+
+        .dashboard-header h1 {
+            margin-bottom: 5px;
+        }
+
+        .dashboard-header p {
+            margin: 0;
+        }
+
+
+        /* ================================
+           KPI Cards
+        ================================= */
+
+        .dashboard-card {
+            background: #ffffff;
+            border-radius: 12px;
+            padding: 24px;
+            border: 1px solid #e5e5e5;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+
+        .stat-card {
+            min-height: 150px;
+        }
+
+        .stat-title {
+            font-size: 0.9rem;
+            color: #6c757d;
+            margin-bottom: 10px;
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 600;
+            margin: 0;
+        }
+
+
+        /* ================================
+           Chart Cards
+        ================================= */
+
+        .chart-card {
+            min-height: 420px;
+        }
+
+        .chart-container {
+            position: relative;
+            height: 300px;
+            width: 100%;
+        }
+
+        .chart-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .chart-description {
+            font-size: 0.85rem;
+            color: #6c757d;
+            margin-bottom: 20px;
+        }
+
+
+        /* ================================
+           Department Filter
+        ================================= */
+
+        .department-filter {
+            min-width: 220px;
+        }
+
+
+        /* ================================
+           Responsive
+        ================================= */
+
+        @media (max-width: 768px) {
+
+            .dashboard-page {
+                padding: 20px;
+            }
+
+            .department-filter {
+                width: 100%;
+            }
+
+        }
+    </style>
+
+</head>
+
+
+<body>
+
+<div class="dashboard-page">
+
+    <!-- ==========================================
+         HEADER
+    =========================================== -->
+
+    <div class="dashboard-header">
+
+        <div class="d-flex flex-wrap justify-content-between align-items-end gap-4">
+
+            <div>
+
+                <span class="text-uppercase text-muted small">
+                    Admin
+                </span>
+
+                <h1 class="h2">
+                    Dashboard
+                </h1>
+
+                <p class="text-muted">
+                    Organisation-wide leadership insights and engagement.
+                </p>
+
+            </div>
+
+
+            <!-- Department Filter -->
+
+            <div class="department-filter">
+
+                <label
+                    for="departmentFilter"
+                    class="form-label fw-semibold"
+                >
+                    Department
+                </label>
+
+                <select
+                    id="departmentFilter"
+                    class="form-select"
+                >
+
+                    <option value="all">
+                        All departments
+                    </option>
+
+                    <option value="IT">
+                        IT
+                    </option>
+
+                    <option value="Sales">
+                        Sales
+                    </option>
+
+                    <option value="Executive">
+                        Executive
+                    </option>
+
+                </select>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- ==========================================
+         KEY METRICS
+    =========================================== -->
+
+    <div class="row g-4 mb-4">
+
+        <!-- Total Users -->
+
+        <div class="col-12 col-sm-6 col-xl-3">
+
+            <div class="dashboard-card stat-card h-100">
+
+                <p class="stat-title">
+                    Total Users
+                </p>
+
+                <h2
+                    id="totalUsers"
+                    class="stat-value"
+                >
+                    0
+                </h2>
+
+            </div>
+
+        </div>
+
+
+        <!-- Assessment Completion -->
+
+        <div class="col-12 col-sm-6 col-xl-3">
+
+            <div class="dashboard-card stat-card h-100">
+
+                <p class="stat-title">
+                    Assessment Completion
+                </p>
+
+                <h2
+                    id="completionRate"
+                    class="stat-value"
+                >
+                    0%
+                </h2>
+
+            </div>
+
+        </div>
+
+
+        <!-- Average Leadership Score -->
+
+        <div class="col-12 col-sm-6 col-xl-3">
+
+            <div class="dashboard-card stat-card h-100">
+
+                <p class="stat-title">
+                    Average Leadership Score
+                </p>
+
+                <h2
+                    id="averageScore"
+                    class="stat-value"
+                >
+                    0
+                </h2>
+
+            </div>
+
+        </div>
+
+
+        <!-- Development Plan Completion -->
+
+        <div class="col-12 col-sm-6 col-xl-3">
+
+            <div class="dashboard-card stat-card h-100">
+
+                <p class="stat-title">
+                    Development Plan Completion
+                </p>
+
+                <h2
+                    id="planCompletion"
+                    class="stat-value"
+                >
+                    0%
+                </h2>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- ==========================================
+         LEADERSHIP PROFILE + SKILL GAPS
+    =========================================== -->
+
+    <div class="row g-4 mb-4">
+
+
+        <!-- Leadership Profiles -->
+
+        <div class="col-12 col-xl-6">
+
+            <div class="dashboard-card chart-card h-100">
+
+                <h2 class="chart-title">
+                    Leadership Profile Distribution
+                </h2>
+
+                <p class="chart-description">
+                    Breakdown of leadership profiles across the organisation.
+                </p>
+
+                <div class="chart-container">
+
+                    <canvas id="leadershipProfileChart"></canvas>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- Skill Gaps -->
+
+        <div class="col-12 col-xl-6">
+
+            <div class="dashboard-card chart-card h-100">
+
+                <h2 class="chart-title">
+                    Top Common Skill Gaps
+                </h2>
+
+                <p class="chart-description">
+                    Areas where participants most commonly require development.
+                </p>
+
+                <div class="chart-container">
+
+                    <canvas id="skillGapChart"></canvas>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- ==========================================
+         PROGRESS OVER TIME
+    =========================================== -->
+
+    <div class="row g-4">
+
+        <div class="col-12">
+
+            <div class="dashboard-card chart-card">
+
+                <h2 class="chart-title">
+                    Progress Over Time
+                </h2>
+
+                <p class="chart-description">
+                    Average leadership score before and after the development plan.
+                </p>
+
+                <div class="chart-container">
+
+                    <canvas id="progressChart"></canvas>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+</div>
+
+
+
+<!-- ==========================================
+     SCRIPTS
+=========================================== -->
+
+<!-- Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<!-- Admin Dashboard JavaScript -->
+<script src="static/js/admin-dashboard.js"></script>
+
+
+</body>
+
+</html>
