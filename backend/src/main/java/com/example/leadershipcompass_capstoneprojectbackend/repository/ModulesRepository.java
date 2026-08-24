@@ -3,6 +3,7 @@ package com.example.leadershipcompass_capstoneprojectbackend.repository;
 import com.example.leadershipcompass_capstoneprojectbackend.model.Modules;
 import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
+import java.util.List;
 
 /**
  * Data access repository for {@link Modules} records.

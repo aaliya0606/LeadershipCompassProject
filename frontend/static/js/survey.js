@@ -123,7 +123,7 @@ function renderPart() {
   let html = `
     <div class="survey-category">
       <h2 class="survey-category-title">${category.label}</h2>
-      <p class="survey-category-subtitle">Rate yourself from 1 (Rarely) to 5 (Consistently)</p>
+      <p class="survey-category-subtitle"><strong>Instructions:</strong> Reflect honestly on how well you invest focused, undistracted time with your team-which builds trust, connection, and psychological safety. For each statement, rate yourself on a scale from <strong> 1 (Rarely/Not at all) to 5 (Consistently/Always)./<strong></p>
       <div class="survey-questions">
   `;
 
@@ -154,7 +154,7 @@ function renderPart() {
       <div class="survey-nav">
         ${currentPart > 1 ? `<button class="survey-btn-back" onclick="goBack()">Back</button>` : ""}
         <button class="survey-btn-next" onclick="goNext('${category.prefix}')">
-          ${currentPart === categories.length ? "Submit" : "Next"}
+          ${currentPart === categories.length ? "Submit Survey" : "Next"}
         </button>
       </div>
     </div>
@@ -245,7 +245,7 @@ function showResults(result) {
       <h2 class="survey-results-title">Your Leadership Profile</h2>
       <div class="survey-overall">
         <p class="survey-overall-score">Overall Score: <strong>${result.overallScore} / 250</strong></p>
-        <span class="survey-band" style="background:#00284B">${result.overallBand}</span>
+        <span class="survey-band" style="background:${bandColor[result.overallBand] || '#6c757d'}">${result.overallBand}</span>
       </div>
       <p class="survey-summary">${result.summary}</p>
       <div class="survey-category-results">
@@ -255,7 +255,7 @@ function showResults(result) {
         ${renderCategoryResult("Words of Recognition",result.wordsOfRecognitionScore,result.wordsOfRecognitionBand,result.wordsOfRecognitionMessage,bandColor)}
         ${renderCategoryResult("Psychological Touch", result.psychologicalTouchScore, result.psychologicalTouchBand, result.psychologicalTouchMessage, bandColor)}
       </div>
-      <button class="survey-button" onclick="window.location.href='dashboard.html'">Dashboard</button>
+      <button class="survey-button" onclick="window.location.href='dashboard.html'">Back to Dashboard</button>
     </div>
   `;
 
@@ -291,8 +291,10 @@ function renderResultBar(label, score, max, band, color) {
 function renderCategoryResult(name, score, band, message, bandColor) {
   return `
     <div class="survey-category-result">
-      <span class="result-bar-label" style="text-align:center;">${name}</span>
-      ${renderResultBar(name, score, 50, band, bandColor[band])}
+      <div class="survey-category-result-header">
+        <h3>${name}</h3>
+        <span class="survey-band" style="background:${bandColor[band] || '#6c757d'}">${band}</span>
+      </div>
       <p class="survey-category-score">Score: <strong>${score} / 50</strong></p>
       <p class="survey-category-message">${message}</p>
     </div>

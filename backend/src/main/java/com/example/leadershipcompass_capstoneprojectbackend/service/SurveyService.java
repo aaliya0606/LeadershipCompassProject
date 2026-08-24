@@ -14,8 +14,14 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.example.leadershipcompass_capstoneprojectbackend.model.User;
 
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+
+import com.example.leadershipcompass_capstoneprojectbackend.dto.ProgressEntryResponse;
+import com.example.leadershipcompass_capstoneprojectbackend.dto.PeerComparisonResponse;
+import com.example.leadershipcompass_capstoneprojectbackend.model.Resource;
 
 @Service
 @RequiredArgsConstructor
@@ -37,6 +43,10 @@ public class SurveyService{
     private final SurveyQuestionsRepository surveyQuestionsRepository;
     private final UserRepository userRepository;
     private final InsightGenerator insightGenerator;
+
+    private final ResourceService resourceService;
+    private static final int NEEDS_ATTENTION_THRESHOLD = 30;
+
 
     @Transactional
     public SurveyResultResponse submitSurvey(SurveySubmissionRequest request, String email){
@@ -125,7 +135,7 @@ public class SurveyService{
         return total;
     }
 
-    private String band(int score){
+    public String band(int score){
         if (score >= 40) return "High";
         if (score >= 30) return "Strong intent";
         if (score >= 20) return "Needs attention";
@@ -134,7 +144,7 @@ public class SurveyService{
 
     /// Only have placeholder values for feedback :
     // this can be refactored to: message() + band()
-    private String message(String categoryName, int score){
+    public String message(String categoryName, int score){
     switch (categoryName) {
         case "Caring Time":
             if (score >= 40) return "You consistently practice high-quality Caring Time, deeply investing in trust and team connection.";
@@ -225,5 +235,146 @@ public class SurveyService{
 
         return response;
 
+    }
+
+    //Progress over time
+    @Transactional(readOnly = true)
+    public List<ProgressEntryResponse> getProgressOverTime(String email) {
+        User user = userRepository.findByEmail(email)
+            .orElseThrow(() -> new EntityNotFoundException("User not found: " + email));
+
+        List<SurveyResult> history = surveyResultRepository.findByUserOrderByGenerateDateAsc(user);
+
+        List<ProgressEntryResponse> progress = new ArrayList<>();
+        for (SurveyResult result : history) {
+            progress.add(new ProgressEntryResponse(
+                result.getGenerateDate(),
+                result.getOverallScore(),
+                result.getScoreBand(),
+                result.getCaringTimeScore(),
+                result.getReceivingValueScore(),
+                result.getActsOfSupportScore(),
+                result.getWordsOfRecognitionScore(),
+                result.getPsychologicalTouchScore()
+            ));
+        }
+        return progress;
+    }
+
+    //Peer comaprisons by percentile
+    @Transactional(readOnly = true)
+    public PeerComparisonResponse getPeerComparison(String email) {
+        User user = userRepository.findByEmail(email)
+            .orElseThrow(() -> new EntityNotFoundException("User not found: " + email));
+
+        SurveyResult latest = surveyResultRepository.findFirstByUserOrderByGenerateDateDesc(user)
+            .orElseThrow(() -> new EntityNotFoundException("No survey result found for user: " + email));
+
+        PeerComparisonResponse response = new PeerComparisonResponse();
+
+        response.setYourCaringTimeScore(latest.getCaringTimeScore());
+        response.setCaringTimePercentile(calculatePercentile(latest.getCaringTimeScore(),
+            surveyResultRepository.findAllCaringTimeScores()));
+
+        response.setYourReceivingValueScore(latest.getReceivingValueScore());
+        response.setReceivingValuePercentile(calculatePercentile(latest.getReceivingValueScore(),
+            surveyResultRepository.findAllReceivingValueScores()));
+
+        response.setYourActsOfSupportScore(latest.getActsOfSupportScore());
+        response.setActsOfSupportPercentile(calculatePercentile(latest.getActsOfSupportScore(),
+            surveyResultRepository.findAllActsOfSupportScores()));
+
+        response.setYourWordsOfRecognitionScore(latest.getWordsOfRecognitionScore());
+        response.setWordsOfRecognitionPercentile(calculatePercentile(latest.getWordsOfRecognitionScore(),
+            surveyResultRepository.findAllWordsOfRecognitionScores()));
+
+        response.setYourPsychologicalTouchScore(latest.getPsychologicalTouchScore());
+        response.setPsychologicalTouchPercentile(calculatePercentile(latest.getPsychologicalTouchScore(),
+            surveyResultRepository.findAllPsychologicalTouchScores()));
+
+        return response;
+    }
+
+    // NEW: calculates what % of all scores are at or below the given score
+    private int calculatePercentile(int userScore, List<Integer> allScores) {
+        if (allScores.isEmpty()) return 0;
+        long countAtOrBelow = allScores.stream().filter(s -> s <= userScore).count();
+        return (int) Math.round((countAtOrBelow / (double) allScores.size()) * 100);
+    }
+
+    @Transactional(readOnly = true)
+    public List<Resource> getSuggestedLearningPath(String email) {
+        User user = userRepository.findByEmail(email)
+            .orElseThrow(() -> new EntityNotFoundException("User not found: " + email));
+
+        SurveyResult latest = surveyResultRepository.findFirstByUserOrderByGenerateDateDesc(user)
+            .orElseThrow(() -> new EntityNotFoundException("No survey result found for user: " + email));
+
+        List<String> weakestCategories = determineWeakestCategories(
+            latest.getCaringTimeScore(),
+            latest.getReceivingValueScore(),
+            latest.getActsOfSupportScore(),
+            latest.getWordsOfRecognitionScore(),
+            latest.getPsychologicalTouchScore()
+        );
+
+        List<Resource> suggested = new ArrayList<>();
+        for (String language : weakestCategories) {
+            suggested.addAll(resourceService.getActiveResourcesByLeadershipLanguage(language));
+        }
+        return suggested;
+    }
+
+    @Transactional(readOnly = true)
+    public List<Resource> getSuggestedLearningPath(SurveyResult result) {
+        List<String> weakestCategories = determineWeakestCategories(
+            result.getCaringTimeScore(),
+            result.getReceivingValueScore(),
+            result.getActsOfSupportScore(),
+            result.getWordsOfRecognitionScore(),
+            result.getPsychologicalTouchScore()
+        );
+
+        List<Resource> suggested = new ArrayList<>();
+        for (String language : weakestCategories) {
+            suggested.addAll(resourceService.getActiveResourcesByLeadershipLanguage(language));
+        }
+        return suggested;
+    }
+
+    private List<String> determineWeakestCategories(int ct, int rv, int as_, int wr, int pt) {
+        Map<String, Integer> scores = new LinkedHashMap<>();
+        scores.put("Caring Time", ct);
+        scores.put("Receiving Value", rv);
+        scores.put("Acts of Support", as_);
+        scores.put("Words of Recognition", wr);
+        scores.put("Psychological Touch", pt);
+
+        List<String> belowThreshold = scores.entrySet().stream()
+            .filter(e -> e.getValue() < NEEDS_ATTENTION_THRESHOLD)
+            .sorted(Map.Entry.comparingByValue())
+            .map(Map.Entry::getKey)
+            .toList();
+
+        if (!belowThreshold.isEmpty()) {
+            return belowThreshold;
+        }
+
+        int minScore = scores.values().stream().min(Integer::compareTo).orElse(0);
+
+        return scores.entrySet().stream()
+            .filter(e -> e.getValue() == minScore)
+            .map(Map.Entry::getKey)
+            .toList();
+    }
+
+    @Transactional(readOnly = true)
+    public SurveyResult getResultById(Long resultId) {
+        SurveyResult result = surveyResultRepository.findById(resultId)
+            .orElseThrow(() -> new EntityNotFoundException("Result not found: " + resultId));
+
+        result.getUser().getFullName(); // ensures user is loaded
+
+        return result;
     }
 }
