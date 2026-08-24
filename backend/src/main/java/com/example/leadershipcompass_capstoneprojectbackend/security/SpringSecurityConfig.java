@@ -38,8 +38,8 @@ public class SpringSecurityConfig {
                                 "/api/reports/dummy",
                                 "/test-download.html",
                                 "/api/360/questions",
-                                "/api/360/questions/**",
-                                "/api/360/surveys/*",
+                                "/api/360/questions/**", // Possibly remove this in future
+                                "/api/360/surveys/*", // Allow access to survey endpoints without authentication
                                 // Swagger UI for API endpoints testing
                                 "/v3/api-docs/**",
                                 "/swagger-ui/**",
