@@ -22,6 +22,14 @@ public class Feedback360Controller {
 
     private final Feedback360Service feedback360Service;
 
+    @GetMapping("/questions")
+    public ResponseEntity<?> getQuestions() {
+
+        return ResponseEntity.ok(
+                feedback360Service.getQuestions()
+        );
+    }
+
     @PostMapping("/surveys")
     public ResponseEntity<?> createSurvey(
             Authentication authentication) {
