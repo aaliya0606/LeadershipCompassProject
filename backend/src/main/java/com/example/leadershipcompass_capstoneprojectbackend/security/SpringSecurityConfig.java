@@ -39,6 +39,7 @@ public class SpringSecurityConfig {
                                 "/test-download.html",
                                 "/api/360/questions",
                                 "/api/360/questions/**",
+                                "/api/360/surveys/*",
                                 // Swagger UI for API endpoints testing
                                 "/v3/api-docs/**",
                                 "/swagger-ui/**",

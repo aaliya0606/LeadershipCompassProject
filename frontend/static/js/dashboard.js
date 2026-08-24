@@ -71,7 +71,7 @@ async function generate360Survey() {
         const data = await response.json();
 
         const surveyLink =
-            `${window.location.origin}/360-feedback.html?token=${data.token}`;
+            `${window.location.origin}/frontend/360-feedback.html?token=${data.token}`;
 
         document.getElementById("surveyLink").value = surveyLink;
 
