@@ -47,6 +47,56 @@ if (!token) {
     });
 }
 
+//360 Degree Feedback Survey Button
+document.getElementById("generate360Btn")
+    .addEventListener("click", generate360Survey);
+
+
+async function generate360Survey() {
+
+    try {
+
+        const response = await fetch("http://localhost:8080/api/360/surveys", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${localStorage.getItem("token")}`
+            }
+        });
+
+        if (!response.ok) {
+            throw new Error("Failed to create 360 survey");
+        }
+
+        const data = await response.json();
+
+        const surveyLink =
+            `${window.location.origin}/360-feedback.html?token=${data.token}`;
+
+        document.getElementById("surveyLink").value = surveyLink;
+
+        document.getElementById("surveyLinkContainer")
+            .style.display = "block";
+
+    } catch (error) {
+
+        console.error(error);
+
+        alert("Unable to create 360 feedback survey.");
+    }
+}
+//Copy survey link to clipboard (button)
+document.getElementById("copySurveyLinkBtn")
+    .addEventListener("click", async () => {
+
+        const link =
+            document.getElementById("surveyLink").value;
+
+        await navigator.clipboard.writeText(link);
+
+        alert("Survey link copied!");
+    });
+
 logoutBtn.addEventListener("click", function () {
   localStorage.removeItem("token");
   localStorage.removeItem("role");
