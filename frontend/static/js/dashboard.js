@@ -6,6 +6,7 @@ const userRole = document.getElementById("userRole");
 const logoutBtn = document.getElementById("logoutBtn");
 const backendResponse = document.getElementById("backendResponse");
 const surveyBtn = document.getElementById("surveyBtn");
+const adminSection = document.getElementById("adminSection");
 
 if (surveyBtn) {
   surveyBtn.addEventListener("click", function() {
@@ -19,6 +20,10 @@ if (!token) {
 } else {
   tokenStatus.textContent = "JWT token found: " + token.substring(0, 40) + "...";
   userRole.textContent = role || "USER";
+
+  if (role === "ADMIN" && adminSection) {
+    adminSection.classList.remove("d-none");
+  }
 
   let dashboardUrl = "http://localhost:8080/api/dashboard/user";
 
