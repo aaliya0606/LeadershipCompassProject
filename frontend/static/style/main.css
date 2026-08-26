@@ -212,6 +212,15 @@ p {
   height: 36px;
 }
 
+.anton-logo {
+    width: 180px;
+    height: 100px;
+    position: absolute;
+    left: 50%;
+    top: -0.25%;
+    transform: translateX(-50%);
+}
+
 .navbar-brand {
   color: white;
 }
@@ -319,7 +328,17 @@ html, body {
 .login {
     display: flex;
     height: 100vh;
-    padding-top: 80px;
+    padding-top: 10px;
+    background-image: url('../img/login-signup page.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+.adminLogin {
+    display: flex;
+    height: 100vh;
+    padding-top: 10px;
     background-image: url('../img/login-signup page.png');
     background-size: cover;
     background-position: center;
@@ -393,11 +412,60 @@ html, body {
 
 /* Top Right Logo */
 .social-icons {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    justify-content: center;
     position: absolute;
-    top: -8px;
-    right: 24px;
-    width: 220px;
-    height: auto;
+    right: 20px;
+    top: 15px;
+}
+
+.social-icons a img {
+    height: 40px;
+    width: 40px;
+}
+
+.adminlogin-btn {
+    position: absolute;
+    top: 750px;
+    left: 1272px;
+    font-family: 'Conthrax', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: #ffffff;
+    text-decoration: none;
+    z-index: 10;
+}
+
+/* login button - return to startup */
+.return-btn {
+    position: absolute;
+    top: 700px;
+    left: 1325px;
+    font-family: 'Conthrax', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: #ffffff;
+    text-decoration: none;
+    z-index: 10;
+}
+
+.return-btn-signup {
+    position: absolute;
+    top: 830px;
+    left: 1325px;
+    font-family: 'Conthrax', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: #ffffff;
+    text-decoration: none;
     z-index: 10;
 }
 
@@ -424,17 +492,17 @@ html, body {
 
 .login-form {
     position: absolute;
-    top: 400px;
+    top: 450px;
     left: 1180px;
-    transform; translateY(-50%);
+    transform: translateY(-50%);
     width: 380px;
 }
 
 .sign-up-form {
     position: absolute;
-    top: 190px;
+    top: 500px;
     left: 1180px;
-    transform; translateY(-50%);
+    transform: translateY(-50%);
     width: 380px;
 }
 
@@ -531,8 +599,8 @@ html, body {
 
 .signup-link {
     text-align: center;
-    margin-top: 690px;
-    margin-left: 1230px;
+    margin-top: 10px;
+    margin-left: 0px;
     font-size: 13px;
     color: rgba(255, 255, 255, 0.7);
     font-family: 'Conthrax', sans-serif;

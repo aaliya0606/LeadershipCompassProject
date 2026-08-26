@@ -1,0 +1,33 @@
+: root {
+    --brand-dark: #00284B;
+    --brand-green: #64BC28;
+    --brand-light-green: #96DA5F;
+}
+
+.custom-navbar-new {
+    background: linear-gradient(90deg, var(--brand-dark), var(--brand-green));
+    border-bottom: 4px solid var(--brand-light-green);
+    padding: -0.4px 40px;
+    display: flex;
+    align-items: center;
+    height: 70px;
+    overflow: visible;
+}
+
+.navbar-logo-new {
+    height: 38px;
+    width: auto;
+    object-fit: contain;
+}
+
+.brand-title-new {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 1000;
+    font-size: 1.1rem;
+    color: #e5e8e8;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    white-space: nowrap;
+    margin-left: 12px;
+}
+
