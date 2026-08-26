@@ -1016,6 +1016,55 @@ html, body {
   font-size: 1rem;
 }
 
+/* MOBILE PHONE OVERRIDES FOR NAVBAR */
 
+@media (max-width: 768px) {
+  .custom-navbar {
+    padding: 8px 16px;
+    position: relative;
+  }
+
+  .navbar-logo {
+    height: 30px;
+  }
+
+  .brand-title {
+    font-size: 0.9rem;
+  }
+
+  .nav-links-inline {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    flex-direction: column;
+    align-items: stretch;
+    padding-left: 0;
+    max-width: 100%;
+    max-height: 0;
+    opacity: 1;
+    overflow: hidden;
+    background: linear-gradient(180deg, #00284B, #64BC28);
+    transition: max-height 0.4s ease;
+    z-index: 100;
+  }
+
+  .nav-links-inline.open {
+    max-height: 400px;
+  }
+
+  .nav-link {
+    padding: 14px 20px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+    width: 100%;
+  }
+
+  .nav-link.logout {
+    border-left: none;
+    border-top: 1px solid rgba(255, 255, 255, 0.15);
+    margin-left: 0;
+    padding-left: 20px;
+  }
+}
 
 

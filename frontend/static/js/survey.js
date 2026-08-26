@@ -118,24 +118,22 @@ function renderPart() {
   let html = `
     <div class="survey-category">
       <h2 class="survey-category-title">${category.label}</h2>
-      <p class="survey-category-subtitle"><strong>Instructions:<strong> Reflect honestly on how well you invest focused, undistracted time with your team-which builds trust, connection, and psychological safety. For each statement, rate yourself on a scale from <strong> 1 (Rarely/Not at all) to 5 (Consistently/Always).<strong></p>
+      <p class="survey-category-subtitle"><strong>Instructions:</strong> Reflect honestly on how well you invest focused, undistracted time with your team-which builds trust, connection, and psychological safety. For each statement, rate yourself on a scale from <strong>1 (Rarely/Not at all)</strong> to <strong>5 (Consistently/Always)</strong>.</p>
       <div class="survey-questions">
   `;
 
   categoryQuestions.forEach((q, index) => {
-    const questionKey = category.prefix + "_" + q.questionId;
+  const questionKey = category.prefix + "_" + q.questionId;
     html += `
       <div class="survey-question" id="q-${questionKey}">
         <p class="survey-question-text">${index + 1}. ${q.questionText}</p>
         <div style="width: max-content; padding-right: 1rem;">
-        <div class="survey-options">
-          ${[1, 2, 3, 4, 5].map(score => `
-            <label class="survey-option">
-              <input type="radio" name="${questionKey}" value="${score}" 
+          <div class="survey-options star-rating">
+            ${[5, 4, 3, 2, 1].map(score => `
+              <input type="radio" id="${questionKey}_${score}" name="${questionKey}" value="${score}"
                 ${answers[questionKey] === score ? "checked" : ""} />
-              <span class="survey-option-label">${score}</span>
-            </label>
-          `).join("")}
+              <label for="${questionKey}_${score}" class="star-label" title="${score}"></label>
+            `).join("")}
           </div>
           <div class="survey-scale-labels">
             <span>Rarely</span>
@@ -252,8 +250,10 @@ function showResults(result) {
         ${renderCategoryResult("Words of Recognition",result.wordsOfRecognitionScore,result.wordsOfRecognitionBand,result.wordsOfRecognitionMessage,bandColor)}
         ${renderCategoryResult("Psychological Touch", result.psychologicalTouchScore, result.psychologicalTouchBand, result.psychologicalTouchMessage, bandColor)}
       </div>
-      <button class="survey-button" onclick="window.location.href='dashboard.html'">Dashboard</button>
-      <button class="survey-button" style="margin: 1rem;">Print Results</button> 
+      <div class="survey-results-actions">
+        <button class="survey-button" onclick="window.location.href='dashboard.html'">Dashboard</button>
+        <button class="survey-button">Print Results</button>
+      </div>
     </div>
   `;
 
@@ -272,11 +272,11 @@ function showResults(result) {
 
 function renderResultBar(label, score, max, band, color) {
   const pct = Math.max(0, Math.min(100, (score / max) * 100));
-  // const fillStyle = color ? `background:${color};` : '';
+  const markerPct = Math.max(8, Math.min(92, pct)); 
 
   return `
   <div class="result-bar-row">
-    <div class="result-bar-marker" data-target-left="${pct}%" style="left:0%; color:#00284B;">
+    <div class="result-bar-marker" data-target-left="${markerPct}%" style="left:0%; color:#00284B;">
       <span class="survey-band" style="background:#00284B;">${band}</span>
     </div>
     <div class="result-bar-track">
