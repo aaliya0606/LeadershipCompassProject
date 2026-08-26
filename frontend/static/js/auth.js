@@ -102,6 +102,9 @@ if (registerForm) {
 
       if (response.ok) {
         message.textContent = "Registration successful. Redirecting to login...";
+        message.style.color = "red";
+        message.style.fontWeight = "bold";
+        message.style.fontSize = "20px";
         message.className = "mt-3 text-center text-success";
 
         setTimeout(() => {
@@ -109,10 +112,16 @@ if (registerForm) {
         }, 1000);
       } else {
         message.textContent = data.message || "Registration failed.";
+        message.style.color = "red";
+        message.style.fontWeight = "bold";
+        message.style.fontSize = "20px";
         message.className = "mt-3 text-center text-danger";
       }
     } catch (error) {
       message.textContent = "Cannot connect to backend.";
+      message.style.color = "red";
+      message.style.fontWeight = "bold";
+      message.style.fontSize = "20px";
       message.className = "mt-3 text-center text-danger";
     }
   });
