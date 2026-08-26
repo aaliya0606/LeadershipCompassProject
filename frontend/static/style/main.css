@@ -427,10 +427,15 @@ html, body {
     width: 40px;
 }
 
+/* Own card for bottom links/button */
+
+
+/* return button for sign in */
 .adminlogin-btn {
     position: absolute;
-    top: 800px;
-    left: 1272px;
+    bottom: 220px;
+    left: 75%;
+    transform: translateX(-5%);
     font-family: 'Conthrax', sans-serif;
     font-size: 13px;
     font-weight: 600;
@@ -440,12 +445,11 @@ html, body {
     text-decoration: none;
     z-index: 10;
 }
-
-/* return button for sign in */
 .return-btn {
     position: absolute;
-    top: 1000px;
-    left: 1325px;
+    bottom: 170px;
+    left: 78%;
+    transform: translateX(-5%);
     font-family: 'Conthrax', sans-serif;
     font-size: 13px;
     font-weight: 600;
@@ -470,20 +474,6 @@ html, body {
     z-index: 10;
 }
 
-/* login button - return to startup */
-.return-btn {
-    position: absolute;
-    top: 850px;
-    left: 1325px;
-    font-family: 'Conthrax', sans-serif;
-    font-size: 13px;
-    font-weight: 600;
-    letter-spacing: 3px;
-    text-transform: uppercase;
-    color: #ffffff;
-    text-decoration: none;
-    z-index: 10;
-}
 
 .return-btn:hover {
     color: #6abf3a;
