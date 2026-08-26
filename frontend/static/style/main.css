@@ -333,6 +333,7 @@ html, body {
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
+    position: relative;
 }
 
 .adminLogin {
@@ -428,7 +429,7 @@ html, body {
 
 .adminlogin-btn {
     position: absolute;
-    top: 750px;
+    top: 800px;
     left: 1272px;
     font-family: 'Conthrax', sans-serif;
     font-size: 13px;
@@ -440,10 +441,10 @@ html, body {
     z-index: 10;
 }
 
-/* login button - return to startup */
+/* return button for sign in */
 .return-btn {
     position: absolute;
-    top: 700px;
+    top: 1000px;
     left: 1325px;
     font-family: 'Conthrax', sans-serif;
     font-size: 13px;
@@ -457,7 +458,7 @@ html, body {
 
 .return-btn-signup {
     position: absolute;
-    top: 830px;
+    top: 870px;
     left: 1325px;
     font-family: 'Conthrax', sans-serif;
     font-size: 13px;
@@ -531,8 +532,18 @@ html, body {
     letter-spacing: 1px;
 }
 
+.field-row {
+    display: flex;
+    gap: 16px;
+}
+
+.field-row .field-group {
+    flex: 1;
+}
+
 .field-input {
     width: 100%;
+    height: 50px;
     background: #ffffff;
     border: 1px solid rgba(255, 255, 255, 0.3);
     border-radius: 10px;
@@ -620,7 +631,7 @@ html, body {
 /* SIGN UP CONFIGURATION */
 .login-link {
     text-align: center;
-    margin-top: 735px;
+    margin-top: 670px;
     margin-left: 1230px;
     font-size: 13px;
     color: rgba(255, 255, 255, 0.7);

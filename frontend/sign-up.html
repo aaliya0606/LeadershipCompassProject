@@ -33,45 +33,56 @@
 
 <div class="sign-up">
 
-    <! -- BUTTON sits right after subtitle -->
+    <!-- BUTTON sits right after subtitle -->
     <a href="startup.html" class="return-btn-signup" >return</a>
 
-    <! -- RIGHT PANEL -->
+    <!-- RIGHT PANEL -->
     <form class="sign-up-form" id="registerForm">
         <h2 class="signin-title">Sign Up</h2>
 
         <!-- FIRST NAME -->
-        <div class="field-group">
-            <label for="registerFirstName" class="field-label">First Name</label>
-            <input type="text" id="registerFirstName" class="field-input" placeholder="Enter first name"/>
-        </div>
+        <div class="field-row">
+            <div class="field-group">
+                <label for="registerFirstName" class="field-label">First Name</label>
+                <input type="text" id="registerFirstName" class="field-input" placeholder="Enter first name"/>
+            </div>
+
 
         <!-- LAST NAME -->
-        <div class="field-group">
-            <label for="registerLastName" class="field-label">Last Name</label>
-            <input type="text" id="registerLastName" class="field-input" placeholder="Enter last name"/>
+            <div class="field-group">
+                <label for="registerLastName" class="field-label">Last Name</label>
+                <input type="text" id="registerLastName" class="field-input" placeholder="Enter last name"/>
+            </div>
+
         </div>
 
 
-        <! -- EMAIL -->
+        <!-- EMAIL -->
         <div class="field-group">
             <label for="registerEmail" class="field-label">Email</label>
             <input type="email" id="registerEmail" class="field-input" placeholder="Enter email" />
         </div>
 
-        <! -- PASSWORD -->
+        <!-- PASSWORD -->
         <div class="field-group">
             <label for="registerPassword" class="field-label">Password</label>
             <input type="password" id="registerPassword" class="field-input" placeholder="Enter password" />
         </div>
 
-        <! -- RE-ENTER PASSWORD -->
+        <!-- RE-ENTER PASSWORD -->
         <div class="field-group">
             <label for="confirmPassword" class="field-label">Re-enter Password</label>
             <input type="password" id="confirmPassword" class="field-input" placeholder="Re-enter your password" />
         </div>
 
-        <input type="hidden" id="registerRole" value="USER"/>
+        <!-- ROLE -->
+        <div class="field-group">
+            <label for="registerRole" class="field-label">Role</label>
+            <select id="registerRole" class="field-input">
+                <option value="USER" selected>User</option>
+                <option value="ADMIN">Admin</option>
+            </select>
+        </div>
 
         <button type="submit" class="btn-login">Sign Up</button>
 
