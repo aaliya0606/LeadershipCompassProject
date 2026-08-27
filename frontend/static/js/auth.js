@@ -4,46 +4,56 @@ const BASE_URL = "http://localhost:8080/api/auth";
 const loginForm = document.getElementById("loginForm");
 
 if (loginForm) {
-  loginForm.addEventListener("submit", async function (event) {
-    event.preventDefault();
+    loginForm.addEventListener("submit", async function (event) {
+        event.preventDefault();
 
-    const email = document.getElementById("loginEmail").value;
-    const password = document.getElementById("loginPassword").value;
-    const message = document.getElementById("loginMessage");
+        const email = document.getElementById("loginEmail").value;
+        const password = document.getElementById("loginPassword").value;
+        const message = document.getElementById("loginMessage");
 
-    try {
-      const response = await fetch(`${BASE_URL}/login`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-          email: email,
-          password: password
-        })
-      });
+        // Detect if it is ADMIN page
+        const isAdminLogin= window.location.pathname.includes("adminLogin");
 
-      const data = await response.json();
+        try {
+            const response = await fetch(`${BASE_URL}/login`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    email: email,
+                    password: password
+                })
+            });
 
-      if (response.ok && data.token) {
-        localStorage.setItem("token", data.token);
-        localStorage.setItem("role", data.role || "USER");
+            const data = await response.json();
 
-        message.textContent = "Login successful!";
-        message.className = "mt-3 text-center text-success";
+            if (response.ok && data.token) {
+                // if page is admin and if the account has Role Admin
+                if (isAdminLogin && data.role !== "ADMIN") {
+                    message.textContent = "This account does not have admin access.";
+                    message.className = "mt-3 text-center text-danger";
+                    return;
+                }
 
-        setTimeout(() => {
-          window.location.href = "dashboard.html";
-        }, 800);
-      } else {
-        message.textContent = data.message || "Login failed.";
-        message.className = "mt-3 text-center text-danger";
-      }
-    } catch (error) {
-      message.textContent = "Cannot connect to backend.";
-      message.className = "mt-3 text-center text-danger";
-    }
-  });
+                localStorage.setItem("token", data.token);
+                localStorage.setItem("role", data.role || "USER");
+
+                message.textContent = "Login successful!";
+                message.className = "mt-3 text-center text-success";
+
+                setTimeout(() => {
+                    // Redirect admins to a different page
+                    window.location.href = isAdminLogin ? "admin-dashboard.html" : "dashboard.html"; }, 800);
+            } else {
+                message.textContent = "Login successful!";
+                message.className = "mt-3 text-center text-success";
+            }
+        } catch (error) {
+            message.textContent = "Cannot connect to backend.";
+            message.className = "mt-3 text-center text danger";
+        }
+    });
 }
 
 // REGISTER

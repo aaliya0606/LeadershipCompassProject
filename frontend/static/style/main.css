@@ -460,6 +460,33 @@ html, body {
     z-index: 10;
 }
 
+.return-btn:hover {
+    color: #6abf3a;
+}
+
+.adminlogin-btn:hover {
+    color: #6abf3a;
+}
+
+.adminreturn-btn {
+    position: absolute;
+    bottom: 180px;
+    left: 78%;
+    transform: translateX(-5%);
+    font-family: 'Conthrax', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: #ffffff;
+    text-decoration: none;
+    z-index: 10;
+}
+
+.adminreturn-btn:hover {
+    color: #6abf3a;
+}
+
 .return-btn-signup {
     position: absolute;
     top: 870px;
@@ -472,11 +499,6 @@ html, body {
     color: #ffffff;
     text-decoration: none;
     z-index: 10;
-}
-
-
-.return-btn:hover {
-    color: #6abf3a;
 }
 
 /* MAIN CONFIGURATION - LOGIN */
