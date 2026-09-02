@@ -11,7 +11,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collections;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -58,6 +60,7 @@ public class AdminDashboardService {
                 0,
                 0,
                 0,
+                Collections.emptyMap(),
                 Collections.emptyMap()
         );
         }
@@ -83,7 +86,8 @@ public class AdminDashboardService {
                     0,
                     0,
                     0,
-                    Collections.emptyMap()
+                    Collections.emptyMap(),
+                        Collections.emptyMap()
             );
         }
 
@@ -118,6 +122,24 @@ public class AdminDashboardService {
                 .average()
                 .orElse(0);
 
+        // Identify the three lowest-scoring leadership areas as skill gaps
+        Map<String, Double> allLeadershipAreas = new LinkedHashMap<>();
+
+        allLeadershipAreas.put("Caring Time", averageCaringTime);
+        allLeadershipAreas.put("Receiving Value", averageReceivingValue);
+        allLeadershipAreas.put("Acts of Support", averageActsOfSupport);
+        allLeadershipAreas.put("Words of Recognition", averageWordsOfRecognition);
+        allLeadershipAreas.put("Psychological Touch", averagePsychologicalTouch);
+
+        Map<String, Double> skillGaps = new LinkedHashMap<>();
+
+        allLeadershipAreas.entrySet().stream()
+                .sorted(Map.Entry.comparingByValue())
+                .limit(3)
+                .forEach(entry ->
+                        skillGaps.put(entry.getKey(), entry.getValue())
+                );
+
         return new AdminDashboardResponse(
                 totalUsers,
                 completedAssessments,
@@ -128,7 +150,8 @@ public class AdminDashboardService {
                 averageActsOfSupport,
                 averageWordsOfRecognition,
                 averagePsychologicalTouch,
-                Collections.emptyMap()
+                Collections.emptyMap(),
+                skillGaps
         );
     }
 }

@@ -30,4 +30,6 @@ public class AdminDashboardResponse {
     private double averagePsychologicalTouchScore;
 
     private Map<String, Integer> leadershipProfiles;
+    
+    private Map<String, Double> skillGaps;
 }
