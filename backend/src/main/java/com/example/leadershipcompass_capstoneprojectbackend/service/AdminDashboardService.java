@@ -61,7 +61,8 @@ public class AdminDashboardService {
                 0,
                 0,
                 Collections.emptyMap(),
-                Collections.emptyMap()
+                Collections.emptyMap(),
+                Collections.emptyList()
         );
         }
 
@@ -87,7 +88,8 @@ public class AdminDashboardService {
                     0,
                     0,
                     Collections.emptyMap(),
-                        Collections.emptyMap()
+                        Collections.emptyMap(),
+                        Collections.emptyList()
             );
         }
 
@@ -139,6 +141,9 @@ public class AdminDashboardService {
                 .forEach(entry ->
                         skillGaps.put(entry.getKey(), entry.getValue())
                 );
+        List<String> recommendedFocus = skillGaps.keySet().stream()
+                .map(this::recommendationForSkillGap)
+                .toList();
 
         return new AdminDashboardResponse(
                 totalUsers,
@@ -151,7 +156,27 @@ public class AdminDashboardService {
                 averageWordsOfRecognition,
                 averagePsychologicalTouch,
                 Collections.emptyMap(),
-                skillGaps
+                skillGaps,
+                recommendedFocus
         );
     }
+
+    private String recommendationForSkillGap(String category) {
+        return switch (category) {
+                case "Caring Time" ->
+                        "Prioritise regular one-on-one leadership activities and protected time with team members.";
+                case "Receiving Value" ->
+                        "Strengthen active listening practices and follow-up on team feedback.";
+                case "Acts of Support" ->
+                        "Focus on practical support behaviours and removing barriers that affect team performance.";
+                case "Words of Recognition" ->
+                        "Prioritise timely and specific recognition of team contributions.";
+                case "Psychological Touch" ->
+                        "Strengthen psychological safety and regular wellbeing check-ins across teams.";
+                default ->
+                        "Review learning resources related to this leadership area.";
+        };
+        }
+
+        
 }

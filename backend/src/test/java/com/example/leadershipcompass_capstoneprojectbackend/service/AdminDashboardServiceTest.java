@@ -109,4 +109,36 @@ class AdminDashboardServiceTest {
         assertEquals(27.0, response.getSkillGaps().get("Acts of Support"));
         assertEquals(30.0, response.getSkillGaps().get("Receiving Value"));
     }
+
+    @Test
+    void shouldReturnRecommendedFocusForSkillGaps() {
+
+        // Arrange
+        SurveyResult result = SurveyResult.builder()
+                .caringTimeScore(32)
+                .receivingValueScore(30)
+                .actsOfSupportScore(27)
+                .wordsOfRecognitionScore(19)
+                .psychologicalTouchScore(33)
+                .overallScore(141)
+                .build();
+
+        when(userRepository.count()).thenReturn(10L);
+        when(surveyResultRepository.findAll())
+                .thenReturn(List.of(result));
+
+        // Act
+        AdminDashboardResponse response =
+                adminDashboardService.getDashboardData("all");
+
+        // Assert
+        assertEquals(
+                List.of(
+                        "Prioritise timely and specific recognition of team contributions.",
+                        "Focus on practical support behaviours and removing barriers that affect team performance.",
+                        "Strengthen active listening practices and follow-up on team feedback."
+                ),
+                response.getRecommendedFocus()
+        );
+    }
 }

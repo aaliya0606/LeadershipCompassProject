@@ -3,6 +3,7 @@ package com.example.leadershipcompass_capstoneprojectbackend.dto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import java.util.List;
 
 import java.util.Map;
 
@@ -30,6 +31,8 @@ public class AdminDashboardResponse {
     private double averagePsychologicalTouchScore;
 
     private Map<String, Integer> leadershipProfiles;
-    
+
     private Map<String, Double> skillGaps;
+
+    private List<String> recommendedFocus;
 }
