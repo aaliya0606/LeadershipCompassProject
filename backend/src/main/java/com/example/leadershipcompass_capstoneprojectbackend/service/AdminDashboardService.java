@@ -42,6 +42,26 @@ public class AdminDashboardService {
 
         long completedAssessments = results.size();
 
+        // Privacy rule: do not expose aggregated department results
+        // when fewer than 6 participants are in the selected group.
+        if (department != null
+                && !department.equalsIgnoreCase("all")
+                && totalUsers < 6) {
+
+        return new AdminDashboardResponse(
+                totalUsers,
+                completedAssessments,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                Collections.emptyMap()
+        );
+        }
+
         // Assessment completion rate
         double completionRate = 0;
 
