@@ -61,7 +61,6 @@ if (navBurgerBtn) {
     this.classList.toggle('open');
   });
 }
-const navBurgerBtn    = document.getElementById('hamburgerBtn');
 
 // -------------------------------------------------------------------------
 // Initialise Navigation Bar
