@@ -31,6 +31,36 @@ const progressCount   = document.getElementById("progressCount");
 const progressFill    = document.getElementById("progressFill");
 const progressTrack   = document.getElementById("progressTrack");
 const getStartedBtn   = document.querySelector(".survey-button");
+const navBurgerBtn    = document.getElementById('hamburgerBtn');
+
+// -------------------------------------------------------------------------
+// Initialise Navigation Bar
+// -------------------------------------------------------------------------
+async function initSidebarNav() {
+  items.forEach(function (item) {
+    item.addEventListener('click', function () {
+      items.forEach(function (i) { i.classList.remove('active'); });
+      panels.forEach(function (p) { p.classList.remove('active'); });
+
+      item.classList.add('active');
+
+      var panelId = 'panel-' + item.getAttribute('data-panel');
+      var panel = document.getElementById(panelId);
+      if (panel) panel.classList.add('active');
+    });
+  });
+}
+
+// Hamburger Button
+if (navBurgerBtn) {
+  navBurgerBtn.addEventListener('click', function () {
+    const navLinks = document.getElementById('navLinks');
+    if (navLinks) {
+      navLinks.classList.toggle('open');
+    }
+    this.classList.toggle('open');
+  });
+}
 
 // -------------------------------------------------------------------------
 // Load questions from backend on page load
@@ -93,7 +123,7 @@ function renderPart() {
   let html = `
     <div class="survey-category">
       <h2 class="survey-category-title">${category.label}</h2>
-      <p class="survey-category-subtitle"><strong>Instructions:<strong> Reflect honestly on how well you invest focused, undistracted time with your team-which builds trust, connection, and psychological safety. For each statement, rate yourself on a scale from <strong> 1 (Rarely/Not at all) to 5 (Consistently/Always).<strong></p>
+      <p class="survey-category-subtitle"><strong>Instructions:</strong> Reflect honestly on how well you invest focused, undistracted time with your team-which builds trust, connection, and psychological safety. For each statement, rate yourself on a scale from <strong> 1 (Rarely/Not at all) to 5 (Consistently/Always)./<strong></p>
       <div class="survey-questions">
   `;
 
@@ -231,6 +261,31 @@ function showResults(result) {
 
   surveyContainer.innerHTML = html;
   window.scrollTo(0, 0);
+
+  requestAnimationFrame(() => {
+    document.querySelectorAll('.result-bar-fill').forEach(fill => {
+      fill.style.width = fill.dataset.targetWidth;
+    });
+    document.querySelectorAll('.result-bar-marker').forEach(marker => {
+      marker.style.left = marker.dataset.targetLeft;
+    });
+  });
+}
+
+function renderResultBar(label, score, max, band, color) {
+  const pct = Math.max(0, Math.min(100, (score / max) * 100));
+  // const fillStyle = color ? `background:${color};` : '';
+
+  return `
+  <div class="result-bar-row">
+    <div class="result-bar-marker" data-target-left="${pct}%" style="left:0%; color:#00284B;">
+      <span class="survey-band" style="background:#00284B;">${band}</span>
+    </div>
+    <div class="result-bar-track">
+      <div class="result-bar-fill" data-target-width="${pct}%" style="width:0%;">${score}</div>
+    </div>
+    </div>
+  `;
 }
 
 function renderCategoryResult(name, score, band, message, bandColor) {

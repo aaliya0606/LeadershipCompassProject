@@ -42,10 +42,11 @@
         <div class="col-md-3">
           <select class="form-select" id="filterCategory">
             <option value="">All Leadership Languages</option>
-            <option value="visionary">Visionary</option>
-            <option value="empathetic">Empathetic</option>
-            <option value="strategic">Strategic</option>
-            <option value="resilient">Resilient</option>
+            <option value="Caring Time">Caring Time</option>
+            <option value="Receiving Value">Receiving Value</option>
+            <option value="Acts of Support">Acts of Support</option>
+            <option value="Words of Recognition">Words of Recognition</option>
+            <option value="Psychological Touch">Psychological Touch</option>
           </select>
         </div>
         <div class="col-md-2">
@@ -63,98 +64,170 @@
       </div>
 
       <div class="row" id="resourceContainer">
-        <div class="col-md-4 mb-4">
-          <div class="card h-100">
-            <div class="card-body">
-              <h5 class="card-title">Calm Decision Making</h5>
-              <p class="card-text">A short guide to keeping control when choices matter.</p>
-              <span class="badge badge-pill badge-soft-primary">Visionary</span>
-              <span class="badge badge-pill badge-soft-secondary ms-1">Article</span>
-              <button class="btn btn-sm btn-outline-primary mt-3">View</button>
-            </div>
-          </div>
-        </div>
-        <div class="col-md-4 mb-4">
-          <div class="card h-100">
-            <div class="card-body">
-              <h5 class="card-title">Courageous Conversations</h5>
-              <p class="card-text">Video training for high-pressure feedback.</p>
-              <span class="badge badge-pill badge-soft-success">Empathetic</span>
-              <span class="badge badge-pill badge-soft-info ms-1">Video</span>
-              <button class="btn btn-sm btn-outline-primary mt-3">View</button>
-            </div>
-          </div>
-        </div>
-        <div class="col-md-4 mb-4">
-          <div class="card h-100">
-            <div class="card-body">
-              <h5 class="card-title">High-Performance Teams</h5>
-              <p class="card-text">Templates for building psychologically safe practices.</p>
-              <span class="badge badge-pill badge-soft-primary">Strategic</span>
-              <span class="badge badge-pill badge-soft-warning ms-1">Template</span>
-              <button class="btn btn-sm btn-outline-primary mt-3">View</button>
-            </div>
-          </div>
-        </div>
-        <div class="col-md-4 mb-4">
-          <div class="card h-100">
-            <div class="card-body">
-              <h5 class="card-title">Pressure-Tested Leadership</h5>
-              <p class="card-text">A podcast episode on leading calmly in crisis.</p>
-              <span class="badge badge-pill badge-soft-success">Resilient</span>
-              <span class="badge badge-pill badge-soft-info ms-1">Podcast</span>
-              <button class="btn btn-sm btn-outline-primary mt-3">Listen</button>
-            </div>
-          </div>
-        </div>
-        <div class="col-md-4 mb-4">
-          <div class="card h-100">
-            <div class="card-body">
-              <h5 class="card-title">Empathy in Action</h5>
-              <p class="card-text">A short article on leading with care and accountability.</p>
-              <span class="badge badge-pill badge-soft-success">Empathetic</span>
-              <span class="badge badge-pill badge-soft-secondary ms-1">Article</span>
-              <button class="btn btn-sm btn-outline-primary mt-3">View</button>
-            </div>
-          </div>
-        </div>
-        <div class="col-md-4 mb-4">
-          <div class="card h-100">
-            <div class="card-body">
-              <h5 class="card-title">Strategic Focus</h5>
-              <p class="card-text">A video session on aligning teams around pressure-safe goals.</p>
-              <span class="badge badge-pill badge-soft-primary">Strategic</span>
-              <span class="badge badge-pill badge-soft-info ms-1">Video</span>
-              <button class="btn btn-sm btn-outline-primary mt-3">View</button>
-            </div>
-          </div>
-        </div>
-        <div class="col-md-4 mb-4">
-          <div class="card h-100">
-            <div class="card-body">
-              <h5 class="card-title">Visionary Influence</h5>
-              <p class="card-text">A template to help you craft team purpose statements.</p>
-              <span class="badge badge-pill badge-soft-primary">Visionary</span>
-              <span class="badge badge-pill badge-soft-warning ms-1">Template</span>
-              <button class="btn btn-sm btn-outline-primary mt-3">Download</button>
-            </div>
-          </div>
-        </div>
-        <div class="col-md-4 mb-4">
-          <div class="card h-100">
-            <div class="card-body">
-              <h5 class="card-title">Resilience Reset</h5>
-              <p class="card-text">Practical tips to lead with calm during an operational pressure spike.</p>
-              <span class="badge badge-pill badge-soft-success">Resilient</span>
-              <span class="badge badge-pill badge-soft-secondary ms-1">Article</span>
-              <button class="btn btn-sm btn-outline-primary mt-3">View</button>
-            </div>
-          </div>
-        </div>
+        <!-- Resources will be loaded here dynamically -->
+      </div>
+      <div id="noResourcesMessage" class="text-center py-5" style="display: none;">
+        <p class="text-muted">No resources found. Try adjusting your filters.</p>
       </div>
     </div>
   </main>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    let allResources = [];
+
+    // Map leadership languages to badge colors
+    const languageBadgeMap = {
+      'caring time': 'badge-soft-primary',
+      'receiving value': 'badge-soft-success',
+      'acts of support': 'badge-soft-primary',
+      'words of recognition': 'badge-soft-success',
+      'psychological touch': 'badge-soft-info'
+    };
+
+    // Map resource types to action button text
+    const actionButtonMap = {
+      article: 'View',
+      video: 'Watch',
+      podcast: 'Listen',
+      template: 'Download',
+      ebook: 'Read',
+      book: 'Read',
+      document: 'View',
+      other: 'View'
+    };
+
+    // Format resource type for display
+    function formatResourceType(type) {
+      if (!type) return 'Resource';
+      return type.charAt(0).toUpperCase() + type.slice(1);
+    }
+
+    // Handle resource action
+    function handleResourceAction(resourceId) {
+      const token = localStorage.getItem("token");
+      if (!token) {
+        alert("Please log in first");
+        return;
+      }
+
+      // Open resource in new window
+      const fileUrl = `http://localhost:8080/api/resources/${resourceId}/file?token=${encodeURIComponent(token)}`;
+      window.open(fileUrl, '_blank');
+    }
+
+    // Create resource card HTML
+    function createResourceCard(resource) {
+      const languageClass = languageBadgeMap[resource.leadershipLanguage?.toLowerCase()] || 'badge-soft-primary';
+      const typeDisplay = formatResourceType(resource.resourceType);
+      const actionText = actionButtonMap[resource.resourceType?.toLowerCase()] || 'View';
+      const description = resource.description || 'No description available';
+
+      return `
+        <div class="col-md-4 mb-4">
+          <div class="card h-100">
+            <div class="card-body">
+              <h5 class="card-title">${resource.title}</h5>
+              <p class="card-text">${description}</p>
+              <span class="badge badge-pill ${languageClass}">${resource.leadershipLanguage || 'General'}</span>
+              <span class="badge badge-pill badge-soft-secondary ms-1">${typeDisplay}</span>
+              <button class="btn btn-sm btn-outline-primary mt-3" onclick="handleResourceAction(${resource.id})">
+                ${actionText}
+              </button>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    // Render resources
+    function renderResources(resources) {
+      const container = document.getElementById('resourceContainer');
+      const noResourcesMsg = document.getElementById('noResourcesMessage');
+
+      if (resources.length === 0) {
+        container.innerHTML = '';
+        noResourcesMsg.style.display = 'block';
+      } else {
+        container.innerHTML = resources.map(resource => createResourceCard(resource)).join('');
+        noResourcesMsg.style.display = 'none';
+      }
+
+      // Update resource count
+      const resourceCount = document.querySelector('.badge.bg-light');
+      if (resourceCount) {
+        resourceCount.textContent = `${resources.length} resource${resources.length !== 1 ? 's' : ''}`;
+      }
+    }
+
+    // Filter and search resources
+    function filterResources() {
+      const searchTerm = document.getElementById('searchInput')?.value.toLowerCase() || '';
+      const selectedLanguage = document.getElementById('filterCategory')?.value || '';
+      const selectedType = document.getElementById('filterType')?.value || '';
+
+      const filtered = allResources.filter(resource => {
+        const matchesSearch = !searchTerm || 
+          resource.title?.toLowerCase().includes(searchTerm) ||
+          resource.description?.toLowerCase().includes(searchTerm);
+
+        const matchesLanguage = !selectedLanguage || 
+          resource.leadershipLanguage?.toLowerCase() === selectedLanguage.toLowerCase();
+
+        const matchesType = !selectedType || 
+          resource.resourceType?.toLowerCase() === selectedType.toLowerCase();
+
+        return matchesSearch && matchesLanguage && matchesType;
+      });
+
+      renderResources(filtered);
+    }
+
+    // Load resources from backend
+    async function loadResources() {
+      try {
+        const token = localStorage.getItem("token");
+        if (!token) {
+          console.warn("No authentication token found. Please log in.");
+          return;
+        }
+
+        const response = await fetch("http://localhost:8080/api/resources", {
+          headers: {
+            "Authorization": `Bearer ${token}`,
+            "Content-Type": "application/json"
+          }
+        });
+
+        if (!response.ok) {
+          throw new Error(`Failed to load resources (${response.status})`);
+        }
+
+        allResources = await response.json();
+        console.log("Resources loaded:", allResources);
+        renderResources(allResources);
+
+      } catch (error) {
+        console.error("Error loading resources:", error);
+        const container = document.getElementById('resourceContainer');
+        container.innerHTML = '<div class="col-12"><div class="alert alert-warning">Failed to load resources. Please try again later.</div></div>';
+      }
+    }
+
+    // Attach event listeners
+    document.addEventListener('DOMContentLoaded', function() {
+      // Load resources on page load
+      loadResources();
+
+      // Attach filter event listeners
+      const searchInput = document.getElementById('searchInput');
+      const filterCategory = document.getElementById('filterCategory');
+      const filterType = document.getElementById('filterType');
+
+      if (searchInput) searchInput.addEventListener('input', filterResources);
+      if (filterCategory) filterCategory.addEventListener('change', filterResources);
+      if (filterType) filterType.addEventListener('change', filterResources);
+    });
+  </script>
 </body>
 </html>
