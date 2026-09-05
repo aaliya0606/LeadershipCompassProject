@@ -14,6 +14,12 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
+
+/**
+ * Tests generation of admin CSV exports using aggregated dashboard data,
+ * including privacy suppression for departments with fewer than six participants.
+ */
+
 class AdminReportServiceTest {
 
     @Mock

@@ -4,8 +4,16 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import java.util.List;
-
 import java.util.Map;
+
+/**
+ * Response object containing aggregated leadership metrics for the
+ * Admin Dashboard.
+ *
+ * Contains organisation-wide or department-level assessment participation,
+ * average leadership scores, identified skill gaps, and recommended
+ * focus areas. Individual participant assessment results are not included.
+ */
 
 @Data
 @NoArgsConstructor

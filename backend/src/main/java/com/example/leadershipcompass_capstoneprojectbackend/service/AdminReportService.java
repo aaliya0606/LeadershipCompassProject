@@ -4,17 +4,30 @@ import com.example.leadershipcompass_capstoneprojectbackend.dto.AdminDashboardRe
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-@Service
-@RequiredArgsConstructor
 
 /**
- * Service for generating admin reports in CSV format.
- * */
+ * Generates CSV reports containing aggregated Leadership Compass
+ * assessment metrics for administrators.
+ *
+ * Reports can be generated organisation-wide or filtered by department.
+ * Department-level aggregate metrics are suppressed when fewer than
+ * six participants are present to maintain the dashboard's privacy rule.
+ */
+@Service
+@RequiredArgsConstructor
 
 
 public class AdminReportService {
 
     private final AdminDashboardService adminDashboardService;
+
+    /**
+     * Generates a CSV export using the same aggregated metrics provided
+     * by the Admin Dashboard.
+     *
+     * @param department department to report on, or "all" for organisation-wide data
+     * @return aggregated dashboard metrics formatted as CSV
+     */
 
     public String generateCsvReport(String department) {
 
@@ -22,6 +35,7 @@ public class AdminReportService {
         AdminDashboardResponse data =
                 adminDashboardService.getDashboardData(department);
 
+        // Apply the same minimum-participant privacy rule to department exports.
         boolean suppressed =
         !department.equalsIgnoreCase("all") && data.getTotalUsers() < 6;
 
