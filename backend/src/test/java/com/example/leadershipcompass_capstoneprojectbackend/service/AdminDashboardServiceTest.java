@@ -18,6 +18,11 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
+
+/**
+ * Tests Admin Dashboard aggregation, department privacy thresholds,
+ * skill gap identification, and recommended focus generation.
+ */
 class AdminDashboardServiceTest {
 
     @Mock
