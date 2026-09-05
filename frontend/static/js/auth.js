@@ -53,11 +53,11 @@ if (registerForm) {
   registerForm.addEventListener("submit", async function (event) {
     event.preventDefault();
 
-    //const fullName = document.getElementById("registerFullName").value;
+    const fullName = document.getElementById("registerFullName").value;
 
-    const firstName = document.getElementById("registerFirstName").value;
-    const lastName = document.getElementById("registerLastName").value;
-    const fullName = `${firstName} ${lastName}`.trim();
+    //const firstName = document.getElementById("registerFirstName").value;
+    //const lastName = document.getElementById("registerLastName").value;
+    //const fullName = `${firstName} ${lastName}`.trim();
 
     const email = document.getElementById("registerEmail").value;
     const password = document.getElementById("registerPassword").value;
