@@ -17,7 +17,24 @@ async function loadSurveyDetails() {
     currentToken = urlParams.get("token");
 
     if (!currentToken) {
+
         console.error("No survey token found in URL.");
+
+        const container =
+            document.getElementById("questionsContainer");
+
+        if (container) {
+            container.innerHTML = `
+                <div class="error-message">
+                    <h3>Survey link required</h3>
+                    <p>
+                        Please open this survey using the unique
+                        feedback link provided to you.
+                    </p>
+                </div>
+            `;
+        }
+
         return false;
     }
 
@@ -43,16 +60,19 @@ async function loadSurveyDetails() {
             currentLeaderName = survey.leaderName;
         }
 
+
         /*
-         * Update the leader name in the page
+         * Update leader name in page heading
          */
 
         const leaderNameElement =
             document.getElementById("leaderName");
 
         if (leaderNameElement) {
-            leaderNameElement.textContent = currentLeaderName;
+            leaderNameElement.textContent =
+                currentLeaderName;
         }
+
 
         /*
          * Check survey status
@@ -61,7 +81,9 @@ async function loadSurveyDetails() {
         if (survey.status !== "ACTIVE") {
 
             const container =
-                document.getElementById("questionsContainer");
+                document.getElementById(
+                    "questionsContainer"
+                );
 
             if (container) {
 
@@ -69,11 +91,14 @@ async function loadSurveyDetails() {
                     <div class="error-message">
                         <h3>Survey unavailable</h3>
                         <p>
-                            This 360° feedback survey is no longer active.
+                            This 360° feedback survey is
+                            no longer active.
                         </p>
                     </div>
                 `;
             }
+
+            hideSubmitButton();
 
             return false;
         }
@@ -88,7 +113,9 @@ async function loadSurveyDetails() {
         );
 
         const container =
-            document.getElementById("questionsContainer");
+            document.getElementById(
+                "questionsContainer"
+            );
 
         if (container) {
 
@@ -96,11 +123,14 @@ async function loadSurveyDetails() {
                 <div class="error-message">
                     <h3>Unable to load survey</h3>
                     <p>
-                        The survey link may be invalid or expired.
+                        The survey link may be invalid
+                        or expired.
                     </p>
                 </div>
             `;
         }
+
+        hideSubmitButton();
 
         return false;
     }
@@ -116,27 +146,40 @@ async function loadQuestions() {
     try {
 
         const response =
-            await fetch(`${API_BASE_URL}/api/360/questions`);
+            await fetch(
+                `${API_BASE_URL}/api/360/questions`
+            );
 
         if (!response.ok) {
-            throw new Error(`HTTP error: ${response.status}`);
+            throw new Error(
+                `HTTP error: ${response.status}`
+            );
         }
 
-        const questions = await response.json();
+        const questions =
+            await response.json();
 
-        console.log("Questions loaded:", questions);
+        console.log(
+            "Questions loaded:",
+            questions
+        );
 
         const container =
-            document.getElementById("questionsContainer");
+            document.getElementById(
+                "questionsContainer"
+            );
 
         if (!container) {
+
             console.error(
                 "Could not find questionsContainer"
             );
+
             return;
         }
 
         container.innerHTML = "";
+
 
         /*
          * Render each question
@@ -147,8 +190,9 @@ async function loadQuestions() {
             const questionElement =
                 renderQuestion(question);
 
-            container.appendChild(questionElement);
-
+            container.appendChild(
+                questionElement
+            );
         });
 
     } catch (error) {
@@ -159,7 +203,9 @@ async function loadQuestions() {
         );
 
         const container =
-            document.getElementById("questionsContainer");
+            document.getElementById(
+                "questionsContainer"
+            );
 
         if (container) {
 
@@ -167,11 +213,14 @@ async function loadQuestions() {
                 <div class="error-message">
                     <h3>Unable to load questions</h3>
                     <p>
-                        Please refresh the page and try again.
+                        Please refresh the page
+                        and try again.
                     </p>
                 </div>
             `;
         }
+
+        hideSubmitButton();
     }
 }
 
@@ -188,6 +237,18 @@ function renderQuestion(question) {
     questionDiv.className = "question";
 
     /*
+     * Store database information on the element.
+     * This is used when building the submission DTO.
+     */
+
+    questionDiv.dataset.questionId =
+        question.id;
+
+    questionDiv.dataset.questionType =
+        question.questionType;
+
+
+    /*
      * Question number
      */
 
@@ -200,7 +261,9 @@ function renderQuestion(question) {
     questionNumber.textContent =
         `Q${question.questionNumber}`;
 
-    questionDiv.appendChild(questionNumber);
+    questionDiv.appendChild(
+        questionNumber
+    );
 
 
     /*
@@ -214,7 +277,7 @@ function renderQuestion(question) {
         "question-text";
 
     /*
-     * Replace [Name] with actual leader name
+     * Replace [Name] with leader name
      */
 
     questionText.textContent =
@@ -223,12 +286,14 @@ function renderQuestion(question) {
             currentLeaderName
         );
 
-    questionDiv.appendChild(questionText);
+    questionDiv.appendChild(
+        questionText
+    );
 
 
     /* =====================================================
        RATING QUESTIONS
-       Q1 - Q8
+       Q1-Q8
        ===================================================== */
 
     if (question.questionType === "RATING") {
@@ -240,11 +305,11 @@ function renderQuestion(question) {
             "rating-options";
 
 
-        /*
-         * Create ratings 1-5
-         */
-
-        for (let rating = 1; rating <= 5; rating++) {
+        for (
+            let rating = 1;
+            rating <= 5;
+            rating++
+        ) {
 
             const option =
                 document.createElement("div");
@@ -281,7 +346,9 @@ function renderQuestion(question) {
 
             option.appendChild(label);
 
-            ratingContainer.appendChild(option);
+            ratingContainer.appendChild(
+                option
+            );
         }
 
 
@@ -291,7 +358,7 @@ function renderQuestion(question) {
 
 
         /*
-         * Rating labels
+         * Rating explanation
          */
 
         const ratingLabels =
@@ -316,10 +383,12 @@ function renderQuestion(question) {
 
     /* =====================================================
        TEXT QUESTIONS
-       Q9, Q12, Q13, Q14
+       Q9, Q12-Q14
        ===================================================== */
 
-    else if (question.questionType === "TEXT") {
+    else if (
+        question.questionType === "TEXT"
+    ) {
 
         const textarea =
             document.createElement("textarea");
@@ -343,11 +412,12 @@ function renderQuestion(question) {
 
     /* =====================================================
        MULTI SELECT
-       Q10 - Q11
+       Q10-Q11
        ===================================================== */
 
     else if (
-        question.questionType === "MULTI_SELECT"
+        question.questionType ===
+        "MULTI_SELECT"
     ) {
 
         const instruction =
@@ -371,10 +441,6 @@ function renderQuestion(question) {
             "checkbox-options";
 
 
-        /*
-         * Make sure options exist
-         */
-
         if (
             question.options &&
             question.options.length > 0
@@ -384,16 +450,21 @@ function renderQuestion(question) {
                 optionData => {
 
                     const optionWrapper =
-                        document.createElement("div");
+                        document.createElement(
+                            "div"
+                        );
 
                     optionWrapper.className =
                         "checkbox-option";
 
 
                     const checkbox =
-                        document.createElement("input");
+                        document.createElement(
+                            "input"
+                        );
 
-                    checkbox.type = "checkbox";
+                    checkbox.type =
+                        "checkbox";
 
                     checkbox.name =
                         `question-${question.id}`;
@@ -406,7 +477,9 @@ function renderQuestion(question) {
 
 
                     const label =
-                        document.createElement("label");
+                        document.createElement(
+                            "label"
+                        );
 
                     label.htmlFor =
                         checkbox.id;
@@ -416,7 +489,7 @@ function renderQuestion(question) {
 
 
                     /*
-                     * Limit selection to 3
+                     * Limit to 3 selections.
                      */
 
                     checkbox.addEventListener(
@@ -440,7 +513,8 @@ function renderQuestion(question) {
 
                                 unchecked.forEach(
                                     input => {
-                                        input.disabled = true;
+                                        input.disabled =
+                                            true;
                                     }
                                 );
 
@@ -452,11 +526,11 @@ function renderQuestion(question) {
                                     )
                                     .forEach(
                                         input => {
-                                            input.disabled = false;
+                                            input.disabled =
+                                                false;
                                         }
                                     );
                             }
-
                         }
                     );
 
@@ -472,7 +546,6 @@ function renderQuestion(question) {
                     optionsContainer.appendChild(
                         optionWrapper
                     );
-
                 }
             );
 
@@ -490,7 +563,7 @@ function renderQuestion(question) {
 
 
     /* =====================================================
-       UNKNOWN QUESTION TYPE
+       UNKNOWN TYPE
        ===================================================== */
 
     else {
@@ -518,124 +591,148 @@ function renderQuestion(question) {
 
 /* =========================================================
    COLLECT RESPONSES
+   Builds the same structure expected by:
+   Feedback360SubmissionDTO
    ========================================================= */
 
 function collectResponses() {
 
-    const responses = [];
+    const answers = [];
 
     const questionElements =
-        document.querySelectorAll(".question");
+        document.querySelectorAll(
+            ".question"
+        );
 
 
     questionElements.forEach(
         questionElement => {
 
-            const numberElement =
-                questionElement.querySelector(
-                    ".question-number"
-                );
-
-            if (!numberElement) {
-                return;
-            }
-
-
-            const questionNumber =
+            const questionId =
                 Number(
-                    numberElement.textContent
-                        .replace("Q", "")
+                    questionElement
+                        .dataset
+                        .questionId
                 );
+
+            const questionType =
+                questionElement
+                    .dataset
+                    .questionType;
 
 
             /*
-             * Rating
+             * Q1-Q8: Rating
              */
-
-            const selectedRating =
-                questionElement.querySelector(
-                    'input[type="radio"]:checked'
-                );
-
-            if (selectedRating) {
-
-                responses.push({
-
-                    questionNumber:
-                        questionNumber,
-
-                    answer:
-                        selectedRating.value
-
-                });
-
-                return;
-            }
-
-
-            /*
-             * Text
-             */
-
-            const textarea =
-                questionElement.querySelector(
-                    "textarea"
-                );
-
-            if (textarea) {
-
-                responses.push({
-
-                    questionNumber:
-                        questionNumber,
-
-                    answer:
-                        textarea.value.trim()
-
-                });
-
-                return;
-            }
-
-
-            /*
-             * Multi-select
-             */
-
-            const selectedOptions =
-                questionElement.querySelectorAll(
-                    'input[type="checkbox"]:checked'
-                );
-
 
             if (
-                selectedOptions.length > 0
+                questionType === "RATING"
             ) {
 
-                const options =
+                const selectedRating =
+                    questionElement.querySelector(
+                        'input[type="radio"]:checked'
+                    );
+
+                answers.push({
+
+                    questionId:
+                        questionId,
+
+                    score:
+                        selectedRating
+                            ? Number(
+                                selectedRating.value
+                            )
+                            : null,
+
+                    textResponse:
+                        null,
+
+                    selectedOptionIds:
+                        []
+                });
+            }
+
+
+            /*
+             * Q9, Q12-Q14: Text
+             */
+
+            else if (
+                questionType === "TEXT"
+            ) {
+
+                const textarea =
+                    questionElement.querySelector(
+                        "textarea"
+                    );
+
+                answers.push({
+
+                    questionId:
+                        questionId,
+
+                    score:
+                        null,
+
+                    textResponse:
+                        textarea
+                            ? textarea.value.trim()
+                            : "",
+
+                    selectedOptionIds:
+                        []
+                });
+            }
+
+
+            /*
+             * Q10-Q11: Multi-select
+             */
+
+            else if (
+                questionType ===
+                "MULTI_SELECT"
+            ) {
+
+                const selectedOptions =
+                    questionElement
+                        .querySelectorAll(
+                            'input[type="checkbox"]:checked'
+                        );
+
+                const selectedOptionIds =
                     Array.from(
                         selectedOptions
                     ).map(
-                        option => option.value
+                        option =>
+                            Number(
+                                option.value
+                            )
                     );
 
 
-                responses.push({
+                answers.push({
 
-                    questionNumber:
-                        questionNumber,
+                    questionId:
+                        questionId,
 
-                    answer:
-                        options
+                    score:
+                        null,
 
+                    textResponse:
+                        null,
+
+                    selectedOptionIds:
+                        selectedOptionIds
                 });
             }
-
         }
     );
 
 
-    return responses;
+    return answers;
 }
 
 
@@ -655,6 +752,15 @@ function validateSurvey() {
 
     questions.forEach(
         question => {
+
+            /*
+             * Remove any old error first.
+             */
+
+            question.classList.remove(
+                "question-error"
+            );
+
 
             /*
              * Rating question
@@ -680,12 +786,6 @@ function validateSurvey() {
                     );
 
                     valid = false;
-
-                } else {
-
-                    question.classList.remove(
-                        "question-error"
-                    );
                 }
 
                 return;
@@ -704,7 +804,9 @@ function validateSurvey() {
             if (textarea) {
 
                 if (
-                    textarea.value.trim() === ""
+                    textarea
+                        .value
+                        .trim() === ""
                 ) {
 
                     question.classList.add(
@@ -712,12 +814,6 @@ function validateSurvey() {
                     );
 
                     valid = false;
-
-                } else {
-
-                    question.classList.remove(
-                        "question-error"
-                    );
                 }
 
                 return;
@@ -734,7 +830,9 @@ function validateSurvey() {
                 );
 
 
-            if (checkboxes.length > 0) {
+            if (
+                checkboxes.length > 0
+            ) {
 
                 const selected =
                     question.querySelectorAll(
@@ -751,15 +849,20 @@ function validateSurvey() {
                     );
 
                     valid = false;
+                }
 
-                } else {
 
-                    question.classList.remove(
+                if (
+                    selected.length > 3
+                ) {
+
+                    question.classList.add(
                         "question-error"
                     );
+
+                    valid = false;
                 }
             }
-
         }
     );
 
@@ -769,10 +872,6 @@ function validateSurvey() {
         alert(
             "Please answer all questions before submitting."
         );
-
-        /*
-         * Scroll to first unanswered question
-         */
 
         const firstError =
             document.querySelector(
@@ -794,13 +893,40 @@ function validateSurvey() {
 
 
 /* =========================================================
-   SUBMIT SURVEY
+   HTML ESCAPE
+   Used when displaying leader name in success message
    ========================================================= */
 
-function submitSurvey() {
+function escapeHtml(value) {
+
+    const div =
+        document.createElement("div");
+
+    div.textContent =
+        value ?? "";
+
+    return div.innerHTML;
+}
+
+
+/* =========================================================
+   SUBMIT SURVEY
+   Sends anonymous feedback to Spring Boot
+   ========================================================= */
+
+async function submitSurvey(event) {
 
     /*
-     * Validate
+     * Prevent form/button default behaviour.
+     */
+
+    if (event) {
+        event.preventDefault();
+    }
+
+
+    /*
+     * Validate first.
      */
 
     if (!validateSurvey()) {
@@ -808,17 +934,26 @@ function submitSurvey() {
     }
 
 
+    if (!currentToken) {
+
+        alert(
+            "Survey token is missing."
+        );
+
+        return;
+    }
+
+
     /*
-     * Collect answers
+     * Build backend DTO payload.
      */
 
-    const responses =
+    const answers =
         collectResponses();
-
-
-    /*
-     * Display in console for now
-     */
+        
+    const submission = {
+        answers: answers
+    };
 
     console.log(
         "Survey ID:",
@@ -836,19 +971,199 @@ function submitSurvey() {
     );
 
     console.log(
-        "Responses:",
-        responses
+        "Submitting:",
+        submission
     );
 
 
-    /*
-     * We will connect this to the
-     * Spring Boot POST endpoint next.
-     */
+    const submitButton =
+        document.getElementById(
+            "submitSurvey"
+        );
 
-    alert(
-        "Thank you! Your feedback has been recorded."
-    );
+
+    try {
+
+        /*
+         * Prevent duplicate clicks while
+         * request is being processed.
+         */
+
+        if (submitButton) {
+
+            submitButton.disabled =
+                true;
+
+            submitButton.textContent =
+                "Submitting...";
+        }
+
+
+        const response =
+            await fetch(
+                `${API_BASE_URL}/api/360/surveys/${currentToken}/responses`,
+                {
+                    method: "POST",
+
+                    headers: {
+                        "Content-Type":
+                            "application/json"
+                    },
+
+                    body:
+                        JSON.stringify(
+                            submission
+                        )
+                }
+            );
+
+
+        /*
+         * Read backend response.
+         */
+
+        const responseText =
+            await response.text();
+
+        let responseData = null;
+
+
+        if (responseText) {
+
+            try {
+
+                responseData =
+                    JSON.parse(
+                        responseText
+                    );
+
+            } catch {
+
+                responseData = {
+                    message:
+                        responseText
+                };
+            }
+        }
+
+
+        /*
+         * Backend returned an error.
+         */
+
+        if (!response.ok) {
+
+            console.error(
+                "Submission failed:",
+                response.status,
+                responseData
+            );
+
+            throw new Error(
+                responseData?.message ||
+                `HTTP error: ${response.status}`
+            );
+        }
+
+
+        console.log(
+            "360 feedback submitted successfully:",
+            responseData
+        );
+
+
+        /*
+         * Replace questions with success message.
+         */
+
+        const container =
+            document.getElementById(
+                "questionsContainer"
+            );
+
+
+        if (container) {
+
+            container.innerHTML = `
+                <div class="success-message">
+                    <h2>Thank you!</h2>
+
+                    <p>
+                        Your anonymous feedback for
+                        <strong>
+                            ${escapeHtml(
+                                currentLeaderName
+                            )}
+                        </strong>
+                        has been submitted successfully.
+                    </p>
+                </div>
+            `;
+        }
+
+
+        /*
+         * Hide submit button after success.
+         */
+
+        if (submitButton) {
+
+            submitButton.style.display =
+                "none";
+        }
+
+
+        window.scrollTo({
+            top: 0,
+            behavior: "smooth"
+        });
+
+
+    } catch (error) {
+
+        console.error(
+            "Failed to submit 360 feedback:",
+            error
+        );
+
+
+        alert(
+            "Your feedback could not be submitted. " +
+            "Please try again."
+        );
+
+
+        /*
+         * Allow retry.
+         */
+
+        if (submitButton) {
+
+            submitButton.disabled =
+                false;
+
+            submitButton.textContent =
+                "Submit Feedback";
+        }
+    }
+}
+
+
+/* =========================================================
+   HIDE SUBMIT BUTTON
+   ========================================================= */
+
+function hideSubmitButton() {
+
+    const submitButton =
+        document.getElementById(
+            "submitSurvey"
+        );
+
+    if (submitButton) {
+        submitButton.style.display =
+            "none";
+    }
 }
 
 
@@ -861,7 +1176,7 @@ document.addEventListener(
     async () => {
 
         /*
-         * First get the survey/leader
+         * Load survey/leader first.
          */
 
         const surveyLoaded =
@@ -869,8 +1184,8 @@ document.addEventListener(
 
 
         /*
-         * Only load questions if the survey
-         * exists and is active.
+         * Only display questions for a
+         * valid active survey.
          */
 
         if (surveyLoaded) {
@@ -880,7 +1195,7 @@ document.addEventListener(
 
 
         /*
-         * Submit button
+         * Connect submit button.
          */
 
         const submitButton =
@@ -896,6 +1211,5 @@ document.addEventListener(
                 submitSurvey
             );
         }
-
     }
 );

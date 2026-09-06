@@ -1,8 +1,5 @@
 package com.example.leadershipcompass_capstoneprojectbackend.model;
 
-import java.time.LocalDateTime;
-
-import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -17,22 +14,23 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
-@Table(name = "feedback_360_responses")
+@Table(name = "feedback_360_answer_options")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class Feedback360Response {
+public class Feedback360AnswerOption {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "survey_id", nullable = false)
-    private Feedback360Survey survey;
+    @JoinColumn(name = "answer_id", nullable = false)
+    private Feedback360Answer answer;
 
-    @Column(nullable = false)
-    private LocalDateTime submittedAt;
+    @ManyToOne
+    @JoinColumn(name = "option_id", nullable = false)
+    private Feedback360QuestionOption option;
 }

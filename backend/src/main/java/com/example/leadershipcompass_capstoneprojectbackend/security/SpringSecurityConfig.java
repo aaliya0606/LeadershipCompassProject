@@ -37,14 +37,19 @@ public class SpringSecurityConfig {
                                 "/h2-console/**",
                                 "/api/reports/dummy",
                                 "/test-download.html",
+
                                 "/api/360/questions",
                                 "/api/360/questions/**", // Possibly remove this in future
-                                "/api/360/surveys/*", // Allow access to survey endpoints without authentication
+                                // Allow access to survey endpoints without authentication
                                 // Swagger UI for API endpoints testing
+                                "/api/360/surveys/*/responses",
+
                                 "/v3/api-docs/**",
                                 "/swagger-ui/**",
                                 "/swagger-ui.html"
                         ).permitAll()
+
+                        .requestMatchers(org.springframework.http.HttpMethod.GET,"/api/360/surveys/*").permitAll()
 
                         .requestMatchers("/api/admin/**").hasRole("ADMIN")
                         .requestMatchers("/api/dashboard/admin").hasRole("ADMIN")

@@ -7,9 +7,12 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.leadershipcompass_capstoneprojectbackend.dto.Feedback360SubmissionDTO;
+import com.example.leadershipcompass_capstoneprojectbackend.model.Feedback360Response;
 import com.example.leadershipcompass_capstoneprojectbackend.model.Feedback360Survey;
 import com.example.leadershipcompass_capstoneprojectbackend.service.Feedback360Service;
 
@@ -58,10 +61,29 @@ public class Feedback360Controller {
         return ResponseEntity.ok(
                 Map.of(
                         "id", survey.getId(),
-                        "leaderName",
-                        survey.getLeader().getFullName(),
-                        "status",
-                        survey.getStatus()
+                        "leaderName", survey.getLeader().getFullName(),
+                        "status", survey.getStatus()
+                )
+        );
+    }
+
+    @PostMapping("/surveys/{token}/responses")
+    public ResponseEntity<?> submitResponse(
+            @PathVariable String token,
+            @RequestBody Feedback360SubmissionDTO submission) {
+
+        Feedback360Response response =
+                feedback360Service.submitResponse(
+                        token,
+                        submission
+                );
+
+        return ResponseEntity.ok(
+                Map.of(
+                        "message",
+                        "360 feedback submitted successfully",
+                        "responseId",
+                        response.getId()
                 )
         );
     }
