@@ -101,6 +101,66 @@
 
     </div>
 
+    <!--progress over time + peer comparison-->
+    <div class="insights-container">
+
+        <div class="insight-card progress-card">
+            <h3>Progress over time</h3>
+            <div class="insight-subtitle" id="progressSubtitle">Loading your submissions&hellip;</div>
+
+            <div class="metric-row">
+                <div class="metric-tile">
+                    <div class="metric-label">Latest score</div>
+                    <div class="metric-value" id="progressLatestScore">&ndash;</div>
+                </div>
+                <div class="metric-tile">
+                    <div class="metric-label" id="progressDeltaLabel">Since last survey</div>
+                    <div class="metric-value" id="progressDelta">&ndash;</div>
+                </div>
+                <div class="metric-tile">
+                    <div class="metric-label">Score band</div>
+                    <div class="metric-value" id="progressBand" style="font-size:16px;">&ndash;</div>
+                </div>
+            </div>
+
+            <div class="chart-label">Overall score</div>
+            <div style="position:relative; width:100%; height:170px; margin-bottom:8px;">
+                <canvas id="overallChart" role="img" aria-label="Line chart of your overall leadership score across the 5-week program">Loading overall score trend.</canvas>
+            </div>
+            <div class="chart-note">Bands: below 150 getting started &middot; 150&ndash;189 building momentum &middot; 190+ strong intent</div>
+
+            <div class="chart-label">By leadership language</div>
+            <div style="position:relative; width:100%; height:190px; margin-bottom:14px;">
+                <canvas id="languageChart" role="img" aria-label="Multi-line chart of your five leadership language scores across the 5-week program">Loading language breakdown.</canvas>
+            </div>
+
+            <div class="legend-row">
+                <span class="legend-item"><span class="legend-swatch" style="background:#64BC28;"></span>Caring time <span id="legendCaringTime"></span></span>
+                <span class="legend-item"><span class="legend-swatch" style="background:#00284B;"></span>Psych. touch <span id="legendPsychologicalTouch"></span></span>
+                <span class="legend-item"><span class="legend-swatch" style="background:#2a78d6;"></span>Acts of support <span id="legendActsOfSupport"></span></span>
+                <span class="legend-item"><span class="legend-swatch" style="background:#e87ba4;"></span>Receiving value <span id="legendReceivingValue"></span></span>
+                <span class="legend-item"><span class="legend-swatch" style="background:#eb6834;"></span>Words of recognition <span id="legendWordsOfRecognition"></span></span>
+            </div>
+        </div>
+
+        <div class="insight-card peer-card">
+            <div>
+                <h3>Peer comparison</h3>
+                <div class="insight-subtitle">Vs. everyone at your organisation</div>
+
+                <div class="peer-headline">
+                    <span class="peer-headline-num" id="peerOverallPercentile">&ndash;</span>
+                    <span class="peer-headline-label">percentile overall</span>
+                </div>
+
+                <div id="peerRows"></div>
+            </div>
+
+            <div class="peer-footer">Percentiles are recalculated after every organisation-wide survey window closes.</div>
+        </div>
+
+    </div>
+
     <!--leadership resources-->
     <div class="resources-section">
         <div class="resources">
