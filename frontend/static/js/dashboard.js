@@ -295,3 +295,39 @@ if (token && role !== "ADMIN") {
   loadProgressOverTime();
   loadPeerComparison();
 }
+
+// for the resources
+async function loadSuggestedResources() {
+  const container = document.getElementById('resourcesList');
+  const token = localStorage.getItem('token'); // adjust key name if it's stored under a different name
+
+  try {
+    const response = await fetch('http://localhost:8080/api/dashboard/suggested-modules', {
+      headers: { 'Authorization': `Bearer ${token}` }
+    });
+
+    if (!response.ok) throw new Error(`Request failed: ${response.status}`);
+
+    const resources = await response.json();
+
+    if (!resources || resources.length === 0) {
+      container.innerHTML = '<p class="res-loading">No recommended resources yet.</p>';
+      return;
+    }
+
+    container.innerHTML = resources.map(resource => `
+      <a href="${resource.resourceUrl || 'resource-library.html'}" class="res-row">
+        <span class="res-title">${resource.title}</span>
+        <span class="res-arrow">→</span>
+      </a>
+    `).join('');
+
+  } catch (err) {
+    console.error('Failed to load suggested resources:', err);
+    container.innerHTML = '<p class="res-loading">Could not load resources right now.</p>';
+  }
+}
+
+if (token && role !== "ADMIN") {
+  loadSuggestedResources();
+}
