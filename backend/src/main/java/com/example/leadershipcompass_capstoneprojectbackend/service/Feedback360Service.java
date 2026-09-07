@@ -11,6 +11,7 @@ import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.example.leadershipcompass_capstoneprojectbackend.dto.Feedback360ActiveSurveyDTO;
 import com.example.leadershipcompass_capstoneprojectbackend.dto.Feedback360AnswerSubmissionDTO;
 import com.example.leadershipcompass_capstoneprojectbackend.dto.Feedback360OptionResultDTO;
 import com.example.leadershipcompass_capstoneprojectbackend.dto.Feedback360QuestionDTO;
@@ -18,6 +19,7 @@ import com.example.leadershipcompass_capstoneprojectbackend.dto.Feedback360Quest
 import com.example.leadershipcompass_capstoneprojectbackend.dto.Feedback360RatingResultDTO;
 import com.example.leadershipcompass_capstoneprojectbackend.dto.Feedback360ResultsDTO;
 import com.example.leadershipcompass_capstoneprojectbackend.dto.Feedback360SubmissionDTO;
+import com.example.leadershipcompass_capstoneprojectbackend.dto.Feedback360SurveyHistoryDTO;
 import com.example.leadershipcompass_capstoneprojectbackend.model.Feedback360Answer;
 import com.example.leadershipcompass_capstoneprojectbackend.model.Feedback360AnswerOption;
 import com.example.leadershipcompass_capstoneprojectbackend.model.Feedback360Question;
@@ -49,169 +51,512 @@ public class Feedback360Service {
     private final Feedback360QuestionOptionRepository questionOptionRepository;
     private final Feedback360AnswerOptionRepository answerOptionRepository;
 
+
     /*
-     * Create a new 360 survey for a logged-in leader.
+     * =========================================================
+     * CREATE 360 SURVEY
+     * =========================================================
+     *
+     * A leader can only have one active survey at a time.
+     *
+     * If they already have an active survey that has not expired,
+     * return the existing survey instead of generating a new one.
+     *
+     * New surveys remain active for 30 days.
      */
     public Feedback360Survey createSurvey(String email) {
 
-        User leader = userRepository.findByEmail(email)
-                .orElseThrow(() ->
-                        new RuntimeException("User not found"));
+        User leader =
+                userRepository.findByEmail(email)
+                        .orElseThrow(() ->
+                                new RuntimeException(
+                                        "User not found"
+                                )
+                        );
 
-        Feedback360Survey survey = Feedback360Survey.builder()
-                .leader(leader)
-                .token(UUID.randomUUID().toString())
-                .status(SurveyStatus.ACTIVE)
-                .createdAt(LocalDateTime.now())
-                .build();
 
-        return surveyRepository.save(survey);
+        /*
+         * Look through the leader's previous surveys,
+         * newest first.
+         */
+        List<Feedback360Survey> existingSurveys =
+                surveyRepository
+                        .findByLeaderIdOrderByCreatedAtDesc(
+                                leader.getId()
+                        );
+
+
+        /*
+         * If an active, non-expired survey already exists,
+         * return it.
+         */
+        for (Feedback360Survey existingSurvey : existingSurveys) {
+
+            boolean stillActive =
+                    existingSurvey.getStatus()
+                            == SurveyStatus.ACTIVE
+                            &&
+                    existingSurvey.getExpiresAt()
+                            != null
+                            &&
+                    LocalDateTime.now()
+                            .isBefore(
+                                    existingSurvey.getExpiresAt()
+                            );
+
+
+            if (stillActive) {
+
+                return existingSurvey;
+
+            }
+        }
+
+
+        /*
+         * No active survey exists.
+         *
+         * Create a new 30-day survey.
+         */
+        LocalDateTime now =
+                LocalDateTime.now();
+
+
+        Feedback360Survey survey =
+                Feedback360Survey.builder()
+
+                        .leader(leader)
+
+                        .token(
+                                UUID.randomUUID()
+                                        .toString()
+                        )
+
+                        .status(
+                                SurveyStatus.ACTIVE
+                        )
+
+                        .createdAt(now)
+
+                        .expiresAt(
+                                now.plusDays(30)
+                        )
+
+                        .build();
+
+
+        return surveyRepository.save(
+                survey
+        );
     }
 
-    /*
-     * Find a 360 survey using the token from the shareable link.
-     */
-    public Feedback360Survey getSurveyByToken(String token) {
 
-        return surveyRepository.findByToken(token)
+    /*
+     * =========================================================
+     * GET SURVEY BY TOKEN
+     * =========================================================
+     *
+     * Used by the anonymous reviewer survey page.
+     */
+    public Feedback360Survey getSurveyByToken(
+            String token) {
+
+        return surveyRepository
+                .findByToken(token)
+
                 .orElseThrow(() ->
                         new RuntimeException(
-                                "360 feedback survey not found"));
+                                "360 feedback survey not found"
+                        )
+                );
     }
 
+
     /*
-     * Return all 360 questions and multi-select options
-     * for the frontend survey page.
+     * =========================================================
+     * GET LOGGED-IN USER'S ACTIVE SURVEY
+     * =========================================================
+     *
+     * Used by the user dashboard.
+     *
+     * Allows the frontend to determine whether the leader
+     * already has an active 360 survey when they log in.
+     */
+    @Transactional(readOnly = true)
+    public Feedback360ActiveSurveyDTO getActiveSurveyForUser(
+            String email) {
+
+        User leader =
+                userRepository.findByEmail(email)
+                        .orElseThrow(() ->
+                                new RuntimeException(
+                                        "User not found"
+                                )
+                        );
+
+
+        List<Feedback360Survey> surveys =
+                surveyRepository
+                        .findByLeaderIdOrderByCreatedAtDesc(
+                                leader.getId()
+                        );
+
+
+        /*
+         * Look for the newest active,
+         * non-expired survey.
+         */
+        for (Feedback360Survey survey : surveys) {
+
+            boolean active =
+                    survey.getStatus()
+                            == SurveyStatus.ACTIVE
+                            &&
+                    survey.getExpiresAt()
+                            != null
+                            &&
+                    LocalDateTime.now()
+                            .isBefore(
+                                    survey.getExpiresAt()
+                            );
+
+
+            if (active) {
+
+                long responseCount =
+                        responseRepository
+                                .countBySurveyId(
+                                        survey.getId()
+                                );
+
+
+                return new Feedback360ActiveSurveyDTO(
+
+                        true,
+
+                        survey.getId(),
+
+                        survey.getToken(),
+
+                        survey.getStatus()
+                                .name(),
+
+                        survey.getCreatedAt(),
+
+                        survey.getExpiresAt(),
+
+                        responseCount
+                );
+            }
+        }
+
+
+        /*
+         * No active survey exists.
+         */
+        return new Feedback360ActiveSurveyDTO(
+
+                false,
+
+                null,
+
+                null,
+
+                null,
+
+                null,
+
+                null,
+
+                0
+        );
+    }
+
+
+    /*
+     * =========================================================
+     * GET 360 QUESTIONS
+     * =========================================================
+     *
+     * Return all questions and multi-select options
+     * for the anonymous reviewer page.
      */
     @Transactional(readOnly = true)
     public List<Feedback360QuestionDTO> getQuestions() {
 
         List<Feedback360Question> questions =
-                questionRepository.findAllByOrderByQuestionNumberAsc();
+                questionRepository
+                        .findAllByOrderByQuestionNumberAsc();
+
 
         return questions.stream()
-                .map(question -> new Feedback360QuestionDTO(
-                        question.getId(),
-                        question.getQuestionNumber(),
-                        question.getQuestionText(),
-                        question.getQuestionType().name(),
-                        question.getCategory(),
-                        question.getOptions().stream()
-                                .map(option ->
-                                        new Feedback360QuestionOptionDTO(
-                                                option.getId(),
-                                                option.getOptionText(),
-                                                option.getDisplayOrder()
+
+                .map(question ->
+
+                        new Feedback360QuestionDTO(
+
+                                question.getId(),
+
+                                question.getQuestionNumber(),
+
+                                question.getQuestionText(),
+
+                                question.getQuestionType()
+                                        .name(),
+
+                                question.getCategory(),
+
+                                question.getOptions()
+                                        .stream()
+
+                                        .map(option ->
+
+                                                new Feedback360QuestionOptionDTO(
+
+                                                        option.getId(),
+
+                                                        option.getOptionText(),
+
+                                                        option.getDisplayOrder()
+                                                )
                                         )
-                                )
-                                .toList()
-                ))
+
+                                        .toList()
+                        )
+                )
+
                 .toList();
     }
 
+
     /*
-     * Store one anonymous peer's completed 360 response.
+     * =========================================================
+     * SUBMIT ANONYMOUS 360 RESPONSE
+     * =========================================================
      */
     @Transactional
     public Feedback360Response submitResponse(
+
             String token,
+
             Feedback360SubmissionDTO submission) {
 
-        Feedback360Survey survey = surveyRepository.findByToken(token)
-                .orElseThrow(() ->
-                        new RuntimeException(
-                                "360 feedback survey not found"));
 
-        if (survey.getStatus() != SurveyStatus.ACTIVE) {
+        Feedback360Survey survey =
+                surveyRepository
+                        .findByToken(token)
+
+                        .orElseThrow(() ->
+                                new RuntimeException(
+                                        "360 feedback survey not found"
+                                )
+                        );
+
+
+        /*
+         * Survey must be active.
+         */
+        if (survey.getStatus()
+                != SurveyStatus.ACTIVE) {
+
             throw new RuntimeException(
-                    "This 360 feedback survey is not active");
+                    "This 360 feedback survey is not active"
+            );
         }
 
+
+        /*
+         * Survey must not have passed
+         * its 30-day expiry date.
+         */
+        if (survey.getExpiresAt() != null
+                &&
+                LocalDateTime.now()
+                        .isAfter(
+                                survey.getExpiresAt()
+                        )) {
+
+            throw new RuntimeException(
+                    "This 360 feedback survey has expired"
+            );
+        }
+
+
+        /*
+         * Submission must contain answers.
+         */
         if (submission == null
-                || submission.getAnswers() == null
-                || submission.getAnswers().isEmpty()) {
+                ||
+                submission.getAnswers() == null
+                ||
+                submission.getAnswers()
+                        .isEmpty()) {
 
             throw new RuntimeException(
-                    "No survey answers were submitted");
+                    "No survey answers were submitted"
+            );
         }
 
+
+        /*
+         * Create anonymous response record.
+         *
+         * No reviewer user ID, email or name
+         * is stored.
+         */
         Feedback360Response response =
                 Feedback360Response.builder()
+
                         .survey(survey)
-                        .submittedAt(LocalDateTime.now())
+
+                        .submittedAt(
+                                LocalDateTime.now()
+                        )
+
                         .build();
 
-        responseRepository.save(response);
 
-        for (Feedback360AnswerSubmissionDTO submittedAnswer
-                : submission.getAnswers()) {
+        responseRepository.save(
+                response
+        );
 
-            if (submittedAnswer.getQuestionId() == null) {
+
+        /*
+         * Save every answer.
+         */
+        for (
+                Feedback360AnswerSubmissionDTO submittedAnswer
+                : submission.getAnswers()
+        ) {
+
+
+            if (submittedAnswer.getQuestionId()
+                    == null) {
+
                 throw new RuntimeException(
-                        "Question ID is required");
+                        "Question ID is required"
+                );
             }
+
 
             Feedback360Question question =
                     questionRepository
-                            .findById(submittedAnswer.getQuestionId())
+
+                            .findById(
+                                    submittedAnswer
+                                            .getQuestionId()
+                            )
+
                             .orElseThrow(() ->
                                     new RuntimeException(
-                                            "360 question not found"));
+                                            "360 question not found"
+                                    )
+                            );
+
 
             Feedback360Answer answer =
                     Feedback360Answer.builder()
+
                             .response(response)
+
                             .question(question)
+
                             .build();
 
+
             /*
+             * =================================================
              * Q1-Q8
+             * Rating questions
+             * =================================================
              */
-            if (question.getQuestionType()
-                    == Feedback360QuestionType.RATING) {
+            if (
+                    question.getQuestionType()
+                            == Feedback360QuestionType.RATING
+            ) {
 
-                Integer score = submittedAnswer.getScore();
+                Integer score =
+                        submittedAnswer.getScore();
 
-                if (score == null
-                        || score < 1
-                        || score > 5) {
+
+                if (
+                        score == null
+                                ||
+                        score < 1
+                                ||
+                        score > 5
+                ) {
 
                     throw new RuntimeException(
-                            "Rating must be between 1 and 5");
+                            "Rating must be between 1 and 5"
+                    );
                 }
 
-                answer.setScore(score);
+
+                answer.setScore(
+                        score
+                );
             }
 
+
             /*
+             * =================================================
              * Q9 + Q12-Q14
+             * Written responses
+             * =================================================
              */
-            else if (question.getQuestionType()
-                    == Feedback360QuestionType.TEXT) {
+            else if (
+                    question.getQuestionType()
+                            == Feedback360QuestionType.TEXT
+            ) {
 
                 String text =
-                        submittedAnswer.getTextResponse();
+                        submittedAnswer
+                                .getTextResponse();
 
-                if (text == null
-                        || text.trim().isEmpty()) {
+
+                if (
+                        text == null
+                                ||
+                        text.trim()
+                                .isEmpty()
+                ) {
 
                     throw new RuntimeException(
-                            "Text response cannot be empty");
+                            "Text response cannot be empty"
+                    );
                 }
 
-                answer.setTextResponse(text.trim());
+
+                answer.setTextResponse(
+                        text.trim()
+                );
             }
+
 
             /*
+             * =================================================
              * Q10-Q11
+             * Multi-select
+             * =================================================
              */
-            else if (question.getQuestionType()
-                    == Feedback360QuestionType.MULTI_SELECT) {
+            else if (
+                    question.getQuestionType()
+                            == Feedback360QuestionType.MULTI_SELECT
+            ) {
 
-                if (submittedAnswer.getSelectedOptionIds() == null) {
+
+                if (
+                        submittedAnswer
+                                .getSelectedOptionIds()
+                                == null
+                ) {
+
                     throw new RuntimeException(
-                            "At least one option must be selected");
+                            "At least one option must be selected"
+                    );
                 }
+
 
                 List<Long> selectedOptionIds =
                         submittedAnswer
@@ -220,21 +565,47 @@ public class Feedback360Service {
                                 .distinct()
                                 .toList();
 
-                if (selectedOptionIds.isEmpty()) {
+
+                if (
+                        selectedOptionIds
+                                .isEmpty()
+                ) {
+
                     throw new RuntimeException(
-                            "At least one option must be selected");
+                            "At least one option must be selected"
+                    );
                 }
 
-                if (selectedOptionIds.size() > 3) {
+
+                if (
+                        selectedOptionIds
+                                .size()
+                                > 3
+                ) {
+
                     throw new RuntimeException(
-                            "A maximum of 3 options can be selected");
+                            "A maximum of 3 options can be selected"
+                    );
                 }
             }
 
-            answerRepository.save(answer);
 
-            if (question.getQuestionType()
-                    == Feedback360QuestionType.MULTI_SELECT) {
+            /*
+             * Save main answer first.
+             */
+            answerRepository.save(
+                    answer
+            );
+
+
+            /*
+             * Save selected Q10/Q11 options.
+             */
+            if (
+                    question.getQuestionType()
+                            == Feedback360QuestionType.MULTI_SELECT
+            ) {
+
 
                 List<Long> selectedOptionIds =
                         submittedAnswer
@@ -243,127 +614,208 @@ public class Feedback360Service {
                                 .distinct()
                                 .toList();
 
-                for (Long optionId : selectedOptionIds) {
+
+                for (
+                        Long optionId
+                        : selectedOptionIds
+                ) {
+
 
                     Feedback360QuestionOption option =
                             questionOptionRepository
+
                                     .findById(optionId)
+
                                     .orElseThrow(() ->
                                             new RuntimeException(
-                                                    "Question option not found"));
+                                                    "Question option not found"
+                                            )
+                                    );
 
-                    if (!option.getQuestion()
-                            .getId()
-                            .equals(question.getId())) {
+
+                    /*
+                     * Make sure an option cannot be
+                     * submitted against another question.
+                     */
+                    if (
+                            !option.getQuestion()
+                                    .getId()
+                                    .equals(
+                                            question.getId()
+                                    )
+                    ) {
 
                         throw new RuntimeException(
-                                "Selected option does not belong to this question");
+                                "Selected option does not belong to this question"
+                        );
                     }
+
 
                     Feedback360AnswerOption answerOption =
                             Feedback360AnswerOption.builder()
+
                                     .answer(answer)
+
                                     .option(option)
+
                                     .build();
 
-                    answerOptionRepository.save(answerOption);
+
+                    answerOptionRepository.save(
+                            answerOption
+                    );
                 }
             }
         }
+
 
         return response;
     }
 
+
     /*
-     * Return aggregated anonymous 360 results for a survey.
+     * =========================================================
+     * GET AGGREGATED 360 RESULTS
+     * =========================================================
      */
     @Transactional(readOnly = true)
-    public Feedback360ResultsDTO getResults(Long surveyId) {
+    public Feedback360ResultsDTO getResults(
+            Long surveyId) {
 
-        surveyRepository.findById(surveyId)
+
+        surveyRepository
+                .findById(surveyId)
+
                 .orElseThrow(() ->
                         new RuntimeException(
-                                "360 feedback survey not found"));
+                                "360 feedback survey not found"
+                        )
+                );
+
 
         long responseCount =
-                responseRepository.countBySurveyId(surveyId);
+                responseRepository
+                        .countBySurveyId(
+                                surveyId
+                        );
+
 
         /*
-         * Later, enable this for anonymity.
+         * Anonymity threshold can be enabled later.
          *
-         * For testing with your current two responses,
-         * leave it commented out.
+         * Example:
+         *
+         * if (responseCount < 3) {
+         *
+         *     throw new RuntimeException(
+         *         "At least 3 responses are required to view results"
+         *     );
+         * }
          */
 
-        /*
-        if (responseCount < 3) {
-            throw new RuntimeException(
-                    "At least 3 responses are required to view results");
-        }
-        */
 
         List<Feedback360Answer> answers =
-                answerRepository.findByResponseSurveyId(surveyId);
+                answerRepository
+                        .findByResponseSurveyId(
+                                surveyId
+                        );
+
 
         /*
          * =================================================
-         * Q1-Q8: Average ratings
+         * Q1-Q8
+         * Average ratings
          * =================================================
          */
 
         List<Feedback360RatingResultDTO> ratings =
                 new ArrayList<>();
 
-        Map<Feedback360Question, List<Feedback360Answer>>
+
+        Map<
+                Feedback360Question,
+                List<Feedback360Answer>
+                >
                 ratingGroups =
+
                 answers.stream()
+
                         .filter(answer ->
-                                answer.getScore() != null)
+                                answer.getScore()
+                                        != null
+                        )
+
                         .collect(
                                 Collectors.groupingBy(
                                         Feedback360Answer::getQuestion
                                 )
                         );
 
+
         ratingGroups.forEach(
                 (question, questionAnswers) -> {
 
+
                     double average =
-                            questionAnswers.stream()
+                            questionAnswers
+                                    .stream()
+
                                     .mapToInt(
                                             Feedback360Answer::getScore
                                     )
+
                                     .average()
-                                    .orElse(0.0);
+
+                                    .orElse(
+                                            0.0
+                                    );
+
 
                     /*
-                     * Round to 2 decimal places.
+                     * Round to two decimal places.
                      */
                     average =
-                            Math.round(average * 100.0)
+                            Math.round(
+                                    average
+                                            * 100.0
+                            )
                                     / 100.0;
 
+
                     ratings.add(
+
                             new Feedback360RatingResultDTO(
+
                                     question.getQuestionNumber(),
+
                                     question.getCategory(),
+
                                     average
                             )
                     );
                 }
         );
 
+
+        /*
+         * Keep questions in Q1-Q8 order.
+         */
         ratings.sort(
                 (a, b) ->
+
                         Integer.compare(
+
                                 a.getQuestionNumber(),
+
                                 b.getQuestionNumber()
                         )
         );
 
+
         /*
          * =================================================
-         * Q10-Q11: Aggregate selected options
+         * Q10-Q11
+         * Aggregate selected options
          * =================================================
          */
 
@@ -373,100 +825,196 @@ public class Feedback360Service {
                                 surveyId
                         );
 
-        Map<Integer, Map<String, Long>> groupedOptions =
+
+        Map<
+                Integer,
+                Map<String, Long>
+                >
+                groupedOptions =
+
                 answerOptions.stream()
+
                         .collect(
+
                                 Collectors.groupingBy(
+
                                         answerOption ->
+
                                                 answerOption
                                                         .getAnswer()
                                                         .getQuestion()
                                                         .getQuestionNumber(),
 
+
                                         Collectors.groupingBy(
+
                                                 answerOption ->
+
                                                         answerOption
                                                                 .getOption()
                                                                 .getOptionText(),
+
 
                                                 Collectors.counting()
                                         )
                                 )
                         );
 
-        Map<Integer, List<Feedback360OptionResultDTO>>
+
+        Map<
+                Integer,
+                List<Feedback360OptionResultDTO>
+                >
                 optionResults =
                 new HashMap<>();
+
 
         groupedOptions.forEach(
                 (questionNumber, counts) -> {
 
+
                     List<Feedback360OptionResultDTO> results =
                             counts.entrySet()
                                     .stream()
+
                                     .map(entry ->
+
                                             new Feedback360OptionResultDTO(
+
                                                     entry.getKey(),
+
                                                     entry.getValue()
                                             )
                                     )
+
                                     .sorted(
                                             (a, b) ->
+
                                                     Long.compare(
+
                                                             b.getCount(),
+
                                                             a.getCount()
                                                     )
                                     )
+
                                     .toList();
 
+
                     optionResults.put(
+
                             questionNumber,
+
                             results
                     );
                 }
         );
 
+
         /*
          * =================================================
-         * Q9 + Q12-Q14: Anonymous written feedback
+         * Q9 + Q12-Q14
+         * Anonymous written feedback
          * =================================================
          */
 
-        Map<Integer, List<String>> writtenFeedback =
+        Map<
+                Integer,
+                List<String>
+                >
+                writtenFeedback =
+
                 answers.stream()
+
                         .filter(answer ->
-                                answer.getTextResponse() != null
+
+                                answer.getTextResponse()
+                                        != null
+
                                         &&
-                                !answer.getTextResponse().isBlank()
+
+                                !answer.getTextResponse()
+                                        .isBlank()
                         )
+
                         .collect(
+
                                 Collectors.groupingBy(
+
                                         answer ->
+
                                                 answer
                                                         .getQuestion()
                                                         .getQuestionNumber(),
 
+
                                         Collectors.mapping(
+
                                                 Feedback360Answer::getTextResponse,
+
                                                 Collectors.toList()
                                         )
                                 )
                         );
 
+
         return new Feedback360ResultsDTO(
+
                 responseCount,
+
                 ratings,
+
                 optionResults,
+
                 writtenFeedback
         );
     }
 
+
     /*
-     * Useful for completion tracking and results.
+     * =========================================================
+     * RESPONSE COUNT
+     * =========================================================
      */
-    public long getResponseCount(Long surveyId) {
+    public long getResponseCount(
+            Long surveyId) {
 
         return responseRepository
-                .countBySurveyId(surveyId);
+                .countBySurveyId(
+                        surveyId
+                );
     }
+    @Transactional(readOnly = true)
+public List<Feedback360SurveyHistoryDTO> getSurveyHistory(
+        String email) {
+
+    User leader =
+            userRepository.findByEmail(email)
+                    .orElseThrow(() ->
+                            new RuntimeException(
+                                    "User not found"
+                            )
+                    );
+
+    List<Feedback360Survey> surveys =
+            surveyRepository
+                    .findByLeaderIdOrderByCreatedAtDesc(
+                            leader.getId()
+                    );
+
+    return surveys.stream()
+            .map(survey ->
+                    new Feedback360SurveyHistoryDTO(
+                            survey.getId(),
+                            survey.getStatus().name(),
+                            survey.getCreatedAt(),
+                            survey.getExpiresAt(),
+                            responseRepository
+                                    .countBySurveyId(
+                                            survey.getId()
+                                    )
+                    )
+            )
+            .toList();
+}
 }

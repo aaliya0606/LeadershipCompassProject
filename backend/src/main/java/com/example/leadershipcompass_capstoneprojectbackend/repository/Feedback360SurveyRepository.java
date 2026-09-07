@@ -1,5 +1,6 @@
 package com.example.leadershipcompass_capstoneprojectbackend.repository;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -10,4 +11,7 @@ public interface Feedback360SurveyRepository
         extends JpaRepository<Feedback360Survey, Long> {
 
     Optional<Feedback360Survey> findByToken(String token);
+
+    List<Feedback360Survey>
+        findByLeaderIdOrderByCreatedAtDesc(Long leaderId);
 }

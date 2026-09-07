@@ -44,4 +44,7 @@ public class Feedback360Survey {
 
     @Column(nullable = false)
     private LocalDateTime createdAt;
+
+    @Column(nullable = false)
+    private LocalDateTime expiresAt;
 }

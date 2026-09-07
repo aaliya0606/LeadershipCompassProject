@@ -3,9 +3,14 @@ const API_BASE_URL = "http://localhost:8080";
 const token = localStorage.getItem("token");
 const role = localStorage.getItem("role");
 
-const logoutBtn = document.getElementById("logoutBtn");
-const surveyBtn = document.getElementById("surveyBtn");
-const adminSection = document.getElementById("adminSection");
+const logoutBtn =
+    document.getElementById("logoutBtn");
+
+const surveyBtn =
+    document.getElementById("surveyBtn");
+
+const adminSection =
+    document.getElementById("adminSection");
 
 const generate360Btn =
     document.getElementById("generate360Btn");
@@ -42,8 +47,10 @@ const surveyIdDisplay =
 
 
 /*
- * Keep track of the current survey
- * while the user is on the dashboard.
+ * Current survey information.
+ *
+ * This is kept in memory while the dashboard is open.
+ * It is no longer restored from localStorage.
  */
 let current360SurveyId = null;
 let current360SurveyToken = null;
@@ -55,7 +62,8 @@ let current360SurveyToken = null;
 
 if (!token) {
 
-    window.location.href = "index.html";
+    window.location.href =
+        "index.html";
 
 }
 
@@ -64,9 +72,15 @@ if (!token) {
    ADMIN SECTION
    ========================================================= */
 
-if (role === "ADMIN" && adminSection) {
+if (
+    role === "ADMIN"
+    &&
+    adminSection
+) {
 
-    adminSection.classList.remove("d-none");
+    adminSection.classList.remove(
+        "d-none"
+    );
 
 }
 
@@ -108,7 +122,9 @@ async function generate360Survey() {
 
     try {
 
-        generate360Btn.disabled = true;
+        generate360Btn.disabled =
+            true;
+
         generate360Btn.textContent =
             "Creating Survey...";
 
@@ -120,6 +136,7 @@ async function generate360Survey() {
                     method: "POST",
 
                     headers: {
+
                         "Content-Type":
                             "application/json",
 
@@ -144,65 +161,41 @@ async function generate360Survey() {
 
 
         console.log(
-            "360 survey created:",
+            "360 survey returned:",
             data
         );
 
 
-        current360SurveyId =
-            data.id;
-
-        current360SurveyToken =
-            data.token;
-
-
         /*
-         * Store locally so the dashboard can
-         * restore the survey after page refresh.
+         * createSurvey() now returns either:
          *
-         * Later we can replace this with a
-         * backend endpoint that finds the
-         * user's active survey.
+         * - a newly created survey
+         * OR
+         * - the user's existing active survey.
          */
-        localStorage.setItem(
-            "current360SurveyId",
-            data.id
-        );
-
-        localStorage.setItem(
-            "current360SurveyToken",
-            data.token
-        );
-
-
-        /*
-         * Construct reviewer survey URL.
-         */
-
         const link =
-            `${window.location.origin}` +
-            `/frontend/360-feedback.html` +
-            `?token=${data.token}`;
-
-
-        localStorage.setItem(
-            "current360SurveyLink",
-            link
-        );
+            build360SurveyLink(
+                data.token
+            );
 
 
         showActive360Survey(
-            data.id,
-            data.token,
-            data.status,
-            link
+            {
+                id: data.id,
+                token: data.token,
+                status:
+                    data.status || "ACTIVE",
+                responseCount: 0,
+                link: link
+            }
         );
 
 
         /*
-         * Load response count.
+         * Reload from the backend so the dashboard
+         * gets the current response count and expiry.
          */
-        await load360ResultsSummary();
+        await loadActive360Survey();
 
 
     } catch (error) {
@@ -232,27 +225,190 @@ async function generate360Survey() {
 
 
 /* =========================================================
+   GET CURRENT ACTIVE SURVEY
+   ========================================================= */
+
+/*
+ * Called whenever the dashboard loads.
+ *
+ * The backend decides whether the logged-in user
+ * currently has an active 360 survey.
+ */
+async function loadActive360Survey() {
+
+    try {
+
+        const response =
+            await fetch(
+                `${API_BASE_URL}/api/360/surveys/me`,
+                {
+                    method: "GET",
+
+                    headers: {
+
+                        "Authorization":
+                            `Bearer ${token}`
+                    }
+                }
+            );
+
+
+        if (!response.ok) {
+
+            throw new Error(
+                `Failed to load active survey: ${response.status}`
+            );
+
+        }
+
+
+        const data =
+            await response.json();
+
+
+        console.log(
+            "Active 360 survey:",
+            data
+        );
+
+
+        /*
+         * No current active survey.
+         */
+        if (!data.hasActiveSurvey) {
+
+            showNoActive360Survey();
+
+            return;
+
+        }
+
+
+        /*
+         * Active survey exists.
+         */
+        const link =
+            build360SurveyLink(
+                data.token
+            );
+
+
+        showActive360Survey(
+            {
+                id: data.id,
+                token: data.token,
+                status:
+                    data.status || "ACTIVE",
+                responseCount:
+                    data.responseCount ?? 0,
+                createdAt:
+                    data.createdAt,
+                expiresAt:
+                    data.expiresAt,
+                link: link
+            }
+        );
+
+
+    } catch (error) {
+
+        console.error(
+            "Unable to load active 360 survey:",
+            error
+        );
+
+
+        /*
+         * Don't automatically show the create button
+         * if the backend failed.
+         *
+         * Otherwise a temporary network error could
+         * make it look like the user has no survey.
+         */
+    }
+
+}
+
+
+/* =========================================================
+   DISPLAY NO ACTIVE SURVEY
+   ========================================================= */
+
+function showNoActive360Survey() {
+
+    current360SurveyId =
+        null;
+
+    current360SurveyToken =
+        null;
+
+
+    if (no360SurveyState) {
+
+        no360SurveyState.style.display =
+            "block";
+
+    }
+
+
+    if (active360SurveyState) {
+
+        active360SurveyState.style.display =
+            "none";
+
+    }
+
+
+    if (surveyStatusBadge) {
+
+        surveyStatusBadge.style.display =
+            "none";
+
+    }
+
+
+    if (responseCount) {
+
+        responseCount.textContent =
+            "0";
+
+    }
+
+
+    if (surveyIdDisplay) {
+
+        surveyIdDisplay.textContent =
+            "-";
+
+    }
+
+
+    if (surveyLink) {
+
+        surveyLink.value =
+            "";
+
+    }
+
+}
+
+
+/* =========================================================
    DISPLAY ACTIVE SURVEY
    ========================================================= */
 
-function showActive360Survey(
-    id,
-    surveyToken,
-    status,
-    link
-) {
+function showActive360Survey(data) {
 
     current360SurveyId =
-        Number(id);
+        Number(data.id);
 
     current360SurveyToken =
-        surveyToken;
+        data.token;
 
 
     /*
-     * Hide create state.
+     * Hide create survey state.
      */
-
     if (no360SurveyState) {
 
         no360SurveyState.style.display =
@@ -262,9 +418,8 @@ function showActive360Survey(
 
 
     /*
-     * Show active state.
+     * Show active survey state.
      */
-
     if (active360SurveyState) {
 
         active360SurveyState.style.display =
@@ -274,39 +429,53 @@ function showActive360Survey(
 
 
     /*
-     * Survey ID
+     * Survey ID.
      */
-
     if (surveyIdDisplay) {
 
         surveyIdDisplay.textContent =
-            `#${id}`;
+            `#${data.id}`;
 
     }
 
 
     /*
-     * Survey status
+     * Response count.
      */
+    if (responseCount) {
 
-    if (surveyStatus) {
-
-        surveyStatus.textContent =
-            status || "ACTIVE";
+        responseCount.textContent =
+            data.responseCount ?? 0;
 
     }
 
 
+    /*
+     * Survey status.
+     */
+    if (surveyStatus) {
+
+        surveyStatus.textContent =
+            data.status || "ACTIVE";
+
+    }
+
+
+    /*
+     * Status badge.
+     */
     if (surveyStatusBadge) {
 
         surveyStatusBadge.style.display =
             "inline-block";
 
         surveyStatusBadge.textContent =
-            status || "ACTIVE";
+            data.status || "ACTIVE";
 
 
-        if (status === "ACTIVE") {
+        if (
+            data.status === "ACTIVE"
+        ) {
 
             surveyStatusBadge.className =
                 "badge bg-success";
@@ -322,56 +491,39 @@ function showActive360Survey(
 
 
     /*
-     * Reviewer link
+     * Reviewer link.
      */
-
     if (surveyLink) {
 
         surveyLink.value =
-            link;
+            data.link || "";
 
     }
 
-}
 
-
-/* =========================================================
-   RESTORE EXISTING SURVEY FROM LOCAL STORAGE
-   ========================================================= */
-
-function restore360Survey() {
-
-    const storedId =
-        localStorage.getItem(
-            "current360SurveyId"
-        );
-
-    const storedToken =
-        localStorage.getItem(
-            "current360SurveyToken"
-        );
-
-    const storedLink =
-        localStorage.getItem(
-            "current360SurveyLink"
+    /*
+     * Optional expiry display.
+     *
+     * This only does anything if your HTML contains:
+     *
+     * <span id="surveyExpiry"></span>
+     */
+    const surveyExpiry =
+        document.getElementById(
+            "surveyExpiry"
         );
 
 
     if (
-        storedId &&
-        storedToken &&
-        storedLink
+        surveyExpiry
+        &&
+        data.expiresAt
     ) {
 
-        showActive360Survey(
-            storedId,
-            storedToken,
-            "ACTIVE",
-            storedLink
-        );
-
-
-        load360ResultsSummary();
+        surveyExpiry.textContent =
+            formatDate(
+                data.expiresAt
+            );
 
     }
 
@@ -379,74 +531,53 @@ function restore360Survey() {
 
 
 /* =========================================================
-   LOAD RESPONSE COUNT
+   BUILD REVIEWER LINK
    ========================================================= */
 
-async function load360ResultsSummary() {
+function build360SurveyLink(
+    surveyToken
+) {
 
-    if (!current360SurveyId) {
+    /*
+     * If your Live Server URL contains /frontend/,
+     * this generates:
+     *
+     * http://127.0.0.1:5500/frontend/360-feedback.html?token=...
+     */
+    return (
+        `${window.location.origin}` +
+        `/frontend/360-feedback.html` +
+        `?token=${surveyToken}`
+    );
 
-        return;
-
-    }
-
-
-    try {
-
-        const response =
-            await fetch(
-                `${API_BASE_URL}` +
-                `/api/360/surveys/` +
-                `${current360SurveyId}/results`,
-                {
-                    method: "GET",
-
-                    headers: {
-                        "Authorization":
-                            `Bearer ${token}`
-                    }
-                }
-            );
+}
 
 
-        if (!response.ok) {
+/* =========================================================
+   FORMAT DATE
+   ========================================================= */
 
-            console.warn(
-                "Unable to load 360 summary:",
-                response.status
-            );
+function formatDate(dateString) {
 
-            return;
+    if (!dateString) {
 
-        }
-
-
-        const results =
-            await response.json();
-
-
-        console.log(
-            "360 summary:",
-            results
-        );
-
-
-        if (responseCount) {
-
-            responseCount.textContent =
-                results.responseCount ?? 0;
-
-        }
-
-
-    } catch (error) {
-
-        console.error(
-            "Failed to load 360 response count:",
-            error
-        );
+        return "-";
 
     }
+
+
+    const date =
+        new Date(dateString);
+
+
+    return date.toLocaleDateString(
+        "en-AU",
+        {
+            day: "numeric",
+            month: "long",
+            year: "numeric"
+        }
+    );
 
 }
 
@@ -494,18 +625,20 @@ async function copySurveyLink() {
     } catch (error) {
 
         console.error(
-            "Unable to copy link:",
+            "Unable to copy survey link:",
             error
         );
 
 
         /*
-         * Basic fallback.
+         * Fallback for browsers where
+         * Clipboard API is unavailable.
          */
-
         surveyLink.select();
 
-        document.execCommand("copy");
+        document.execCommand(
+            "copy"
+        );
 
 
         alert(
@@ -559,8 +692,7 @@ if (view360ResultsBtn) {
 
 
             window.location.href =
-                `360-results.html?surveyId=` +
-                current360SurveyId;
+                `360-results.html?surveyId=${current360SurveyId}`;
 
         }
     );
@@ -578,32 +710,18 @@ if (logoutBtn) {
         "click",
         () => {
 
+            /*
+             * Only authentication information
+             * needs to be stored locally now.
+             *
+             * Survey information lives in the database.
+             */
             localStorage.removeItem(
                 "token"
             );
 
             localStorage.removeItem(
                 "role"
-            );
-
-
-            /*
-             * You can choose whether these should
-             * be removed at logout.
-             *
-             * For now we remove them because they
-             * belong to the logged-in session.
-             */
-            localStorage.removeItem(
-                "current360SurveyId"
-            );
-
-            localStorage.removeItem(
-                "current360SurveyToken"
-            );
-
-            localStorage.removeItem(
-                "current360SurveyLink"
             );
 
 
@@ -622,9 +740,13 @@ if (logoutBtn) {
 
 document.addEventListener(
     "DOMContentLoaded",
-    () => {
+    async () => {
 
-        restore360Survey();
+        /*
+         * Ask the backend whether the user
+         * already has an active 360 survey.
+         */
+        await loadActive360Survey();
 
     }
 );

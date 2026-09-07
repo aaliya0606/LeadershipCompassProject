@@ -97,4 +97,28 @@ public class Feedback360Controller {
                 )
         );
         }
+     @GetMapping("/surveys/me")
+        public ResponseEntity<?> getMyActiveSurvey(
+                Authentication authentication) {
+
+        String email =
+                authentication.getName();
+
+        return ResponseEntity.ok(
+                feedback360Service
+                        .getActiveSurveyForUser(email)
+        );
+        }
+     @GetMapping("/surveys/me/history")
+        public ResponseEntity<?> getMySurveyHistory(
+                Authentication authentication) {
+
+        String email =
+                authentication.getName();
+
+        return ResponseEntity.ok(
+                feedback360Service
+                        .getSurveyHistory(email)
+        );
+        }
 }
