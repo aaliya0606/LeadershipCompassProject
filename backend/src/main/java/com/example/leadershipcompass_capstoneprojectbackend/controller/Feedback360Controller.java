@@ -87,4 +87,14 @@ public class Feedback360Controller {
                 )
         );
     }
+    @GetMapping("/surveys/{surveyId}/results")
+        public ResponseEntity<?> getResults(
+                @PathVariable Long surveyId) {
+
+        return ResponseEntity.ok(
+                feedback360Service.getResults(
+                        surveyId
+                )
+        );
+        }
 }

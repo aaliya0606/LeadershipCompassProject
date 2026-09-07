@@ -1,15 +1,22 @@
 package com.example.leadershipcompass_capstoneprojectbackend.service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.example.leadershipcompass_capstoneprojectbackend.dto.Feedback360AnswerSubmissionDTO;
+import com.example.leadershipcompass_capstoneprojectbackend.dto.Feedback360OptionResultDTO;
 import com.example.leadershipcompass_capstoneprojectbackend.dto.Feedback360QuestionDTO;
 import com.example.leadershipcompass_capstoneprojectbackend.dto.Feedback360QuestionOptionDTO;
+import com.example.leadershipcompass_capstoneprojectbackend.dto.Feedback360RatingResultDTO;
+import com.example.leadershipcompass_capstoneprojectbackend.dto.Feedback360ResultsDTO;
 import com.example.leadershipcompass_capstoneprojectbackend.dto.Feedback360SubmissionDTO;
 import com.example.leadershipcompass_capstoneprojectbackend.model.Feedback360Answer;
 import com.example.leadershipcompass_capstoneprojectbackend.model.Feedback360AnswerOption;
@@ -115,17 +122,11 @@ public class Feedback360Service {
                         new RuntimeException(
                                 "360 feedback survey not found"));
 
-        /*
-         * Only active surveys can accept responses.
-         */
         if (survey.getStatus() != SurveyStatus.ACTIVE) {
             throw new RuntimeException(
                     "This 360 feedback survey is not active");
         }
 
-        /*
-         * Make sure the request actually contains answers.
-         */
         if (submission == null
                 || submission.getAnswers() == null
                 || submission.getAnswers().isEmpty()) {
@@ -134,10 +135,6 @@ public class Feedback360Service {
                     "No survey answers were submitted");
         }
 
-        /*
-         * Create one anonymous response record.
-         * No reviewer name, email or user ID is stored.
-         */
         Feedback360Response response =
                 Feedback360Response.builder()
                         .survey(survey)
@@ -146,15 +143,9 @@ public class Feedback360Service {
 
         responseRepository.save(response);
 
-        /*
-         * Process each submitted answer.
-         */
         for (Feedback360AnswerSubmissionDTO submittedAnswer
                 : submission.getAnswers()) {
 
-            /*
-             * Every submitted answer must identify its question.
-             */
             if (submittedAnswer.getQuestionId() == null) {
                 throw new RuntimeException(
                         "Question ID is required");
@@ -174,8 +165,7 @@ public class Feedback360Service {
                             .build();
 
             /*
-             * Q1-Q8:
-             * Rating score between 1 and 5.
+             * Q1-Q8
              */
             if (question.getQuestionType()
                     == Feedback360QuestionType.RATING) {
@@ -194,8 +184,7 @@ public class Feedback360Service {
             }
 
             /*
-             * Q9 and Q12-Q14:
-             * Written response.
+             * Q9 + Q12-Q14
              */
             else if (question.getQuestionType()
                     == Feedback360QuestionType.TEXT) {
@@ -214,8 +203,7 @@ public class Feedback360Service {
             }
 
             /*
-             * Q10-Q11:
-             * Multi-select responses.
+             * Q10-Q11
              */
             else if (question.getQuestionType()
                     == Feedback360QuestionType.MULTI_SELECT) {
@@ -225,9 +213,6 @@ public class Feedback360Service {
                             "At least one option must be selected");
                 }
 
-                /*
-                 * Remove duplicate option IDs before validation.
-                 */
                 List<Long> selectedOptionIds =
                         submittedAnswer
                                 .getSelectedOptionIds()
@@ -246,14 +231,8 @@ public class Feedback360Service {
                 }
             }
 
-            /*
-             * Save the main answer first.
-             */
             answerRepository.save(answer);
 
-            /*
-             * Save Q10/Q11 selected options.
-             */
             if (question.getQuestionType()
                     == Feedback360QuestionType.MULTI_SELECT) {
 
@@ -273,10 +252,6 @@ public class Feedback360Service {
                                             new RuntimeException(
                                                     "Question option not found"));
 
-                    /*
-                     * Prevent an option belonging to another question
-                     * being submitted.
-                     */
                     if (!option.getQuestion()
                             .getId()
                             .equals(question.getId())) {
@@ -300,9 +275,198 @@ public class Feedback360Service {
     }
 
     /*
-     * Useful later for completion tracking and results.
+     * Return aggregated anonymous 360 results for a survey.
+     */
+    @Transactional(readOnly = true)
+    public Feedback360ResultsDTO getResults(Long surveyId) {
+
+        surveyRepository.findById(surveyId)
+                .orElseThrow(() ->
+                        new RuntimeException(
+                                "360 feedback survey not found"));
+
+        long responseCount =
+                responseRepository.countBySurveyId(surveyId);
+
+        /*
+         * Later, enable this for anonymity.
+         *
+         * For testing with your current two responses,
+         * leave it commented out.
+         */
+
+        /*
+        if (responseCount < 3) {
+            throw new RuntimeException(
+                    "At least 3 responses are required to view results");
+        }
+        */
+
+        List<Feedback360Answer> answers =
+                answerRepository.findByResponseSurveyId(surveyId);
+
+        /*
+         * =================================================
+         * Q1-Q8: Average ratings
+         * =================================================
+         */
+
+        List<Feedback360RatingResultDTO> ratings =
+                new ArrayList<>();
+
+        Map<Feedback360Question, List<Feedback360Answer>>
+                ratingGroups =
+                answers.stream()
+                        .filter(answer ->
+                                answer.getScore() != null)
+                        .collect(
+                                Collectors.groupingBy(
+                                        Feedback360Answer::getQuestion
+                                )
+                        );
+
+        ratingGroups.forEach(
+                (question, questionAnswers) -> {
+
+                    double average =
+                            questionAnswers.stream()
+                                    .mapToInt(
+                                            Feedback360Answer::getScore
+                                    )
+                                    .average()
+                                    .orElse(0.0);
+
+                    /*
+                     * Round to 2 decimal places.
+                     */
+                    average =
+                            Math.round(average * 100.0)
+                                    / 100.0;
+
+                    ratings.add(
+                            new Feedback360RatingResultDTO(
+                                    question.getQuestionNumber(),
+                                    question.getCategory(),
+                                    average
+                            )
+                    );
+                }
+        );
+
+        ratings.sort(
+                (a, b) ->
+                        Integer.compare(
+                                a.getQuestionNumber(),
+                                b.getQuestionNumber()
+                        )
+        );
+
+        /*
+         * =================================================
+         * Q10-Q11: Aggregate selected options
+         * =================================================
+         */
+
+        List<Feedback360AnswerOption> answerOptions =
+                answerOptionRepository
+                        .findByAnswerResponseSurveyId(
+                                surveyId
+                        );
+
+        Map<Integer, Map<String, Long>> groupedOptions =
+                answerOptions.stream()
+                        .collect(
+                                Collectors.groupingBy(
+                                        answerOption ->
+                                                answerOption
+                                                        .getAnswer()
+                                                        .getQuestion()
+                                                        .getQuestionNumber(),
+
+                                        Collectors.groupingBy(
+                                                answerOption ->
+                                                        answerOption
+                                                                .getOption()
+                                                                .getOptionText(),
+
+                                                Collectors.counting()
+                                        )
+                                )
+                        );
+
+        Map<Integer, List<Feedback360OptionResultDTO>>
+                optionResults =
+                new HashMap<>();
+
+        groupedOptions.forEach(
+                (questionNumber, counts) -> {
+
+                    List<Feedback360OptionResultDTO> results =
+                            counts.entrySet()
+                                    .stream()
+                                    .map(entry ->
+                                            new Feedback360OptionResultDTO(
+                                                    entry.getKey(),
+                                                    entry.getValue()
+                                            )
+                                    )
+                                    .sorted(
+                                            (a, b) ->
+                                                    Long.compare(
+                                                            b.getCount(),
+                                                            a.getCount()
+                                                    )
+                                    )
+                                    .toList();
+
+                    optionResults.put(
+                            questionNumber,
+                            results
+                    );
+                }
+        );
+
+        /*
+         * =================================================
+         * Q9 + Q12-Q14: Anonymous written feedback
+         * =================================================
+         */
+
+        Map<Integer, List<String>> writtenFeedback =
+                answers.stream()
+                        .filter(answer ->
+                                answer.getTextResponse() != null
+                                        &&
+                                !answer.getTextResponse().isBlank()
+                        )
+                        .collect(
+                                Collectors.groupingBy(
+                                        answer ->
+                                                answer
+                                                        .getQuestion()
+                                                        .getQuestionNumber(),
+
+                                        Collectors.mapping(
+                                                Feedback360Answer::getTextResponse,
+                                                Collectors.toList()
+                                        )
+                                )
+                        );
+
+        return new Feedback360ResultsDTO(
+                responseCount,
+                ratings,
+                optionResults,
+                writtenFeedback
+        );
+    }
+
+    /*
+     * Useful for completion tracking and results.
      */
     public long getResponseCount(Long surveyId) {
-        return responseRepository.countBySurveyId(surveyId);
+
+        return responseRepository
+                .countBySurveyId(surveyId);
     }
 }
