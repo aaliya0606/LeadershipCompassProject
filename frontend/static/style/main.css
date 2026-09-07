@@ -1022,7 +1022,6 @@ html, body {
   font-size: 1rem;
 }
 
-<<<<<<< HEAD
 /* dashboard */
 @font-face {
     font-family: 'Montserrat';
@@ -1687,7 +1686,6 @@ tag {
     color: #013664;
 }
 
-=======
 /* MOBILE PHONE OVERRIDES FOR NAVBAR */
 
 @media (max-width: 768px) {
@@ -1738,7 +1736,6 @@ tag {
     padding-left: 20px;
   }
 }
->>>>>>> origin/main
 
 .custom-navbar {
   padding: 2px 40px;
