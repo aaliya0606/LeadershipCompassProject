@@ -1,88 +1,421 @@
 <!doctype html>
+
 <html lang="en">
-  <head>
+
+<head>
+
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    />
+
     <title>Dashboard | Leadership Compass</title>
 
     <link
-      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
-      rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+        rel="stylesheet"
     />
-    <link rel="stylesheet" href="static/style/main.css" />
-  </head>
 
-  <body>
+    <link
+        rel="stylesheet"
+        href="static/style/main.css"
+    />
+
+</head>
+
+<body>
+
+    <!-- Navigation -->
     <nav class="navbar navbar-dark bg-primary px-4">
-      <span class="navbar-brand"> Leadership Compass Dashboard </span>
-      <button id="logoutBtn" class="btn btn-light">Logout</button>
+
+        <span class="navbar-brand">
+            Leadership Compass
+        </span>
+
+        <button
+            id="logoutBtn"
+            class="btn btn-light"
+            type="button"
+        >
+            Logout
+        </button>
+
     </nav>
 
-    <main class="container mt-5">
 
-      <div class="dashboard-card">
-        <h1> Welcome to your Dashboard </h1>
-        <p> You are successfully authenticated. </p>
+    <main class="container py-5">
 
-        <hr />
+        <!-- Welcome -->
+        <section class="mb-5">
 
-        <h4> JWT Token Status </h4>
-        <p id="tokenStatus"></p>
+            <h1 class="mb-2">
+                Welcome to your Dashboard
+            </h1>
 
-        <h4> User Role </h4>
-        <p id="userRole">Role will appear here later.</p>
+            <p class="text-muted">
+                Track your leadership development, complete assessments
+                and gather feedback from the people you work with.
+            </p>
 
-        <h4> Backend Protected API Response </h4>
-        <p id="backendResponse">Waiting for backend response...</p>
+        </section>
 
-        <h4> Please click the Survey button to start the survey. </h4>
-        <button id="surveyBtn" type="button" class="btn btn-primary" style="width: 200px;"> Start the Survery </button>
 
-        <div id="adminSection" class="mt-4 d-none">
-          <hr />
-          <h4> Admin tools </h4>
-          <p class="text-muted">Manage learning modules across all books and categories.</p>
-          <a href="admin-modules.html" class="btn btn-success">Manage learning modules</a>
-          <h4> Admin Dashboard </h4>
-          <p class="text-muted">View survey results across all users and departments.</p>
-          <a href="admin-dashboard.html" class="btn btn-success">View admin dashboard</a>
+        <!-- Main Dashboard Cards -->
+        <div class="row g-4">
+
+
+            <!-- Leadership Assessment -->
+            <div class="col-md-6">
+
+                <div class="card h-100 shadow-sm">
+
+                    <div class="card-body">
+
+                        <h3 class="card-title">
+                            Leadership Assessment
+                        </h3>
+
+                        <p class="text-muted">
+                            Complete your Leadership Compass assessment
+                            to understand your leadership profile.
+                        </p>
+
+                        <button
+                            id="surveyBtn"
+                            type="button"
+                            class="btn btn-primary"
+                        >
+                            Start Assessment
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- Development Plan -->
+            <div class="col-md-6">
+
+                <div class="card h-100 shadow-sm">
+
+                    <div class="card-body">
+
+                        <h3 class="card-title">
+                            Development Plan
+                        </h3>
+
+                        <p class="text-muted">
+                            View and work through your personalised
+                            leadership development activities.
+                        </p>
+
+                        <a
+                            href="development-plan.html"
+                            class="btn btn-outline-primary"
+                        >
+                            View Development Plan
+                        </a>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- 360 Feedback -->
+            <div class="col-12">
+
+                <div class="card shadow-sm">
+
+                    <div class="card-body">
+
+                        <div
+                            class="d-flex
+                                   justify-content-between
+                                   align-items-start
+                                   flex-wrap
+                                   gap-3"
+                        >
+
+                            <div>
+
+                                <h3 class="card-title mb-2">
+                                    360° Feedback
+                                </h3>
+
+                                <p class="text-muted mb-0">
+                                    Gather anonymous feedback from colleagues
+                                    and teammates to better understand your
+                                    leadership strengths and development areas.
+                                </p>
+
+                            </div>
+
+                            <span
+                                id="surveyStatusBadge"
+                                class="badge bg-secondary"
+                                style="display: none;"
+                            >
+                                Active
+                            </span>
+
+                        </div>
+
+
+                        <hr>
+
+
+                        <!-- BEFORE survey exists -->
+                        <div id="no360SurveyState">
+
+                            <p>
+                                You haven't created a 360° feedback survey yet.
+                            </p>
+
+                            <button
+                                id="generate360Btn"
+                                type="button"
+                                class="btn btn-primary"
+                            >
+                                Create 360° Feedback Link
+                            </button>
+
+                        </div>
+
+
+                        <!-- AFTER survey exists -->
+                        <div
+                            id="active360SurveyState"
+                            style="display: none;"
+                        >
+
+                            <div class="row g-4 mb-4">
+
+
+                                <!-- Status -->
+                                <div class="col-md-4">
+
+                                    <div class="border rounded p-3 h-100">
+
+                                        <p
+                                            class="text-muted mb-1"
+                                        >
+                                            Status
+                                        </p>
+
+                                        <h4
+                                            id="surveyStatus"
+                                            class="mb-0"
+                                        >
+                                            Active
+                                        </h4>
+
+                                    </div>
+
+                                </div>
+
+
+                                <!-- Response Count -->
+                                <div class="col-md-4">
+
+                                    <div class="border rounded p-3 h-100">
+
+                                        <p
+                                            class="text-muted mb-1"
+                                        >
+                                            Responses
+                                        </p>
+
+                                        <h4
+                                            id="responseCount"
+                                            class="mb-0"
+                                        >
+                                            0
+                                        </h4>
+
+                                    </div>
+
+                                </div>
+
+
+                                <!-- Survey ID -->
+                                <div class="col-md-4">
+
+                                    <div class="border rounded p-3 h-100">
+
+                                        <p
+                                            class="text-muted mb-1"
+                                        >
+                                            Survey
+                                        </p>
+
+                                        <h4
+                                            id="surveyIdDisplay"
+                                            class="mb-0"
+                                        >
+                                            -
+                                        </h4>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+
+                            <!-- Share Link -->
+                            <div class="mb-4">
+
+                                <label
+                                    for="surveyLink"
+                                    class="form-label fw-semibold"
+                                >
+                                    Shareable Feedback Link
+                                </label>
+
+                                <p class="text-muted small">
+                                    Send this link to colleagues or teammates.
+                                    They do not need to log in and their
+                                    responses remain anonymous.
+                                </p>
+
+                                <div class="input-group">
+
+                                    <input
+                                        type="text"
+                                        id="surveyLink"
+                                        class="form-control"
+                                        readonly
+                                    />
+
+                                    <button
+                                        id="copySurveyLinkBtn"
+                                        type="button"
+                                        class="btn btn-outline-secondary"
+                                    >
+                                        Copy Link
+                                    </button>
+
+                                </div>
+
+                            </div>
+
+
+                            <!-- Actions -->
+                            <div class="d-flex gap-2 flex-wrap">
+
+                                <button
+                                    id="view360ResultsBtn"
+                                    type="button"
+                                    class="btn btn-primary"
+                                >
+                                    View Results
+                                </button>
+
+                                <button
+                                    id="copySurveyLinkSecondaryBtn"
+                                    type="button"
+                                    class="btn btn-outline-primary"
+                                >
+                                    Copy Feedback Link
+                                </button>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
 
         </div>
-       
 
-      <section class="360-feedback-section">
 
-          <h2>360° Peer Feedback</h2>
+        <!-- Admin Section -->
+        <section
+            id="adminSection"
+            class="mt-5 d-none"
+        >
 
-          <p>
-              Get anonymous feedback from colleagues and peers
-              to better understand your leadership strengths and
-              development areas.
-          </p>
+            <h2 class="mb-3">
+                Admin Tools
+            </h2>
 
-          <button id="generate360Btn" type="button">
-              Generate 360° Feedback Survey
-          </button>
+            <div class="row g-4">
 
-          <div id="surveyLinkContainer" style="display: none;">
 
-              <p>Your feedback survey is ready. Share this link with your peers:</p>
+                <div class="col-md-6">
 
-              <input
-                  type="text"
-                  id="surveyLink"
-                  readonly
-              >
+                    <div class="card h-100 shadow-sm">
 
-              <button id="copySurveyLinkBtn" type="button">
-                  Copy Link
-              </button>
+                        <div class="card-body">
 
-          </div>
-          </div>
-      </section>
+                            <h4>
+                                Learning Modules
+                            </h4>
+
+                            <p class="text-muted">
+                                Manage learning resources and modules.
+                            </p>
+
+                            <a
+                                href="admin-modules.html"
+                                class="btn btn-success"
+                            >
+                                Manage Modules
+                            </a>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="col-md-6">
+
+                    <div class="card h-100 shadow-sm">
+
+                        <div class="card-body">
+
+                            <h4>
+                                Admin Dashboard
+                            </h4>
+
+                            <p class="text-muted">
+                                View aggregated survey results across
+                                users and departments.
+                            </p>
+
+                            <a
+                                href="admin-dashboard.html"
+                                class="btn btn-success"
+                            >
+                                View Admin Dashboard
+                            </a>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
     </main>
 
+
     <script src="static/js/dashboard.js"></script>
-  </body>
+
+</body>
+
 </html>
