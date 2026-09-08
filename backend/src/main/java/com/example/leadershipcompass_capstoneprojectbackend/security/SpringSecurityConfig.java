@@ -45,9 +45,18 @@ public class SpringSecurityConfig {
 
                         .requestMatchers("/api/admin/**").hasRole("ADMIN")
                         .requestMatchers("/api/dashboard/admin").hasRole("ADMIN")
+                        .requestMatchers("/api/reports/**").hasAnyRole("USER", "ADMIN")
+
+                        //NEW added security rules for survey endpoints:
+                        .requestMatchers("/api/survey/questions", "/api/survey/submit", "/api/survey/history")
+                        .hasAnyRole("USER", "ADMIN")
+                        .requestMatchers("/api/survey/admin/**").hasRole("ADMIN")
+
+                        // NEW: added mising Web User Dashboard
+                        // Note: security rule below is actually the progress-over-time endpoint might rename this later to /api/dashboard/progress-over-time
                         .requestMatchers("/api/dashboard/user").hasAnyRole("USER", "ADMIN")
                         .requestMatchers("/api/dashboard/suggested-modules").hasAnyRole("USER", "ADMIN")
-                        .requestMatchers("/api/reports/**").hasAnyRole("USER", "ADMIN")
+                        .requestMatchers("/api/dashboard/peer-comparison").hasAnyRole("USER", "ADMIN")
 
                         // Users and admins may view resource metadata
                         .requestMatchers(HttpMethod.GET, "/api/resources/**")

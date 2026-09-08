@@ -88,6 +88,7 @@
         }
         .overall { text-align: center; margin-bottom: 8px; }
         .overall-score { font-size: 18px; margin: 0 0 8px; }
+
         .band {
             display: inline-block;
             padding: 4px 16px;
@@ -95,7 +96,7 @@
             color: #fff;
             font-size: 13px;
             font-weight: bold;
-            background: rgba(0, 40, 75, 0.95);
+            background: #00284B;
         }
         .summary {
             text-align: center;
@@ -141,16 +142,25 @@
             padding: 14px 18px;
             page-break-inside: avoid;
         }
+        
         .category-result-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+            display: table;
+            width: 100%;
             margin-bottom: 6px;
         }
         .category-result-header h3 {
+            display: table-cell;
+            vertical-align: middle;
             margin: 0;
             font-size: 14.5px;
             color: #10263A;
+        }
+        .category-result-header .band {
+            display: table-cell;
+            vertical-align: middle;
+            text-align: right;
+            width: 1%;
+            white-space: nowrap;
         }
         .category-score {
             margin: 0 0 4px;

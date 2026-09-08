@@ -5,6 +5,7 @@
 
 package com.example.leadershipcompass_capstoneprojectbackend.controller;
 
+import com.example.leadershipcompass_capstoneprojectbackend.dto.SurveyHistoryEntryResponse;
 import com.example.leadershipcompass_capstoneprojectbackend.dto.SurveyResultResponse;
 import com.example.leadershipcompass_capstoneprojectbackend.dto.SurveySubmissionRequest;
 
@@ -71,8 +72,16 @@ public class SurveyController {
         }
     }
 
+    // @GetMapping("/history")
+    // public ResponseEntity<List<SurveyResult>> getSurveyHistory(
+    //     @AuthenticationPrincipal String email) {
+
+    //     return ResponseEntity.ok(
+    //             surveyService.getHistoryForUser(email));
+    // }
+
     @GetMapping("/history")
-    public ResponseEntity<List<SurveyResult>> getSurveyHistory(
+    public ResponseEntity<List<SurveyHistoryEntryResponse>> getSurveyHistory(
         @AuthenticationPrincipal String email) {
 
         return ResponseEntity.ok(

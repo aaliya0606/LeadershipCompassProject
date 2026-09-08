@@ -51,16 +51,11 @@ async function initSidebarNav() {
   });
 }
 
-// Hamburger Button
-if (navBurgerBtn) {
-  navBurgerBtn.addEventListener('click', function () {
-    const navLinks = document.getElementById('navLinks');
-    if (navLinks) {
-      navLinks.classList.toggle('open');
-    }
-    this.classList.toggle('open');
-  });
-}
+// Hamburger Button 
+document.getElementById('hamburgerBtn').addEventListener('click', function () {
+  document.getElementById('navLinks').classList.toggle('open');
+  this.classList.toggle('open');
+});
 
 // -------------------------------------------------------------------------
 // Load questions from backend on page load
@@ -123,27 +118,27 @@ function renderPart() {
   let html = `
     <div class="survey-category">
       <h2 class="survey-category-title">${category.label}</h2>
-      <p class="survey-category-subtitle"><strong>Instructions:</strong> Reflect honestly on how well you invest focused, undistracted time with your team-which builds trust, connection, and psychological safety. For each statement, rate yourself on a scale from <strong> 1 (Rarely/Not at all) to 5 (Consistently/Always)./<strong></p>
+      <p class="survey-category-subtitle"><strong>Instructions:</strong> Reflect honestly on how well you invest focused, undistracted time with your team-which builds trust, connection, and psychological safety. For each statement, rate yourself on a scale from <strong>1 (Rarely/Not at all)</strong> to <strong>5 (Consistently/Always)</strong>.</p>
       <div class="survey-questions">
   `;
 
   categoryQuestions.forEach((q, index) => {
-    const questionKey = category.prefix + "_" + q.questionId;
+  const questionKey = category.prefix + "_" + q.questionId;
     html += `
       <div class="survey-question" id="q-${questionKey}">
         <p class="survey-question-text">${index + 1}. ${q.questionText}</p>
-        <div class="survey-options">
-          ${[1, 2, 3, 4, 5].map(score => `
-            <label class="survey-option">
-              <input type="radio" name="${questionKey}" value="${score}" 
+        <div style="width: max-content; padding-right: 1rem;">
+          <div class="survey-options star-rating">
+            ${[5, 4, 3, 2, 1].map(score => `
+              <input type="radio" id="${questionKey}_${score}" name="${questionKey}" value="${score}"
                 ${answers[questionKey] === score ? "checked" : ""} />
-              <span class="survey-option-label">${score}</span>
-            </label>
-          `).join("")}
-        </div>
-        <div class="survey-scale-labels">
-          <span>Rarely</span>
-          <span>Consistently</span>
+              <label for="${questionKey}_${score}" class="star-label" title="${score}"></label>
+            `).join("")}
+          </div>
+          <div class="survey-scale-labels">
+            <span>Rarely</span>
+            <span>Consistently</span>
+          </div>
         </div>
       </div>
     `;
@@ -154,7 +149,7 @@ function renderPart() {
       <div class="survey-nav">
         ${currentPart > 1 ? `<button class="survey-btn-back" onclick="goBack()">Back</button>` : ""}
         <button class="survey-btn-next" onclick="goNext('${category.prefix}')">
-          ${currentPart === categories.length ? "Submit Survey" : "Next"}
+          ${currentPart === categories.length ? "Submit" : "Next"}
         </button>
       </div>
     </div>
@@ -245,7 +240,7 @@ function showResults(result) {
       <h2 class="survey-results-title">Your Leadership Profile</h2>
       <div class="survey-overall">
         <p class="survey-overall-score">Overall Score: <strong>${result.overallScore} / 250</strong></p>
-        <span class="survey-band" style="background:${bandColor[result.overallBand] || '#6c757d'}">${result.overallBand}</span>
+        <span class="survey-band" style="background:#00284B">${result.overallBand}</span>
       </div>
       <p class="survey-summary">${result.summary}</p>
       <div class="survey-category-results">
@@ -255,7 +250,10 @@ function showResults(result) {
         ${renderCategoryResult("Words of Recognition",result.wordsOfRecognitionScore,result.wordsOfRecognitionBand,result.wordsOfRecognitionMessage,bandColor)}
         ${renderCategoryResult("Psychological Touch", result.psychologicalTouchScore, result.psychologicalTouchBand, result.psychologicalTouchMessage, bandColor)}
       </div>
-      <button class="survey-button" onclick="window.location.href='dashboard.html'">Back to Dashboard</button>
+      <div class="survey-results-actions">
+        <button class="survey-button" onclick="window.location.href='dashboard.html'">Dashboard</button>
+        <button class="survey-button">Print Results</button>
+      </div>
     </div>
   `;
 
@@ -274,11 +272,11 @@ function showResults(result) {
 
 function renderResultBar(label, score, max, band, color) {
   const pct = Math.max(0, Math.min(100, (score / max) * 100));
-  // const fillStyle = color ? `background:${color};` : '';
+  const markerPct = Math.max(8, Math.min(92, pct)); 
 
   return `
   <div class="result-bar-row">
-    <div class="result-bar-marker" data-target-left="${pct}%" style="left:0%; color:#00284B;">
+    <div class="result-bar-marker" data-target-left="${markerPct}%" style="left:0%; color:#00284B;">
       <span class="survey-band" style="background:#00284B;">${band}</span>
     </div>
     <div class="result-bar-track">
@@ -291,10 +289,8 @@ function renderResultBar(label, score, max, band, color) {
 function renderCategoryResult(name, score, band, message, bandColor) {
   return `
     <div class="survey-category-result">
-      <div class="survey-category-result-header">
-        <h3>${name}</h3>
-        <span class="survey-band" style="background:${bandColor[band] || '#6c757d'}">${band}</span>
-      </div>
+      <span class="result-bar-label" style="text-align:center;">${name}</span>
+      ${renderResultBar(name, score, 50, band, bandColor[band])}
       <p class="survey-category-score">Score: <strong>${score} / 50</strong></p>
       <p class="survey-category-message">${message}</p>
     </div>
