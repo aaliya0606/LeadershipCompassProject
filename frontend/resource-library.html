@@ -103,17 +103,9 @@
       return type.charAt(0).toUpperCase() + type.slice(1);
     }
 
-    // Handle resource action
+    // Open the resource metadata page, where the user can view the resource.
     function handleResourceAction(resourceId) {
-      const token = localStorage.getItem("token");
-      if (!token) {
-        alert("Please log in first");
-        return;
-      }
-
-      // Open resource in new window
-      const fileUrl = `http://localhost:8080/api/resources/${resourceId}/file?token=${encodeURIComponent(token)}`;
-      window.open(fileUrl, '_blank');
+      window.location.href = `resource-view.html?id=${encodeURIComponent(resourceId)}`;
     }
 
     // Create resource card HTML
