@@ -492,6 +492,92 @@ h1, h4, h5, h6 {
   border: 1px solid rgba(0, 40, 75, 0.08);
 }
 
+.dashboard-card.hero-card {
+  background: linear-gradient(110deg, var(--brand-green), var(--brand-dark));
+  color: white;
+}
+
+.dashboard-card.hero-card {
+  padding: 3rem;
+}
+
+.dashboard-card.hero-card .btn-hero {
+  background: white;
+  border-color: white;
+  color: var(--brand-green);
+  font-weight: 700;
+}
+
+.dashboard-card.hero-card .btn-hero:hover,
+.dashboard-card.hero-card .btn-hero:focus {
+  background: var(--brand-light-green);
+  border-color: var(--brand-light-green);
+  color: var(--brand-dark);
+}
+
+.dashboard-card.hero-card .btn-outline-dark {
+  border-color: white;
+  color: white;
+}
+
+.dashboard-card.hero-card .btn-outline-dark:hover,
+.dashboard-card.hero-card .btn-outline-dark:focus {
+  background: white;
+  border-color: white;
+  color: var(--brand-dark);
+}
+
+#development-plan {
+  padding-top: 1rem;
+}
+
+#development-plan .section-header {
+  border-left: 5px solid var(--brand-green);
+  padding-left: 1rem;
+}
+
+#development-plan .section-header h4 {
+  margin-bottom: 0.4rem;
+}
+
+#development-plan .week-card {
+  overflow: hidden;
+  border-top: 6px solid var(--brand-green);
+  border-radius: 12px;
+  box-shadow: 0 14px 30px rgba(0, 40, 75, 0.09);
+}
+
+#development-plan .week-card h5 {
+  font-size: 1.45rem;
+  line-height: 1.15;
+}
+
+#development-plan .week-card .list-group {
+  margin-top: 1.25rem;
+  border-top: 1px solid rgba(0, 40, 75, 0.1);
+}
+
+#development-plan .week-card .list-group-item {
+  padding-top: 0.85rem;
+  padding-bottom: 0.85rem;
+  color: #526272;
+}
+
+@media (max-width: 767px) {
+  .dashboard-card.hero-card {
+    padding: 1.5rem;
+  }
+
+  .dashboard-card.hero-card h1 {
+    font-size: 2.4rem;
+    line-height: 1.05;
+  }
+
+  .dashboard-card.hero-card .btn {
+    width: 100%;
+  }
+}
+
 .card-header {
   background: var(--brand-light-green);
   color: var(--brand-dark);
