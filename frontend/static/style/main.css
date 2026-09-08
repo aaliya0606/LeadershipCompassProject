@@ -211,6 +211,10 @@ p {
 
 .resource-view-card {
   padding: 3rem;
+  border-radius: 1vh;
+  box-shadow: 26px 26px 0 -6px var(--brand-green),
+    34px 34px 12px -8px rgba(0, 0, 0, 0.2),
+    10px 10px 10px 0 rgba(0, 0, 0, 0.2);
 }
 
 .resource-view-heading {
@@ -325,6 +329,7 @@ p {
   border-color: white;
   background: white;
   color: var(--brand-green);
+  font-weight: 700;
 }
 
 .resource-preview-panel .btn-outline-primary:hover,
@@ -337,6 +342,9 @@ p {
 @media (max-width: 767px) {
   .resource-view-card {
     padding: 1.5rem;
+    box-shadow: 14px 14px 0 -5px var(--brand-green),
+      20px 20px 10px -7px rgba(0, 0, 0, 0.2),
+      6px 6px 8px 0 rgba(0, 0, 0, 0.16);
   }
 
   .resource-view-layout {
