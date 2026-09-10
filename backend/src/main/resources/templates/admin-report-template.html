@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+
+    <style>
+        @page {
+            size: A4;
+            margin: 30mm 20mm;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            color: #222;
+            font-size: 12px;
+        }
+
+        h1 {
+            font-size: 24px;
+            margin-bottom: 5px;
+        }
+
+        h2 {
+            font-size: 17px;
+            margin-top: 25px;
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 5px;
+        }
+
+        .filter-info {
+            margin-bottom: 25px;
+        }
+
+        .metric {
+            margin: 8px 0;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        .focus-item {
+            margin-bottom: 8px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h1>Leadership Compass Admin Report</h1>
+
+    <!-- Shows which organisation/department this report represents. -->
+    <div class="filter-info">
+        <strong>Organisation:</strong>
+        <span th:text="${organisation}">All</span>
+        <br />
+
+        <strong>Department:</strong>
+        <span th:text="${department}">All</span>
+    </div>
+
+
+    <!-- Assessment participation summary. -->
+    <h2>Assessment Overview</h2>
+
+    <div class="metric">
+        <strong>Total Participants:</strong>
+        <span th:text="${totalUsers}">0</span>
+    </div>
+
+    <div class="metric">
+        <strong>Completed Assessments:</strong>
+        <span th:text="${completedAssessments}">0</span>
+    </div>
+
+    <div class="metric">
+        <strong>Assessment Completion Rate:</strong>
+        <span th:text="${#numbers.formatDecimal(completionRate, 1, 2)}">0.00</span>%
+    </div>
+
+
+    <!-- Aggregated leadership assessment scores. -->
+    <h2>Average Leadership Scores</h2>
+
+    <table>
+        <tr>
+            <th>Leadership Area</th>
+            <th>Average Score</th>
+        </tr>
+
+        <tr>
+            <td>Overall Leadership Score</td>
+            <td>
+                <span th:text="${#numbers.formatDecimal(averageLeadershipScore, 1, 2)}">0.00</span>
+                / 250
+            </td>
+        </tr>
+
+        <tr>
+            <td>Caring Time</td>
+            <td>
+                <span th:text="${#numbers.formatDecimal(averageCaringTimeScore, 1, 2)}">0.00</span>
+                / 50
+            </td>
+        </tr>
+
+        <tr>
+            <td>Receiving Value</td>
+            <td>
+                <span th:text="${#numbers.formatDecimal(averageReceivingValueScore, 1, 2)}">0.00</span>
+                / 50
+            </td>
+        </tr>
+
+        <tr>
+            <td>Acts of Support</td>
+            <td>
+                <span th:text="${#numbers.formatDecimal(averageActsOfSupportScore, 1, 2)}">0.00</span>
+                / 50
+            </td>
+        </tr>
+
+        <tr>
+            <td>Words of Recognition</td>
+            <td>
+                <span th:text="${#numbers.formatDecimal(averageWordsOfRecognitionScore, 1, 2)}">0.00</span>
+                / 50
+            </td>
+        </tr>
+
+        <tr>
+            <td>Psychological Touch</td>
+            <td>
+                <span th:text="${#numbers.formatDecimal(averagePsychologicalTouchScore, 1, 2)}">0.00</span>
+                / 50
+            </td>
+        </tr>
+    </table>
+
+
+    <!-- Displays the three lowest-scoring leadership areas. -->
+    <h2>Top Skill Gaps</h2>
+
+    <table>
+        <tr>
+            <th>Leadership Area</th>
+            <th>Average Score</th>
+        </tr>
+
+        <tr th:each="gap : ${skillGaps}">
+            <td th:text="${gap.key}">Leadership Area</td>
+            <td th:text="${#numbers.formatDecimal(gap.value, 1, 2)}">0.00</td>
+        </tr>
+    </table>
+
+
+    <!-- Recommended focus areas based on the identified skill gaps. -->
+    <h2>Recommended Focus Areas</h2>
+
+    <div
+        class="focus-item"
+        th:each="focus : ${recommendedFocus}"
+        th:text="${focus}">
+        Recommended focus area
+    </div>
+
+</body>
+</html>
