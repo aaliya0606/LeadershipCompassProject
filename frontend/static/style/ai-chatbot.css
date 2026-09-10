@@ -40,8 +40,9 @@
 }
 
 .lc-chat-panel {
-  width: min(380px, calc(100vw - 32px));
-  height: min(520px, calc(100vh - 96px));
+  position: relative;
+  width: min(460px, calc(100vw - 32px));
+  height: min(560px, calc(100vh - 96px));
   margin-bottom: 12px;
   background: var(--brand-surface, #FFFFFF);
   border-radius: 18px;
@@ -50,6 +51,36 @@
   flex-direction: column;
   overflow: hidden;
   color: var(--brand-text, #10263A);
+}
+
+.lc-chat-resize {
+  position: absolute;
+  z-index: 2;
+}
+
+.lc-chat-resize-w {
+  left: 0;
+  top: 0;
+  width: 10px;
+  height: 100%;
+  cursor: ew-resize;
+}
+
+.lc-chat-resize-n {
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 10px;
+  cursor: ns-resize;
+}
+
+body.lc-chat-resizing {
+  cursor: ew-resize;
+  user-select: none;
+}
+
+body.lc-chat-resizing .lc-chat-resize-n {
+  cursor: ns-resize;
 }
 
 .lc-chat-header {
@@ -157,9 +188,23 @@
 
 .lc-chat-bubble.is-assistant {
   align-self: flex-start;
+  max-width: 100%;
   background: #fff;
   border: 1px solid rgba(0, 40, 75, 0.08);
   border-bottom-left-radius: 4px;
+}
+
+.lc-chat-list {
+  margin: 0.35rem 0 0.15rem 1.1rem;
+  padding: 0;
+}
+
+.lc-chat-list li {
+  margin: 0.2rem 0;
+}
+
+.lc-chat-bubble strong {
+  font-weight: 700;
 }
 
 .lc-chat-bubble.is-error {
@@ -283,5 +328,9 @@
   .lc-chat-panel {
     width: calc(100vw - 32px);
     height: min(70vh, 520px);
+  }
+
+  .lc-chat-resize {
+    display: none;
   }
 }

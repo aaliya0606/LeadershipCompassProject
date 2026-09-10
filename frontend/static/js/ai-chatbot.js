@@ -2,6 +2,7 @@
   const API_URL = "http://localhost:8080/api/ai-brain/chat";
   const SESSION_KEY = "lc-ai-chat-session";
   const OPEN_KEY = "lc-ai-chat-open";
+  const SIZE_KEY = "lc-ai-chat-size";
   const HISTORY_PREFIX = "lc-ai-chat-history-";
   const WELCOME =
     "Hi — I’m the Leadership Compass assistant. Ask about your survey, development plan, or the five leadership languages.";
@@ -20,6 +21,8 @@
   root.className = "lc-chat";
   root.innerHTML = `
     <div class="lc-chat-panel" id="lcChatPanel" hidden>
+      <div class="lc-chat-resize lc-chat-resize-w" id="lcChatResizeW" role="separator" aria-orientation="vertical" aria-label="Resize chat width"></div>
+      <div class="lc-chat-resize lc-chat-resize-n" id="lcChatResizeN" role="separator" aria-orientation="horizontal" aria-label="Resize chat height"></div>
       <div class="lc-chat-header">
         <div>
           <p class="lc-chat-kicker">Leadership Compass</p>
@@ -57,7 +60,10 @@
   const input = document.getElementById("lcChatInput");
   const sendBtn = document.getElementById("lcChatSend");
   const messageList = document.getElementById("lcChatMessages");
+  const resizeW = document.getElementById("lcChatResizeW");
+  const resizeN = document.getElementById("lcChatResizeN");
 
+  applySavedSize();
   renderMessages();
   if (sessionStorage.getItem(OPEN_KEY) === "1") {
     setOpen(true);
@@ -81,6 +87,8 @@
     }
   });
   input.addEventListener("input", autosize);
+  enableResize(resizeW, "width");
+  enableResize(resizeN, "height");
   document.addEventListener("keydown", function (event) {
     if (event.key === "Escape" && !panel.hidden) {
       setOpen(false);
@@ -193,7 +201,7 @@
             '<div class="lc-chat-bubble ' +
             css +
             '">' +
-            formatText(message.text) +
+            (message.role === "assistant" ? formatMarkdown(message.text) : formatPlain(message.text)) +
             "</div>"
           );
         })
@@ -249,8 +257,118 @@
     messageList.scrollTop = messageList.scrollHeight;
   }
 
-  function formatText(text) {
+  function applySavedSize() {
+    const size = loadSize();
+    if (size.width) {
+      panel.style.width = size.width + "px";
+    }
+    if (size.height) {
+      panel.style.height = size.height + "px";
+    }
+  }
+
+  function loadSize() {
+    try {
+      const parsed = JSON.parse(sessionStorage.getItem(SIZE_KEY) || "{}");
+      return parsed && typeof parsed === "object" ? parsed : {};
+    } catch (error) {
+      return {};
+    }
+  }
+
+  function saveSize() {
+    sessionStorage.setItem(
+      SIZE_KEY,
+      JSON.stringify({
+        width: Math.round(panel.getBoundingClientRect().width),
+        height: Math.round(panel.getBoundingClientRect().height)
+      })
+    );
+  }
+
+  function enableResize(handle, axis) {
+    if (!handle) {
+      return;
+    }
+    handle.addEventListener("mousedown", function (event) {
+      event.preventDefault();
+      const startX = event.clientX;
+      const startY = event.clientY;
+      const startWidth = panel.getBoundingClientRect().width;
+      const startHeight = panel.getBoundingClientRect().height;
+      const minWidth = 320;
+      const minHeight = 360;
+      const maxWidth = Math.max(minWidth, window.innerWidth - 48);
+      const maxHeight = Math.max(minHeight, window.innerHeight - 96);
+
+      function onMove(moveEvent) {
+        if (axis === "width") {
+          const nextWidth = Math.min(
+            maxWidth,
+            Math.max(minWidth, startWidth + (startX - moveEvent.clientX))
+          );
+          panel.style.width = nextWidth + "px";
+        } else {
+          const nextHeight = Math.min(
+            maxHeight,
+            Math.max(minHeight, startHeight + (startY - moveEvent.clientY))
+          );
+          panel.style.height = nextHeight + "px";
+        }
+      }
+
+      function onUp() {
+        document.removeEventListener("mousemove", onMove);
+        document.removeEventListener("mouseup", onUp);
+        document.body.classList.remove("lc-chat-resizing");
+        saveSize();
+      }
+
+      document.body.classList.add("lc-chat-resizing");
+      document.addEventListener("mousemove", onMove);
+      document.addEventListener("mouseup", onUp);
+    });
+  }
+
+  function formatPlain(text) {
     return escapeHtml(text).replace(/\n/g, "<br>");
+  }
+
+  function formatMarkdown(text) {
+    const lines = escapeHtml(text).split(/\n/);
+    let html = "";
+    let inList = false;
+
+    lines.forEach(function (line) {
+      const bullet = line.match(/^\s*[\*\-]\s+(.*)$/);
+      if (bullet) {
+        if (!inList) {
+          html += '<ul class="lc-chat-list">';
+          inList = true;
+        }
+        html += "<li>" + formatInline(bullet[1]) + "</li>";
+        return;
+      }
+      if (inList) {
+        html += "</ul>";
+        inList = false;
+      }
+      if (line.trim() === "") {
+        html += "<br>";
+        return;
+      }
+      html += formatInline(line) + "<br>";
+    });
+    if (inList) {
+      html += "</ul>";
+    }
+    return html.replace(/(<br>)+$/, "");
+  }
+
+  function formatInline(text) {
+    return text
+      .replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>")
+      .replace(/__([^_]+?)__/g, "<strong>$1</strong>");
   }
 
   function escapeHtml(text) {

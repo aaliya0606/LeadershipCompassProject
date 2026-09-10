@@ -6,6 +6,7 @@ import java.util.ArrayDeque;
 import java.util.Deque;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -38,6 +39,7 @@ public class AiBrainUsageLimiter {
     private final ConcurrentHashMap<String, AtomicInteger> userInFlight = new ConcurrentHashMap<>();
     private final AtomicInteger globalInFlight = new AtomicInteger();
 
+    @Autowired
     public AiBrainUsageLimiter(
             @Value("${app.ai-brain.limits.chat-max-requests:12}") int chatMaxRequests,
             @Value("${app.ai-brain.limits.chat-window-seconds:600}") long chatWindowSeconds,
