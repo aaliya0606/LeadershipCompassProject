@@ -30,19 +30,25 @@ public class AdminDashboardController {
     private final AdminDashboardService adminDashboardService;
     private final AdminReportService adminReportService;
 
-    /**
-     * Returns aggregated leadership assessment data for the Admin Dashboard.
-     *
-     * @param department department to filter by, or "all" for organisation-wide data
-     * @return aggregated Admin Dashboard metrics
-     */
-    @GetMapping
-    public AdminDashboardResponse getDashboard(
-            @RequestParam(required = false, defaultValue = "all")
-            String department) {
+/**
+ * Returns aggregated leadership assessment data for the Admin Dashboard.
+ *
+ * Data can be filtered by organisation and, where applicable,
+ * by a department within that organisation.
+ *
+ * @param organisation organisation to filter by, or "all"
+ * @param department department to filter by, or "all"
+ * @return aggregated Admin Dashboard metrics
+ */
+   @GetMapping
+   public AdminDashboardResponse getDashboard(
+        @RequestParam(required = false, defaultValue = "all")
+           String organisation,
+           @RequestParam(required = false, defaultValue = "all")
+           String department) {
 
-        return adminDashboardService.getDashboardData(department);
-    }
+       return adminDashboardService.getDashboardData(organisation, department);
+   }
 
     /**
      * Downloads aggregated Admin Dashboard metrics as a CSV report.
@@ -55,14 +61,40 @@ public class AdminDashboardController {
      */
     @GetMapping("/export")
     public ResponseEntity<String> exportDashboard(
-            @RequestParam(required = false, defaultValue = "all")
-            String department) {
+           @RequestParam(required = false, defaultValue = "all")
+           String organisation,
+           @RequestParam(required = false, defaultValue = "all")
+           String department) {
 
-        String csv = adminReportService.generateCsvReport(department);
+        // Generate the report using the same organisation and department filters
+        // as the Admin Dashboard.
+        String csv = adminReportService.generateCsvReport(
+                organisation,
+                department
+        );
 
-        String filename = department.equalsIgnoreCase("all")
-                ? "leadership-compass-report-all.csv"
-                : "leadership-compass-report-" + department + ".csv";
+        // Create a filename that reflects the selected organisation and department.
+        String filename;
+
+        if (organisation.equalsIgnoreCase("all")
+                && department.equalsIgnoreCase("all")) {
+
+        filename = "leadership-compass-report-all.csv";
+
+        } else if (!organisation.equalsIgnoreCase("all")
+                && department.equalsIgnoreCase("all")) {
+
+        filename = "leadership-compass-report-" + organisation + ".csv";
+
+        } else if (organisation.equalsIgnoreCase("all")) {
+
+        filename = "leadership-compass-report-" + department + ".csv";
+
+        } else {
+
+        filename = "leadership-compass-report-"
+                + organisation + "-" + department + ".csv";
+        }
 
         return ResponseEntity.ok()
                 .header(

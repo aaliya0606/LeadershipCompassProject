@@ -21,19 +21,31 @@ public class AdminReportService {
 
     private final AdminDashboardService adminDashboardService;
 
-    /**
-     * Generates a CSV export using the same aggregated metrics provided
-     * by the Admin Dashboard.
+     /**
+     * Generates a CSV report using the existing department-only behaviour.
+     * Retained so existing report functionality and tests continue to work.
      *
-     * @param department department to report on, or "all" for organisation-wide data
+     * @param department department to report on, or "all"
      * @return aggregated dashboard metrics formatted as CSV
      */
 
     public String generateCsvReport(String department) {
+        return generateCsvReport("all", department);
+        }
 
-        //gets the same AdminDashboardResponse data as the AdminDashboard we already use
+        /**
+         * Generates a CSV report for a selected organisation and,
+         * where applicable, a department within that organisation.
+         *
+         * @param organisation organisation to report on, or "all"
+         * @param department department to report on, or "all"
+         * @return aggregated dashboard metrics formatted as CSV
+         */
+        public String generateCsvReport(String organisation, String department) {
+
+        // Use the same aggregated data and filters as the Admin Dashboard.
         AdminDashboardResponse data =
-                adminDashboardService.getDashboardData(department);
+                adminDashboardService.getDashboardData(organisation,department);
 
         // Apply the same minimum-participant privacy rule to department exports.
         boolean suppressed =
@@ -43,6 +55,10 @@ public class AdminReportService {
 
         //Than transform the data into a CSV format, with each metric on a new line
         csv.append("Metric,Value\n");
+
+        csv.append("Organisation,")
+        .append(organisation)
+        .append("\n");
 
         csv.append("Department,")
                 .append(department)
