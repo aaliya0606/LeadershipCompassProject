@@ -3,6 +3,7 @@ package com.example.leadershipcompass_capstoneprojectbackend.controller;
 import com.example.leadershipcompass_capstoneprojectbackend.dto.AdminDashboardResponse;
 import com.example.leadershipcompass_capstoneprojectbackend.service.AdminDashboardService;
 import com.example.leadershipcompass_capstoneprojectbackend.service.AdminReportService;
+import com.example.leadershipcompass_capstoneprojectbackend.service.AdminPdfService;
 
 import lombok.RequiredArgsConstructor;
 
@@ -29,20 +30,27 @@ public class AdminDashboardController {
 
     private final AdminDashboardService adminDashboardService;
     private final AdminReportService adminReportService;
+    private final AdminPdfService adminPdfService;
 
-    /**
-     * Returns aggregated leadership assessment data for the Admin Dashboard.
-     *
-     * @param department department to filter by, or "all" for organisation-wide data
-     * @return aggregated Admin Dashboard metrics
-     */
-    @GetMapping
-    public AdminDashboardResponse getDashboard(
-            @RequestParam(required = false, defaultValue = "all")
-            String department) {
+/**
+ * Returns aggregated leadership assessment data for the Admin Dashboard.
+ *
+ * Data can be filtered by organisation and, where applicable,
+ * by a department within that organisation.
+ *
+ * @param organisation organisation to filter by, or "all"
+ * @param department department to filter by, or "all"
+ * @return aggregated Admin Dashboard metrics
+ */
+   @GetMapping
+   public AdminDashboardResponse getDashboard(
+        @RequestParam(required = false, defaultValue = "all")
+           String organisation,
+           @RequestParam(required = false, defaultValue = "all")
+           String department) {
 
-        return adminDashboardService.getDashboardData(department);
-    }
+       return adminDashboardService.getDashboardData(organisation, department);
+   }
 
     /**
      * Downloads aggregated Admin Dashboard metrics as a CSV report.
@@ -55,14 +63,40 @@ public class AdminDashboardController {
      */
     @GetMapping("/export")
     public ResponseEntity<String> exportDashboard(
-            @RequestParam(required = false, defaultValue = "all")
-            String department) {
+           @RequestParam(required = false, defaultValue = "all")
+           String organisation,
+           @RequestParam(required = false, defaultValue = "all")
+           String department) {
 
-        String csv = adminReportService.generateCsvReport(department);
+        // Generate the report using the same organisation and department filters
+        // as the Admin Dashboard.
+        String csv = adminReportService.generateCsvReport(
+                organisation,
+                department
+        );
 
-        String filename = department.equalsIgnoreCase("all")
-                ? "leadership-compass-report-all.csv"
-                : "leadership-compass-report-" + department + ".csv";
+        // Create a filename that reflects the selected organisation and department.
+        String filename;
+
+        if (organisation.equalsIgnoreCase("all")
+                && department.equalsIgnoreCase("all")) {
+
+        filename = "leadership-compass-report-all.csv";
+
+        } else if (!organisation.equalsIgnoreCase("all")
+                && department.equalsIgnoreCase("all")) {
+
+        filename = "leadership-compass-report-" + organisation + ".csv";
+
+        } else if (organisation.equalsIgnoreCase("all")) {
+
+        filename = "leadership-compass-report-" + department + ".csv";
+
+        } else {
+
+        filename = "leadership-compass-report-"
+                + organisation + "-" + department + ".csv";
+        }
 
         return ResponseEntity.ok()
                 .header(
@@ -72,4 +106,40 @@ public class AdminDashboardController {
                 .contentType(MediaType.parseMediaType("text/csv"))
                 .body(csv);
     }
+    /**
+    * Downloads aggregated Admin Dashboard metrics as a PDF report.
+    *
+    * The PDF uses the same organisation and department filtering
+    * as the Admin Dashboard.
+    *
+    * @param organisation organisation to export, or "all"
+    * @param department department to export, or "all"
+    * @return generated PDF report as a downloadable file
+    */
+   @GetMapping("/export/pdf")
+   public ResponseEntity<byte[]> exportDashboardPdf(
+           @RequestParam(required = false, defaultValue = "all")
+           String organisation,
+           @RequestParam(required = false, defaultValue = "all")
+           String department) {
+
+       // Generate the PDF using the same aggregated dashboard data.
+       byte[] pdf =
+               adminPdfService.generatePdfReport(organisation, department);
+
+       // Build a filename based on the selected filters.
+       String filename = "leadership-compass-report-"
+               + organisation.replace(" ", "-")
+               + "-"
+               + department.replace(" ", "-")
+               + ".pdf";
+
+       return ResponseEntity.ok()
+               .header(
+                       HttpHeaders.CONTENT_DISPOSITION,
+                       "attachment; filename=\"" + filename + "\""
+               )
+               .contentType(MediaType.APPLICATION_PDF)
+               .body(pdf);
+   }
 }

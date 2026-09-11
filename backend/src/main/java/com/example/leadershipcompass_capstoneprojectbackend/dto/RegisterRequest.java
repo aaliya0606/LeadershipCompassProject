@@ -15,4 +15,5 @@ public class RegisterRequest {
     private String confirmPassword;
     private String role;    // USER or ADMIN
     private String department;
+    private String organisation;
 }

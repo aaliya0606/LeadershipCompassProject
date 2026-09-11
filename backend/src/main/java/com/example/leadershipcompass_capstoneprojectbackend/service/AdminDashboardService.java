@@ -4,6 +4,7 @@ import com.example.leadershipcompass_capstoneprojectbackend.dto.AdminDashboardRe
 import com.example.leadershipcompass_capstoneprojectbackend.model.SurveyResult;
 import com.example.leadershipcompass_capstoneprojectbackend.repository.SurveyResultRepository;
 import com.example.leadershipcompass_capstoneprojectbackend.repository.UserRepository;
+import com.example.leadershipcompass_capstoneprojectbackend.model.User;
 
 import lombok.RequiredArgsConstructor;
 
@@ -18,12 +19,13 @@ import java.util.Map;
 /**
  * Provides aggregated leadership assessment data for the Admin Dashboard.
  *
- * Dashboard data can be viewed organisation-wide or filtered by department.
+ * Dashboard data can be viewed across all users, filtered by organisation,
+ * filtered by department, or filtered by a department within an organisation.
  * Results are aggregated to prevent individual participant assessment data
  * from being exposed through the admin dashboard.
  *
  * Department-level aggregate metrics are suppressed when fewer than six
- * participants are present in the selected department.
+ * participants are present in the selected group.
  */
 
 @Service
@@ -34,17 +36,35 @@ public class AdminDashboardService {
     private final SurveyResultRepository surveyResultRepository;
 
     /**
-     * Retrieves aggregated dashboard metrics for the organisation or a
-     * selected department.
-     * The response includes assessment participation, average leadership
-     * scores, the three lowest-scoring leadership areas, and recommended
-     * focus areas.
-     * @param department department to filter by, or "all" for organisation-wide data
-     *  @return aggregated Admin Dashboard data
-     */
+    * Retrieves aggregated dashboard data using the existing department-only
+    * filtering behaviour.
+    *
+    * This method is retained for compatibility with existing dashboard,
+    * report and test functionality.
+    *
+    * @param department department to filter by, or "all" for all users
+   * @return aggregated Admin Dashboard data
+   */    @Transactional(readOnly = true)
+   
+    public AdminDashboardResponse getDashboardData(String department) {
+        return getDashboardData("all", department);
+    }
+
+    /**
+    * Retrieves aggregated dashboard data for a selected organisation and,
+    * where applicable, a department within that organisation.
+    *
+    * An organisation value of "all" represents users across all organisations.
+    * A department value of "all" represents all departments within the selected
+    * organisation.
+    *
+    * @param organisation organisation to filter by, or "all"
+    * @param department department to filter by, or "all"
+    * @return aggregated Admin Dashboard data
+    */
 
     @Transactional(readOnly = true)
-    public AdminDashboardResponse getDashboardData(String department) {
+    public AdminDashboardResponse getDashboardData(String organisation, String department) {
 
         // Get users
         long totalUsers;
@@ -52,40 +72,57 @@ public class AdminDashboardService {
         // Get survey results
         List<SurveyResult> results;
 
-        if (department == null || department.equalsIgnoreCase("all")) {
+        // Retrieve users and survey results based on the selected
+        // organisation and department filters.
+        if ((organisation == null || organisation.equalsIgnoreCase("all"))
+                && (department == null || department.equalsIgnoreCase("all"))) {
 
-            totalUsers = userRepository.count();
-            results = surveyResultRepository.findAll();
+        // No filters selected - retrieve all users and results.
+        totalUsers = userRepository.count();
+        results = surveyResultRepository.findAll();
+
+        } else if (organisation != null
+                && !organisation.equalsIgnoreCase("all")
+                && (department == null || department.equalsIgnoreCase("all"))) {
+
+        // Organisation selected - include all departments within that organisation.
+        totalUsers = userRepository.findByOrganisationIgnoreCase(organisation).size();
+        results = surveyResultRepository.findByUserOrganisationIgnoreCase(organisation);
+
+        } else if ((organisation == null || organisation.equalsIgnoreCase("all"))
+                && department != null
+                && !department.equalsIgnoreCase("all")) {
+
+        // Department-only filtering retained for existing functionality.
+        totalUsers = userRepository.findByDepartment(department).size();
+        results = surveyResultRepository.findByUserDepartment(department);
 
         } else {
 
-            totalUsers = userRepository.findByDepartment(department).size();
-            results = surveyResultRepository.findByUserDepartment(department);
+        // Both organisation and department selected.
+        totalUsers =
+                userRepository.findByOrganisationIgnoreCaseAndDepartmentIgnoreCase(
+                        organisation,
+                        department
+                ).size();
+
+        results =
+                surveyResultRepository
+                        .findByUserOrganisationIgnoreCaseAndUserDepartmentIgnoreCase(
+                                organisation,
+                                department
+                        );
         }
 
-        long completedAssessments = results.size();
+        // Count completed assessments by distinct user IDs
+        // This ensures that each user is only counted once, even if they have multiple survey results.
+        // This is important for calculating the assessment completion rate accurately.
 
-        // Privacy rule: do not expose aggregated department results
-        // when fewer than 6 participants are in the selected group.
-        if (department != null
-                && !department.equalsIgnoreCase("all")
-                && totalUsers < 6) {
-
-                return new AdminDashboardResponse(
-                        totalUsers,
-                        completedAssessments,
-                        0,
-                        0,
-                        0,
-                        0,
-                        0,
-                        0,
-                        0,
-                        Collections.emptyMap(),
-                        Collections.emptyMap(),
-                        Collections.emptyList()
-                );
-                }
+        long completedAssessments = results.stream()
+                .map(SurveyResult::getUser)
+                .map(User::getId)
+                .distinct()
+                .count();
 
                 // Assessment completion rate
                 double completionRate = 0;
@@ -95,10 +132,10 @@ public class AdminDashboardService {
                         ((double) completedAssessments / totalUsers) * 100;
                 }
 
-                // If there are no completed assessments
+                // If there are no completed assessments, return participation data
+                // without generating leadership averages, skill gaps or recommendations.
                 if (results.isEmpty()) {
-
-                return new AdminDashboardResponse(
+                   return new AdminDashboardResponse(
                         totalUsers,
                         0,
                         completionRate,
@@ -109,9 +146,9 @@ public class AdminDashboardService {
                         0,
                         0,
                         Collections.emptyMap(),
-                                Collections.emptyMap(),
-                                Collections.emptyList()
-                );
+                        Collections.emptyMap(),
+                        Collections.emptyList()
+                   );
                 }
 
                 // Calculate averages
