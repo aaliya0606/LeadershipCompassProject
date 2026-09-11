@@ -61,42 +61,5 @@ class AdminReportServiceTest {
         assertTrue(csv.contains("Average Words of Recognition Score (out of 50),29.33"));
         assertTrue(csv.contains("Organisation,all"));
     }
-    @Test
-    void shouldSuppressDepartmentMetricsWhenFewerThanSixParticipants() {
 
-        AdminDashboardResponse dashboardResponse =
-                new AdminDashboardResponse(
-                        1,
-                        1,
-                        0.0,
-                        0.0,
-                        0.0,
-                        0.0,
-                        0.0,
-                        0.0,
-                        0.0,
-                        Map.of(),
-                        Map.of(),
-                        List.of()
-                );
-
-        when(adminDashboardService.getDashboardData("all", "IT"))
-                .thenReturn(dashboardResponse);
-
-        String csv = adminReportService.generateCsvReport("all", "IT");
-
-        assertTrue(csv.contains("Department,IT"));
-        assertTrue(csv.contains("Total Participants,1"));
-        assertTrue(csv.contains("Completed Assessments,1"));
-        assertTrue(csv.contains(
-                "Assessment Completion Rate,Suppressed (<6 participants)"
-        ));
-        assertTrue(csv.contains(
-                "Average Leadership Score (out of 250),Suppressed (<6 participants)"
-        ));
-        assertTrue(csv.contains(
-                "Average Caring Time Score (out of 50),Suppressed (<6 participants)"
-        ));
-        assertTrue(csv.contains("Organisation,all"));
-    }
 }

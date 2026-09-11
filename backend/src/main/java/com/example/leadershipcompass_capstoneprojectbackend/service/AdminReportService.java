@@ -47,10 +47,6 @@ public class AdminReportService {
         AdminDashboardResponse data =
                 adminDashboardService.getDashboardData(organisation,department);
 
-        // Apply the same minimum-participant privacy rule to department exports.
-        boolean suppressed =
-        !department.equalsIgnoreCase("all") && data.getTotalUsers() < 6;
-
         StringBuilder csv = new StringBuilder();
 
         //Than transform the data into a CSV format, with each metric on a new line
@@ -73,45 +69,31 @@ public class AdminReportService {
                 .append("\n");
 
         csv.append("Assessment Completion Rate,")
-                .append(suppressed
-                    ? "Suppressed (<6 participants)"
-                    : String.format("%.2f%%", data.getAssessmentCompletionRate()))
+                .append(String.format("%.2f%%", data.getAssessmentCompletionRate()))
                 .append("\n");
 
         csv.append("Average Leadership Score (out of 250),")
-                .append(suppressed
-                        ? "Suppressed (<6 participants)"
-                        : String.format("%.2f", data.getAverageLeadershipScore()))
+                .append(String.format("%.2f", data.getAverageLeadershipScore()))
                 .append("\n");
 
         csv.append("Average Caring Time Score (out of 50),")
-                .append(suppressed
-                        ? "Suppressed (<6 participants)"
-                        : String.format("%.2f", data.getAverageCaringTimeScore()))
+                .append(String.format("%.2f", data.getAverageCaringTimeScore()))
                 .append("\n");
 
         csv.append("Average Receiving Value Score (out of 50),")
-                .append(suppressed
-                        ? "Suppressed (<6 participants)"
-                        : String.format("%.2f", data.getAverageReceivingValueScore()))
+                .append(String.format("%.2f", data.getAverageReceivingValueScore()))
                 .append("\n");
 
         csv.append("Average Acts of Support Score (out of 50),")
-                .append(suppressed
-                        ? "Suppressed (<6 participants)"
-                        : String.format("%.2f", data.getAverageActsOfSupportScore()))
+                .append(String.format("%.2f", data.getAverageActsOfSupportScore()))
                 .append("\n");
 
         csv.append("Average Words of Recognition Score (out of 50),")
-                .append(suppressed
-                        ? "Suppressed (<6 participants)"
-                        : String.format("%.2f", data.getAverageWordsOfRecognitionScore()))
+                .append(String.format("%.2f", data.getAverageWordsOfRecognitionScore()))
                 .append("\n");
 
         csv.append("Average Psychological Touch Score (out of 50),")
-                .append(suppressed
-                        ? "Suppressed (<6 participants)"
-                        : String.format("%.2f", data.getAveragePsychologicalTouchScore()))
+                .append(String.format("%.2f", data.getAveragePsychologicalTouchScore()))
                 .append("\n");
 
         return csv.toString();

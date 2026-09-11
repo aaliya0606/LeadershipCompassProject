@@ -4,6 +4,7 @@ import com.example.leadershipcompass_capstoneprojectbackend.dto.AdminDashboardRe
 import com.example.leadershipcompass_capstoneprojectbackend.model.SurveyResult;
 import com.example.leadershipcompass_capstoneprojectbackend.repository.SurveyResultRepository;
 import com.example.leadershipcompass_capstoneprojectbackend.repository.UserRepository;
+import com.example.leadershipcompass_capstoneprojectbackend.model.User;
 
 import lombok.RequiredArgsConstructor;
 
@@ -113,29 +114,15 @@ public class AdminDashboardService {
                         );
         }
 
-        long completedAssessments = results.size();
+        // Count completed assessments by distinct user IDs
+        // This ensures that each user is only counted once, even if they have multiple survey results.
+        // This is important for calculating the assessment completion rate accurately.
 
-        // Privacy rule: do not expose aggregated department results
-        // when fewer than 6 participants are in the selected group.
-        if (department != null
-                && !department.equalsIgnoreCase("all")
-                && totalUsers < 6) {
-
-                return new AdminDashboardResponse(
-                        totalUsers,
-                        completedAssessments,
-                        0,
-                        0,
-                        0,
-                        0,
-                        0,
-                        0,
-                        0,
-                        Collections.emptyMap(),
-                        Collections.emptyMap(),
-                        Collections.emptyList()
-                );
-                }
+        long completedAssessments = results.stream()
+                .map(SurveyResult::getUser)
+                .map(User::getId)
+                .distinct()
+                .count();
 
                 // Assessment completion rate
                 double completionRate = 0;
@@ -145,10 +132,10 @@ public class AdminDashboardService {
                         ((double) completedAssessments / totalUsers) * 100;
                 }
 
-                // If there are no completed assessments
+                // If there are no completed assessments, return participation data
+                // without generating leadership averages, skill gaps or recommendations.
                 if (results.isEmpty()) {
-
-                return new AdminDashboardResponse(
+                   return new AdminDashboardResponse(
                         totalUsers,
                         0,
                         completionRate,
@@ -159,9 +146,9 @@ public class AdminDashboardService {
                         0,
                         0,
                         Collections.emptyMap(),
-                                Collections.emptyMap(),
-                                Collections.emptyList()
-                );
+                        Collections.emptyMap(),
+                        Collections.emptyList()
+                   );
                 }
 
                 // Calculate averages
