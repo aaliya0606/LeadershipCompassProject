@@ -252,7 +252,9 @@ function showResults(result) {
       </div>
       <div class="survey-results-actions">
         <button class="survey-button" onclick="window.location.href='dashboard.html'">Dashboard</button>
-        <button class="survey-button">Print Results</button>
+        <button class="survey-button" onclick="printResults(${result.resultId})">
+            Print Results
+        </button>
       </div>
     </div>
   `;
@@ -295,6 +297,44 @@ function renderCategoryResult(name, score, band, message, bandColor) {
       <p class="survey-category-message">${message}</p>
     </div>
   `;
+}
+
+// -------------------------------------------------------------------------
+// Print PDF Results
+// -------------------------------------------------------------------------
+async function printResults(resultId) {
+  try {
+    const response = await fetch(
+      BASE_URL + "/api/reports/" + resultId,
+      {
+        method: "GET",
+        headers: {
+            "Authorization": "Bearer " + token
+        }
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error("Failed to generate PDF");
+    }
+
+    const pdfBlob = await response.blob();
+    const pdfUrl = window.URL.createObjectURL(pdfBlob);
+
+    const link = document.createElement("a");
+    link.href = pdfUrl;
+    link.download = "leadership-report.pdf";
+
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+
+    window.URL.revokeObjectURL(pdfUrl);
+
+  } catch (error) {
+    console.error("PDF download error:", error);
+    showError("Failed to generate PDF report.");
+  }
 }
 
 // -------------------------------------------------------------------------
