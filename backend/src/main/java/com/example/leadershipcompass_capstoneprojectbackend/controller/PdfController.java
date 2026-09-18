@@ -22,14 +22,6 @@ public class PdfController {
         this.surveyService = surveyService;
     }
 
-    @GetMapping("/api/reports/dummy")
-    public ResponseEntity<byte[]> downloadDummyReport() {
-        byte[] pdfBytes = pdfService.generateDummyReportPdf();
-        return ResponseEntity.ok()
-                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=leadership-report.pdf")
-                .contentType(MediaType.APPLICATION_PDF)
-                .body(pdfBytes);
-    }
 
     @GetMapping("/api/reports/{resultId}")
     public ResponseEntity<byte[]> downloadReport(@PathVariable Long resultId) {
