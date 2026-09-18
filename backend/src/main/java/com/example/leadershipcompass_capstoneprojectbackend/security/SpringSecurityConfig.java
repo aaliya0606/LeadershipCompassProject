@@ -57,6 +57,8 @@ public class SpringSecurityConfig {
                         .requestMatchers("/api/dashboard/user").hasAnyRole("USER", "ADMIN")
                         .requestMatchers("/api/dashboard/suggested-modules").hasAnyRole("USER", "ADMIN")
                         .requestMatchers("/api/dashboard/peer-comparison").hasAnyRole("USER", "ADMIN")
+                        //for the chart
+                        .requestMatchers("/api/dashboard/latest-scores").hasAnyRole("USER", "ADMIN")
 
                         // Users and admins may view resource metadata
                         .requestMatchers(HttpMethod.GET, "/api/resources/**")
