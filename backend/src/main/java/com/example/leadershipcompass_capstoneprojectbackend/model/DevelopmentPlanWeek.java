@@ -64,10 +64,9 @@ public class DevelopmentPlanWeek {
     @Column(length = 2000)
     private String rationale;
 
-    /** Ordered practical action items for the learner. */
+    /** Ordered practical action items for the learner, including check-off state. */
     @ElementCollection
     @CollectionTable(name = "development_plan_week_actions", joinColumns = @JoinColumn(name = "development_plan_week_id"))
-    @Column(name = "action_item", length = 1000)
     @OrderColumn(name = "action_order")
-    private List<String> actions = new ArrayList<>();
+    private List<DevelopmentPlanAction> actions = new ArrayList<>();
 }

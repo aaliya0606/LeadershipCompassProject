@@ -7,6 +7,11 @@ const weeksContainer = document.getElementById("weeksContainer");
 const planMeta = document.getElementById("planMeta");
 const planAlert = document.getElementById("planAlert");
 const planLoading = document.getElementById("planLoading");
+const planProgress = document.getElementById("planProgress");
+const planProgressLabel = document.getElementById("planProgressLabel");
+const planProgressFill = document.getElementById("planProgressFill");
+
+let currentPlan = null;
 
 if (!token) {
   window.location.href = "index.html";
@@ -47,10 +52,21 @@ if (generatePlanBtn) {
   });
 }
 
+if (weeksContainer) {
+  weeksContainer.addEventListener("change", (event) => {
+    const checkbox = event.target;
+    if (!(checkbox instanceof HTMLInputElement) || !checkbox.matches("[data-action-checkbox]")) {
+      return;
+    }
+    toggleAction(checkbox);
+  });
+}
+
 loadCurrentPlan();
 
 async function loadCurrentPlan() {
   planLoading.classList.remove("d-none");
+  hideProgress();
   try {
     const response = await fetch(`${API_BASE}/current`, {
       headers: {
@@ -59,6 +75,7 @@ async function loadCurrentPlan() {
     });
 
     if (response.status === 404) {
+      hideProgress();
       weeksContainer.innerHTML = emptyState(
         "No plan has been generated yet.",
         "Use the button above to create a personalised 5-week plan from your latest survey scores."
@@ -83,8 +100,10 @@ async function loadCurrentPlan() {
 }
 
 function renderPlan(plan) {
+  currentPlan = plan;
   const weeksRaw = Array.isArray(plan.weeks) ? plan.weeks : [];
   if (weeksRaw.length === 0) {
+    hideProgress();
     weeksContainer.innerHTML = emptyState("No weekly recommendations were returned.", "Generate the plan again after survey data is available.");
     return;
   }
@@ -92,10 +111,31 @@ function renderPlan(plan) {
   planMeta.textContent = `Generated ${formatTimestamp(plan.generatedAt)} using ${formatGenerationSource(plan.generationSource)}. Complete modules in week order (1 → 5).`;
 
   const weeks = [...weeksRaw].sort((a, b) => (a.weekNumber || 0) - (b.weekNumber || 0));
+  updateProgress(weeks);
   weeksContainer.innerHTML = weeks
     .map((week) => {
-      const actions = (week.actions || [])
-        .map((action) => `<li class="list-group-item">${escapeHtml(action)}</li>`)
+      const actions = normalizeActions(week.actions);
+      const completedCount = actions.filter((action) => action.completed).length;
+      const actionItems = actions
+        .map((action) => {
+          const inputId = `action-${week.weekNumber}-${action.index}`;
+          const completeClass = action.completed ? " is-complete" : "";
+          const checked = action.completed ? "checked" : "";
+          return `
+            <li class="list-group-item">
+              <div class="action-check-item${completeClass}">
+                <input
+                  id="${inputId}"
+                  type="checkbox"
+                  data-action-checkbox
+                  data-week-number="${week.weekNumber}"
+                  data-action-index="${action.index}"
+                  ${checked}
+                />
+                <label for="${inputId}">${escapeHtml(action.text)}</label>
+              </div>
+            </li>`;
+        })
         .join("");
 
       return `
@@ -109,19 +149,92 @@ function renderPlan(plan) {
                 </div>
                 <div class="text-end">
                   <span class="badge text-bg-secondary d-block mb-1">Step ${week.weekNumber} of 5</span>
-                  <span class="badge text-bg-light">Module ${week.moduleId ?? "-"}</span>
+                  <span class="badge text-bg-light d-block mb-1">Module ${week.moduleId ?? "-"}</span>
+                  <span class="badge badge-soft-success week-progress-badge">${completedCount} of ${actions.length} actions</span>
                 </div>
               </div>
               <p><strong>Focus:</strong> ${escapeHtml(week.focus || "No focus provided.")}</p>
               <p class="text-muted">${escapeHtml(week.rationale || "No rationale provided.")}</p>
               <ul class="list-group list-group-flush">
-                ${actions || '<li class="list-group-item">No action items provided.</li>'}
+                ${actionItems || '<li class="list-group-item">No action items provided.</li>'}
               </ul>
             </div>
           </div>
         </div>`;
     })
     .join("");
+}
+
+async function toggleAction(checkbox) {
+  if (!currentPlan || !currentPlan.id) {
+    checkbox.checked = !checkbox.checked;
+    showAlert("This plan cannot be updated yet. Generate a plan first.", "danger");
+    return;
+  }
+
+  const weekNumber = Number(checkbox.dataset.weekNumber);
+  const actionIndex = Number(checkbox.dataset.actionIndex);
+  const completed = checkbox.checked;
+  checkbox.disabled = true;
+
+  try {
+    const response = await fetch(
+      `${API_BASE}/${currentPlan.id}/weeks/${weekNumber}/actions/${actionIndex}`,
+      {
+        method: "PATCH",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ completed })
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error(await extractError(response));
+    }
+
+    renderPlan(await response.json());
+  } catch (error) {
+    checkbox.checked = !completed;
+    showAlert(error.message || "Unable to update that action right now.", "danger");
+  } finally {
+    checkbox.disabled = false;
+  }
+}
+
+function normalizeActions(actions) {
+  return (actions || []).map((action, index) => {
+    if (typeof action === "string") {
+      return { index, text: action, completed: false };
+    }
+    return {
+      index: action.index ?? index,
+      text: action.text || "",
+      completed: Boolean(action.completed)
+    };
+  });
+}
+
+function updateProgress(weeks) {
+  const actions = weeks.flatMap((week) => normalizeActions(week.actions));
+  const total = actions.length;
+  const completed = actions.filter((action) => action.completed).length;
+  const percent = total === 0 ? 0 : Math.round((completed / total) * 100);
+
+  planProgress.classList.remove("d-none");
+  planProgressLabel.textContent = `${completed} of ${total} actions complete`;
+  planProgressFill.style.width = `${percent}%`;
+  const track = planProgress.querySelector("[role='progressbar']");
+  if (track) {
+    track.setAttribute("aria-valuenow", String(percent));
+  }
+}
+
+function hideProgress() {
+  currentPlan = null;
+  planProgress.classList.add("d-none");
+  planProgressFill.style.width = "0%";
 }
 
 async function extractError(response) {
