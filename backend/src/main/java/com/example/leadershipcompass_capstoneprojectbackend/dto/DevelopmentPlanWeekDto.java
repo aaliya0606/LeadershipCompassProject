@@ -29,5 +29,5 @@ public class DevelopmentPlanWeekDto {
     private String rationale;
 
     /** Practical action items for the learner to complete this week. */
-    private List<String> actions = new ArrayList<>();
+    private List<DevelopmentPlanActionDto> actions = new ArrayList<>();
 }
