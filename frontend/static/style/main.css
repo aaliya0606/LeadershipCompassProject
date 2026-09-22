@@ -1195,14 +1195,14 @@ header.custom-navbar .navbar-brand {
     gap: 4px;
 }
  
-#wheelName {
+#radarPointName {
     font-family: 'Montserrat', sans-serif;
     font-size: 0.85vw;
     font-weight: 600;
     color: #00284B;
 }
  
-#wheelDesc {
+#radarPointScore {
     font-family: 'Montserrat', sans-serif;
     font-size: 0.7vw;
     color: #64BC28;
@@ -1212,21 +1212,6 @@ header.custom-navbar .navbar-brand {
     overflow: visible;
     width: 100%;
     height: 100%;
-}
- 
-.wheel .slice {
-    cursor: pointer;
-    transform-box: view-box;
-    transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1), filter 0.2s ease;
-}
- 
-.wheel .slice:hover {
-    transform: scale(1.09);
-    filter: brightness(1.1);
-}
- 
-.wheel .slice:active {
-    transform: scale(1.04);
 }
  
 .wheel-container {
@@ -1242,6 +1227,10 @@ header.custom-navbar .navbar-brand {
     display: flex;
     flex-direction: column;
     overflow: visible;
+}
+
+.wheel-container .insight-subtitle {
+    margin-bottom: 8px;
 }
  
 .wheel {

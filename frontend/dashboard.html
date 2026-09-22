@@ -51,16 +51,16 @@
         <!--current and upcoming-->
         <div class="plan">
             <h3>CURRENT FOCUS</h3>
-            <tag>WEEK 2 • ACTIVE</tag>
-            <h1>CARING TIME</h1>
-            <p>Dedicate intentional time to demonstrating genuine care for your team. Build trust through consistent, 
+            <tag id="currentFocusTag">WEEK 2 • ACTIVE</tag>
+            <h1 id="currentFocusTitle">CARING TIME</h1>
+            <p id="currentFocusDesc">Dedicate intentional time to demonstrating genuine care for your team. Build trust through consistent, 
                 present leadership.</p>
         </div>
 
-        <div class="plan1">
+        <div class="plan1" id="comingUpCard">
             <h3>COMING UP</h3>
-            <h1>ACTS OF SUPPORT</h1>
-            <p>Translate care into visible action. Identify and remove blockers so 
+            <h1 id="comingUpTitle">ACTS OF SUPPORT</h1>
+            <p id="comingUpDesc">Translate care into visible action. Identify and remove blockers so 
                 your people can do their best work.</p>
             <a href="5weekplan.html" class="view-plan-btn">View full development plan →</a>
         </div>
@@ -68,18 +68,19 @@
         <!--leadership languages-->
         <div class="wheel-container">
             <h3>The 5 Leadership Languages</h3>
+            <div class="insight-subtitle" id="radarSubtitle">Loading your latest scores&hellip;</div>
             <div class="wheel">
-                <canvas id="leadershipWheel"></canvas>
+                <canvas id="leadershipRadar" role="img" aria-label="Radar chart of your five leadership language scores, each out of 50">Loading your leadership language scores.</canvas>
             </div>
             <div class="wheel-label">
-                <span id="wheelName">Hover a segment</span>
-                <span id="wheelDesc"></span>
+                <span id="radarPointName">Hover a point</span>
+                <span id="radarPointScore"></span>
             </div>
         </div>
 
         <!--weeks overview-->
         <div class="overview">
-            <div class="mini-grid">
+            <div class="mini-grid" id="weekOverviewGrid">
                 <h3>5 Week Overview</h3>
                 <div>
                     <h5>Week 1<br><p>Words of Recognition</p></h5>

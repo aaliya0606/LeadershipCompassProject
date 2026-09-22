@@ -53,63 +53,6 @@ logoutBtn.addEventListener("click", function () {
   window.location.href = "index.html";
 });
 
-// the wheel
-
-const leadershipWheelCanvas = document.getElementById("leadershipWheel");
-
-if (leadershipWheelCanvas) {
-
-  const segments = [
-    { name: "Words of Recognition", desc: "Verbal affirmation and praise" },
-    { name: "Caring Time",          desc: "Intentional presence with your team" },
-    { name: "Acts of Support",      desc: "Remove blockers, enable great work" },
-    { name: "Psychological Touch",  desc: "Emotional safety and connection" },
-    { name: "Receiving Value",      desc: "Recognising others' contributions" },
-  ];
-
-  const wheel = new Chart(leadershipWheelCanvas, {
-    type: "doughnut",
-    data: {
-      labels: segments.map(s => s.name),
-      datasets: [{
-        data: [1, 1, 1, 1, 1],
-        backgroundColor: ["#64BC28", "#4A9E1A", "#96DA5F", "#2E7D0E", "#B8ED85"],
-        borderColor: "#013664",
-        borderWidth: 3,
-        hoverOffset: 14,
-      }]
-    },
-    options: {
-      layout: {
-        padding: 20
-      },
-      plugins: {
-        legend: { display: false },
-        tooltip: { enabled: false },
-      },
-      onHover: (event, elements) => {
-        const wheelName = document.getElementById("wheelName");
-        const wheelDesc = document.getElementById("wheelDesc");
-        if (elements.length > 0) {
-          const i = elements[0].index;
-          wheelName.textContent = segments[i].name;
-          wheelDesc.textContent = segments[i].desc;
-        } else {
-          wheelName.textContent = "Hover a segment";
-          wheelDesc.textContent = "";
-        }
-      }
-    }
-  });
-}
-
-function toggleNav() {
-  document.getElementById('navLinks').classList.toggle('open');
-  document.getElementById('hamburgerBtn').classList.toggle('open');
-}
-
-// progress over time + peer comparison 
-
 const API_BASE = "http://localhost:8080";
 
 const CATEGORIES = [
@@ -134,6 +77,203 @@ function ordinal(n) {
   const s = ["th", "st", "nd", "rd"], v = n % 100;
   return n + (s[(v - 20) % 10] || s[v] || s[0]);
 }
+
+
+
+async function loadLeadershipRadar() {
+  const canvas = document.getElementById("leadershipRadar");
+  const subtitleEl = document.getElementById("radarSubtitle");
+  if (!canvas) return;
+
+  try {
+    const res = await fetch(API_BASE + "/api/dashboard/latest-scores", {
+      method: "GET",
+      headers: { "Authorization": "Bearer " + token }
+    });
+    if (!res.ok) throw new Error("Request failed: " + res.status);
+    const scores = await res.json();
+
+    const labels = CATEGORIES.map(c => c.label);
+    const values = CATEGORIES.map(c => (scores ? scores[c.key + "Score"] : undefined));
+    const hasScores = values.some(v => typeof v === "number");
+
+    if (!hasScores) {
+      if (subtitleEl) subtitleEl.textContent = "Complete a survey to see your radar chart.";
+      return;
+    }
+
+    if (subtitleEl) subtitleEl.textContent = "Your most recent survey scores";
+
+    new Chart(canvas, {
+      type: "radar",
+      data: {
+        labels,
+        datasets: [{
+          label: "Score",
+          data: values.map(v => v || 0),
+          backgroundColor: "rgba(0, 40, 75, 0.16)",
+          borderColor: "#00284B",
+          borderWidth: 2,
+          pointBackgroundColor: CATEGORIES.map(c => c.color),
+          pointBorderColor: "#ffffff",
+          pointBorderWidth: 1.5,
+          pointRadius: 4,
+          pointHoverRadius: 7,
+        }]
+      },
+      options: {
+        plugins: {
+          legend: { display: false },
+          tooltip: { enabled: false } 
+        },
+        scales: {
+          r: {
+            min: 0,
+            max: 50,
+            ticks: {
+              stepSize: 10,
+              showLabelBackdrop: false,
+              font: { size: 9 },
+              color: "rgba(0,40,75,0.45)"
+            },
+            grid: { color: "#E5E8E8" },
+            angleLines: { color: "rgba(0,40,75,0.15)" },
+            pointLabels: {
+              font: { size: 11, family: "Montserrat, Arial, sans-serif" },
+              color: "#00284B"
+            }
+          }
+        },
+        onHover: (event, elements) => {
+          const nameEl = document.getElementById("radarPointName");
+          const scoreEl = document.getElementById("radarPointScore");
+          if (!nameEl || !scoreEl) return;
+          if (elements.length > 0) {
+            const i = elements[0].index;
+            nameEl.textContent = labels[i];
+            scoreEl.textContent = values[i] != null ? "Score: " + values[i] + " / 50" : "No score yet";
+          } else {
+            nameEl.textContent = "Hover a point";
+            scoreEl.textContent = "";
+          }
+        }
+      }
+    });
+  } catch (err) {
+    console.error("Could not load leadership radar scores", err);
+    if (subtitleEl) subtitleEl.textContent = "Could not load your latest scores.";
+  }
+}
+
+loadLeadershipRadar();
+
+function toggleNav() {
+  document.getElementById('navLinks').classList.toggle('open');
+  document.getElementById('hamburgerBtn').classList.toggle('open');
+}
+
+
+const LANGUAGE_BLURBS = {
+  "Words of Recognition": "Give genuine, specific praise. Call out what someone did well and why it mattered, in the moment.",
+  "Caring Time": "Dedicate intentional time to demonstrating genuine care for your team. Build trust through consistent, present leadership.",
+  "Acts of Support": "Translate care into visible action. Identify and remove blockers so your people can do their best work.",
+  "Psychological Touch": "Create emotional safety so your team feels comfortable being open with you. Small, consistent gestures build lasting trust.",
+  "Receiving Value": "Recognise and act on your team's contributions and ideas. Show that their input genuinely shapes decisions.",
+};
+
+function weekLanguage(week) {
+
+  return week.language || week.theme || week.title || "";
+}
+
+function weekBlurb(week) {
+  
+  return week.focusSummary || week.description || LANGUAGE_BLURBS[weekLanguage(week)] || "";
+}
+
+function buildWeekCell(weekNumber, language, coloured) {
+  const cell = document.createElement("div");
+  if (coloured) cell.className = "coloured";
+  const h5 = document.createElement("h5");
+  h5.appendChild(document.createTextNode("Week " + weekNumber));
+  h5.appendChild(document.createElement("br"));
+  const p = document.createElement("p");
+  p.textContent = language;
+  h5.appendChild(p);
+  cell.appendChild(h5);
+  return cell;
+}
+
+async function loadDevelopmentPlan() {
+  try {
+    const res = await fetch(API_BASE + "/api/development-plans/current", {
+      method: "GET",
+      headers: { "Authorization": "Bearer " + token }
+    });
+    if (!res.ok) throw new Error("Request failed: " + res.status);
+    const plan = await res.json();
+
+    
+    console.log("[dev plan] /api/development-plans/current response:", plan);
+
+    const weeks = (plan.weeks || []).slice().sort((a, b) => a.weekNumber - b.weekNumber);
+    if (!weeks.length) {
+      console.warn("[dev plan] No weeks found at plan.weeks — check the logged response above for the real key name.");
+      return;
+    }
+
+    
+    const currentWeek = weeks.find(w => !(w.actions || []).every(a => a.completed));
+    const isPlanComplete = !currentWeek;
+    const activeWeek = currentWeek || weeks[weeks.length - 1];
+    const activeIndex = weeks.findIndex(w => w.weekNumber === activeWeek.weekNumber);
+    const comingUpWeek = isPlanComplete ? null : (weeks[activeIndex + 1] || null);
+
+    // Current focus card
+    const focusTag = document.getElementById("currentFocusTag");
+    const focusTitle = document.getElementById("currentFocusTitle");
+    const focusDesc = document.getElementById("currentFocusDesc");
+    if (isPlanComplete) {
+      if (focusTag) focusTag.textContent = "PLAN COMPLETE";
+      if (focusTitle) focusTitle.textContent = "ALL 5 LANGUAGES";
+      if (focusDesc) focusDesc.textContent = "You've completed every action across all 5 weeks. Nice work — revisit any language from the full plan below.";
+    } else {
+      if (focusTag) focusTag.textContent = "WEEK " + activeWeek.weekNumber + " • ACTIVE";
+      if (focusTitle) focusTitle.textContent = weekLanguage(activeWeek).toUpperCase();
+      if (focusDesc) focusDesc.textContent = weekBlurb(activeWeek);
+    }
+
+    // Coming up card
+    const comingUpCard = document.getElementById("comingUpCard");
+    const comingUpTitle = document.getElementById("comingUpTitle");
+    const comingUpDesc = document.getElementById("comingUpDesc");
+    if (comingUpWeek) {
+      if (comingUpTitle) comingUpTitle.textContent = weekLanguage(comingUpWeek).toUpperCase();
+      if (comingUpDesc) comingUpDesc.textContent = weekBlurb(comingUpWeek);
+      if (comingUpCard) comingUpCard.style.display = "";
+    } else if (comingUpCard) {
+      
+      comingUpCard.style.display = "none";
+    }
+
+    // 5 Week Overview 
+    const grid = document.getElementById("weekOverviewGrid");
+    if (grid) {
+      grid.querySelectorAll(":scope > div").forEach(el => el.remove());
+      weeks.forEach(w => {
+        const isColoured = !isPlanComplete && w.weekNumber >= activeWeek.weekNumber;
+        grid.appendChild(buildWeekCell(w.weekNumber, weekLanguage(w), isColoured));
+      });
+    }
+  } catch (err) {
+    console.error("Could not load development plan", err);
+    
+  }
+}
+
+loadDevelopmentPlan();
+
+// progress over time + peer comparison
 
 async function loadProgressOverTime() {
   try {
@@ -299,7 +439,7 @@ if (token && role !== "ADMIN") {
 // for the resources
 async function loadSuggestedResources() {
   const container = document.getElementById('resourcesList');
-  const token = localStorage.getItem('token'); // adjust key name if it's stored under a different name
+  const token = localStorage.getItem('token'); 
 
   try {
     const response = await fetch('http://localhost:8080/api/dashboard/suggested-modules', {
