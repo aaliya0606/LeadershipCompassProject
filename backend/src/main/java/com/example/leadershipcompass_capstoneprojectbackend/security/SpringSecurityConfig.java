@@ -2,6 +2,8 @@ package com.example.leadershipcompass_capstoneprojectbackend.security;
 
 import java.util.List;
 
+import lombok.RequiredArgsConstructor;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -12,8 +14,6 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-
-import lombok.RequiredArgsConstructor;
 
 @Configuration
 @RequiredArgsConstructor
@@ -26,26 +26,17 @@ public class SpringSecurityConfig {
             HttpSecurity http) throws Exception {
 
         http
+                // JWT REST API, so CSRF is disabled.
+                .csrf(csrf -> csrf.disable())
 
-                /*
-                 * JWT REST API, so CSRF is disabled.
-                 */
-                .csrf(csrf ->
-                        csrf.disable()
-                )
-
-                /*
-                 * Enable CORS using the configuration below.
-                 */
+                // Enable CORS using the configuration below.
                 .cors(cors ->
                         cors.configurationSource(
                                 corsConfigurationSource()
                         )
                 )
 
-                /*
-                 * JWT authentication is stateless.
-                 */
+                // JWT authentication is stateless.
                 .sessionManagement(session ->
                         session.sessionCreationPolicy(
                                 SessionCreationPolicy.STATELESS
@@ -54,59 +45,38 @@ public class SpringSecurityConfig {
 
                 .authorizeHttpRequests(auth -> auth
 
-
-                        /*
-                         * =================================================
-                         * CORS PREFLIGHT
-                         * =================================================
-                         */
+                        // =================================================
+                        // CORS PREFLIGHT
+                        // =================================================
                         .requestMatchers(
                                 HttpMethod.OPTIONS,
                                 "/**"
                         ).permitAll()
 
-
-                        /*
-                         * =================================================
-                         * AUTHENTICATION
-                         * =================================================
-                         */
+                        // =================================================
+                        // AUTHENTICATION
+                        // =================================================
                         .requestMatchers(
                                 "/api/auth/register",
                                 "/api/auth/login"
                         ).permitAll()
 
-
-                        /*
-                         * =================================================
-                         * DEVELOPMENT / TESTING
-                         * =================================================
-                         */
+                        // =================================================
+                        // DEVELOPMENT / TESTING
+                        // =================================================
                         .requestMatchers(
                                 "/h2-console/**",
                                 "/api/reports/dummy",
                                 "/test-download.html"
                         ).permitAll()
 
+                        // =================================================
+                        // 360 FEEDBACK - PROTECTED USER ROUTES
+                        // =================================================
 
-                        /*
-                         * =================================================
-                         * 360 FEEDBACK - PROTECTED USER ROUTES
-                         * =================================================
-                         *
-                         * IMPORTANT:
-                         *
-                         * These must appear BEFORE:
-                         *
-                         * /api/360/surveys/{token}
-                         *
-                         * otherwise "me" can be interpreted as a token.
-                         */
+                        // These must appear before the public {token} route
+                        // so "me" is not interpreted as a survey token.
 
-
-                        /*
-                         * Current logged-in user's active survey.
-                         */
                         .requestMatchers(
                                 HttpMethod.GET,
                                 "/api/360/surveys/me"
@@ -115,10 +85,6 @@ public class SpringSecurityConfig {
                                 "ADMIN"
                         )
 
-
-                        /*
-                         * Logged-in user's previous survey history.
-                         */
                         .requestMatchers(
                                 HttpMethod.GET,
                                 "/api/360/surveys/me/history"
@@ -127,10 +93,6 @@ public class SpringSecurityConfig {
                                 "ADMIN"
                         )
 
-
-                        /*
-                         * Logged-in user can view 360 results.
-                         */
                         .requestMatchers(
                                 HttpMethod.GET,
                                 "/api/360/surveys/{surveyId}/results"
@@ -139,158 +101,158 @@ public class SpringSecurityConfig {
                                 "ADMIN"
                         )
 
+                        // =================================================
+                        // 360 FEEDBACK - PUBLIC REVIEWER ROUTES
+                        // =================================================
 
-                        /*
-                         * =================================================
-                         * 360 FEEDBACK - PUBLIC REVIEWER ROUTES
-                         * =================================================
-                         */
-
-
-                        /*
-                         * Reviewer can retrieve survey questions.
-                         */
                         .requestMatchers(
                                 HttpMethod.GET,
                                 "/api/360/questions",
                                 "/api/360/questions/**"
                         ).permitAll()
 
-
-                        /*
-                         * Reviewer can load survey information
-                         * using the unique survey token.
-                         *
-                         * Example:
-                         *
-                         * GET /api/360/surveys/abc-123
-                         *
-                         * Keep this AFTER /me and /me/history.
-                         */
                         .requestMatchers(
                                 HttpMethod.GET,
                                 "/api/360/surveys/{token}"
                         ).permitAll()
 
-
-                        /*
-                         * Reviewer can submit anonymous feedback.
-                         *
-                         * Example:
-                         *
-                         * POST /api/360/surveys/abc-123/responses
-                         */
                         .requestMatchers(
                                 HttpMethod.POST,
                                 "/api/360/surveys/{token}/responses"
                         ).permitAll()
 
+                        // =================================================
+                        // ADMIN
+                        // =================================================
 
-                        /*
-                         * =================================================
-                         * ADMIN ROUTES
-                         * =================================================
-                         */
                         .requestMatchers(
                                 "/api/admin/**"
-                        ).hasRole(
-                                "ADMIN"
-                        )
+                        ).hasRole("ADMIN")
 
                         .requestMatchers(
                                 "/api/dashboard/admin"
-                        ).hasRole(
-                                "ADMIN"
-                        )
+                        ).hasRole("ADMIN")
 
+                        // =================================================
+                        // REPORTS
+                        // =================================================
 
-                        /*
-                         * =================================================
-                         * USER DASHBOARD
-                         * =================================================
-                         */
                         .requestMatchers(
-                                "/api/dashboard/user"
+                                "/api/reports/**"
                         ).hasAnyRole(
                                 "USER",
                                 "ADMIN"
                         )
 
+                        // =================================================
+                        // LEADERSHIP ASSESSMENT / SURVEY
+                        // =================================================
 
-                        /*
-                         * =================================================
-                         * SWAGGER
-                         * =================================================
-                         */
+                        .requestMatchers(
+                                "/api/survey/questions",
+                                "/api/survey/submit",
+                                "/api/survey/history"
+                        ).hasAnyRole(
+                                "USER",
+                                "ADMIN"
+                        )
+
+                        .requestMatchers(
+                                "/api/survey/admin/**"
+                        ).hasRole("ADMIN")
+
+                        // =================================================
+                        // USER DASHBOARD
+                        // =================================================
+
+                        .requestMatchers(
+                                "/api/dashboard/user",
+                                "/api/dashboard/suggested-modules",
+                                "/api/dashboard/peer-comparison",
+                                "/api/dashboard/latest-scores"
+                        ).hasAnyRole(
+                                "USER",
+                                "ADMIN"
+                        )
+
+                        // =================================================
+                        // RESOURCES
+                        // =================================================
+
+                        // Users and admins may view resources.
+                        .requestMatchers(
+                                HttpMethod.GET,
+                                "/api/resources/**"
+                        ).hasAnyRole(
+                                "USER",
+                                "ADMIN"
+                        )
+
+                        // Resource management is admin-only.
+                        .requestMatchers(
+                                HttpMethod.POST,
+                                "/api/resources/**"
+                        ).hasRole("ADMIN")
+
+                        .requestMatchers(
+                                HttpMethod.PUT,
+                                "/api/resources/**"
+                        ).hasRole("ADMIN")
+
+                        .requestMatchers(
+                                HttpMethod.DELETE,
+                                "/api/resources/**"
+                        ).hasRole("ADMIN")
+
+                        // =================================================
+                        // SWAGGER
+                        // =================================================
+
                         .requestMatchers(
                                 "/v3/api-docs/**",
                                 "/swagger-ui/**",
                                 "/swagger-ui.html"
                         ).permitAll()
 
+                        // =================================================
+                        // EVERYTHING ELSE
+                        // =================================================
 
-                        /*
-                         * =================================================
-                         * EVERYTHING ELSE
-                         * =================================================
-                         *
-                         * Requires authentication.
-                         *
-                         * This includes:
-                         *
-                         * POST /api/360/surveys
-                         *
-                         * so only a logged-in leader can
-                         * create a 360 survey.
-                         */
+                        // Requires authentication.
+                        //
+                        // This includes POST /api/360/surveys,
+                        // meaning only a logged-in leader can create
+                        // a 360 survey.
                         .anyRequest()
                         .authenticated()
                 )
 
-
-                /*
-                 * Required for H2 console during development.
-                 */
+                // Required for H2 console during development.
                 .headers(headers ->
                         headers.frameOptions(
-                                frame ->
-                                        frame.disable()
+                                frame -> frame.disable()
                         )
                 )
 
-
-                /*
-                 * Process JWT before Spring's default
-                 * username/password authentication filter.
-                 */
+                // Process JWT before Spring's default authentication filter.
                 .addFilterBefore(
                         jwtFilter,
                         UsernamePasswordAuthenticationFilter.class
                 );
 
-
         return http.build();
     }
 
+    // =========================================================
+    // CORS CONFIGURATION
+    // =================================================
 
-    /*
-     * =========================================================
-     * CORS CONFIGURATION
-     * =========================================================
-     */
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
 
         CorsConfiguration configuration =
                 new CorsConfiguration();
 
-
-        /*
-         * Frontend development origins.
-         *
-         * These must be normal URLs,
-         * NOT markdown links.
-         */
         configuration.setAllowedOrigins(
                 List.of(
                         "http://localhost:3000",
@@ -301,17 +263,16 @@ public class SpringSecurityConfig {
                 )
         );
 
-
         configuration.setAllowedMethods(
                 List.of(
                         "GET",
                         "POST",
                         "PUT",
+                        "PATCH",
                         "DELETE",
                         "OPTIONS"
                 )
         );
-
 
         configuration.setAllowedHeaders(
                 List.of(
@@ -320,21 +281,15 @@ public class SpringSecurityConfig {
                 )
         );
 
-
-        configuration.setAllowCredentials(
-                true
-        );
-
+        configuration.setAllowCredentials(true);
 
         UrlBasedCorsConfigurationSource source =
                 new UrlBasedCorsConfigurationSource();
-
 
         source.registerCorsConfiguration(
                 "/**",
                 configuration
         );
-
 
         return source;
     }

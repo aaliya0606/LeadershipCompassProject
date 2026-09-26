@@ -863,24 +863,20 @@ function render360SurveyHistory(
    BUILD REVIEWER LINK
    ========================================================= */
 
-function build360SurveyLink(
-    surveyToken
-) {
+function build360SurveyLink(surveyToken) {
 
-    /*
-     * Local development URL.
-     *
-     * Example:
-     *
-     * http://127.0.0.1:5500/frontend/
-     * 360-feedback.html?token=...
-     */
+    const currentPath = window.location.pathname;
+
+    const frontendPrefix =
+        currentPath.includes("/frontend/")
+            ? "/frontend"
+            : "";
+
     return (
         `${window.location.origin}` +
-        `/frontend/360-feedback.html` +
-        `?token=${surveyToken}`
+        `${frontendPrefix}/360-feedback.html` +
+        `?token=${encodeURIComponent(surveyToken)}`
     );
-
 }
 
 

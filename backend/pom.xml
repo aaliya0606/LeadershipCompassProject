@@ -60,6 +60,13 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-h2console</artifactId>
         </dependency>
+
+         <!-- JFreeChart: for rendering chart in the pdf -->
+         <dependency>
+            <groupId>org.jfree</groupId>
+            <artifactId>jfreechart</artifactId>
+            <version>1.5.4</version>
+         </dependency>
        
         <dependency>
             <groupId>org.springframework.boot</groupId>

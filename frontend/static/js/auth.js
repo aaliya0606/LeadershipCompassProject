@@ -67,7 +67,6 @@ if (registerForm) {
     const password = document.getElementById("registerPassword").value;
     const confirmPassword = document.getElementById("confirmPassword").value;
     const role = document.getElementById("registerRole").value;
-    const department = document.getElementById("registerDepartment").value;
     const message = document.getElementById("registerMessage");
 
     try {
@@ -99,8 +98,7 @@ if (registerForm) {
           fullName: fullName,
           email: email,
           password: password,
-          role: role, 
-          department: department
+          role: role
         })
       });
 

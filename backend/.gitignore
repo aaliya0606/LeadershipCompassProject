@@ -14,3 +14,10 @@ build/
 
 # Environment files
 .env
+
+# Local Resource Library files - do not commit
+resource-storage/**/*
+
+# Keep the storage folder structure in Git
+!resource-storage/**/
+!resource-storage/**/.gitkeep
