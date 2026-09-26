@@ -1,5 +1,9 @@
 const token = localStorage.getItem("token");
-const BASE_URL = "http://localhost:8080";
+const BASE_URL =
+    window.location.hostname === "localhost" ||
+    window.location.hostname === "127.0.0.1"
+        ? "http://localhost:8080"
+        : "https://leadership-compass-api.ashysand-21bb09f6.australiaeast.azurecontainerapps.io";
 
 // Redirect to login if no token
 if (!token) {

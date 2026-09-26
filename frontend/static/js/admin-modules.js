@@ -1,4 +1,8 @@
-const API_BASE = "http://localhost:8080/api/admin/modules";
+const API_BASE =
+    window.location.hostname === "localhost" ||
+    window.location.hostname === "127.0.0.1"
+        ? "http://localhost:8080"
+        : "https://leadership-compass-api.ashysand-21bb09f6.australiaeast.azurecontainerapps.io/api/admin/modules";
 const token = localStorage.getItem("token");
 const role = localStorage.getItem("role");
 

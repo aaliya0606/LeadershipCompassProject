@@ -1,0 +1,1237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Leadership Compass Admin Dashboard</title>
+
+  <!-- Bootstrap -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <!-- Bootstrap Icons -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+
+  <style>
+    @font-face {
+      font-family: "Conthrax";
+      src: url("static/fonts/Conthrax-SemiBold.otf") format("opentype");
+      font-weight: 600;
+      font-style: normal;
+    }
+
+    @font-face {
+      font-family: "AntonCustom";
+      src: url("static/fonts/Anton-Regular.ttf") format("truetype");
+      font-weight: 400;
+      font-style: normal;
+    }
+
+    @font-face {
+      font-family: "Brittany";
+      src: url("static/fonts/BrittanySignatureScript.ttf") format("truetype");
+      font-weight: 400;
+      font-style: normal;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      padding-top: 76px;
+      background: #e9eef1;
+      color: #073763;
+      font-family: Arial, Helvetica, sans-serif;
+    }
+
+    section {
+      scroll-margin-top: 110px;
+    }
+
+    h1,
+    h2,
+    h3,
+    h4,
+    .brand-title,
+    .stat-value,
+    .btn,
+    .jump-nav a,
+    .nav-dropdown a,
+    .result-label,
+    .category-title,
+    .category-item,
+    .report-card h3,
+    .course-card h3 {
+      font-family: "Conthrax", "AntonCustom", Arial, sans-serif;
+      font-weight: 600;
+      letter-spacing: 1px;
+    }
+
+    p,
+    li,
+    td,
+    th,
+    small,
+    .stat-label,
+    .stat-note,
+    .soft-badge,
+    .month-label,
+    .admin-label,
+    .module-count {
+      font-family: Arial, Helvetica, sans-serif;
+    }
+
+    /* NAVBAR - KEPT SAME */
+    .custom-navbar {
+      background: #6fca2b;
+      height: 76px;
+      width: 100%;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 999;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .nav-logo-center {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      text-decoration: none;
+    }
+
+    .brand-script {
+      font-family: "Brittany", cursive;
+      color: #073763;
+      font-size: 2.2rem;
+      line-height: 1;
+      transform: translateY(4px);
+      font-weight: 400;
+    }
+
+    .brand-title {
+      color: #073763;
+      font-size: 1rem;
+      letter-spacing: 0.4px;
+    }
+
+    .hamburger-button {
+      position: absolute;
+      right: 34px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: none;
+      border: none;
+      color: #ffffff;
+      font-size: 2.3rem;
+      cursor: pointer;
+      line-height: 1;
+    }
+
+    .nav-dropdown {
+      position: fixed;
+      top: 76px;
+      right: 24px;
+      background: #ffffff;
+      border-radius: 14px;
+      box-shadow: 0 12px 28px rgba(0, 0, 0, 0.25);
+      padding: 12px;
+      min-width: 220px;
+      display: none;
+      z-index: 1000;
+      border: 2px solid #6fca2b;
+    }
+
+    .nav-dropdown.show {
+      display: block;
+    }
+
+    .nav-dropdown a {
+      display: block;
+      color: #073763;
+      text-decoration: none;
+      padding: 12px 14px;
+      border-radius: 10px;
+      font-size: 0.75rem;
+    }
+
+    .nav-dropdown a:hover {
+      background: #eef7e6;
+    }
+
+    /* PAGE LAYOUT */
+    .page-shell {
+      max-width: 1220px;
+      margin: 0 auto;
+      padding: 35px 24px 70px;
+    }
+
+    .section-block {
+      margin-bottom: 95px;
+    }
+
+    .dashboard-header,
+    .section-heading {
+      text-align: center;
+      margin-bottom: 36px;
+    }
+
+    .dashboard-header h1,
+    .section-heading h2 {
+      color: #073763;
+      text-transform: uppercase;
+      font-size: 2.35rem;
+      margin-bottom: 18px;
+    }
+
+    .dashboard-header p,
+    .section-heading p {
+      color: #536273;
+      max-width: 850px;
+      margin: 0 auto;
+      line-height: 1.6;
+      font-size: 1rem;
+    }
+
+    .jump-nav {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 12px;
+      margin-top: 26px;
+    }
+
+    .jump-nav a {
+      background: #ffffff;
+      border: 2px solid #6fca2b;
+      color: #073763;
+      text-decoration: none;
+      border-radius: 10px;
+      padding: 11px 18px;
+      font-size: 0.72rem;
+      transition: 0.2s ease;
+      box-shadow: 0 5px 12px rgba(0, 0, 0, 0.04);
+    }
+
+    .jump-nav a:hover {
+      background: #6fca2b;
+      color: #073763;
+      border-color: #6fca2b;
+    }
+
+    /* ALL MAIN BOXES */
+    .stat-card,
+    .results-card,
+    .content-card,
+    .course-card,
+    .report-card,
+    .sub-card,
+    .module-card {
+      background: #ffffff;
+      border: 3px solid #6fca2b;
+      border-radius: 14px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
+      color: #073763;
+    }
+
+    /* OVERVIEW CARDS */
+    .stat-card {
+      padding: 24px;
+      height: 100%;
+    }
+
+    .stat-label {
+      color: #536273;
+      font-size: 0.95rem;
+      margin-bottom: 10px;
+    }
+
+    .stat-value {
+      color: #073763;
+      font-size: 2rem;
+      line-height: 1;
+      margin-bottom: 12px;
+    }
+
+    .stat-note {
+      color: #536273;
+      margin-bottom: 0;
+    }
+
+    .stat-note.success {
+      color: #057a45;
+    }
+
+    .stat-note.danger {
+      color: #d62839;
+    }
+
+    .stat-icon {
+      width: 56px;
+      height: 56px;
+      border-radius: 16px;
+      background: #eef4f8;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #073763;
+      font-size: 1.35rem;
+    }
+
+    /* LEADERSHIP SCORE BOARD */
+    .results-card {
+      padding: 24px;
+      height: 100%;
+    }
+
+    .results-card-main-title {
+      color: #073763;
+      text-transform: uppercase;
+      font-size: 1.55rem;
+      margin-bottom: 26px;
+      text-align: left;
+    }
+
+    .result-row {
+      margin-bottom: 20px;
+    }
+
+    .result-row:last-child {
+      margin-bottom: 0;
+    }
+
+    .result-label {
+      color: #073763;
+      text-transform: uppercase;
+      font-size: 0.68rem;
+      margin-bottom: 8px;
+    }
+
+    .result-track {
+      width: 100%;
+      height: 26px;
+      background: #eef2f5;
+      border-radius: 50px;
+      overflow: hidden;
+      box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.08);
+    }
+
+    .result-fill {
+      height: 100%;
+      background: #073763;
+      color: #ffffff;
+      border-radius: 50px;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      padding-right: 12px;
+      font-size: 0.75rem;
+      font-weight: bold;
+      min-width: 45px;
+    }
+
+    .content-card {
+      padding: 30px;
+      height: 100%;
+    }
+
+    .content-card h3,
+    .sub-card h3,
+    .module-card h3 {
+      color: #073763;
+      text-transform: uppercase;
+      font-size: 1.35rem;
+      margin-bottom: 22px;
+    }
+
+    .list-group-item {
+      background: transparent;
+      color: #536273;
+      border-color: #e1e6ea;
+      padding: 16px 0;
+      line-height: 1.55;
+    }
+
+    /* USERS / MODULES */
+    .sub-card,
+    .module-card {
+      padding: 30px;
+      height: 100%;
+    }
+
+    .module-card {
+      margin-top: 34px;
+    }
+
+    .admin-label {
+      color: #9aa6b2;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      font-size: 0.75rem;
+      font-weight: bold;
+      margin-bottom: 6px;
+    }
+
+    .module-card p {
+      color: #536273;
+      margin-bottom: 20px;
+    }
+
+    .module-controls {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr auto;
+      gap: 14px;
+      align-items: end;
+      margin-bottom: 20px;
+    }
+
+    .module-controls label {
+      color: #536273;
+      font-weight: 700;
+      margin-bottom: 6px;
+      display: block;
+    }
+
+    .module-controls select {
+      width: 100%;
+      border: 1px solid #d8dde2;
+      border-radius: 8px;
+      padding: 10px 12px;
+      color: #536273;
+      background: #ffffff;
+    }
+
+    .module-count {
+      background: #eef2f5;
+      color: #073763;
+      border-radius: 20px;
+      padding: 7px 12px;
+      font-size: 0.8rem;
+      font-weight: bold;
+      white-space: nowrap;
+    }
+
+    .active-pill {
+      background: #15995b;
+      color: #ffffff;
+      border-radius: 20px;
+      padding: 4px 10px;
+      font-size: 0.78rem;
+      font-weight: bold;
+    }
+
+    /* ANALYTICS */
+    .course-card {
+      padding: 28px;
+      height: 100%;
+    }
+
+    .course-card h3 {
+      color: #073763;
+      text-transform: uppercase;
+      font-size: 1.2rem;
+      margin-bottom: 16px;
+    }
+
+    .course-card p {
+      color: #536273;
+      margin-bottom: 14px;
+    }
+
+    .soft-badge {
+      display: inline-block;
+      padding: 7px 12px;
+      border-radius: 16px;
+      font-size: 0.78rem;
+      font-weight: 700;
+      margin-right: 8px;
+      margin-bottom: 10px;
+    }
+
+    .badge-green {
+      background: #dff4cb;
+      color: #4b8e22;
+    }
+
+    .badge-grey {
+      background: #eef2f5;
+      color: #536273;
+    }
+
+    .mini-bar {
+      height: 12px;
+      border-radius: 50px;
+      background: #e1e6ea;
+      overflow: hidden;
+      margin-top: 18px;
+    }
+
+    .mini-bar span {
+      display: block;
+      height: 100%;
+      background: #6fca2b;
+      border-radius: 50px;
+    }
+
+    .sub-card ol,
+    .sub-card ul {
+      color: #536273;
+      line-height: 1.8;
+    }
+
+    .month-bar {
+      margin-bottom: 18px;
+    }
+
+    .month-label {
+      color: #536273;
+      margin-bottom: 8px;
+      font-weight: 700;
+    }
+
+    .month-track {
+      height: 14px;
+      border-radius: 50px;
+      background: #e1e6ea;
+      overflow: hidden;
+    }
+
+    .month-fill {
+      background: #073763;
+      height: 100%;
+      border-radius: 50px;
+    }
+
+    /* TABLE */
+    .table-wrap {
+      overflow-x: auto;
+    }
+
+    .table {
+      color: #073763;
+    }
+
+    .table thead th {
+      color: #536273;
+      border-bottom: 1px solid #e1e6ea;
+      font-size: 0.85rem;
+      white-space: nowrap;
+    }
+
+    .table td,
+    .table th {
+      border-color: #e1e6ea;
+      padding: 16px 12px;
+      vertical-align: middle;
+      white-space: nowrap;
+    }
+
+    /* REPORTS */
+    .report-card {
+      padding: 26px;
+      height: 100%;
+    }
+
+    .report-card i {
+      color: #6fca2b;
+      font-size: 2rem;
+    }
+
+    .report-card h3 {
+      color: #073763;
+      text-transform: uppercase;
+      font-size: 1rem;
+      margin: 16px 0 12px;
+    }
+
+    .report-card p {
+      color: #536273;
+      line-height: 1.6;
+    }
+
+    .btn-green {
+      background: #6fca2b;
+      color: #073763;
+      border: none;
+      border-radius: 10px;
+      padding: 10px 18px;
+      font-size: 0.72rem;
+    }
+
+    .btn-green:hover {
+      background: #8de048;
+      color: #073763;
+    }
+
+    .btn-outline-custom {
+      border: 2px solid #6fca2b;
+      color: #073763;
+      background: #ffffff;
+      border-radius: 10px;
+      padding: 10px 18px;
+      font-size: 0.72rem;
+    }
+
+    .btn-outline-custom:hover {
+      background: #eef2f5;
+      color: #073763;
+    }
+
+    .btn-edit {
+      border: 1px solid #4c8bb8;
+      color: #4c8bb8;
+      background: #ffffff;
+      border-radius: 8px;
+      padding: 6px 12px;
+      font-size: 0.82rem;
+    }
+
+    .btn-delete {
+      border: 1px solid #bc6b78;
+      color: #bc6b78;
+      background: #ffffff;
+      border-radius: 8px;
+      padding: 6px 12px;
+      font-size: 0.82rem;
+    }
+
+    footer {
+      text-align: center;
+      color: #536273;
+      padding-top: 20px;
+      font-size: 0.9rem;
+    }
+
+    @media (max-width: 850px) {
+      body {
+        padding-top: 74px;
+      }
+
+      .custom-navbar {
+        height: 70px;
+      }
+
+      .brand-script {
+        font-size: 1.8rem;
+      }
+
+      .brand-title {
+        font-size: 0.85rem;
+      }
+
+      .hamburger-button {
+        right: 18px;
+        font-size: 2rem;
+      }
+
+      .nav-dropdown {
+        top: 70px;
+        right: 14px;
+      }
+
+      .dashboard-header h1,
+      .section-heading h2 {
+        font-size: 1.7rem;
+      }
+
+      .page-shell {
+        padding-left: 18px;
+        padding-right: 18px;
+      }
+
+      .module-controls {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- Navbar kept the same -->
+  <nav class="custom-navbar">
+    <a href="#dashboard" class="nav-logo-center">
+      <span class="brand-script">Anton</span>
+      <span class="brand-title">Guinea</span>
+    </a>
+
+    <button class="hamburger-button" type="button" onclick="toggleMenu()" aria-label="Open navigation menu">
+      <i class="bi bi-list"></i>
+    </button>
+  </nav>
+
+  <!-- Dropdown Menu -->
+  <div id="navDropdown" class="nav-dropdown">
+    <a href="#dashboard" onclick="closeMenu()">Dashboard</a>
+    <a href="#overview" onclick="closeMenu()">Overview</a>
+    <a href="#results" onclick="closeMenu()">Results</a>
+    <a href="#users" onclick="closeMenu()">Users</a>
+    <a href="#learningModules" onclick="closeMenu()">Learning Modules</a>
+    <a href="#analytics" onclick="closeMenu()">Analytics</a>
+    <a href="#reports" onclick="closeMenu()">Reports</a>
+    <a href="login.html">Logout</a>
+  </div>
+
+  <main class="page-shell">
+
+    <!-- DASHBOARD -->
+    <section id="dashboard" class="section-block">
+      <div class="dashboard-header">
+        <h1>Admin Dashboard</h1>
+        <p>
+          Monitor student engagement, course completion, student scores, and organisation-wide development performance.
+        </p>
+
+        <div class="jump-nav">
+          <a href="#overview">Overview</a>
+          <a href="#results">Results</a>
+          <a href="#users">Users</a>
+          <a href="#learningModules">Learning Modules</a>
+          <a href="#analytics">Analytics</a>
+          <a href="#reports">Reports</a>
+        </div>
+      </div>
+
+      <!-- OVERVIEW CARDS -->
+      <div id="overview" class="row g-4 mb-5">
+        <div class="col-md-6 col-lg-3">
+          <div class="stat-card">
+            <div class="d-flex justify-content-between">
+              <div>
+                <div class="stat-label">User Engagement</div>
+                <div class="stat-value">78%</div>
+                <p class="stat-note success">+12% from last month</p>
+              </div>
+              <div class="stat-icon"><i class="bi bi-activity"></i></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-6 col-lg-3">
+          <div class="stat-card">
+            <div class="d-flex justify-content-between">
+              <div>
+                <div class="stat-label">Completion Rate</div>
+                <div class="stat-value">64%</div>
+                <p class="stat-note">Assessment progress improving</p>
+              </div>
+              <div class="stat-icon"><i class="bi bi-check-circle"></i></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-6 col-lg-3">
+          <div class="stat-card">
+            <div class="d-flex justify-content-between">
+              <div>
+                <div class="stat-label">Student Scores</div>
+                <div class="stat-value">7.8/10</div>
+                <p class="stat-note">Organisation average</p>
+              </div>
+              <div class="stat-icon"><i class="bi bi-star"></i></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-6 col-lg-3">
+          <div class="stat-card">
+            <div class="d-flex justify-content-between">
+              <div>
+                <div class="stat-label">Student Assistance</div>
+                <div class="stat-value">3</div>
+                <p class="stat-note danger">Needs admin review</p>
+              </div>
+              <div class="stat-icon"><i class="bi bi-person-exclamation"></i></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SPLIT RESULTS BOARD -->
+      <div id="results" class="row g-4">
+        <div class="col-lg-8">
+          <div class="results-card">
+            <h3 class="results-card-main-title">Student Score Breakdown</h3>
+
+            <div class="result-row">
+              <div class="result-label">Caring Time</div>
+              <div class="result-track">
+                <div class="result-fill" style="width: 70%;">70%</div>
+              </div>
+            </div>
+
+            <div class="result-row">
+              <div class="result-label">Receiving Value</div>
+              <div class="result-track">
+                <div class="result-fill" style="width: 40%;">40%</div>
+              </div>
+            </div>
+
+            <div class="result-row">
+              <div class="result-label">Acts of Support</div>
+              <div class="result-track">
+                <div class="result-fill" style="width: 10%;">10%</div>
+              </div>
+            </div>
+
+            <div class="result-row">
+              <div class="result-label">Words of Recognition</div>
+              <div class="result-track">
+                <div class="result-fill" style="width: 80%;">80%</div>
+              </div>
+            </div>
+
+            <div class="result-row">
+              <div class="result-label">Psychological Touch</div>
+              <div class="result-track">
+                <div class="result-fill" style="width: 35%;">35%</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-lg-4">
+          <div class="content-card">
+            <h3>Recommended Actions</h3>
+
+            <ul class="list-group list-group-flush">
+              <li class="list-group-item">Follow up with students who have not started their assessment.</li>
+              <li class="list-group-item">Review students with low Receiving Value and Acts of Support results.</li>
+              <li class="list-group-item">Provide targeted resources for recognition and support behaviours.</li>
+              <li class="list-group-item">Export monthly student progress report.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- USERS -->
+    <section id="users" class="section-block">
+      <div class="section-heading">
+        <h2>Users</h2>
+        <p>Manage students, courses, course types, industries, and participation progress.</p>
+      </div>
+
+      <div class="sub-card">
+        <div class="d-flex flex-wrap justify-content-between gap-2 mb-4">
+          <h3>User List</h3>
+          <div class="d-flex gap-2">
+            <button class="btn btn-green">Add User</button>
+          </div>
+        </div>
+
+        <div class="table-wrap">
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Course</th>
+                <th>Course Type</th>
+                <th>Industry</th>
+                <th>Role</th>
+                <th>Status</th>
+                <th>Completion</th>
+                <th>Last Active</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              <tr>
+                <td>Sarah Mitchell</td>
+                <td>Leadership Foundations</td>
+                <td>Standard</td>
+                <td>Healthcare</td>
+                <td>Manager</td>
+                <td><span class="badge bg-success">Active</span></td>
+                <td>100%</td>
+                <td>Today</td>
+                <td><button class="btn btn-sm btn-outline-primary">View</button></td>
+              </tr>
+
+              <tr>
+                <td>James Turner</td>
+                <td>Influence Under Pressure</td>
+                <td>Customised</td>
+                <td>Construction</td>
+                <td>Team Lead</td>
+                <td><span class="badge bg-success">Active</span></td>
+                <td>75%</td>
+                <td>2 days ago</td>
+                <td><button class="btn btn-sm btn-outline-primary">Edit</button></td>
+              </tr>
+
+              <tr>
+                <td>Mia Kelly</td>
+                <td>Communication Essentials</td>
+                <td>Standard</td>
+                <td>Education</td>
+                <td>Student</td>
+                <td><span class="badge bg-warning text-dark">Pending</span></td>
+                <td>0%</td>
+                <td>Not started</td>
+                <td><button class="btn btn-sm btn-outline-danger">Remind</button></td>
+              </tr>
+
+              <tr>
+                <td>Daniel Brooks</td>
+                <td>Resilient Leadership</td>
+                <td>Customised</td>
+                <td>Mining</td>
+                <td>Supervisor</td>
+                <td><span class="badge bg-secondary">Inactive</span></td>
+                <td>40%</td>
+                <td>12 days ago</td>
+                <td><button class="btn btn-sm btn-outline-primary">Edit</button></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- LEARNING MODULES SUBSECTION -->
+      <div id="learningModules" class="module-card">
+        <div class="d-flex flex-wrap justify-content-between gap-3 align-items-start mb-4">
+          <div>
+            <h3 class="mb-2">Learning Modules</h3>
+            <p>View, sort, add, edit, and delete modules across the system.</p>
+          </div>
+
+          <button class="btn btn-green">
+            <i class="bi bi-plus-lg me-2"></i>Add Module
+          </button>
+        </div>
+
+        <div class="module-controls">
+          <div>
+            <label>Sort by</label>
+            <select>
+              <option>Module ID</option>
+              <option>Category</option>
+              <option>Book</option>
+              <option>Title</option>
+            </select>
+          </div>
+
+          <div>
+            <label>Direction</label>
+            <select>
+              <option>Ascending</option>
+              <option>Descending</option>
+            </select>
+          </div>
+
+          <button class="btn btn-green">Refresh List</button>
+
+          <span class="module-count">38 modules</span>
+        </div>
+
+        <div class="table-wrap">
+          <table class="table">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Category</th>
+                <th>Book</th>
+                <th>Title</th>
+                <th>Order</th>
+                <th>Active</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              <tr>
+                <td>1</td>
+                <td>Acts of Support</td>
+                <td>The Art of Facilitation</td>
+                <td>Facilitation as a Leadership Superpower</td>
+                <td>1</td>
+                <td><span class="active-pill">Yes</span></td>
+                <td>
+                  <button class="btn-edit">Edit</button>
+                  <button class="btn-delete">Delete</button>
+                </td>
+              </tr>
+
+              <tr>
+                <td>2</td>
+                <td>Caring Time</td>
+                <td>The Art of Facilitation</td>
+                <td>Run a Goal Setting Workshop That Actually Sticks</td>
+                <td>1</td>
+                <td><span class="active-pill">Yes</span></td>
+                <td>
+                  <button class="btn-edit">Edit</button>
+                  <button class="btn-delete">Delete</button>
+                </td>
+              </tr>
+
+              <tr>
+                <td>3</td>
+                <td>Words of Recognition</td>
+                <td>The Art of Facilitation</td>
+                <td>Facilitate Innovation: Running an Idea Generation Workshop</td>
+                <td>1</td>
+                <td><span class="active-pill">Yes</span></td>
+                <td>
+                  <button class="btn-edit">Edit</button>
+                  <button class="btn-delete">Delete</button>
+                </td>
+              </tr>
+
+              <tr>
+                <td>4</td>
+                <td>Acts of Support</td>
+                <td>The Art of Facilitation</td>
+                <td>Facilitate Solutions: Running a Problem Solving Workshop</td>
+                <td>2</td>
+                <td><span class="active-pill">Yes</span></td>
+                <td>
+                  <button class="btn-edit">Edit</button>
+                  <button class="btn-delete">Delete</button>
+                </td>
+              </tr>
+
+              <tr>
+                <td>5</td>
+                <td>Psychological Touch</td>
+                <td>The Art of Facilitation</td>
+                <td>The Questions That Lead the Room</td>
+                <td>1</td>
+                <td><span class="active-pill">Yes</span></td>
+                <td>
+                  <button class="btn-edit">Edit</button>
+                  <button class="btn-delete">Delete</button>
+                </td>
+              </tr>
+
+              <tr>
+                <td>6</td>
+                <td>Psychological Touch</td>
+                <td>The Leadership Triad</td>
+                <td>Mindset is the Multiplier</td>
+                <td>1</td>
+                <td><span class="active-pill">Yes</span></td>
+                <td>
+                  <button class="btn-edit">Edit</button>
+                  <button class="btn-delete">Delete</button>
+                </td>
+              </tr>
+
+              <tr>
+                <td>7</td>
+                <td>Caring Time</td>
+                <td>The Leadership Triad</td>
+                <td>Engineer Your Future Backwards</td>
+                <td>1</td>
+                <td><span class="active-pill">Yes</span></td>
+                <td>
+                  <button class="btn-edit">Edit</button>
+                  <button class="btn-delete">Delete</button>
+                </td>
+              </tr>
+
+              <tr>
+                <td>8</td>
+                <td>Receiving Value</td>
+                <td>The Leadership Triad</td>
+                <td>Use Failure as Fuel</td>
+                <td>1</td>
+                <td><span class="active-pill">Yes</span></td>
+                <td>
+                  <button class="btn-edit">Edit</button>
+                  <button class="btn-delete">Delete</button>
+                </td>
+              </tr>
+
+              <tr>
+                <td>9</td>
+                <td>Caring Time</td>
+                <td>The Leadership Triad</td>
+                <td>Lead Under Pressure: Stabilise, Simplify, Strike</td>
+                <td>2</td>
+                <td><span class="active-pill">Yes</span></td>
+                <td>
+                  <button class="btn-edit">Edit</button>
+                  <button class="btn-delete">Delete</button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ANALYTICS -->
+    <section id="analytics" class="section-block">
+      <div class="section-heading">
+        <h2>Analytics</h2>
+        <p>Review course profiles, common limitations, and student progress over time.</p>
+      </div>
+
+      <div class="row g-4 mb-5">
+        <div class="col-md-6 col-lg-4">
+          <div class="course-card">
+            <h3>Operations Course</h3>
+            <p>Average Score: 7.2/10</p>
+            <span class="soft-badge badge-green">Strength: Words of Recognition</span>
+            <span class="soft-badge badge-grey">Limitation: Acts of Support</span>
+            <div class="mini-bar"><span style="width:82%"></span></div>
+            <small class="d-block mt-3">82% completion</small>
+          </div>
+        </div>
+
+        <div class="col-md-6 col-lg-4">
+          <div class="course-card">
+            <h3>Sales Course</h3>
+            <p>Average Score: 8.1/10</p>
+            <span class="soft-badge badge-green">Strength: Caring Time</span>
+            <span class="soft-badge badge-grey">Limitation: Receiving Value</span>
+            <div class="mini-bar"><span style="width:91%"></span></div>
+            <small class="d-block mt-3">91% completion</small>
+          </div>
+        </div>
+
+        <div class="col-md-6 col-lg-4">
+          <div class="course-card">
+            <h3>HR Course</h3>
+            <p>Average Score: 7.6/10</p>
+            <span class="soft-badge badge-green">Strength: Psychological Touch</span>
+            <span class="soft-badge badge-grey">Limitation: Acts of Support</span>
+            <div class="mini-bar"><span style="width:74%"></span></div>
+            <small class="d-block mt-3">74% completion</small>
+          </div>
+        </div>
+      </div>
+
+      <div class="row g-4">
+        <div class="col-lg-6">
+          <div class="sub-card">
+            <h3>Common Limitations</h3>
+            <ol>
+              <li>Acts of Support</li>
+              <li>Receiving Value</li>
+              <li>Psychological Touch</li>
+              <li>Consistent recognition</li>
+              <li>Quality presence and dedicated attention</li>
+            </ol>
+          </div>
+        </div>
+
+        <div class="col-lg-6">
+          <div class="sub-card">
+            <h3>Progress Over Time</h3>
+
+            <div class="month-bar">
+              <div class="month-label">January - 64%</div>
+              <div class="month-track"><div class="month-fill" style="width:64%"></div></div>
+            </div>
+
+            <div class="month-bar">
+              <div class="month-label">February - 68%</div>
+              <div class="month-track"><div class="month-fill" style="width:68%"></div></div>
+            </div>
+
+            <div class="month-bar">
+              <div class="month-label">March - 72%</div>
+              <div class="month-track"><div class="month-fill" style="width:72%"></div></div>
+            </div>
+
+            <div class="month-bar">
+              <div class="month-label">April - 78%</div>
+              <div class="month-track"><div class="month-fill" style="width:78%"></div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- REPORTS -->
+    <section id="reports" class="section-block">
+      <div class="section-heading">
+        <h2>Reports</h2>
+        <p>Generate exportable reports that support organisational decision-making.</p>
+      </div>
+
+      <div class="row g-4 mb-5">
+        <div class="col-md-6 col-lg-3">
+          <div class="report-card">
+            <i class="bi bi-building"></i>
+            <h3>Organisation Summary</h3>
+            <p>Overall engagement, completion, and student performance.</p>
+            <button class="btn btn-outline-custom">Generate</button>
+          </div>
+        </div>
+
+        <div class="col-md-6 col-lg-3">
+          <div class="report-card">
+            <i class="bi bi-book"></i>
+            <h3>Course Report</h3>
+            <p>Course strengths, limitations, and progress over time.</p>
+            <button class="btn btn-outline-custom">Generate</button>
+          </div>
+        </div>
+
+        <div class="col-md-6 col-lg-3">
+          <div class="report-card">
+            <i class="bi bi-exclamation-circle"></i>
+            <h3>Limitations Report</h3>
+            <p>Most common development limitations across courses.</p>
+            <button class="btn btn-outline-custom">Generate</button>
+          </div>
+        </div>
+
+        <div class="col-md-6 col-lg-3">
+          <div class="report-card">
+            <i class="bi bi-graph-up-arrow"></i>
+            <h3>Impact Report</h3>
+            <p>ROI, improvement, and student growth metrics.</p>
+            <button class="btn btn-outline-custom">Generate</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="sub-card">
+        <h3>April Student Impact Preview</h3>
+        <p>124 total users, 79% engagement rate, 68% assessment completion, and an average student score of 7.6/10.</p>
+
+        <div class="d-flex flex-wrap gap-2 mt-3">
+          <button class="btn btn-green"><i class="bi bi-file-earmark-pdf me-2"></i>Export PDF</button>
+          <button class="btn btn-outline-custom"><i class="bi bi-filetype-csv me-2"></i>Export CSV</button>
+          <button class="btn btn-outline-custom"><i class="bi bi-envelope me-2"></i>Email Report</button>
+        </div>
+      </div>
+    </section>
+
+    
+
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+  <script>
+    function toggleMenu() {
+      document.getElementById("navDropdown").classList.toggle("show");
+    }
+
+    function closeMenu() {
+      document.getElementById("navDropdown").classList.remove("show");
+    }
+
+    document.addEventListener("click", function(event) {
+      const menu = document.getElementById("navDropdown");
+      const button = document.querySelector(".hamburger-button");
+
+      if (!menu.contains(event.target) && !button.contains(event.target)) {
+        menu.classList.remove("show");
+      }
+    });
+  </script>
+
+</body>
+</html>
