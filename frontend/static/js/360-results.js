@@ -1,12 +1,12 @@
 const API_BASE_URL = "http://localhost:8080";
 
 
-/*
- * Get survey ID from URL.
- *
- * Example:
- * 360-results.html?surveyId=16
- */
+/* =========================================================
+   GET SURVEY ID
+   Example:
+   360-results.html?surveyId=16
+   ========================================================= */
+
 function getSurveyId() {
 
     const params =
@@ -18,21 +18,20 @@ function getSurveyId() {
 }
 
 
-/*
- * Get JWT stored by your login flow.
- *
- * Change "token" if your application
- * stores it under another key.
- */
+/* =========================================================
+   GET AUTH TOKEN
+   ========================================================= */
+
 function getAuthToken() {
 
     return localStorage.getItem("token");
 }
 
 
-/*
- * Load aggregated 360 results.
- */
+/* =========================================================
+   LOAD RESULTS
+   ========================================================= */
+
 async function loadResults() {
 
     const surveyId =
@@ -127,9 +126,10 @@ async function loadResults() {
 }
 
 
-/*
- * Response count
- */
+/* =========================================================
+   RESPONSE COUNT
+   ========================================================= */
+
 function renderResponseCount(count) {
 
     const element =
@@ -138,20 +138,35 @@ function renderResponseCount(count) {
         );
 
     if (element) {
+
         element.textContent =
             count ?? 0;
     }
 }
 
 
-/*
- * Q1-Q8 averages
- */
+/* =========================================================
+   LEADERSHIP RATINGS
+   Q1-Q8
+
+   Displays:
+   - Category
+   - Question number
+   - Average score
+   - Visual progress bar
+   - Overall average
+   ========================================================= */
+
 function renderRatings(ratings) {
 
     const container =
         document.getElementById(
             "ratingsContainer"
+        );
+
+    const overallAverageElement =
+        document.getElementById(
+            "overallAverage"
         );
 
 
@@ -163,66 +178,169 @@ function renderRatings(ratings) {
     container.innerHTML = "";
 
 
-    if (!ratings ||
-        ratings.length === 0) {
+    if (
+        !ratings ||
+        ratings.length === 0
+    ) {
 
-        container.innerHTML =
-            "<p>No rating results available yet.</p>";
+        container.innerHTML = `
+            <p class="empty-message">
+                No rating results available yet.
+            </p>
+        `;
+
+
+        if (overallAverageElement) {
+
+            overallAverageElement.innerHTML =
+                '- <span>/ 5</span>';
+        }
+
 
         return;
     }
 
 
+    let total = 0;
+    let validScoreCount = 0;
+
+
     ratings.forEach(rating => {
 
-        const column =
-            document.createElement("div");
+        const score =
+            Number(
+                rating.averageScore
+            );
 
-        column.className =
-            "col-md-6 col-lg-4";
+
+        /*
+         * Protect against invalid or missing
+         * average scores.
+         */
+
+        const validScore =
+            Number.isFinite(score)
+                ? score
+                : 0;
 
 
-        column.innerHTML = `
-            <div class="card h-100">
+        if (Number.isFinite(score)) {
 
-                <div class="card-body">
+            total += score;
 
-                    <h5 class="card-title">
+            validScoreCount++;
+        }
+
+
+        /*
+         * Convert the score out of 5
+         * into a percentage for the bar.
+         */
+
+        const percentage =
+            Math.max(
+                0,
+                Math.min(
+                    100,
+                    (validScore / 5) * 100
+                )
+            );
+
+
+        const card =
+            document.createElement(
+                "div"
+            );
+
+        card.className =
+            "rating-card";
+
+
+        card.innerHTML = `
+            <div class="rating-card-top">
+
+                <div>
+
+                    <div class="rating-category">
                         ${escapeHtml(
                             rating.category
                         )}
-                    </h5>
+                    </div>
 
-                    <p class="mb-1">
+                    <div class="rating-question">
                         Question
-                        ${rating.questionNumber}
-                    </p>
-
-                    <p class="display-6 mb-0">
-                        ${Number(
-                            rating.averageScore
-                        ).toFixed(1)}
-                        <span class="fs-6">
-                            / 5
-                        </span>
-                    </p>
+                        ${escapeHtml(
+                            rating.questionNumber
+                        )}
+                    </div>
 
                 </div>
+
+
+                <div class="rating-score">
+
+                    ${validScore.toFixed(1)}
+
+                    <span>
+                        / 5
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <div class="score-track">
+
+                <div
+                    class="score-fill"
+                    style="width: ${percentage}%"
+                ></div>
 
             </div>
         `;
 
 
         container.appendChild(
-            column
+            card
         );
     });
+
+
+    /*
+     * Calculate overall average using
+     * the Q1-Q8 competency averages.
+     */
+
+    if (overallAverageElement) {
+
+        if (validScoreCount > 0) {
+
+            const overallAverage =
+                total /
+                validScoreCount;
+
+
+            overallAverageElement.innerHTML = `
+                ${overallAverage.toFixed(1)}
+                <span>/ 5</span>
+            `;
+
+        } else {
+
+            overallAverageElement.innerHTML =
+                '- <span>/ 5</span>';
+        }
+    }
 }
 
 
-/*
- * Q10 and Q11
- */
+/* =========================================================
+   OPTION RESULTS
+   Q10 = Strengths
+   Q11 = Working Style
+   ========================================================= */
+
 function renderOptionResults(
     optionResults
 ) {
@@ -232,6 +350,7 @@ function renderOptionResults(
             "strengthsContainer"
         );
 
+
     const workingStyleContainer =
         document.getElementById(
             "workingStyleContainer"
@@ -239,10 +358,14 @@ function renderOptionResults(
 
 
     /*
-     * JSON object keys become strings.
+     * JSON object keys become strings,
+     * therefore question 10 is "10"
+     * and question 11 is "11".
      */
+
     const strengths =
         optionResults?.["10"] || [];
+
 
     const workingStyle =
         optionResults?.["11"] || [];
@@ -253,6 +376,7 @@ function renderOptionResults(
         strengths
     );
 
+
     renderOptionList(
         workingStyleContainer,
         workingStyle
@@ -260,9 +384,10 @@ function renderOptionResults(
 }
 
 
-/*
- * Render option counts.
- */
+/* =========================================================
+   RENDER OPTION CHIPS
+   ========================================================= */
+
 function renderOptionList(
     container,
     options
@@ -273,33 +398,60 @@ function renderOptionList(
     }
 
 
-    if (!options ||
-        options.length === 0) {
+    container.innerHTML = "";
 
-        container.innerHTML =
-            "<p>No responses available yet.</p>";
+
+    if (
+        !options ||
+        options.length === 0
+    ) {
+
+        container.innerHTML = `
+            <p class="empty-message">
+                No responses available yet.
+            </p>
+        `;
 
         return;
     }
 
 
     const list =
-        document.createElement("div");
+        document.createElement(
+            "div"
+        );
+
 
     list.className =
-        "list-group";
+        "option-list";
 
 
-    options.forEach(option => {
+    /*
+     * Sort most commonly selected
+     * options first.
+     */
 
-        const item =
-            document.createElement("div");
+    const sortedOptions =
+        [...options].sort(
+            (a, b) =>
+                Number(b.count) -
+                Number(a.count)
+        );
 
-        item.className =
-            "list-group-item d-flex justify-content-between align-items-center";
+
+    sortedOptions.forEach(option => {
+
+        const chip =
+            document.createElement(
+                "div"
+            );
 
 
-        item.innerHTML = `
+        chip.className =
+            "feedback-chip";
+
+
+        chip.innerHTML = `
             <span>
                 ${escapeHtml(
                     option.optionText
@@ -307,20 +459,19 @@ function renderOptionList(
             </span>
 
             <span
-                class="badge bg-secondary rounded-pill"
+                class="feedback-chip-count"
+                title="Number of reviewers who selected this option"
             >
-                ${option.count}
+                ${Number(option.count) || 0}
             </span>
         `;
 
 
         list.appendChild(
-            item
+            chip
         );
     });
 
-
-    container.innerHTML = "";
 
     container.appendChild(
         list
@@ -328,9 +479,11 @@ function renderOptionList(
 }
 
 
-/*
- * Q9 + Q12-Q14
- */
+/* =========================================================
+   WRITTEN FEEDBACK
+   Q9 + Q12-Q14
+   ========================================================= */
+
 function renderWrittenFeedback(
     writtenFeedback
 ) {
@@ -350,26 +503,35 @@ function renderWrittenFeedback(
 
 
     const sections = [
+
         {
             question: "9",
+
             title:
                 "Examples of Strong Results or Positive Impact"
         },
+
         {
             question: "12",
+
             title:
                 "What You Do Really Well"
         },
+
         {
             question: "13",
+
             title:
                 "What You Could Do More Of"
         },
+
         {
             question: "14",
+
             title:
                 "How Others Are Willing to Support You"
         }
+
     ];
 
 
@@ -382,14 +544,24 @@ function renderWrittenFeedback(
 
 
         const sectionElement =
-            document.createElement("div");
+            document.createElement(
+                "div"
+            );
+
 
         sectionElement.className =
-            "mb-4";
+            "written-section";
 
+
+        /*
+         * Section heading
+         */
 
         const heading =
-            document.createElement("h4");
+            document.createElement(
+                "h3"
+            );
+
 
         heading.textContent =
             section.title;
@@ -400,16 +572,25 @@ function renderWrittenFeedback(
         );
 
 
+        /*
+         * No written responses
+         */
+
         if (responses.length === 0) {
 
             const empty =
-                document.createElement("p");
+                document.createElement(
+                    "p"
+                );
+
 
             empty.className =
-                "text-muted";
+                "empty-message";
+
 
             empty.textContent =
                 "No responses available yet.";
+
 
             sectionElement.appendChild(
                 empty
@@ -417,29 +598,36 @@ function renderWrittenFeedback(
 
         } else {
 
+            /*
+             * Render each anonymous
+             * response separately.
+             */
+
             responses.forEach(
                 responseText => {
 
-                    const card =
+                    const feedback =
                         document.createElement(
                             "div"
                         );
 
-                    card.className =
-                        "card mb-2";
+
+                    feedback.className =
+                        "anonymous-feedback-item";
 
 
-                    card.innerHTML = `
-                        <div class="card-body">
-                            ${escapeHtml(
-                                responseText
-                            )}
-                        </div>
-                    `;
+                    /*
+                     * textContent is used deliberately
+                     * so reviewer text cannot be
+                     * interpreted as HTML.
+                     */
+
+                    feedback.textContent =
+                        responseText;
 
 
                     sectionElement.appendChild(
-                        card
+                        feedback
                     );
                 }
             );
@@ -453,9 +641,10 @@ function renderWrittenFeedback(
 }
 
 
-/*
- * Error message
- */
+/* =========================================================
+   ERROR MESSAGE
+   ========================================================= */
+
 function showError(message) {
 
     const element =
@@ -472,30 +661,39 @@ function showError(message) {
     element.textContent =
         message;
 
+
     element.style.display =
         "block";
 }
 
 
-/*
- * Prevent feedback text from being
- * interpreted as HTML.
- */
+/* =========================================================
+   HTML ESCAPE
+
+   Used for values inserted into
+   dynamically generated HTML.
+   ========================================================= */
+
 function escapeHtml(value) {
 
     const div =
-        document.createElement("div");
+        document.createElement(
+            "div"
+        );
+
 
     div.textContent =
         value ?? "";
+
 
     return div.innerHTML;
 }
 
 
-/*
- * Page startup
- */
+/* =========================================================
+   PAGE STARTUP
+   ========================================================= */
+
 document.addEventListener(
     "DOMContentLoaded",
     loadResults
