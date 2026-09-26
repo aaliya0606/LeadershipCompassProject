@@ -11,7 +11,9 @@
         content="width=device-width, initial-scale=1.0"
     />
 
-    <title>Dashboard | Leadership Compass</title>
+    <title>
+        Dashboard | Leadership Compass
+    </title>
 
     <link
         href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
@@ -25,10 +27,16 @@
 
 </head>
 
+
 <body>
 
-    <!-- Navigation -->
-    <nav class="navbar navbar-dark bg-primary px-4">
+    <!-- =========================================
+         NAVIGATION
+         ========================================= -->
+
+    <nav
+        class="navbar navbar-dark bg-primary px-4"
+    >
 
         <span class="navbar-brand">
             Leadership Compass
@@ -45,7 +53,12 @@
     </nav>
 
 
+    <!-- =========================================
+         MAIN DASHBOARD
+         ========================================= -->
+
     <main class="container py-5">
+
 
         <!-- Welcome -->
         <section class="mb-5">
@@ -55,21 +68,27 @@
             </h1>
 
             <p class="text-muted">
-                Track your leadership development, complete assessments
-                and gather feedback from the people you work with.
+                Track your leadership development,
+                complete assessments and gather
+                feedback from the people you work with.
             </p>
 
         </section>
 
 
-        <!-- Main Dashboard Cards -->
+        <!-- =========================================
+             MAIN USER CARDS
+             ========================================= -->
+
         <div class="row g-4">
 
 
             <!-- Leadership Assessment -->
             <div class="col-md-6">
 
-                <div class="card h-100 shadow-sm">
+                <div
+                    class="card h-100 shadow-sm"
+                >
 
                     <div class="card-body">
 
@@ -78,8 +97,11 @@
                         </h3>
 
                         <p class="text-muted">
-                            Complete your Leadership Compass assessment
-                            to understand your leadership profile.
+                            Complete your Leadership
+                            Compass assessment to
+                            understand your leadership
+                            profile, strengths and
+                            development areas.
                         </p>
 
                         <button
@@ -100,7 +122,9 @@
             <!-- Development Plan -->
             <div class="col-md-6">
 
-                <div class="card h-100 shadow-sm">
+                <div
+                    class="card h-100 shadow-sm"
+                >
 
                     <div class="card-body">
 
@@ -109,8 +133,10 @@
                         </h3>
 
                         <p class="text-muted">
-                            View and work through your personalised
-                            leadership development activities.
+                            View and work through your
+                            personalised leadership
+                            development activities and
+                            track your progress.
                         </p>
 
                         <a
@@ -127,41 +153,56 @@
             </div>
 
 
-            <!-- 360 Feedback -->
+            <!-- =====================================
+                 360 FEEDBACK
+                 ===================================== -->
+
             <div class="col-12">
 
                 <div class="card shadow-sm">
 
                     <div class="card-body">
 
+
+                        <!-- Heading -->
                         <div
-                            class="d-flex
-                                   justify-content-between
-                                   align-items-start
-                                   flex-wrap
-                                   gap-3"
+                            class="
+                                d-flex
+                                justify-content-between
+                                align-items-start
+                                flex-wrap
+                                gap-3
+                            "
                         >
 
                             <div>
 
-                                <h3 class="card-title mb-2">
+                                <h3
+                                    class="card-title mb-2"
+                                >
                                     360° Feedback
                                 </h3>
 
-                                <p class="text-muted mb-0">
-                                    Gather anonymous feedback from colleagues
-                                    and teammates to better understand your
-                                    leadership strengths and development areas.
+                                <p
+                                    class="text-muted mb-0"
+                                >
+                                    Gather anonymous feedback
+                                    from colleagues and teammates
+                                    to better understand your
+                                    leadership strengths,
+                                    behaviours and development
+                                    areas.
                                 </p>
 
                             </div>
+
 
                             <span
                                 id="surveyStatusBadge"
                                 class="badge bg-secondary"
                                 style="display: none;"
                             >
-                                Active
+                                ACTIVE
                             </span>
 
                         </div>
@@ -170,11 +211,21 @@
                         <hr>
 
 
-                        <!-- BEFORE survey exists -->
+                        <!-- =================================
+                             NO ACTIVE SURVEY
+                             ================================= -->
+
                         <div id="no360SurveyState">
 
-                            <p>
-                                You haven't created a 360° feedback survey yet.
+                            <h5>
+                                Start a 360° feedback period
+                            </h5>
+
+                            <p class="text-muted">
+                                Create a feedback link and share
+                                it with colleagues or teammates.
+                                Your survey will remain active
+                                for 30 days.
                             </p>
 
                             <button
@@ -188,22 +239,51 @@
                         </div>
 
 
-                        <!-- AFTER survey exists -->
+                        <!-- =================================
+                             ACTIVE SURVEY
+                             ================================= -->
+
                         <div
                             id="active360SurveyState"
                             style="display: none;"
                         >
 
-                            <div class="row g-4 mb-4">
+
+                            <div class="mb-4">
+
+                                <h5>
+                                    Current Feedback Period
+                                </h5>
+
+                                <p class="text-muted">
+                                    Your survey is currently
+                                    accepting anonymous responses.
+                                </p>
+
+                            </div>
+
+
+                            <!-- Summary Cards -->
+                            <div class="row g-3 mb-4">
 
 
                                 <!-- Status -->
-                                <div class="col-md-4">
+                                <div class="col-md-3">
 
-                                    <div class="border rounded p-3 h-100">
+                                    <div
+                                        class="
+                                            border
+                                            rounded
+                                            p-3
+                                            h-100
+                                        "
+                                    >
 
                                         <p
-                                            class="text-muted mb-1"
+                                            class="
+                                                text-muted
+                                                mb-1
+                                            "
                                         >
                                             Status
                                         </p>
@@ -212,7 +292,7 @@
                                             id="surveyStatus"
                                             class="mb-0"
                                         >
-                                            Active
+                                            ACTIVE
                                         </h4>
 
                                     </div>
@@ -220,13 +300,23 @@
                                 </div>
 
 
-                                <!-- Response Count -->
-                                <div class="col-md-4">
+                                <!-- Responses -->
+                                <div class="col-md-3">
 
-                                    <div class="border rounded p-3 h-100">
+                                    <div
+                                        class="
+                                            border
+                                            rounded
+                                            p-3
+                                            h-100
+                                        "
+                                    >
 
                                         <p
-                                            class="text-muted mb-1"
+                                            class="
+                                                text-muted
+                                                mb-1
+                                            "
                                         >
                                             Responses
                                         </p>
@@ -243,13 +333,56 @@
                                 </div>
 
 
-                                <!-- Survey ID -->
-                                <div class="col-md-4">
+                                <!-- Expiry -->
+                                <div class="col-md-3">
 
-                                    <div class="border rounded p-3 h-100">
+                                    <div
+                                        class="
+                                            border
+                                            rounded
+                                            p-3
+                                            h-100
+                                        "
+                                    >
 
                                         <p
-                                            class="text-muted mb-1"
+                                            class="
+                                                text-muted
+                                                mb-1
+                                            "
+                                        >
+                                            Expires
+                                        </p>
+
+                                        <h4
+                                            id="surveyExpiry"
+                                            class="mb-0"
+                                        >
+                                            -
+                                        </h4>
+
+                                    </div>
+
+                                </div>
+
+
+                                <!-- Survey ID -->
+                                <div class="col-md-3">
+
+                                    <div
+                                        class="
+                                            border
+                                            rounded
+                                            p-3
+                                            h-100
+                                        "
+                                    >
+
+                                        <p
+                                            class="
+                                                text-muted
+                                                mb-1
+                                            "
                                         >
                                             Survey
                                         </p>
@@ -273,16 +406,27 @@
 
                                 <label
                                     for="surveyLink"
-                                    class="form-label fw-semibold"
+                                    class="
+                                        form-label
+                                        fw-semibold
+                                    "
                                 >
                                     Shareable Feedback Link
                                 </label>
 
-                                <p class="text-muted small">
-                                    Send this link to colleagues or teammates.
-                                    They do not need to log in and their
-                                    responses remain anonymous.
+                                <p
+                                    class="
+                                        text-muted
+                                        small
+                                    "
+                                >
+                                    Share this link with people
+                                    you would like feedback from.
+                                    Reviewers do not need an
+                                    account and responses are
+                                    stored anonymously.
                                 </p>
+
 
                                 <div class="input-group">
 
@@ -293,10 +437,14 @@
                                         readonly
                                     />
 
+
                                     <button
                                         id="copySurveyLinkBtn"
                                         type="button"
-                                        class="btn btn-outline-secondary"
+                                        class="
+                                            btn
+                                            btn-outline-secondary
+                                        "
                                     >
                                         Copy Link
                                     </button>
@@ -307,7 +455,13 @@
 
 
                             <!-- Actions -->
-                            <div class="d-flex gap-2 flex-wrap">
+                            <div
+                                class="
+                                    d-flex
+                                    gap-2
+                                    flex-wrap
+                                "
+                            >
 
                                 <button
                                     id="view360ResultsBtn"
@@ -317,10 +471,14 @@
                                     View Results
                                 </button>
 
+
                                 <button
                                     id="copySurveyLinkSecondaryBtn"
                                     type="button"
-                                    class="btn btn-outline-primary"
+                                    class="
+                                        btn
+                                        btn-outline-primary
+                                    "
                                 >
                                     Copy Feedback Link
                                 </button>
@@ -329,16 +487,80 @@
 
                         </div>
 
+
+                        <!-- =================================
+                             SURVEY HISTORY
+                             ================================= -->
+
+                        <hr class="my-4">
+
+
+                        <section
+                            id="surveyHistorySection"
+                        >
+
+                            <div
+                                class="
+                                    d-flex
+                                    justify-content-between
+                                    align-items-center
+                                    flex-wrap
+                                    gap-3
+                                    mb-3
+                                "
+                            >
+
+                                <div>
+
+                                    <h4 class="mb-1">
+                                        Previous 360° Surveys
+                                    </h4>
+
+                                    <p
+                                        class="
+                                            text-muted
+                                            mb-0
+                                        "
+                                    >
+                                        Review feedback from
+                                        previous survey periods
+                                        and compare your
+                                        leadership development
+                                        over time.
+                                    </p>
+
+                                </div>
+
+                            </div>
+
+
+                            <div
+                                id="surveyHistoryContainer"
+                            >
+
+                                <p class="text-muted">
+                                    Loading previous surveys...
+                                </p>
+
+                            </div>
+
+                        </section>
+
+
                     </div>
 
                 </div>
 
             </div>
 
+
         </div>
 
 
-        <!-- Admin Section -->
+        <!-- =========================================
+             ADMIN SECTION
+             ========================================= -->
+
         <section
             id="adminSection"
             class="mt-5 d-none"
@@ -348,12 +570,16 @@
                 Admin Tools
             </h2>
 
+
             <div class="row g-4">
 
 
+                <!-- Learning Modules -->
                 <div class="col-md-6">
 
-                    <div class="card h-100 shadow-sm">
+                    <div
+                        class="card h-100 shadow-sm"
+                    >
 
                         <div class="card-body">
 
@@ -362,7 +588,9 @@
                             </h4>
 
                             <p class="text-muted">
-                                Manage learning resources and modules.
+                                Manage learning resources,
+                                leadership content and
+                                development modules.
                             </p>
 
                             <a
@@ -379,9 +607,12 @@
                 </div>
 
 
+                <!-- Admin Dashboard -->
                 <div class="col-md-6">
 
-                    <div class="card h-100 shadow-sm">
+                    <div
+                        class="card h-100 shadow-sm"
+                    >
 
                         <div class="card-body">
 
@@ -390,7 +621,8 @@
                             </h4>
 
                             <p class="text-muted">
-                                View aggregated survey results across
+                                View aggregated leadership
+                                assessment results across
                                 users and departments.
                             </p>
 
@@ -407,14 +639,23 @@
 
                 </div>
 
+
             </div>
 
         </section>
 
+
     </main>
 
 
-    <script src="static/js/dashboard.js"></script>
+    <!-- =========================================
+         JAVASCRIPT
+         ========================================= -->
+
+    <script
+        src="static/js/dashboard.js"
+    ></script>
+
 
 </body>
 

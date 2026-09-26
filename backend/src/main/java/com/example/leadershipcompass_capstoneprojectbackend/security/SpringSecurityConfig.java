@@ -27,14 +27,25 @@ public class SpringSecurityConfig {
 
         http
 
-                .csrf(csrf -> csrf.disable())
+                /*
+                 * JWT REST API, so CSRF is disabled.
+                 */
+                .csrf(csrf ->
+                        csrf.disable()
+                )
 
+                /*
+                 * Enable CORS using the configuration below.
+                 */
                 .cors(cors ->
                         cors.configurationSource(
                                 corsConfigurationSource()
                         )
                 )
 
+                /*
+                 * JWT authentication is stateless.
+                 */
                 .sessionManagement(session ->
                         session.sessionCreationPolicy(
                                 SessionCreationPolicy.STATELESS
@@ -43,8 +54,11 @@ public class SpringSecurityConfig {
 
                 .authorizeHttpRequests(auth -> auth
 
+
                         /*
-                         * Allow browser CORS preflight requests.
+                         * =================================================
+                         * CORS PREFLIGHT
+                         * =================================================
                          */
                         .requestMatchers(
                                 HttpMethod.OPTIONS,
@@ -53,7 +67,9 @@ public class SpringSecurityConfig {
 
 
                         /*
-                         * Authentication endpoints.
+                         * =================================================
+                         * AUTHENTICATION
+                         * =================================================
                          */
                         .requestMatchers(
                                 "/api/auth/register",
@@ -62,7 +78,9 @@ public class SpringSecurityConfig {
 
 
                         /*
-                         * Development/testing endpoints.
+                         * =================================================
+                         * DEVELOPMENT / TESTING
+                         * =================================================
                          */
                         .requestMatchers(
                                 "/h2-console/**",
@@ -73,9 +91,61 @@ public class SpringSecurityConfig {
 
                         /*
                          * =================================================
-                         * 360 FEEDBACK - PUBLIC REVIEWER ENDPOINTS
+                         * 360 FEEDBACK - PROTECTED USER ROUTES
+                         * =================================================
+                         *
+                         * IMPORTANT:
+                         *
+                         * These must appear BEFORE:
+                         *
+                         * /api/360/surveys/{token}
+                         *
+                         * otherwise "me" can be interpreted as a token.
+                         */
+
+
+                        /*
+                         * Current logged-in user's active survey.
+                         */
+                        .requestMatchers(
+                                HttpMethod.GET,
+                                "/api/360/surveys/me"
+                        ).hasAnyRole(
+                                "USER",
+                                "ADMIN"
+                        )
+
+
+                        /*
+                         * Logged-in user's previous survey history.
+                         */
+                        .requestMatchers(
+                                HttpMethod.GET,
+                                "/api/360/surveys/me/history"
+                        ).hasAnyRole(
+                                "USER",
+                                "ADMIN"
+                        )
+
+
+                        /*
+                         * Logged-in user can view 360 results.
+                         */
+                        .requestMatchers(
+                                HttpMethod.GET,
+                                "/api/360/surveys/{surveyId}/results"
+                        ).hasAnyRole(
+                                "USER",
+                                "ADMIN"
+                        )
+
+
+                        /*
+                         * =================================================
+                         * 360 FEEDBACK - PUBLIC REVIEWER ROUTES
                          * =================================================
                          */
+
 
                         /*
                          * Reviewer can retrieve survey questions.
@@ -89,10 +159,13 @@ public class SpringSecurityConfig {
 
                         /*
                          * Reviewer can load survey information
-                         * using the unique token.
+                         * using the unique survey token.
                          *
                          * Example:
+                         *
                          * GET /api/360/surveys/abc-123
+                         *
+                         * Keep this AFTER /me and /me/history.
                          */
                         .requestMatchers(
                                 HttpMethod.GET,
@@ -101,9 +174,10 @@ public class SpringSecurityConfig {
 
 
                         /*
-                         * Reviewer can anonymously submit feedback.
+                         * Reviewer can submit anonymous feedback.
                          *
                          * Example:
+                         *
                          * POST /api/360/surveys/abc-123/responses
                          */
                         .requestMatchers(
@@ -114,45 +188,27 @@ public class SpringSecurityConfig {
 
                         /*
                          * =================================================
-                         * 360 FEEDBACK - PROTECTED RESULTS
+                         * ADMIN ROUTES
                          * =================================================
-                         *
-                         * Only logged-in USER or ADMIN accounts
-                         * can retrieve survey results.
-                         *
-                         * Example:
-                         * GET /api/360/surveys/16/results
                          */
                         .requestMatchers(
-                                HttpMethod.GET,
-                                "/api/360/surveys/{surveyId}/results"
-                        ).hasAnyRole(
-                                "USER",
+                                "/api/admin/**"
+                        ).hasRole(
+                                "ADMIN"
+                        )
+
+                        .requestMatchers(
+                                "/api/dashboard/admin"
+                        ).hasRole(
                                 "ADMIN"
                         )
 
 
                         /*
                          * =================================================
-                         * ADMIN ROUTES
+                         * USER DASHBOARD
                          * =================================================
                          */
-
-                        .requestMatchers(
-                                "/api/admin/**"
-                        ).hasRole("ADMIN")
-
-                        .requestMatchers(
-                                "/api/dashboard/admin"
-                        ).hasRole("ADMIN")
-
-
-                        /*
-                         * =================================================
-                         * USER ROUTES
-                         * =================================================
-                         */
-
                         .requestMatchers(
                                 "/api/dashboard/user"
                         ).hasAnyRole(
@@ -166,7 +222,6 @@ public class SpringSecurityConfig {
                          * SWAGGER
                          * =================================================
                          */
-
                         .requestMatchers(
                                 "/v3/api-docs/**",
                                 "/swagger-ui/**",
@@ -175,14 +230,18 @@ public class SpringSecurityConfig {
 
 
                         /*
-                         * Everything else requires authentication.
+                         * =================================================
+                         * EVERYTHING ELSE
+                         * =================================================
                          *
-                         * This means:
+                         * Requires authentication.
+                         *
+                         * This includes:
                          *
                          * POST /api/360/surveys
                          *
-                         * remains protected, so only a logged-in
-                         * leader can create their 360 survey.
+                         * so only a logged-in leader can
+                         * create a 360 survey.
                          */
                         .anyRequest()
                         .authenticated()
@@ -190,34 +249,48 @@ public class SpringSecurityConfig {
 
 
                 /*
-                 * Allow H2 console frames during development.
+                 * Required for H2 console during development.
                  */
                 .headers(headers ->
                         headers.frameOptions(
-                                frame -> frame.disable()
+                                frame ->
+                                        frame.disable()
                         )
                 )
 
 
                 /*
                  * Process JWT before Spring's default
-                 * authentication filter.
+                 * username/password authentication filter.
                  */
                 .addFilterBefore(
                         jwtFilter,
                         UsernamePasswordAuthenticationFilter.class
                 );
 
+
         return http.build();
     }
 
 
+    /*
+     * =========================================================
+     * CORS CONFIGURATION
+     * =========================================================
+     */
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
 
         CorsConfiguration configuration =
                 new CorsConfiguration();
 
+
+        /*
+         * Frontend development origins.
+         *
+         * These must be normal URLs,
+         * NOT markdown links.
+         */
         configuration.setAllowedOrigins(
                 List.of(
                         "http://localhost:3000",
@@ -226,6 +299,7 @@ public class SpringSecurityConfig {
                         "http://localhost:5173"
                 )
         );
+
 
         configuration.setAllowedMethods(
                 List.of(
@@ -237,6 +311,7 @@ public class SpringSecurityConfig {
                 )
         );
 
+
         configuration.setAllowedHeaders(
                 List.of(
                         "Authorization",
@@ -244,15 +319,21 @@ public class SpringSecurityConfig {
                 )
         );
 
-        configuration.setAllowCredentials(true);
+
+        configuration.setAllowCredentials(
+                true
+        );
+
 
         UrlBasedCorsConfigurationSource source =
                 new UrlBasedCorsConfigurationSource();
+
 
         source.registerCorsConfiguration(
                 "/**",
                 configuration
         );
+
 
         return source;
     }

@@ -1,7 +1,11 @@
 const API_BASE_URL = "http://localhost:8080";
 
-const token = localStorage.getItem("token");
-const role = localStorage.getItem("role");
+const token =
+    localStorage.getItem("token");
+
+const role =
+    localStorage.getItem("role");
+
 
 const logoutBtn =
     document.getElementById("logoutBtn");
@@ -28,29 +32,54 @@ const copySurveyLinkBtn =
     document.getElementById("copySurveyLinkBtn");
 
 const copySurveyLinkSecondaryBtn =
-    document.getElementById("copySurveyLinkSecondaryBtn");
+    document.getElementById(
+        "copySurveyLinkSecondaryBtn"
+    );
 
 const view360ResultsBtn =
-    document.getElementById("view360ResultsBtn");
+    document.getElementById(
+        "view360ResultsBtn"
+    );
 
 const surveyStatus =
-    document.getElementById("surveyStatus");
+    document.getElementById(
+        "surveyStatus"
+    );
 
 const surveyStatusBadge =
-    document.getElementById("surveyStatusBadge");
+    document.getElementById(
+        "surveyStatusBadge"
+    );
 
 const responseCount =
-    document.getElementById("responseCount");
+    document.getElementById(
+        "responseCount"
+    );
 
 const surveyIdDisplay =
-    document.getElementById("surveyIdDisplay");
+    document.getElementById(
+        "surveyIdDisplay"
+    );
+
+const surveyExpiry =
+    document.getElementById(
+        "surveyExpiry"
+    );
+
+const surveyHistoryContainer =
+    document.getElementById(
+        "surveyHistoryContainer"
+    );
 
 
 /*
  * Current survey information.
  *
- * This is kept in memory while the dashboard is open.
- * It is no longer restored from localStorage.
+ * This only needs to stay in memory while
+ * the dashboard page is open.
+ *
+ * The database is now responsible for
+ * remembering the user's active survey.
  */
 let current360SurveyId = null;
 let current360SurveyToken = null;
@@ -167,11 +196,10 @@ async function generate360Survey() {
 
 
         /*
-         * createSurvey() now returns either:
+         * The backend may either:
          *
-         * - a newly created survey
-         * OR
-         * - the user's existing active survey.
+         * 1. create a new survey, or
+         * 2. return an existing active survey.
          */
         const link =
             build360SurveyLink(
@@ -182,20 +210,34 @@ async function generate360Survey() {
         showActive360Survey(
             {
                 id: data.id,
-                token: data.token,
+
+                token:
+                    data.token,
+
                 status:
-                    data.status || "ACTIVE",
-                responseCount: 0,
-                link: link
+                    data.status ||
+                    "ACTIVE",
+
+                responseCount:
+                    0,
+
+                link:
+                    link
             }
         );
 
 
         /*
-         * Reload from the backend so the dashboard
-         * gets the current response count and expiry.
+         * Reload active survey from backend
+         * so expiry and response count are current.
          */
         await loadActive360Survey();
+
+
+        /*
+         * Reload history as well.
+         */
+        await load360SurveyHistory();
 
 
     } catch (error) {
@@ -228,12 +270,6 @@ async function generate360Survey() {
    GET CURRENT ACTIVE SURVEY
    ========================================================= */
 
-/*
- * Called whenever the dashboard loads.
- *
- * The backend decides whether the logged-in user
- * currently has an active 360 survey.
- */
 async function loadActive360Survey() {
 
     try {
@@ -295,17 +331,27 @@ async function loadActive360Survey() {
 
         showActive360Survey(
             {
-                id: data.id,
-                token: data.token,
+                id:
+                    data.id,
+
+                token:
+                    data.token,
+
                 status:
-                    data.status || "ACTIVE",
+                    data.status ||
+                    "ACTIVE",
+
                 responseCount:
                     data.responseCount ?? 0,
+
                 createdAt:
                     data.createdAt,
+
                 expiresAt:
                     data.expiresAt,
-                link: link
+
+                link:
+                    link
             }
         );
 
@@ -317,14 +363,6 @@ async function loadActive360Survey() {
             error
         );
 
-
-        /*
-         * Don't automatically show the create button
-         * if the backend failed.
-         *
-         * Otherwise a temporary network error could
-         * make it look like the user has no survey.
-         */
     }
 
 }
@@ -378,6 +416,14 @@ function showNoActive360Survey() {
     if (surveyIdDisplay) {
 
         surveyIdDisplay.textContent =
+            "-";
+
+    }
+
+
+    if (surveyExpiry) {
+
+        surveyExpiry.textContent =
             "-";
 
     }
@@ -456,7 +502,8 @@ function showActive360Survey(data) {
     if (surveyStatus) {
 
         surveyStatus.textContent =
-            data.status || "ACTIVE";
+            data.status ||
+            "ACTIVE";
 
     }
 
@@ -470,7 +517,8 @@ function showActive360Survey(data) {
             "inline-block";
 
         surveyStatusBadge.textContent =
-            data.status || "ACTIVE";
+            data.status ||
+            "ACTIVE";
 
 
         if (
@@ -502,23 +550,9 @@ function showActive360Survey(data) {
 
 
     /*
-     * Optional expiry display.
-     *
-     * This only does anything if your HTML contains:
-     *
-     * <span id="surveyExpiry"></span>
+     * Expiry date.
      */
-    const surveyExpiry =
-        document.getElementById(
-            "surveyExpiry"
-        );
-
-
-    if (
-        surveyExpiry
-        &&
-        data.expiresAt
-    ) {
+    if (surveyExpiry) {
 
         surveyExpiry.textContent =
             formatDate(
@@ -526,6 +560,297 @@ function showActive360Survey(data) {
             );
 
     }
+
+}
+
+
+/* =========================================================
+   LOAD SURVEY HISTORY
+   ========================================================= */
+
+async function load360SurveyHistory() {
+
+    if (!surveyHistoryContainer) {
+
+        return;
+
+    }
+
+
+    try {
+
+        const response =
+            await fetch(
+                `${API_BASE_URL}/api/360/surveys/me/history`,
+                {
+                    method: "GET",
+
+                    headers: {
+
+                        "Authorization":
+                            `Bearer ${token}`
+                    }
+                }
+            );
+
+
+        if (!response.ok) {
+
+            throw new Error(
+                `Failed to load survey history: ${response.status}`
+            );
+
+        }
+
+
+        const surveys =
+            await response.json();
+
+
+        console.log(
+            "360 survey history:",
+            surveys
+        );
+
+
+        render360SurveyHistory(
+            surveys
+        );
+
+
+    } catch (error) {
+
+        console.error(
+            "Unable to load 360 survey history:",
+            error
+        );
+
+
+        surveyHistoryContainer.innerHTML = `
+            <p class="text-muted">
+                Unable to load previous surveys.
+            </p>
+        `;
+
+    }
+
+}
+
+
+/* =========================================================
+   RENDER SURVEY HISTORY
+   ========================================================= */
+
+function render360SurveyHistory(
+    surveys
+) {
+
+    if (!surveyHistoryContainer) {
+
+        return;
+
+    }
+
+
+    surveyHistoryContainer.innerHTML =
+        "";
+
+
+    /*
+     * No previous surveys.
+     */
+    if (
+        !Array.isArray(surveys)
+        ||
+        surveys.length === 0
+    ) {
+
+        surveyHistoryContainer.innerHTML = `
+            <p class="text-muted">
+                You do not have any previous
+                360° feedback surveys yet.
+            </p>
+        `;
+
+        return;
+
+    }
+
+
+    /*
+     * Render each previous survey.
+     */
+    surveys.forEach(
+        survey => {
+
+            const card =
+                document.createElement(
+                    "div"
+                );
+
+
+            card.className =
+                "card mb-3";
+
+
+            const createdDate =
+                formatDate(
+                    survey.createdAt
+                );
+
+
+            const expiryDate =
+                formatDate(
+                    survey.expiresAt
+                );
+
+
+            const responseLabel =
+                survey.responseCount === 1
+                    ? "response"
+                    : "responses";
+
+
+            let statusClass =
+                "bg-secondary";
+
+
+            if (
+                survey.status === "ACTIVE"
+            ) {
+
+                statusClass =
+                    "bg-success";
+
+            }
+
+
+            card.innerHTML = `
+
+                <div class="card-body">
+
+                    <div
+                        class="
+                            d-flex
+                            justify-content-between
+                            align-items-start
+                            flex-wrap
+                            gap-3
+                        "
+                    >
+
+                        <div>
+
+                            <h5 class="mb-1">
+                                360° Feedback Survey
+                                #${survey.id}
+                            </h5>
+
+                            <p
+                                class="
+                                    text-muted
+                                    mb-1
+                                "
+                            >
+                                ${createdDate}
+                                –
+                                ${expiryDate}
+                            </p>
+
+                            <p class="mb-0">
+                                ${survey.responseCount}
+                                ${responseLabel}
+                            </p>
+
+                        </div>
+
+
+                        <div
+                            class="
+                                d-flex
+                                align-items-center
+                                gap-2
+                                flex-wrap
+                            "
+                        >
+
+                            <span
+                                class="
+                                    badge
+                                    ${statusClass}
+                                "
+                            >
+                                ${survey.status}
+                            </span>
+
+
+                            <button
+                                type="button"
+                                class="
+                                    btn
+                                    btn-outline-primary
+                                    btn-sm
+                                    view-history-results-btn
+                                "
+                                data-survey-id="${survey.id}"
+                            >
+                                View Results
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                </div>
+            `;
+
+
+            surveyHistoryContainer
+                .appendChild(
+                    card
+                );
+
+        }
+    );
+
+
+    /*
+     * Attach View Results event listeners
+     * after rendering all cards.
+     */
+    const historyButtons =
+        document.querySelectorAll(
+            ".view-history-results-btn"
+        );
+
+
+    historyButtons.forEach(
+        button => {
+
+            button.addEventListener(
+                "click",
+                () => {
+
+                    const surveyId =
+                        button.dataset
+                                .surveyId;
+
+
+                    if (!surveyId) {
+
+                        return;
+
+                    }
+
+
+                    window.location.href =
+                        `360-results.html?surveyId=${surveyId}`;
+
+                }
+            );
+
+        }
+    );
 
 }
 
@@ -539,10 +864,12 @@ function build360SurveyLink(
 ) {
 
     /*
-     * If your Live Server URL contains /frontend/,
-     * this generates:
+     * Local development URL.
      *
-     * http://127.0.0.1:5500/frontend/360-feedback.html?token=...
+     * Example:
+     *
+     * http://127.0.0.1:5500/frontend/
+     * 360-feedback.html?token=...
      */
     return (
         `${window.location.origin}` +
@@ -557,7 +884,9 @@ function build360SurveyLink(
    FORMAT DATE
    ========================================================= */
 
-function formatDate(dateString) {
+function formatDate(
+    dateString
+) {
 
     if (!dateString) {
 
@@ -567,14 +896,30 @@ function formatDate(dateString) {
 
 
     const date =
-        new Date(dateString);
+        new Date(
+            dateString
+        );
+
+
+    /*
+     * Protect against an invalid date.
+     */
+    if (
+        Number.isNaN(
+            date.getTime()
+        )
+    ) {
+
+        return "-";
+
+    }
 
 
     return date.toLocaleDateString(
         "en-AU",
         {
             day: "numeric",
-            month: "long",
+            month: "short",
             year: "numeric"
         }
     );
@@ -612,9 +957,10 @@ async function copySurveyLink() {
 
     try {
 
-        await navigator.clipboard.writeText(
-            link
-        );
+        await navigator.clipboard
+            .writeText(
+                link
+            );
 
 
         alert(
@@ -631,10 +977,10 @@ async function copySurveyLink() {
 
 
         /*
-         * Fallback for browsers where
-         * Clipboard API is unavailable.
+         * Fallback for older browsers.
          */
         surveyLink.select();
+
 
         document.execCommand(
             "copy"
@@ -650,6 +996,10 @@ async function copySurveyLink() {
 }
 
 
+/* =========================================================
+   COPY BUTTON LISTENERS
+   ========================================================= */
+
 if (copySurveyLinkBtn) {
 
     copySurveyLinkBtn.addEventListener(
@@ -662,16 +1012,17 @@ if (copySurveyLinkBtn) {
 
 if (copySurveyLinkSecondaryBtn) {
 
-    copySurveyLinkSecondaryBtn.addEventListener(
-        "click",
-        copySurveyLink
-    );
+    copySurveyLinkSecondaryBtn
+        .addEventListener(
+            "click",
+            copySurveyLink
+        );
 
 }
 
 
 /* =========================================================
-   VIEW RESULTS
+   VIEW CURRENT SURVEY RESULTS
    ========================================================= */
 
 if (view360ResultsBtn) {
@@ -711,14 +1062,15 @@ if (logoutBtn) {
         () => {
 
             /*
-             * Only authentication information
-             * needs to be stored locally now.
+             * Only authentication data
+             * is stored in localStorage now.
              *
-             * Survey information lives in the database.
+             * Survey data lives in the database.
              */
             localStorage.removeItem(
                 "token"
             );
+
 
             localStorage.removeItem(
                 "role"
@@ -743,10 +1095,15 @@ document.addEventListener(
     async () => {
 
         /*
-         * Ask the backend whether the user
-         * already has an active 360 survey.
+         * Load the current 30-day survey.
          */
         await loadActive360Survey();
+
+
+        /*
+         * Load previous survey periods.
+         */
+        await load360SurveyHistory();
 
     }
 );

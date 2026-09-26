@@ -59,11 +59,12 @@ public class Feedback360Service {
      *
      * A leader can only have one active survey at a time.
      *
-     * If they already have an active survey that has not expired,
-     * return the existing survey instead of generating a new one.
+     * If an active, non-expired survey already exists,
+     * return that survey rather than generating a new one.
      *
      * New surveys remain active for 30 days.
      */
+    @Transactional
     public Feedback360Survey createSurvey(String email) {
 
         User leader =
@@ -74,21 +75,31 @@ public class Feedback360Service {
                                 )
                         );
 
-
-        /*
-         * Look through the leader's previous surveys,
-         * newest first.
-         */
         List<Feedback360Survey> existingSurveys =
                 surveyRepository
                         .findByLeaderIdOrderByCreatedAtDesc(
                                 leader.getId()
                         );
 
+        LocalDateTime now =
+                LocalDateTime.now();
+
 
         /*
-         * If an active, non-expired survey already exists,
-         * return it.
+         * First update any surveys whose expiry
+         * date has already passed.
+         */
+        for (Feedback360Survey existingSurvey : existingSurveys) {
+
+            expireSurveyIfNecessary(
+                    existingSurvey,
+                    now
+            );
+        }
+
+
+        /*
+         * Find an existing active survey.
          */
         for (Feedback360Survey existingSurvey : existingSurveys) {
 
@@ -99,29 +110,21 @@ public class Feedback360Service {
                     existingSurvey.getExpiresAt()
                             != null
                             &&
-                    LocalDateTime.now()
-                            .isBefore(
-                                    existingSurvey.getExpiresAt()
-                            );
-
+                    now.isBefore(
+                            existingSurvey.getExpiresAt()
+                    );
 
             if (stillActive) {
 
                 return existingSurvey;
-
             }
         }
 
 
         /*
          * No active survey exists.
-         *
          * Create a new 30-day survey.
          */
-        LocalDateTime now =
-                LocalDateTime.now();
-
-
         Feedback360Survey survey =
                 Feedback360Survey.builder()
 
@@ -158,17 +161,28 @@ public class Feedback360Service {
      *
      * Used by the anonymous reviewer survey page.
      */
+    @Transactional
     public Feedback360Survey getSurveyByToken(
             String token) {
 
-        return surveyRepository
-                .findByToken(token)
+        Feedback360Survey survey =
+                surveyRepository
+                        .findByToken(token)
 
-                .orElseThrow(() ->
-                        new RuntimeException(
-                                "360 feedback survey not found"
-                        )
-                );
+                        .orElseThrow(() ->
+                                new RuntimeException(
+                                        "360 feedback survey not found"
+                                )
+                        );
+
+
+        expireSurveyIfNecessary(
+                survey,
+                LocalDateTime.now()
+        );
+
+
+        return survey;
     }
 
 
@@ -177,12 +191,9 @@ public class Feedback360Service {
      * GET LOGGED-IN USER'S ACTIVE SURVEY
      * =========================================================
      *
-     * Used by the user dashboard.
-     *
-     * Allows the frontend to determine whether the leader
-     * already has an active 360 survey when they log in.
+     * Used whenever the dashboard loads.
      */
-    @Transactional(readOnly = true)
+    @Transactional
     public Feedback360ActiveSurveyDTO getActiveSurveyForUser(
             String email) {
 
@@ -202,9 +213,25 @@ public class Feedback360Service {
                         );
 
 
+        LocalDateTime now =
+                LocalDateTime.now();
+
+
         /*
-         * Look for the newest active,
-         * non-expired survey.
+         * Update any ACTIVE surveys that
+         * have passed their expiry date.
+         */
+        for (Feedback360Survey survey : surveys) {
+
+            expireSurveyIfNecessary(
+                    survey,
+                    now
+            );
+        }
+
+
+        /*
+         * Return the newest valid active survey.
          */
         for (Feedback360Survey survey : surveys) {
 
@@ -215,10 +242,9 @@ public class Feedback360Service {
                     survey.getExpiresAt()
                             != null
                             &&
-                    LocalDateTime.now()
-                            .isBefore(
-                                    survey.getExpiresAt()
-                            );
+                    now.isBefore(
+                            survey.getExpiresAt()
+                    );
 
 
             if (active) {
@@ -252,7 +278,7 @@ public class Feedback360Service {
 
 
         /*
-         * No active survey exists.
+         * No active survey.
          */
         return new Feedback360ActiveSurveyDTO(
 
@@ -277,9 +303,6 @@ public class Feedback360Service {
      * =========================================================
      * GET 360 QUESTIONS
      * =========================================================
-     *
-     * Return all questions and multi-select options
-     * for the anonymous reviewer page.
      */
     @Transactional(readOnly = true)
     public List<Feedback360QuestionDTO> getQuestions() {
@@ -353,31 +376,28 @@ public class Feedback360Service {
                         );
 
 
+        LocalDateTime now =
+                LocalDateTime.now();
+
+
         /*
-         * Survey must be active.
+         * Automatically expire the survey
+         * if its 30-day period has passed.
+         */
+        expireSurveyIfNecessary(
+                survey,
+                now
+        );
+
+
+        /*
+         * Survey must still be active.
          */
         if (survey.getStatus()
                 != SurveyStatus.ACTIVE) {
 
             throw new RuntimeException(
                     "This 360 feedback survey is not active"
-            );
-        }
-
-
-        /*
-         * Survey must not have passed
-         * its 30-day expiry date.
-         */
-        if (survey.getExpiresAt() != null
-                &&
-                LocalDateTime.now()
-                        .isAfter(
-                                survey.getExpiresAt()
-                        )) {
-
-            throw new RuntimeException(
-                    "This 360 feedback survey has expired"
             );
         }
 
@@ -400,18 +420,13 @@ public class Feedback360Service {
 
         /*
          * Create anonymous response record.
-         *
-         * No reviewer user ID, email or name
-         * is stored.
          */
         Feedback360Response response =
                 Feedback360Response.builder()
 
                         .survey(survey)
 
-                        .submittedAt(
-                                LocalDateTime.now()
-                        )
+                        .submittedAt(now)
 
                         .build();
 
@@ -422,7 +437,7 @@ public class Feedback360Service {
 
 
         /*
-         * Save every answer.
+         * Save every submitted answer.
          */
         for (
                 Feedback360AnswerSubmissionDTO submittedAnswer
@@ -465,10 +480,8 @@ public class Feedback360Service {
 
 
             /*
-             * =================================================
              * Q1-Q8
-             * Rating questions
-             * =================================================
+             * Rating questions.
              */
             if (
                     question.getQuestionType()
@@ -500,10 +513,8 @@ public class Feedback360Service {
 
 
             /*
-             * =================================================
              * Q9 + Q12-Q14
-             * Written responses
-             * =================================================
+             * Written response questions.
              */
             else if (
                     question.getQuestionType()
@@ -535,10 +546,8 @@ public class Feedback360Service {
 
 
             /*
-             * =================================================
              * Q10-Q11
-             * Multi-select
-             * =================================================
+             * Multi-select questions.
              */
             else if (
                     question.getQuestionType()
@@ -591,7 +600,7 @@ public class Feedback360Service {
 
 
             /*
-             * Save main answer first.
+             * Save the main answer first.
              */
             answerRepository.save(
                     answer
@@ -599,7 +608,7 @@ public class Feedback360Service {
 
 
             /*
-             * Save selected Q10/Q11 options.
+             * Save Q10/Q11 selected options.
              */
             if (
                     question.getQuestionType()
@@ -634,8 +643,8 @@ public class Feedback360Service {
 
 
                     /*
-                     * Make sure an option cannot be
-                     * submitted against another question.
+                     * Prevent an option belonging to one
+                     * question being submitted for another.
                      */
                     if (
                             !option.getQuestion()
@@ -706,7 +715,6 @@ public class Feedback360Service {
          * Example:
          *
          * if (responseCount < 3) {
-         *
          *     throw new RuntimeException(
          *         "At least 3 responses are required to view results"
          *     );
@@ -771,13 +779,9 @@ public class Feedback360Service {
                                     );
 
 
-                    /*
-                     * Round to two decimal places.
-                     */
                     average =
                             Math.round(
-                                    average
-                                            * 100.0
+                                    average * 100.0
                             )
                                     / 100.0;
 
@@ -797,9 +801,6 @@ public class Feedback360Service {
         );
 
 
-        /*
-         * Keep questions in Q1-Q8 order.
-         */
         ratings.sort(
                 (a, b) ->
 
@@ -973,6 +974,125 @@ public class Feedback360Service {
 
     /*
      * =========================================================
+     * GET PREVIOUS SURVEY HISTORY
+     * =========================================================
+     *
+     * Returns surveys that are no longer current.
+     *
+     * The active survey is excluded because it is already
+     * displayed separately on the dashboard.
+     */
+    @Transactional
+    public List<Feedback360SurveyHistoryDTO> getSurveyHistory(
+            String email) {
+
+
+        User leader =
+                userRepository.findByEmail(email)
+
+                        .orElseThrow(() ->
+                                new RuntimeException(
+                                        "User not found"
+                                )
+                        );
+
+
+        List<Feedback360Survey> surveys =
+                surveyRepository
+                        .findByLeaderIdOrderByCreatedAtDesc(
+                                leader.getId()
+                        );
+
+
+        LocalDateTime now =
+                LocalDateTime.now();
+
+
+        /*
+         * First update any expired statuses.
+         */
+        for (Feedback360Survey survey : surveys) {
+
+            expireSurveyIfNecessary(
+                    survey,
+                    now
+            );
+        }
+
+
+        /*
+         * Determine which survey is currently active.
+         */
+        Feedback360Survey currentSurvey =
+                surveys.stream()
+
+                        .filter(survey ->
+
+                                survey.getStatus()
+                                        == SurveyStatus.ACTIVE
+
+                                        &&
+
+                                survey.getExpiresAt()
+                                        != null
+
+                                        &&
+
+                                now.isBefore(
+                                        survey.getExpiresAt()
+                                )
+                        )
+
+                        .findFirst()
+
+                        .orElse(
+                                null
+                        );
+
+
+        /*
+         * Return everything except the current survey.
+         */
+        return surveys.stream()
+
+                .filter(survey ->
+
+                        currentSurvey == null
+
+                                ||
+
+                        !survey.getId()
+                                .equals(
+                                        currentSurvey.getId()
+                                )
+                )
+
+                .map(survey ->
+
+                        new Feedback360SurveyHistoryDTO(
+
+                                survey.getId(),
+
+                                survey.getStatus()
+                                        .name(),
+
+                                survey.getCreatedAt(),
+
+                                survey.getExpiresAt(),
+
+                                responseRepository
+                                        .countBySurveyId(
+                                                survey.getId()
+                                        )
+                        )
+                )
+
+                .toList();
+    }
+
+
+    /*
+     * =========================================================
      * RESPONSE COUNT
      * =========================================================
      */
@@ -984,37 +1104,46 @@ public class Feedback360Service {
                         surveyId
                 );
     }
-    @Transactional(readOnly = true)
-public List<Feedback360SurveyHistoryDTO> getSurveyHistory(
-        String email) {
 
-    User leader =
-            userRepository.findByEmail(email)
-                    .orElseThrow(() ->
-                            new RuntimeException(
-                                    "User not found"
-                            )
-                    );
 
-    List<Feedback360Survey> surveys =
-            surveyRepository
-                    .findByLeaderIdOrderByCreatedAtDesc(
-                            leader.getId()
-                    );
+    /*
+     * =========================================================
+     * EXPIRE SURVEY IF NECESSARY
+     * =========================================================
+     *
+     * Centralised helper so every part of the 360 feature
+     * follows the same expiry logic.
+     */
+    private void expireSurveyIfNecessary(
+            Feedback360Survey survey,
+            LocalDateTime now) {
 
-    return surveys.stream()
-            .map(survey ->
-                    new Feedback360SurveyHistoryDTO(
-                            survey.getId(),
-                            survey.getStatus().name(),
-                            survey.getCreatedAt(),
-                            survey.getExpiresAt(),
-                            responseRepository
-                                    .countBySurveyId(
-                                            survey.getId()
-                                    )
-                    )
-            )
-            .toList();
-}
+
+        if (
+                survey.getStatus()
+                        == SurveyStatus.ACTIVE
+
+                        &&
+
+                survey.getExpiresAt()
+                        != null
+
+                        &&
+
+                !now.isBefore(
+                        survey.getExpiresAt()
+                )
+        ) {
+
+
+            survey.setStatus(
+                    SurveyStatus.EXPIRED
+            );
+
+
+            surveyRepository.save(
+                    survey
+            );
+        }
+    }
 }
