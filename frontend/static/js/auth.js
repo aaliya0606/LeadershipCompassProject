@@ -1,4 +1,8 @@
-const BASE_URL = "http://localhost:8080/api/auth";
+const BASE_URL =
+    window.location.hostname === "localhost" ||
+    window.location.hostname === "127.0.0.1"
+        ? "http://localhost:8080/api/auth"
+        : "https://leadership-compass-api.ashysand-21bb09f6.australiaeast.azurecontainerapps.io/api/auth";
 
 // LOGIN
 const loginForm = document.getElementById("loginForm");
