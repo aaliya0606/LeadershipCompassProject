@@ -54,6 +54,9 @@ public class AdminPdfService {
             context.setVariable("averageWordsOfRecognitionScore", data.getAverageWordsOfRecognitionScore());
             context.setVariable("averagePsychologicalTouchScore", data.getAveragePsychologicalTouchScore());
 
+            context.setVariable("developmentPlanCompletionRate",data.getDevelopmentPlanCompletionRate());
+
+            context.setVariable("developmentProgressByWeek",data.getDevelopmentProgressByWeek());
             context.setVariable("skillGaps", data.getSkillGaps());
             context.setVariable("recommendedFocus", data.getRecommendedFocus());
 

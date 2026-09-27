@@ -6,6 +6,9 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import com.example.leadershipcompass_capstoneprojectbackend.model.DevelopmentPlan;
+import com.example.leadershipcompass_capstoneprojectbackend.model.DevelopmentPlanWeek;
+import com.example.leadershipcompass_capstoneprojectbackend.model.DevelopmentPlanAction;
 
 import java.util.List;
 import java.util.Map;
@@ -17,7 +20,6 @@ import static org.mockito.Mockito.when;
 
 /**
  * Tests generation of admin CSV exports using aggregated dashboard data,
- * including privacy suppression for departments with fewer than six participants.
  */
 
 class AdminReportServiceTest {
@@ -36,12 +38,14 @@ class AdminReportServiceTest {
                         14,
                         3,
                         21.43,
+                        50.00,
                         177.67,
                         38.00,
                         36.67,
                         35.00,
                         29.33,
                         38.67,
+                        Map.of(),
                         Map.of(),
                         Map.of(),
                         List.of()

@@ -37,7 +37,11 @@ if (loginForm) {
         message.className = "mt-3 text-center text-success";
 
         setTimeout(() => {
-          window.location.href = "dashboard.html";
+          if (data.role === "ADMIN") {
+            window.location.href = "admin.html";
+          } else {
+            window.location.href = "dashboard.html";
+          }
         }, 800);
       } else {
         message.textContent = data.message || "Login failed.";

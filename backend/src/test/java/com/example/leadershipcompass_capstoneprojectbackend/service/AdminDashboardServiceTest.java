@@ -1,10 +1,14 @@
 package com.example.leadershipcompass_capstoneprojectbackend.service;
 
 import com.example.leadershipcompass_capstoneprojectbackend.dto.AdminDashboardResponse;
+import com.example.leadershipcompass_capstoneprojectbackend.model.DevelopmentPlan;
+import com.example.leadershipcompass_capstoneprojectbackend.model.DevelopmentPlanAction;
+import com.example.leadershipcompass_capstoneprojectbackend.model.DevelopmentPlanWeek;
 import com.example.leadershipcompass_capstoneprojectbackend.model.SurveyResult;
 import com.example.leadershipcompass_capstoneprojectbackend.repository.SurveyResultRepository;
 import com.example.leadershipcompass_capstoneprojectbackend.repository.UserRepository;
 import com.example.leadershipcompass_capstoneprojectbackend.model.User;
+import com.example.leadershipcompass_capstoneprojectbackend.repository.DevelopmentPlanRepository;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -31,6 +35,8 @@ class AdminDashboardServiceTest {
 
     @Mock
     private SurveyResultRepository surveyResultRepository;
+    @Mock
+    private DevelopmentPlanRepository developmentPlanRepository;
 
     @InjectMocks
     private AdminDashboardService adminDashboardService;
@@ -53,7 +59,8 @@ class AdminDashboardServiceTest {
                 .overallScore(141)
                 .build();
 
-        when(userRepository.count()).thenReturn(10L);
+        // Return the users included in the dashboard aggregation.
+        when(userRepository.findAll()).thenReturn(List.of(user));
         when(surveyResultRepository.findAll())
                 .thenReturn(List.of(result));
 
@@ -95,7 +102,8 @@ class AdminDashboardServiceTest {
                 .overallScore(141)
                 .build();
 
-        when(userRepository.count()).thenReturn(10L);
+        // Return the users included in the dashboard aggregation.
+        when(userRepository.findAll()).thenReturn(List.of(user));
         when(surveyResultRepository.findAll())
                 .thenReturn(List.of(result));
 
@@ -111,6 +119,49 @@ class AdminDashboardServiceTest {
                         "Strengthen active listening practices and follow-up on team feedback."
                 ),
                 response.getRecommendedFocus()
+        );
+    }
+
+    @Test
+        void shouldCalculateDevelopmentPlanCompletionRate() {
+
+        // Arrange
+        User user = User.builder()
+                .id(1L)
+                .build();
+
+        DevelopmentPlanAction completedAction =
+                DevelopmentPlanAction.pending("Completed action");
+        completedAction.setCompleted(true);
+
+        DevelopmentPlanAction pendingAction =
+                DevelopmentPlanAction.pending("Pending action");
+
+        DevelopmentPlanWeek week = new DevelopmentPlanWeek();
+        week.getActions().add(completedAction);
+        week.getActions().add(pendingAction);
+
+        DevelopmentPlan plan = new DevelopmentPlan();
+        plan.getWeeks().add(week);
+
+        when(userRepository.findAll())
+                .thenReturn(List.of(user));
+
+        when(surveyResultRepository.findAll())
+                .thenReturn(Collections.emptyList());
+
+        when(developmentPlanRepository.findFirstByUserIdOrderByGeneratedAtDesc(1L))
+                .thenReturn(java.util.Optional.of(plan));
+
+        // Act
+        AdminDashboardResponse response =
+                adminDashboardService.getDashboardData("all");
+
+        // Assert
+        assertEquals(
+                50.0,
+                response.getDevelopmentPlanCompletionRate(),
+                0.01
         );
     }
 }

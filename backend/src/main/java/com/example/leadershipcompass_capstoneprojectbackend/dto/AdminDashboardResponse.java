@@ -26,6 +26,8 @@ public class AdminDashboardResponse {
 
     private double assessmentCompletionRate;
 
+    private double developmentPlanCompletionRate;
+
     private double averageLeadershipScore;
 
     private double averageCaringTimeScore;
@@ -37,6 +39,8 @@ public class AdminDashboardResponse {
     private double averageWordsOfRecognitionScore;
 
     private double averagePsychologicalTouchScore;
+
+    private Map<String, Double> developmentProgressByWeek;
 
     private Map<String, Integer> leadershipProfiles;
 
