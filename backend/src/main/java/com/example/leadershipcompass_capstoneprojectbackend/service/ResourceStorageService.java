@@ -34,39 +34,77 @@ public class ResourceStorageService {
     private final Path storageLocation = resolveStorageLocation();
 
     /**
-     * Resolves the Resource Library storage directory consistently whether
-     * the backend is launched from the repository root or the backend folder.
+     * Resolves the Resource Library storage directory.
      *
-     * @return absolute path to backend/resource-storage
+     * Supports:
+     * - Running locally from the backend folder
+     * - Running locally from the repository root / IDE
+     * - Running inside Docker / Azure Container Apps
+     *
+     * @return absolute path to the resource-storage directory
      */
     private static Path resolveStorageLocation() {
         Path workingDirectory =
                 Paths.get("").toAbsolutePath().normalize();
 
-        // Backend started from the backend folder
+        // Local development: backend started from the backend folder
         if (Files.exists(workingDirectory.resolve("pom.xml"))) {
-            return workingDirectory
+            Path storagePath = workingDirectory
                     .resolve("resource-storage")
                     .normalize();
+
+            createStorageDirectory(storagePath);
+            return storagePath;
         }
 
-        // Backend started from the repository root / IDE
+        // Local development: backend started from repository root / IDE
         Path backendDirectory = workingDirectory.resolve("backend");
 
         if (Files.exists(backendDirectory.resolve("pom.xml"))) {
-            return backendDirectory
+            Path storagePath = backendDirectory
                     .resolve("resource-storage")
                     .normalize();
+
+            createStorageDirectory(storagePath);
+            return storagePath;
         }
 
-        throw new IllegalStateException(
-                "Could not locate backend Resource Library storage directory"
-        );
-    }
-    //method that safely resolves a filename inside resource-storage
+        // Docker / Azure Container Apps
+        Path containerStorage = workingDirectory
+                .resolve("resource-storage")
+                .normalize();
 
+        createStorageDirectory(containerStorage);
+        return containerStorage;
+    }
+
+    /**
+     * Creates the storage directory if it does not already exist.
+     *
+     * @param storagePath directory used for Resource Library files
+     */
+    private static void createStorageDirectory(Path storagePath) {
+        try {
+            Files.createDirectories(storagePath);
+        } catch (IOException e) {
+            throw new IllegalStateException(
+                    "Could not create Resource Library storage directory: "
+                            + storagePath,
+                    e
+            );
+        }
+    }
+
+    /**
+     * Safely resolves a filename inside resource-storage.
+     *
+     * @param fileName relative filename or storage key
+     * @return safely resolved path
+     */
     public Path getFilePath(String fileName) {
-        Path filePath = storageLocation.resolve(fileName).normalize();
+        Path filePath = storageLocation
+                .resolve(fileName)
+                .normalize();
 
         if (!filePath.startsWith(storageLocation)) {
             throw new IllegalArgumentException("Invalid file path");
@@ -75,21 +113,26 @@ public class ResourceStorageService {
         return filePath;
     }
 
-    //method that checks if a file exists in the storage location
-    //safely resolves and confirms the file exists, throwing an exception if it does not
+    /**
+     * Checks if a file exists in the storage location.
+     *
+     * @param fileName relative filename or storage key
+     * @return path to the existing file
+     */
     public Path getExistingFilePath(String fileName) {
-    Path filePath = getFilePath(fileName);
+        Path filePath = getFilePath(fileName);
 
         if (!Files.exists(filePath) || !Files.isRegularFile(filePath)) {
-            throw new RuntimeException("Resource file not found: " + fileName);
+            throw new RuntimeException(
+                    "Resource file not found: " + fileName
+            );
         }
 
         return filePath;
     }
 
-    //return the file as Spring Resource so controllers can send it to the browser
     /**
-     * Loads a stored Resource Library file as a Spring {@link UrlResource}.
+     * Loads a stored Resource Library file as a Spring Resource.
      *
      * <p>The returned resource can be passed to a controller so that the file
      * can be securely served through the Resource API.</p>
@@ -98,20 +141,26 @@ public class ResourceStorageService {
      * @return readable Spring resource representing the stored file
      * @throws RuntimeException if the file cannot be found, read, or loaded
      */
-
     public org.springframework.core.io.Resource loadFile(String fileName) {
         try {
             Path filePath = getExistingFilePath(fileName);
+
             org.springframework.core.io.Resource resource =
                     new UrlResource(filePath.toUri());
 
             if (!resource.exists() || !resource.isReadable()) {
-                throw new RuntimeException("Resource file is not readable: " + fileName);
+                throw new RuntimeException(
+                        "Resource file is not readable: " + fileName
+                );
             }
 
             return resource;
+
         } catch (Exception e) {
-            throw new RuntimeException("Could not load resource file: " + fileName, e);
+            throw new RuntimeException(
+                    "Could not load resource file: " + fileName,
+                    e
+            );
         }
     }
 
@@ -141,21 +190,22 @@ public class ResourceStorageService {
      * @throws RuntimeException if the file has no name, has an invalid storage path,
      *                          already exists, or cannot be stored
      */
-
     public Resource storeResource(
-        MultipartFile file,
-        String title,
-        String description,
-        String leadershipLanguage,
-        String resourceType,
-        Integer displayOrder,
-        Boolean active) {
+            MultipartFile file,
+            String title,
+            String description,
+            String leadershipLanguage,
+            String resourceType,
+            Integer displayOrder,
+            Boolean active) {
 
         try {
             String originalFileName = file.getOriginalFilename();
 
             if (originalFileName == null || originalFileName.isBlank()) {
-                throw new RuntimeException("Uploaded file has no filename");
+                throw new RuntimeException(
+                        "Uploaded file has no filename"
+                );
             }
 
             String folderName = switch (resourceType.toUpperCase()) {
@@ -179,18 +229,21 @@ public class ResourceStorageService {
                     .normalize();
 
             if (!targetFile.startsWith(storageLocation)) {
-                throw new RuntimeException("Invalid storage path");
+                throw new RuntimeException(
+                        "Invalid storage path"
+                );
             }
 
             if (Files.exists(targetFile)) {
                 throw new RuntimeException(
-                    "A resource file with this name already exists: " + originalFileName
+                        "A resource file with this name already exists: "
+                                + originalFileName
                 );
             }
 
             Files.copy(
-                file.getInputStream(),
-                targetFile
+                    file.getInputStream(),
+                    targetFile
             );
 
             String storageKey = storageLocation
@@ -220,7 +273,10 @@ public class ResourceStorageService {
             return resourceRepository.save(resource);
 
         } catch (IOException e) {
-            throw new RuntimeException("Could not store uploaded resource", e);
+            throw new RuntimeException(
+                    "Could not store uploaded resource",
+                    e
+            );
         }
     }
 
@@ -242,4 +298,3 @@ public class ResourceStorageService {
         }
     }
 }
-
