@@ -5,6 +5,7 @@ import com.example.leadershipcompass_capstoneprojectbackend.model.SurveyResult;
 import com.example.leadershipcompass_capstoneprojectbackend.repository.SurveyResultRepository;
 import com.example.leadershipcompass_capstoneprojectbackend.repository.UserRepository;
 import com.example.leadershipcompass_capstoneprojectbackend.model.User;
+import com.example.leadershipcompass_capstoneprojectbackend.repository.DevelopmentPlanRepository;
 
 import lombok.RequiredArgsConstructor;
 
@@ -34,6 +35,7 @@ public class AdminDashboardService {
 
     private final UserRepository userRepository;
     private final SurveyResultRepository surveyResultRepository;
+    private final DevelopmentPlanRepository developmentPlanRepository;
 
     /**
     * Retrieves aggregated dashboard data using the existing department-only
@@ -45,7 +47,7 @@ public class AdminDashboardService {
     * @param department department to filter by, or "all" for all users
    * @return aggregated Admin Dashboard data
    */    @Transactional(readOnly = true)
-   
+
     public AdminDashboardResponse getDashboardData(String department) {
         return getDashboardData("all", department);
     }
@@ -66,8 +68,9 @@ public class AdminDashboardService {
     @Transactional(readOnly = true)
     public AdminDashboardResponse getDashboardData(String organisation, String department) {
 
-        // Get users
-        long totalUsers;
+        // Keep the users in the selected organisation/department so the same
+        // filtered group can also be used to calculate development plan progress.
+        List<User> users;
 
         // Get survey results
         List<SurveyResult> results;
@@ -78,7 +81,7 @@ public class AdminDashboardService {
                 && (department == null || department.equalsIgnoreCase("all"))) {
 
         // No filters selected - retrieve all users and results.
-        totalUsers = userRepository.count();
+        users = userRepository.findAll();
         results = surveyResultRepository.findAll();
 
         } else if (organisation != null
@@ -86,7 +89,7 @@ public class AdminDashboardService {
                 && (department == null || department.equalsIgnoreCase("all"))) {
 
         // Organisation selected - include all departments within that organisation.
-        totalUsers = userRepository.findByOrganisationIgnoreCase(organisation).size();
+        users = userRepository.findByOrganisationIgnoreCase(organisation);
         results = surveyResultRepository.findByUserOrganisationIgnoreCase(organisation);
 
         } else if ((organisation == null || organisation.equalsIgnoreCase("all"))
@@ -94,17 +97,17 @@ public class AdminDashboardService {
                 && !department.equalsIgnoreCase("all")) {
 
         // Department-only filtering retained for existing functionality.
-        totalUsers = userRepository.findByDepartment(department).size();
+        users = userRepository.findByDepartment(department);
         results = surveyResultRepository.findByUserDepartment(department);
 
         } else {
 
         // Both organisation and department selected.
-        totalUsers =
+        users =
                 userRepository.findByOrganisationIgnoreCaseAndDepartmentIgnoreCase(
                         organisation,
                         department
-                ).size();
+                );
 
         results =
                 surveyResultRepository
@@ -113,6 +116,18 @@ public class AdminDashboardService {
                                 department
                         );
         }
+
+        // Use the same filtered user group for participation metrics and
+        // development plan progress calculations.
+        long totalUsers = users.size();
+
+        // Calculate development progress for the same users included by the
+        // selected organisation and department filters.
+        double developmentPlanCompletionRate =
+                calculateDevelopmentPlanCompletion(users);
+
+        Map<String, Double> developmentProgressByWeek =
+                calculateDevelopmentProgressByWeek(users);
 
         // Count completed assessments by distinct user IDs
         // This ensures that each user is only counted once, even if they have multiple survey results.
@@ -139,12 +154,14 @@ public class AdminDashboardService {
                         totalUsers,
                         0,
                         completionRate,
+                        developmentPlanCompletionRate,
                         0,
                         0,
                         0,
                         0,
                         0,
                         0,
+                        developmentProgressByWeek,
                         Collections.emptyMap(),
                         Collections.emptyMap(),
                         Collections.emptyList()
@@ -207,17 +224,119 @@ public class AdminDashboardService {
                         totalUsers,
                         completedAssessments,
                         completionRate,
+                        developmentPlanCompletionRate,
                         averageOverall,
                         averageCaringTime,
                         averageReceivingValue,
                         averageActsOfSupport,
                         averageWordsOfRecognition,
                         averagePsychologicalTouch,
+                        developmentProgressByWeek,
                         Collections.emptyMap(),
                         skillGaps,
                         recommendedFocus
                 );
         }
+
+            /**
+    * Calculates aggregated completion across each selected user's current
+    * development plan.
+    *
+    * Only the latest development plan for each user is included so historical
+    * plan snapshots do not inflate the completion calculation.
+    *
+    * @param users users included by the current organisation/department filters
+    * @return percentage of development plan actions marked as completed
+    */
+   private double calculateDevelopmentPlanCompletion(List<User> users) {
+
+           long totalActions = 0;
+           long completedActions = 0;
+
+           for (User user : users) {
+
+           // A user may not have generated a development plan yet.
+           var currentPlan =
+                   developmentPlanRepository.findFirstByUserIdOrderByGeneratedAtDesc(
+                           user.getId()
+                   );
+
+           if (currentPlan.isEmpty()) {
+             continue;
+           }
+
+           // Count actions across all five weeks of the user's current plan.
+           for (var week : currentPlan.get().getWeeks()) {
+                   totalActions += week.getActions().size();
+
+                   completedActions += week.getActions().stream()
+                           .filter(action -> action.isCompleted())
+                           .count();
+           }
+           }
+
+           // Avoid division by zero when no users have development plan actions yet.
+           if (totalActions == 0) {
+           return 0;
+           }
+
+           return ((double) completedActions / totalActions) * 100;
+   }
+
+        /**
+         * Calculates aggregated completion for each week of the selected users'
+         * current five-week development plans.
+         *
+         * Only the latest development plan for each user is included.
+         *
+         * @param users users included by the current organisation/department filters
+         * @return completion percentage for Week 1 through Week 5
+         */
+        private Map<String, Double> calculateDevelopmentProgressByWeek(List<User> users) {
+
+        Map<String, Double> progressByWeek = new LinkedHashMap<>();
+
+        for (int weekNumber = 1; weekNumber <= 5; weekNumber++) {
+
+                long totalActions = 0;
+                long completedActions = 0;
+
+                for (User user : users) {
+
+                var currentPlan =
+                        developmentPlanRepository.findFirstByUserIdOrderByGeneratedAtDesc(
+                                user.getId()
+                        );
+
+                if (currentPlan.isEmpty()) {
+                        continue;
+                }
+
+                for (var week : currentPlan.get().getWeeks()) {
+
+                        if (week.getWeekNumber() != null
+                                && week.getWeekNumber() == weekNumber) {
+
+                        totalActions += week.getActions().size();
+
+                        completedActions += week.getActions().stream()
+                                .filter(action -> action.isCompleted())
+                                .count();
+                        }
+                }
+                }
+
+                double completionRate =
+                        totalActions == 0
+                                ? 0
+                                : ((double) completedActions / totalActions) * 100;
+
+                progressByWeek.put("Week " + weekNumber, completionRate);
+        }
+
+        return progressByWeek;
+        }
+
 
      /**
      *  Maps an identified leadership skill gap to an actionable
