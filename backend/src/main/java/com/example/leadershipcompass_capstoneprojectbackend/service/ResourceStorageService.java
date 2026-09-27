@@ -1,194 +1,44 @@
 package com.example.leadershipcompass_capstoneprojectbackend.service;
 
-import org.springframework.stereotype.Service;
-
-import lombok.RequiredArgsConstructor;
-
-import com.example.leadershipcompass_capstoneprojectbackend.repository.ResourceRepository;
-
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.Files;
-import org.springframework.core.io.UrlResource;
-import org.springframework.web.multipart.MultipartFile;
 import com.example.leadershipcompass_capstoneprojectbackend.model.Resource;
-import java.io.IOException;
+import com.example.leadershipcompass_capstoneprojectbackend.repository.ResourceRepository;
+import com.example.leadershipcompass_capstoneprojectbackend.service.storage.ResourceStorageProvider;
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
 
 /**
- * Handles local file storage for Resource Library content.
+ * Coordinates Resource Library file storage and metadata persistence.
  *
- * <p>Uploaded files are stored beneath the configured
- * resource-storage directory and a corresponding Resource
- * metadata record is persisted to PostgreSQL.</p>
- *
- * <p>Frontend clients should never access storage paths
- * directly. Files should be retrieved through the Resource API.</p>
+ * <p>The actual physical storage mechanism is delegated to a
+ * {@link ResourceStorageProvider}. This allows the Resource Library
+ * to use local storage, Supabase Storage, or a future provider such
+ * as SharePoint without changing the frontend API.</p>
  */
-
-@Service
+@org.springframework.stereotype.Service
 @RequiredArgsConstructor
 public class ResourceStorageService {
 
     private final ResourceRepository resourceRepository;
+    private final List<ResourceStorageProvider> storageProviders;
 
-    private final Path storageLocation = resolveStorageLocation();
-
-    /**
-     * Resolves the Resource Library storage directory.
-     *
-     * Supports:
-     * - Running locally from the backend folder
-     * - Running locally from the repository root / IDE
-     * - Running inside Docker / Azure Container Apps
-     *
-     * @return absolute path to the resource-storage directory
-     */
-    private static Path resolveStorageLocation() {
-        Path workingDirectory =
-                Paths.get("").toAbsolutePath().normalize();
-
-        // Local development: backend started from the backend folder
-        if (Files.exists(workingDirectory.resolve("pom.xml"))) {
-            Path storagePath = workingDirectory
-                    .resolve("resource-storage")
-                    .normalize();
-
-            createStorageDirectory(storagePath);
-            return storagePath;
-        }
-
-        // Local development: backend started from repository root / IDE
-        Path backendDirectory = workingDirectory.resolve("backend");
-
-        if (Files.exists(backendDirectory.resolve("pom.xml"))) {
-            Path storagePath = backendDirectory
-                    .resolve("resource-storage")
-                    .normalize();
-
-            createStorageDirectory(storagePath);
-            return storagePath;
-        }
-
-        // Docker / Azure Container Apps
-        Path containerStorage = workingDirectory
-                .resolve("resource-storage")
-                .normalize();
-
-        createStorageDirectory(containerStorage);
-        return containerStorage;
-    }
+    @Value("${app.resource-storage.provider:LOCAL}")
+    private String configuredProvider;
 
     /**
-     * Creates the storage directory if it does not already exist.
-     *
-     * @param storagePath directory used for Resource Library files
-     */
-    private static void createStorageDirectory(Path storagePath) {
-        try {
-            Files.createDirectories(storagePath);
-        } catch (IOException e) {
-            throw new IllegalStateException(
-                    "Could not create Resource Library storage directory: "
-                            + storagePath,
-                    e
-            );
-        }
-    }
-
-    /**
-     * Safely resolves a filename inside resource-storage.
-     *
-     * @param fileName relative filename or storage key
-     * @return safely resolved path
-     */
-    public Path getFilePath(String fileName) {
-        Path filePath = storageLocation
-                .resolve(fileName)
-                .normalize();
-
-        if (!filePath.startsWith(storageLocation)) {
-            throw new IllegalArgumentException("Invalid file path");
-        }
-
-        return filePath;
-    }
-
-    /**
-     * Checks if a file exists in the storage location.
-     *
-     * @param fileName relative filename or storage key
-     * @return path to the existing file
-     */
-    public Path getExistingFilePath(String fileName) {
-        Path filePath = getFilePath(fileName);
-
-        if (!Files.exists(filePath) || !Files.isRegularFile(filePath)) {
-            throw new RuntimeException(
-                    "Resource file not found: " + fileName
-            );
-        }
-
-        return filePath;
-    }
-
-    /**
-     * Loads a stored Resource Library file as a Spring Resource.
-     *
-     * <p>The returned resource can be passed to a controller so that the file
-     * can be securely served through the Resource API.</p>
-     *
-     * @param fileName storage key identifying the file to load
-     * @return readable Spring resource representing the stored file
-     * @throws RuntimeException if the file cannot be found, read, or loaded
-     */
-    public org.springframework.core.io.Resource loadFile(String fileName) {
-        try {
-            Path filePath = getExistingFilePath(fileName);
-
-            org.springframework.core.io.Resource resource =
-                    new UrlResource(filePath.toUri());
-
-            if (!resource.exists() || !resource.isReadable()) {
-                throw new RuntimeException(
-                        "Resource file is not readable: " + fileName
-                );
-            }
-
-            return resource;
-
-        } catch (Exception e) {
-            throw new RuntimeException(
-                    "Could not load resource file: " + fileName,
-                    e
-            );
-        }
-    }
-
-    /**
-     * Stores an uploaded Resource Library file and creates its database metadata.
-     *
-     * <p>The destination folder is selected from the supplied resource type.
-     * For example, PDF resources are stored under {@code books}, videos under
-     * {@code videos}, and audio resources under {@code audios}.</p>
-     *
-     * <p>The method creates the destination directory when necessary, validates
-     * that the final path remains within the Resource Library storage directory,
-     * and rejects an upload when a file with the same name already exists.</p>
-     *
-     * <p>After the physical file is successfully stored, a {@link Resource}
-     * record containing its metadata and relative storage key is persisted to
-     * the database.</p>
+     * Stores an uploaded Resource Library file using the configured
+     * storage provider and persists its metadata.
      *
      * @param file uploaded physical file
      * @param title title displayed in the Resource Library
-     * @param description optional description of the resource
-     * @param leadershipLanguage Leadership Compass category assigned to the resource
-     * @param resourceType type used to classify and determine storage of the resource
-     * @param displayOrder preferred ordering value in the Resource Library
-     * @param active whether the resource should be available to users
-     * @return persisted Resource metadata for the uploaded file
-     * @throws RuntimeException if the file has no name, has an invalid storage path,
-     *                          already exists, or cannot be stored
+     * @param description optional resource description
+     * @param leadershipLanguage Leadership Compass category
+     * @param resourceType resource classification
+     * @param displayOrder preferred display order
+     * @param active whether the resource is active
+     * @return persisted Resource metadata
      */
     public Resource storeResource(
             MultipartFile file,
@@ -197,103 +47,171 @@ public class ResourceStorageService {
             String leadershipLanguage,
             String resourceType,
             Integer displayOrder,
-            Boolean active) {
+            Boolean active
+    ) {
+        String originalFileName = file.getOriginalFilename();
+
+        if (originalFileName == null || originalFileName.isBlank()) {
+            throw new RuntimeException("Uploaded file has no filename");
+        }
+
+        String folderName = determineFolder(resourceType);
+
+        String safeFileName = sanitizeFileName(originalFileName);
+
+        String storageKey = folderName + "/" + safeFileName;
+
+        ResourceStorageProvider provider =
+                getProvider(configuredProvider);
+
+        provider.store(file, storageKey);
+
+        Resource resource = Resource.builder()
+                .title(title)
+                .description(description)
+                .leadershipLanguage(leadershipLanguage)
+                .resourceType(resourceType)
+                .resourceUrl(null)
+                .active(active)
+                .displayOrder(displayOrder)
+                .originalFileName(originalFileName)
+                .contentType(
+                        file.getContentType() != null
+                                ? file.getContentType()
+                                : "application/octet-stream"
+                )
+                .fileSize(file.getSize())
+                .storageProvider(provider.getProviderName())
+                .storageKey(storageKey)
+                .build();
 
         try {
-            String originalFileName = file.getOriginalFilename();
-
-            if (originalFileName == null || originalFileName.isBlank()) {
-                throw new RuntimeException(
-                        "Uploaded file has no filename"
-                );
-            }
-
-            String folderName = switch (resourceType.toUpperCase()) {
-                case "PDF" -> "books";
-                case "VIDEO" -> "videos";
-                case "AUDIO" -> "audios";
-                case "EBOOK" -> "ebooks";
-                case "DOCUMENT" -> "documents";
-                case "IMAGE" -> "images";
-                default -> "other";
-            };
-
-            Path targetFolder = storageLocation
-                    .resolve(folderName)
-                    .normalize();
-
-            Files.createDirectories(targetFolder);
-
-            Path targetFile = targetFolder
-                    .resolve(originalFileName)
-                    .normalize();
-
-            if (!targetFile.startsWith(storageLocation)) {
-                throw new RuntimeException(
-                        "Invalid storage path"
-                );
-            }
-
-            if (Files.exists(targetFile)) {
-                throw new RuntimeException(
-                        "A resource file with this name already exists: "
-                                + originalFileName
-                );
-            }
-
-            Files.copy(
-                    file.getInputStream(),
-                    targetFile
-            );
-
-            String storageKey = storageLocation
-                    .relativize(targetFile)
-                    .toString()
-                    .replace("\\", "/");
-
-            Resource resource = Resource.builder()
-                    .title(title)
-                    .description(description)
-                    .leadershipLanguage(leadershipLanguage)
-                    .resourceType(resourceType)
-                    .resourceUrl(null)
-                    .active(active)
-                    .displayOrder(displayOrder)
-                    .originalFileName(originalFileName)
-                    .contentType(
-                            file.getContentType() != null
-                                    ? file.getContentType()
-                                    : "application/octet-stream"
-                    )
-                    .fileSize(file.getSize())
-                    .storageProvider("LOCAL")
-                    .storageKey(storageKey)
-                    .build();
-
             return resourceRepository.save(resource);
+        } catch (RuntimeException e) {
+            // Avoid leaving an orphaned uploaded file if database persistence fails.
+            try {
+                provider.delete(storageKey);
+            } catch (Exception cleanupException) {
+                e.addSuppressed(cleanupException);
+            }
 
-        } catch (IOException e) {
-            throw new RuntimeException(
-                    "Could not store uploaded resource",
-                    e
-            );
+            throw e;
         }
     }
 
     /**
-     * Deletes a locally stored Resource Library file.
+     * Loads the physical file belonging to a Resource.
      *
-     * @param storageKey relative storage path of the file
-     * @throws RuntimeException if the file cannot be deleted
+     * <p>The provider recorded on the Resource determines where the
+     * file is retrieved from.</p>
+     *
+     * @param resource resource metadata containing provider and storage key
+     * @return stored file as a Spring Resource
      */
-    public void deleteFile(String storageKey) {
-        try {
-            Path filePath = getFilePath(storageKey);
-            Files.deleteIfExists(filePath);
-        } catch (IOException e) {
-            throw new RuntimeException(
-                    "Could not delete resource file: " + storageKey,
-                    e
+    public org.springframework.core.io.Resource loadFile(Resource resource) {
+        validateStoredResource(resource);
+
+        return getProvider(resource.getStorageProvider())
+                .load(resource.getStorageKey());
+    }
+
+    /**
+     * Deletes the physical file belonging to a Resource.
+     *
+     * @param resource resource metadata containing provider and storage key
+     */
+    public void deleteFile(Resource resource) {
+        validateStoredResource(resource);
+
+        getProvider(resource.getStorageProvider())
+                .delete(resource.getStorageKey());
+    }
+
+    /**
+     * Finds the configured implementation for a provider name.
+     *
+     * @param providerName provider identifier such as LOCAL or SUPABASE
+     * @return matching storage provider
+     */
+    private ResourceStorageProvider getProvider(String providerName) {
+        if (providerName == null || providerName.isBlank()) {
+            throw new IllegalArgumentException(
+                    "Resource storage provider is missing"
+            );
+        }
+
+        return storageProviders.stream()
+                .filter(provider ->
+                        provider.getProviderName()
+                                .equalsIgnoreCase(providerName))
+                .findFirst()
+                .orElseThrow(() ->
+                        new IllegalArgumentException(
+                                "Unsupported resource storage provider: "
+                                        + providerName
+                        )
+                );
+    }
+
+    /**
+     * Determines the logical storage folder for a resource type.
+     */
+    private String determineFolder(String resourceType) {
+        if (resourceType == null) {
+            return "other";
+        }
+
+        return switch (resourceType.toUpperCase()) {
+            case "PDF" -> "books";
+            case "VIDEO" -> "videos";
+            case "AUDIO" -> "audios";
+            case "EBOOK" -> "ebooks";
+            case "DOCUMENT" -> "documents";
+            case "IMAGE" -> "images";
+            default -> "other";
+        };
+    }
+
+    /**
+     * Prevents an uploaded filename from introducing storage path segments.
+     */
+    private String sanitizeFileName(String originalFileName) {
+        String normalized = originalFileName.replace("\\", "/");
+
+        String fileName = normalized.substring(
+                normalized.lastIndexOf('/') + 1
+        );
+
+        if (fileName.isBlank()
+                || ".".equals(fileName)
+                || "..".equals(fileName)) {
+            throw new IllegalArgumentException(
+                    "Uploaded file has an invalid filename"
+            );
+        }
+
+        return fileName;
+    }
+
+    /**
+     * Validates metadata required to locate a stored physical file.
+     */
+    private void validateStoredResource(Resource resource) {
+        if (resource == null) {
+            throw new IllegalArgumentException("Resource is required");
+        }
+
+        if (resource.getStorageKey() == null
+                || resource.getStorageKey().isBlank()) {
+            throw new IllegalArgumentException(
+                    "Resource storage key is missing"
+            );
+        }
+
+        if (resource.getStorageProvider() == null
+                || resource.getStorageProvider().isBlank()) {
+            throw new IllegalArgumentException(
+                    "Resource storage provider is missing"
             );
         }
     }
