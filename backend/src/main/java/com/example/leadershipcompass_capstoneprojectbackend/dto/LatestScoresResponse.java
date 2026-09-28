@@ -1,14 +1,18 @@
 package com.example.leadershipcompass_capstoneprojectbackend.dto;
 
+/**NEW: 28/09/26
+ * Most recent survey scores for the dashboard radar chart.
+ * All scores are null when the user has not completed a survey yet.
+ */
 public class LatestScoresResponse {
-    private int caringTimeScore;
-    private int receivingValueScore;
-    private int actsOfSupportScore;
-    private int wordsOfRecognitionScore;
-    private int psychologicalTouchScore;
+    private Integer caringTimeScore;
+    private Integer receivingValueScore;
+    private Integer actsOfSupportScore;
+    private Integer wordsOfRecognitionScore;
+    private Integer psychologicalTouchScore;
 
-    public LatestScoresResponse(int caringTimeScore, int receivingValueScore, int actsOfSupportScore,
-                                 int wordsOfRecognitionScore, int psychologicalTouchScore) {
+    public LatestScoresResponse(Integer caringTimeScore, Integer receivingValueScore, Integer actsOfSupportScore,
+                                 Integer wordsOfRecognitionScore, Integer psychologicalTouchScore) {
         this.caringTimeScore = caringTimeScore;
         this.receivingValueScore = receivingValueScore;
         this.actsOfSupportScore = actsOfSupportScore;
@@ -16,9 +20,9 @@ public class LatestScoresResponse {
         this.psychologicalTouchScore = psychologicalTouchScore;
     }
 
-    public int getCaringTimeScore() { return caringTimeScore; }
-    public int getReceivingValueScore() { return receivingValueScore; }
-    public int getActsOfSupportScore() { return actsOfSupportScore; }
-    public int getWordsOfRecognitionScore() { return wordsOfRecognitionScore; }
-    public int getPsychologicalTouchScore() { return psychologicalTouchScore; }
+    public Integer getCaringTimeScore() { return caringTimeScore; }
+    public Integer getReceivingValueScore() { return receivingValueScore; }
+    public Integer getActsOfSupportScore() { return actsOfSupportScore; }
+    public Integer getWordsOfRecognitionScore() { return wordsOfRecognitionScore; }
+    public Integer getPsychologicalTouchScore() { return psychologicalTouchScore; }
 }
