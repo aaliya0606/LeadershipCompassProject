@@ -106,7 +106,8 @@ logoutBtn.addEventListener("click", function () {
   window.location.href = "index.html";
 });
 
-const API_BASE = "http://localhost:8080";
+//NEW: replaced prev version, updated to work on the host 28/09/26
+const API_BASE = API_BASE_URL;
 
 const CATEGORIES = [
   { key: "caringTime", label: "Caring time", color: "#64BC28", dash: [], point: "circle" },
@@ -416,10 +417,15 @@ async function loadProgressOverTime() {
       method: "GET",
       headers: { "Authorization": "Bearer " + token }
     });
-    const entries = await res.json(); // oldest -> newest
-    if (!entries || !entries.length) return;
 
-   
+    //NEW: Replaced the previous version with this: for when user hasn't completed the survey yet (28/09/26)
+    const entries = await res.json(); // oldest -> newest
+    if (!entries || !entries.length) {
+      document.getElementById("progressSubtitle").textContent =
+        "Unlocks once you have completed the survey.";
+      return;
+    }
+
     const recent = entries.slice(-5);
     const weekLabels = recent.map((_, i) => "Week " + (i + 1));
     const overallScores = recent.map(e => e.overallScore);
@@ -520,12 +526,34 @@ async function loadProgressOverTime() {
   }
 }
 
+//NEW: for when user hasn't completed the survey yet (28/09/26)
+function showPeerEmptyState(hasSurvey) {
+  const headline = document.querySelector(".peer-headline");
+  if (headline) headline.style.display = "none";
+  const container = document.getElementById("peerRows");
+  if (container) {
+    container.innerHTML = "";
+    const note = document.createElement("p");
+    note.textContent = hasSurvey
+      ? "Could not load your peer comparison right now."
+      : "Unlocks once you have completed the survey.";
+    container.appendChild(note);
+  }
+}
+
 async function loadPeerComparison() {
   try {
     const res = await fetch(API_BASE + "/api/dashboard/peer-comparison", {
       method: "GET",
       headers: { "Authorization": "Bearer " + token }
     });
+
+    
+    //NEW: for when user hasn't completed the survey yet (28/09/26)
+    if (!res.ok) {
+      showPeerEmptyState(await userHasSurvey());
+      return;
+    }
     const data = await res.json();
 
    
@@ -577,7 +605,8 @@ async function loadSuggestedResources() {
   const token = localStorage.getItem('token'); 
 
   try {
-    const response = await fetch('http://localhost:8080/api/dashboard/suggested-modules', {
+    //NEW: updated to work on the host 28/09/26
+    const response = await fetch(API_BASE + '/api/dashboard/suggested-modules', {
       headers: { 'Authorization': `Bearer ${token}` }
     });
 
@@ -585,8 +614,12 @@ async function loadSuggestedResources() {
 
     const resources = await response.json();
 
+    //NEW: for when user hasn't completed the survey yet (28/09/26)
     if (!resources || resources.length === 0) {
-      container.innerHTML = '<p class="res-loading">No recommended resources yet.</p>';
+      const hasSurvey = await userHasSurvey();
+      container.innerHTML = hasSurvey
+        ? '<p class="res-loading">No recommended resources yet.</p>'
+        : '<p class="res-loading">Unlocks once you have completed the survey.</p>';
       return;
     }
 
