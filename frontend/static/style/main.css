@@ -127,6 +127,58 @@ p {
   padding-right: 0;
 }
 
+.plan-progress-card {
+  background: white;
+  border: 1px solid rgba(0, 40, 75, 0.08);
+  border-radius: 16px;
+  padding: 1.25rem 1.5rem;
+  box-shadow: 0 12px 30px rgba(0, 40, 75, 0.06);
+}
+
+.plan-progress-track {
+  height: 10px;
+  border-radius: 999px;
+  background: rgba(0, 40, 75, 0.08);
+  overflow: hidden;
+}
+
+.plan-progress-fill {
+  height: 100%;
+  width: 0;
+  border-radius: 999px;
+  background: var(--brand-green);
+  transition: width 0.2s ease;
+}
+
+.week-progress-badge {
+  font-weight: 600;
+}
+
+.action-check-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+}
+
+.action-check-item input[type="checkbox"] {
+  margin-top: 0.3rem;
+  flex-shrink: 0;
+  width: 1.1rem;
+  height: 1.1rem;
+  accent-color: var(--brand-green);
+  cursor: pointer;
+}
+
+.action-check-item label {
+  margin-bottom: 0;
+  cursor: pointer;
+}
+
+.action-check-item.is-complete label {
+  color: #6c757d;
+  text-decoration: line-through;
+}
+
 .btn-hero {
   background: var(--brand-light-green);
   border-color: var(--brand-dark);
@@ -190,6 +242,172 @@ p {
 
 #resourceContainer .card {
   min-height: 220px;
+}
+
+.resource-view-shell {
+  max-width: 1080px;
+  padding-top: 3rem;
+  padding-bottom: 3rem;
+}
+
+.resource-back-link {
+  color: var(--brand-dark);
+  font-size: 0.85rem;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.resource-back-link:hover {
+  color: var(--brand-green);
+}
+
+.resource-view-card {
+  padding: 3rem;
+  border-radius: 1vh;
+  box-shadow: 26px 26px 0 -6px var(--brand-green),
+    34px 34px 12px -8px rgba(0, 0, 0, 0.2),
+    10px 10px 10px 0 rgba(0, 0, 0, 0.2);
+}
+
+.resource-view-heading {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 2rem;
+  padding-bottom: 2rem;
+  border-bottom: 1px solid rgba(0, 40, 75, 0.1);
+}
+
+.resource-view-heading h1 {
+  margin: 0.6rem 0 1rem;
+  font-size: clamp(2.2rem, 5vw, 4.5rem);
+  line-height: 1;
+}
+
+.resource-view-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.resource-view-heading .resource-type-mark {
+  flex: 0 0 auto;
+  width: 72px;
+  height: 72px;
+  font-size: 1rem;
+}
+
+.resource-view-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.5fr) minmax(260px, 0.8fr);
+  gap: 3rem;
+  padding: 2.5rem 0;
+}
+
+.resource-view-description h2 {
+  margin-bottom: 1rem;
+}
+
+.resource-view-description p {
+  max-width: 650px;
+  color: #526272;
+  font-size: 1rem;
+  line-height: 1.8;
+}
+
+.resource-view-action {
+  margin-top: 2rem;
+}
+
+.resource-detail-panel {
+  padding: 1.5rem;
+  border-left: 4px solid var(--brand-light-green);
+  background: #f7f9f8;
+}
+
+.resource-detail-panel dl {
+  margin: 1.25rem 0 0;
+}
+
+.resource-detail-panel dl > div {
+  padding: 0.8rem 0;
+  border-bottom: 1px solid rgba(0, 40, 75, 0.1);
+}
+
+.resource-detail-panel dl > div:last-child {
+  border-bottom: none;
+}
+
+.resource-detail-panel dt {
+  color: #71808d;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.resource-detail-panel dd {
+  margin: 0.25rem 0 0;
+  color: var(--brand-dark);
+  font-size: 0.9rem;
+  overflow-wrap: anywhere;
+}
+
+.resource-preview-panel {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 2rem;
+  padding: 1.5rem;
+  background: linear-gradient(110deg, var(--brand-green), var(--brand-dark));
+  color: white;
+}
+
+.resource-preview-panel h2 {
+  margin: 0.4rem 0;
+  color: white;
+}
+
+.resource-preview-panel .overview-label,
+.resource-preview-panel p {
+  color: white;
+}
+
+.resource-preview-panel p {
+  opacity: 0.9;
+}
+
+.resource-preview-panel .btn-outline-primary {
+  border-color: white;
+  background: white;
+  color: var(--brand-green);
+  font-weight: 700;
+}
+
+.resource-preview-panel .btn-outline-primary:hover,
+.resource-preview-panel .btn-outline-primary:focus {
+  border-color: var(--brand-light-green);
+  background: var(--brand-light-green);
+  color: var(--brand-dark);
+}
+
+@media (max-width: 767px) {
+  .resource-view-card {
+    padding: 1.5rem;
+    box-shadow: 14px 14px 0 -5px var(--brand-green),
+      20px 20px 10px -7px rgba(0, 0, 0, 0.2),
+      6px 6px 8px 0 rgba(0, 0, 0, 0.16);
+  }
+
+  .resource-view-layout {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+
+  .resource-preview-panel {
+    align-items: flex-start;
+    flex-direction: column;
+  }
 }
 
 .badge {
@@ -332,6 +550,92 @@ h1, h4, h5, h6 {
 .card {
   background: var(--brand-surface);
   border: 1px solid rgba(0, 40, 75, 0.08);
+}
+
+.dashboard-card.hero-card {
+  background: linear-gradient(110deg, var(--brand-green), var(--brand-dark));
+  color: white;
+}
+
+.dashboard-card.hero-card {
+  padding: 3rem;
+}
+
+.dashboard-card.hero-card .btn-hero {
+  background: white;
+  border-color: white;
+  color: var(--brand-green);
+  font-weight: 700;
+}
+
+.dashboard-card.hero-card .btn-hero:hover,
+.dashboard-card.hero-card .btn-hero:focus {
+  background: var(--brand-light-green);
+  border-color: var(--brand-light-green);
+  color: var(--brand-dark);
+}
+
+.dashboard-card.hero-card .btn-outline-dark {
+  border-color: white;
+  color: white;
+}
+
+.dashboard-card.hero-card .btn-outline-dark:hover,
+.dashboard-card.hero-card .btn-outline-dark:focus {
+  background: white;
+  border-color: white;
+  color: var(--brand-dark);
+}
+
+#development-plan {
+  padding-top: 1rem;
+}
+
+#development-plan .section-header {
+  border-left: 5px solid var(--brand-green);
+  padding-left: 1rem;
+}
+
+#development-plan .section-header h4 {
+  margin-bottom: 0.4rem;
+}
+
+#development-plan .week-card {
+  overflow: hidden;
+  border-top: 6px solid var(--brand-green);
+  border-radius: 12px;
+  box-shadow: 0 14px 30px rgba(0, 40, 75, 0.09);
+}
+
+#development-plan .week-card h5 {
+  font-size: 1.45rem;
+  line-height: 1.15;
+}
+
+#development-plan .week-card .list-group {
+  margin-top: 1.25rem;
+  border-top: 1px solid rgba(0, 40, 75, 0.1);
+}
+
+#development-plan .week-card .list-group-item {
+  padding-top: 0.85rem;
+  padding-bottom: 0.85rem;
+  color: #526272;
+}
+
+@media (max-width: 767px) {
+  .dashboard-card.hero-card {
+    padding: 1.5rem;
+  }
+
+  .dashboard-card.hero-card h1 {
+    font-size: 2.4rem;
+    line-height: 1.05;
+  }
+
+  .dashboard-card.hero-card .btn {
+    width: 100%;
+  }
 }
 
 .card-header {
@@ -579,7 +883,7 @@ html, body {
     font-size: 15px;
     color: #333333;
     outline: none;
-    transition: border-color 0.2;
+    transition: border-color 0.2s;
 }
 
 .field-input::placeholder {

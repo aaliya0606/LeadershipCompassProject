@@ -63,7 +63,7 @@ public class ResourceController {
         Resource resource = resourceService.getResourceById(id);
 
         org.springframework.core.io.Resource file =
-                resourceStorageService.loadFile(resource.getStorageKey());
+                resourceStorageService.loadFile(resource);
 
         return ResponseEntity.ok()
                 .header(

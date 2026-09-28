@@ -20,8 +20,11 @@ import java.util.List;
 import java.util.Map;
 
 import com.example.leadershipcompass_capstoneprojectbackend.dto.ProgressEntryResponse;
+import com.example.leadershipcompass_capstoneprojectbackend.dto.SurveyHistoryEntryResponse;
 import com.example.leadershipcompass_capstoneprojectbackend.dto.PeerComparisonResponse;
 import com.example.leadershipcompass_capstoneprojectbackend.model.Resource;
+
+import com.example.leadershipcompass_capstoneprojectbackend.dto.LatestScoresResponse;
 
 @Service
 @RequiredArgsConstructor
@@ -81,12 +84,37 @@ public class SurveyService{
 
     }
 
+    // @Transactional(readOnly = true)
+    // public List<SurveyResult> getHistoryForUser(String email){
+    //     User user = userRepository.findByEmail(email)
+    //             .orElseThrow(() -> new EntityNotFoundException("User not found: " + email));
+    //     return surveyResultRepository.findByUserOrderByGenerateDateDesc(user);
+
+    // }
+
     @Transactional(readOnly = true)
-    public List<SurveyResult> getHistoryForUser(String email){
+    public List<SurveyHistoryEntryResponse> getHistoryForUser(String email){
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new EntityNotFoundException("User not found: " + email));
-        return surveyResultRepository.findByUserOrderByGenerateDateDesc(user);
 
+        List<SurveyResult> results = surveyResultRepository.findByUserOrderByGenerateDateDesc(user);
+
+        List<SurveyHistoryEntryResponse> history = new ArrayList<>();
+        for (SurveyResult result : results) {
+            history.add(new SurveyHistoryEntryResponse(
+                result.getResultId(),
+                result.getGenerateDate(),
+                result.getOverallScore(),
+                result.getScoreBand(),
+                result.getSummary(),
+                result.getCaringTimeScore(),
+                result.getReceivingValueScore(),
+                result.getActsOfSupportScore(),
+                result.getWordsOfRecognitionScore(),
+                result.getPsychologicalTouchScore()
+            ));
+        }
+        return history;
     }
 
     @Transactional
@@ -376,5 +404,22 @@ public class SurveyService{
         result.getUser().getFullName(); // ensures user is loaded
 
         return result;
+    }
+
+    @Transactional(readOnly = true)
+    public LatestScoresResponse getLatestScores(String email) {
+        User user = userRepository.findByEmail(email)
+            .orElseThrow(() -> new EntityNotFoundException("User not found: " + email));
+
+        SurveyResult latest = surveyResultRepository.findFirstByUserOrderByGenerateDateDesc(user)
+            .orElseThrow(() -> new EntityNotFoundException("No survey result found for user: " + email));
+
+        return new LatestScoresResponse(
+            latest.getCaringTimeScore(),
+            latest.getReceivingValueScore(),
+            latest.getActsOfSupportScore(),
+            latest.getWordsOfRecognitionScore(),
+            latest.getPsychologicalTouchScore()
+        );
     }
 }

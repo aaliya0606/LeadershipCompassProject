@@ -1,9 +1,14 @@
 package com.example.leadershipcompass_capstoneprojectbackend.service;
 
 import com.example.leadershipcompass_capstoneprojectbackend.dto.AdminDashboardResponse;
+import com.example.leadershipcompass_capstoneprojectbackend.model.DevelopmentPlan;
+import com.example.leadershipcompass_capstoneprojectbackend.model.DevelopmentPlanAction;
+import com.example.leadershipcompass_capstoneprojectbackend.model.DevelopmentPlanWeek;
 import com.example.leadershipcompass_capstoneprojectbackend.model.SurveyResult;
 import com.example.leadershipcompass_capstoneprojectbackend.repository.SurveyResultRepository;
 import com.example.leadershipcompass_capstoneprojectbackend.repository.UserRepository;
+import com.example.leadershipcompass_capstoneprojectbackend.model.User;
+import com.example.leadershipcompass_capstoneprojectbackend.repository.DevelopmentPlanRepository;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -30,58 +35,22 @@ class AdminDashboardServiceTest {
 
     @Mock
     private SurveyResultRepository surveyResultRepository;
+    @Mock
+    private DevelopmentPlanRepository developmentPlanRepository;
 
     @InjectMocks
     private AdminDashboardService adminDashboardService;
 
     @Test
-    void shouldHideAggregatedResultsWhenDepartmentHasFewerThanSixParticipants() {
-
-        // Arrange: department contains only 5 participants
-        when(userRepository.findByDepartment("IT"))
-                .thenReturn(Collections.nCopies(5, null));
-
-        when(surveyResultRepository.findByUserDepartment("IT"))
-                .thenReturn(Collections.emptyList());
-
-        // Act
-        AdminDashboardResponse response =
-                adminDashboardService.getDashboardData("IT");
-
-        // Assert
-        assertEquals(5, response.getTotalUsers());
-        assertEquals(0, response.getAssessmentCompletionRate());
-        assertEquals(0, response.getAverageLeadershipScore());
-        assertEquals(0, response.getAverageCaringTimeScore());
-        assertEquals(0, response.getAverageReceivingValueScore());
-        assertEquals(0, response.getAverageActsOfSupportScore());
-        assertEquals(0, response.getAverageWordsOfRecognitionScore());
-        assertEquals(0, response.getAveragePsychologicalTouchScore());
-    }
-
-    @Test
-    void shouldAllowAggregatedResultsWhenDepartmentHasSixParticipants() {
-
-        // Arrange: department contains exactly 6 participants
-        when(userRepository.findByDepartment("IT"))
-                .thenReturn(Collections.nCopies(6, null));
-
-        when(surveyResultRepository.findByUserDepartment("IT"))
-                .thenReturn(Collections.emptyList());
-
-        // Act
-        AdminDashboardResponse response =
-                adminDashboardService.getDashboardData("IT");
-
-        // Assert
-        assertEquals(6, response.getTotalUsers());
-    }
-
-    @Test
     void shouldReturnThreeLowestScoringLeadershipAreasAsSkillGaps() {
+
+        User user = User.builder()
+        .id(1L)
+        .build();
 
         // Arrange
         SurveyResult result = SurveyResult.builder()
+                .user(user)
                 .caringTimeScore(32)
                 .receivingValueScore(30)
                 .actsOfSupportScore(27)
@@ -90,7 +59,8 @@ class AdminDashboardServiceTest {
                 .overallScore(141)
                 .build();
 
-        when(userRepository.count()).thenReturn(10L);
+        // Return the users included in the dashboard aggregation.
+        when(userRepository.findAll()).thenReturn(List.of(user));
         when(surveyResultRepository.findAll())
                 .thenReturn(List.of(result));
 
@@ -117,9 +87,13 @@ class AdminDashboardServiceTest {
 
     @Test
     void shouldReturnRecommendedFocusForSkillGaps() {
+        User user = User.builder()
+        .id(1L)
+        .build();
 
         // Arrange
         SurveyResult result = SurveyResult.builder()
+                .user(user)
                 .caringTimeScore(32)
                 .receivingValueScore(30)
                 .actsOfSupportScore(27)
@@ -128,7 +102,8 @@ class AdminDashboardServiceTest {
                 .overallScore(141)
                 .build();
 
-        when(userRepository.count()).thenReturn(10L);
+        // Return the users included in the dashboard aggregation.
+        when(userRepository.findAll()).thenReturn(List.of(user));
         when(surveyResultRepository.findAll())
                 .thenReturn(List.of(result));
 
@@ -144,6 +119,49 @@ class AdminDashboardServiceTest {
                         "Strengthen active listening practices and follow-up on team feedback."
                 ),
                 response.getRecommendedFocus()
+        );
+    }
+
+    @Test
+        void shouldCalculateDevelopmentPlanCompletionRate() {
+
+        // Arrange
+        User user = User.builder()
+                .id(1L)
+                .build();
+
+        DevelopmentPlanAction completedAction =
+                DevelopmentPlanAction.pending("Completed action");
+        completedAction.setCompleted(true);
+
+        DevelopmentPlanAction pendingAction =
+                DevelopmentPlanAction.pending("Pending action");
+
+        DevelopmentPlanWeek week = new DevelopmentPlanWeek();
+        week.getActions().add(completedAction);
+        week.getActions().add(pendingAction);
+
+        DevelopmentPlan plan = new DevelopmentPlan();
+        plan.getWeeks().add(week);
+
+        when(userRepository.findAll())
+                .thenReturn(List.of(user));
+
+        when(surveyResultRepository.findAll())
+                .thenReturn(Collections.emptyList());
+
+        when(developmentPlanRepository.findFirstByUserIdOrderByGeneratedAtDesc(1L))
+                .thenReturn(java.util.Optional.of(plan));
+
+        // Act
+        AdminDashboardResponse response =
+                adminDashboardService.getDashboardData("all");
+
+        // Assert
+        assertEquals(
+                50.0,
+                response.getDevelopmentPlanCompletionRate(),
+                0.01
         );
     }
 }

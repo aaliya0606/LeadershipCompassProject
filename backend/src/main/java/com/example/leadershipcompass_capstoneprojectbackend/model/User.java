@@ -37,4 +37,7 @@ public class User {
 
     @Column
     private String department;
+
+    @Column
+    private String organisation;    
 }

@@ -57,6 +57,15 @@
         <p id="planMeta" class="text-muted">Generate a plan to see your current recommendations.</p>
       </div>
       <div id="planLoading" class="text-muted mb-3">Loading your latest plan...</div>
+      <div id="planProgress" class="plan-progress-card d-none mb-4">
+        <div class="d-flex justify-content-between align-items-baseline gap-3 mb-2">
+          <h5 class="mb-0">Your progress</h5>
+          <span id="planProgressLabel" class="text-muted">0 of 0 actions complete</span>
+        </div>
+        <div class="plan-progress-track" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" aria-label="Development plan progress">
+          <div id="planProgressFill" class="plan-progress-fill"></div>
+        </div>
+      </div>
       <div id="weeksContainer" class="row gx-4 gy-4"></div>
     </section>
 

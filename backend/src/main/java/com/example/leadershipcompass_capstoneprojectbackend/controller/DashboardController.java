@@ -7,6 +7,7 @@ import com.example.leadershipcompass_capstoneprojectbackend.service.SurveyServic
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
+import com.example.leadershipcompass_capstoneprojectbackend.dto.LatestScoresResponse;
 
 import java.util.List;
 
@@ -40,5 +41,11 @@ public class DashboardController {
     public List<Resource> suggestedModules(Authentication authentication) {
         String email = authentication.getName();
         return surveyService.getSuggestedLearningPath(email);
+    }
+
+    @GetMapping("/api/dashboard/latest-scores")
+    public LatestScoresResponse latestScores(Authentication authentication) {
+        String email = authentication.getName();
+        return surveyService.getLatestScores(email);
     }
 }

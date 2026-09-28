@@ -143,39 +143,13 @@ function applyFilters() {
 }
 
 /**
- * Securely retrieves and opens a stored resource using the current JWT.
+ * Opens the same resource detail page used by regular users.
  *
  * @param {number} id resource identifier
  */
 
-async function viewResource(id) {
-  try {
-    const response = await fetch(
-      `${API_BASE}/${id}/file`,
-      {
-        headers: {
-          Authorization: "Bearer " + token
-        }
-      }
-    );
-
-    if (!response.ok) {
-      throw new Error(await response.text());
-    }
-
-    const blob = await response.blob();
-    const fileUrl = URL.createObjectURL(blob);
-
-    window.open(fileUrl, "_blank");
-
-    setTimeout(() => {
-      URL.revokeObjectURL(fileUrl);
-    }, 60000);
-
-  } catch (error) {
-    console.error(error);
-    showPageAlert("Could not open resource.");
-  }
+function viewResource(id) {
+  window.location.href = `resource-view.html?id=${encodeURIComponent(id)}`;
 }
 
 /**
@@ -229,7 +203,7 @@ function renderResources(resources) {
         <td class="text-end text-nowrap">
 
           ${
-            resource.storageKey
+            resource.storageKey || resource.resourceUrl
               ? `
                 <button
                     type="button"

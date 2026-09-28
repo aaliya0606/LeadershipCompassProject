@@ -2,7 +2,9 @@ package com.example.leadershipcompass_capstoneprojectbackend.controller;
 
 import com.example.leadershipcompass_capstoneprojectbackend.dto.DevelopmentPlanDto;
 import com.example.leadershipcompass_capstoneprojectbackend.dto.DevelopmentPlanSummaryDto;
+import com.example.leadershipcompass_capstoneprojectbackend.dto.ToggleDevelopmentPlanActionRequest;
 import com.example.leadershipcompass_capstoneprojectbackend.service.DevelopmentPlanService;
+import jakarta.validation.Valid;
 import java.security.Principal;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -10,8 +12,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -80,5 +84,30 @@ public class DevelopmentPlanController {
     public ResponseEntity<DevelopmentPlanDto> generatePlan(Principal principal) {
         DevelopmentPlanDto plan = developmentPlanService.generatePlan(principal.getName());
         return ResponseEntity.status(HttpStatus.CREATED).body(plan);
+    }
+
+    /**
+     * Checks or unchecks one action on a plan owned by the caller.
+     *
+     * @param principal   current authenticated user
+     * @param planId      development plan id
+     * @param weekNumber  week number within the plan (1–5)
+     * @param actionIndex zero-based action index within that week
+     * @param request     completion flag
+     * @return updated plan
+     */
+    @PatchMapping("/{planId}/weeks/{weekNumber}/actions/{actionIndex}")
+    public DevelopmentPlanDto toggleAction(
+            Principal principal,
+            @PathVariable Long planId,
+            @PathVariable Integer weekNumber,
+            @PathVariable Integer actionIndex,
+            @Valid @RequestBody ToggleDevelopmentPlanActionRequest request) {
+        return developmentPlanService.toggleAction(
+                principal.getName(),
+                planId,
+                weekNumber,
+                actionIndex,
+                request.getCompleted());
     }
 }
