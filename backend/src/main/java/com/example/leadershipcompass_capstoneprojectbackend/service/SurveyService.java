@@ -24,6 +24,8 @@ import com.example.leadershipcompass_capstoneprojectbackend.dto.SurveyHistoryEnt
 import com.example.leadershipcompass_capstoneprojectbackend.dto.PeerComparisonResponse;
 import com.example.leadershipcompass_capstoneprojectbackend.model.Resource;
 
+import com.example.leadershipcompass_capstoneprojectbackend.dto.LatestScoresResponse;
+
 @Service
 @RequiredArgsConstructor
 //SurveyManager in UML Class Diagram
@@ -402,5 +404,22 @@ public class SurveyService{
         result.getUser().getFullName(); // ensures user is loaded
 
         return result;
+    }
+
+    @Transactional(readOnly = true)
+    public LatestScoresResponse getLatestScores(String email) {
+        User user = userRepository.findByEmail(email)
+            .orElseThrow(() -> new EntityNotFoundException("User not found: " + email));
+
+        SurveyResult latest = surveyResultRepository.findFirstByUserOrderByGenerateDateDesc(user)
+            .orElseThrow(() -> new EntityNotFoundException("No survey result found for user: " + email));
+
+        return new LatestScoresResponse(
+            latest.getCaringTimeScore(),
+            latest.getReceivingValueScore(),
+            latest.getActsOfSupportScore(),
+            latest.getWordsOfRecognitionScore(),
+            latest.getPsychologicalTouchScore()
+        );
     }
 }

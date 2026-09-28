@@ -127,6 +127,58 @@ p {
   padding-right: 0;
 }
 
+.plan-progress-card {
+  background: white;
+  border: 1px solid rgba(0, 40, 75, 0.08);
+  border-radius: 16px;
+  padding: 1.25rem 1.5rem;
+  box-shadow: 0 12px 30px rgba(0, 40, 75, 0.06);
+}
+
+.plan-progress-track {
+  height: 10px;
+  border-radius: 999px;
+  background: rgba(0, 40, 75, 0.08);
+  overflow: hidden;
+}
+
+.plan-progress-fill {
+  height: 100%;
+  width: 0;
+  border-radius: 999px;
+  background: var(--brand-green);
+  transition: width 0.2s ease;
+}
+
+.week-progress-badge {
+  font-weight: 600;
+}
+
+.action-check-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+}
+
+.action-check-item input[type="checkbox"] {
+  margin-top: 0.3rem;
+  flex-shrink: 0;
+  width: 1.1rem;
+  height: 1.1rem;
+  accent-color: var(--brand-green);
+  cursor: pointer;
+}
+
+.action-check-item label {
+  margin-bottom: 0;
+  cursor: pointer;
+}
+
+.action-check-item.is-complete label {
+  color: #6c757d;
+  text-decoration: line-through;
+}
+
 .btn-hero {
   background: var(--brand-light-green);
   border-color: var(--brand-dark);

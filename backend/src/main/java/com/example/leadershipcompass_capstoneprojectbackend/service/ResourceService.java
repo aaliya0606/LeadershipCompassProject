@@ -115,7 +115,7 @@ public class ResourceService {
         Resource resource = getResourceById(id);
 
         if (resource.getStorageKey() != null) {
-            resourceStorageService.deleteFile(resource.getStorageKey());
+            resourceStorageService.deleteFile(resource);
         }
 
         resourceRepository.delete(resource);

@@ -35,30 +35,6 @@ public class PdfService {
         this.insightGenerator = insightGenerator;
     }
 
-    public byte[] generateDummyReportPdf() {
-        try {
-            Context context = new Context();
-            context.setVariable("name", "Test User");
-            context.setVariable("role", "USER");
-            context.setVariable("summary", "This is a hardcoded leadership report generated from a Thymeleaf HTML template.");
-            context.setVariable("developmentFocus", "Focus on conscious control, care factor, and courage over the next 5 weeks.");
-
-            String htmlContent = templateEngine.process("report-template", context);
-
-            ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-
-            PdfRendererBuilder builder = new PdfRendererBuilder();
-            builder.useFastMode();
-            builder.withHtmlContent(htmlContent, null);
-            builder.toStream(outputStream);
-            builder.run();
-
-            return outputStream.toByteArray();
-
-        } catch (Exception e) {
-            throw new RuntimeException("Failed to generate PDF", e);
-        }
-    }
 
     public byte[] generateReportPdf(SurveyResult result) {
         try {

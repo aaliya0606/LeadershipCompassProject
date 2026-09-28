@@ -1,4 +1,8 @@
-const BASE_URL = "http://localhost:8080/api/auth";
+const BASE_URL =
+    window.location.hostname === "localhost" ||
+    window.location.hostname === "127.0.0.1"
+        ? "http://localhost:8080/api/auth"
+        : "https://leadership-compass-api.ashysand-21bb09f6.australiaeast.azurecontainerapps.io/api/auth";
 
 // LOGIN
 const loginForm = document.getElementById("loginForm");
@@ -33,7 +37,11 @@ if (loginForm) {
         message.className = "mt-3 text-center text-success";
 
         setTimeout(() => {
-          window.location.href = "dashboard.html";
+          if (data.role === "ADMIN") {
+            window.location.href = "admin.html";
+          } else {
+            window.location.href = "dashboard.html";
+          }
         }, 800);
       } else {
         message.textContent = data.message || "Login failed.";

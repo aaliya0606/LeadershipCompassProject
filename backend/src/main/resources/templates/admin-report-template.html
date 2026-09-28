@@ -149,6 +149,31 @@
         </tr>
     </table>
 
+    <!-- Aggregated progress through participants' current five-week development plans. -->
+    <h2>Development Plan Progress</h2>
+
+    <div class="metric">
+        <strong>Current Plan Completion:</strong>
+        <span th:text="${#numbers.formatDecimal(developmentPlanCompletionRate, 1, 2)}">
+            0.00
+        </span>%
+    </div>
+
+    <table>
+        <tr>
+            <th>Development Plan Week</th>
+            <th>Actions Completed</th>
+        </tr>
+
+        <tr th:each="week : ${developmentProgressByWeek}">
+            <td th:text="${week.key}">Week 1</td>
+            <td>
+                <span th:text="${#numbers.formatDecimal(week.value, 1, 2)}">
+                    0.00
+                </span>%
+            </td>
+        </tr>
+    </table>
 
     <!-- Displays the three lowest-scoring leadership areas. -->
     <h2>Top Skill Gaps</h2>

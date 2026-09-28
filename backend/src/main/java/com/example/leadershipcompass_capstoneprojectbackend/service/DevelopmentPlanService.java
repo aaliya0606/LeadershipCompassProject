@@ -1,9 +1,11 @@
 package com.example.leadershipcompass_capstoneprojectbackend.service;
 
+import com.example.leadershipcompass_capstoneprojectbackend.dto.DevelopmentPlanActionDto;
 import com.example.leadershipcompass_capstoneprojectbackend.dto.DevelopmentPlanDto;
 import com.example.leadershipcompass_capstoneprojectbackend.dto.DevelopmentPlanSummaryDto;
 import com.example.leadershipcompass_capstoneprojectbackend.dto.DevelopmentPlanWeekDto;
 import com.example.leadershipcompass_capstoneprojectbackend.model.DevelopmentPlan;
+import com.example.leadershipcompass_capstoneprojectbackend.model.DevelopmentPlanAction;
 import com.example.leadershipcompass_capstoneprojectbackend.model.DevelopmentPlanWeek;
 import com.example.leadershipcompass_capstoneprojectbackend.model.Modules;
 import com.example.leadershipcompass_capstoneprojectbackend.model.SurveyResult;
@@ -152,6 +154,45 @@ public class DevelopmentPlanService {
         plan.setWordsOfRecognitionScore(scoreSnapshot.wordsOfRecognitionScore());
         plan.setPsychologicalTouchScore(scoreSnapshot.psychologicalTouchScore());
         plan.replaceWeeks(toEntities(plannedWeeks));
+
+        return toDto(developmentPlanRepository.save(plan));
+    }
+
+    /**
+     * Checks or unchecks one action on a plan owned by the authenticated user.
+     * Unchecking clears {@code completedAt}.
+     *
+     * @param userEmail   authenticated user email
+     * @param planId      development plan id
+     * @param weekNumber  week number within the plan (1–5)
+     * @param actionIndex zero-based action index within that week
+     * @param completed   {@code true} to check off; {@code false} to undo
+     * @return updated plan including all weeks
+     */
+    @Transactional
+    public DevelopmentPlanDto toggleAction(
+            String userEmail,
+            Long planId,
+            Integer weekNumber,
+            Integer actionIndex,
+            boolean completed) {
+        User user = getUserByEmail(userEmail);
+        DevelopmentPlan plan = developmentPlanRepository.findByIdAndUserId(planId, user.getId())
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Development plan not found."));
+        DevelopmentPlanWeek week = plan.getWeeks().stream()
+                .filter(planWeek -> weekNumber.equals(planWeek.getWeekNumber()))
+                .findFirst()
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Week not found."));
+        if (actionIndex == null || actionIndex < 0 || actionIndex >= week.getActions().size()) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Action not found.");
+        }
+
+        DevelopmentPlanAction current = week.getActions().get(actionIndex);
+        DevelopmentPlanAction updated = new DevelopmentPlanAction();
+        updated.setText(current.getText());
+        updated.setCompleted(completed);
+        updated.setCompletedAt(completed ? Instant.now() : null);
+        week.getActions().set(actionIndex, updated);
 
         return toDto(developmentPlanRepository.save(plan));
     }
@@ -653,7 +694,7 @@ public class DevelopmentPlanService {
             week.setModuleTitle(plannedWeek.module().getTitle());
             week.setFocus(plannedWeek.focus());
             week.setRationale(plannedWeek.rationale());
-            week.setActions(new ArrayList<>(plannedWeek.actions()));
+            week.setActions(toActionEntities(plannedWeek.actions()));
             weeks.add(week);
         }
         return weeks;
@@ -696,7 +737,7 @@ public class DevelopmentPlanService {
             weekDto.setModuleTitle(plannedWeek.module().getTitle());
             weekDto.setFocus(plannedWeek.focus());
             weekDto.setRationale(plannedWeek.rationale());
-            weekDto.setActions(new ArrayList<>(plannedWeek.actions()));
+            weekDto.setActions(toActionDtosFromTexts(plannedWeek.actions()));
             weeks.add(weekDto);
         }
         return weeks;
@@ -712,10 +753,56 @@ public class DevelopmentPlanService {
             weekDto.setModuleTitle(week.getModuleTitle());
             weekDto.setFocus(week.getFocus());
             weekDto.setRationale(week.getRationale());
-            weekDto.setActions(new ArrayList<>(week.getActions()));
+            weekDto.setActions(toActionDtos(week.getActions()));
             weeks.add(weekDto);
         }
         return weeks;
+    }
+
+    private List<DevelopmentPlanAction> toActionEntities(List<String> actionTexts) {
+        List<DevelopmentPlanAction> actions = new ArrayList<>();
+        if (actionTexts == null) {
+            return actions;
+        }
+        for (String text : actionTexts) {
+            if (text == null || text.isBlank()) {
+                continue;
+            }
+            actions.add(DevelopmentPlanAction.pending(text.trim()));
+        }
+        return actions;
+    }
+
+    private List<DevelopmentPlanActionDto> toActionDtos(List<DevelopmentPlanAction> actions) {
+        List<DevelopmentPlanActionDto> dtos = new ArrayList<>();
+        if (actions == null) {
+            return dtos;
+        }
+        for (int index = 0; index < actions.size(); index++) {
+            DevelopmentPlanAction action = actions.get(index);
+            DevelopmentPlanActionDto dto = new DevelopmentPlanActionDto();
+            dto.setIndex(index);
+            dto.setText(action.getText());
+            dto.setCompleted(action.isCompleted());
+            dto.setCompletedAt(action.getCompletedAt());
+            dtos.add(dto);
+        }
+        return dtos;
+    }
+
+    private List<DevelopmentPlanActionDto> toActionDtosFromTexts(List<String> actionTexts) {
+        List<DevelopmentPlanActionDto> dtos = new ArrayList<>();
+        if (actionTexts == null) {
+            return dtos;
+        }
+        for (int index = 0; index < actionTexts.size(); index++) {
+            DevelopmentPlanActionDto dto = new DevelopmentPlanActionDto();
+            dto.setIndex(index);
+            dto.setText(actionTexts.get(index));
+            dto.setCompleted(false);
+            dtos.add(dto);
+        }
+        return dtos;
     }
 
     private List<AiModuleSummary> toAiModuleSummaries(List<Modules> activeModules) {
