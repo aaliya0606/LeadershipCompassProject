@@ -9,6 +9,8 @@ import com.example.leadershipcompass_capstoneprojectbackend.model.User;
 public interface UserRepository extends JpaRepository<User, Long> {
     
     Optional<User> findByEmail(String email);
+
+    Optional<User> findByUnsubscribeToken(String unsubscribeToken);
     
     boolean existsByEmail(String email);
     
