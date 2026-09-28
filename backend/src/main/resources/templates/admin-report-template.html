@@ -2,204 +2,282 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8" />
-
+    <title>Leadership Compass Admin Report</title>
     <style>
-        @page {
-            size: A4;
-            margin: 30mm 20mm;
+        * { box-sizing: border-box; }
+        @page { size: A4; margin: 18mm 16mm; }
+        :root {
+            --brand-dark: #00284B;
+            --brand-green: #64BC28;
+            --brand-light-green: #96DA5F;
+            --brand-surface: #FFFFFF;
+            --brand-muted: #E5E8E8;
+            --brand-text: #10263A;
         }
 
         body {
             font-family: Arial, sans-serif;
-            color: #222;
+            background: #ffffff;
+            color: #212529;
+            margin: 0;
+            padding: 0;
+        }
+        .report {
+            max-width: 700px;
+            margin: 0 auto;
+            background: #ffffff;
+            border-radius: 0;
+            padding: 24px 28px;
+            box-shadow: none;
+        }
+
+        /* display:table/table-cell instead of CSS Grid or flex rows - more reliable in OpenHTMLtoPDF */
+        .report-header {
+            display: table;
+            width: 100%;
+            border-bottom: 3px solid #64BC28;
+            padding-bottom: 14px;
+            margin-bottom: 20px;
+        }
+        .logo-cell {
+            display: table-cell;
+            width: 80px;
+            vertical-align: middle;
+        }
+        .header-text {
+            display: table-cell;
+            vertical-align: middle;
+            text-align: center;
+        }
+        .header-spacer {
+            display: table-cell;
+            width: 80px;
+        }
+        .logo {
+            width: 60px;
+            height: auto;
+        }
+
+        .report-header h1 {
+            margin: 0;
+            font-size: 28px;
+            color: #00284B;
+            letter-spacing: 0.5px;
+        }
+        .report-header p {
+            margin: 6px 0 0;
             font-size: 12px;
+            color: #6c757d;
         }
 
-        h1 {
-            font-size: 24px;
-            margin-bottom: 5px;
+        .respondent {
+            text-align: center;
+            margin-bottom: 20px;
+            padding-bottom: 14px;
+            border-bottom: 3px solid #64BC28;
+        }
+        .respondent-name {
+            margin: 0;
+            font-size: 16px;
+            font-weight: bold;
+            color: #212529;
+        }
+        .respondent-role {
+            margin: 2px 0 0;
+            font-size: 12.5px;
+            color: #6c757d;
         }
 
-        h2 {
-            font-size: 17px;
-            margin-top: 25px;
-            border-bottom: 1px solid #ddd;
-            padding-bottom: 5px;
+        .metric-row {
+            display: table;
+            width: 100%;
+            table-layout: fixed;
+            margin-bottom: 4px;
+        }
+        .metric-cell {
+            display: table-cell;
+            text-align: center;
+            padding: 10px 6px;
+        }
+        .metric-value {
+            font-size: 20px;
+            font-weight: bold;
+            color: #00284B;
+        }
+        .metric-label {
+            margin: 4px 0 0;
+            font-size: 11px;
+            color: #6c757d;
         }
 
-        .filter-info {
-            margin-bottom: 25px;
-        }
+        .overall { text-align: center; margin-bottom: 8px; }
+        .overall-score { font-size: 18px; margin: 0 0 8px; }
 
-        .metric {
-            margin: 8px 0;
-        }
-
-        table {
+        table.grid-table {
             width: 100%;
             border-collapse: collapse;
-            margin-top: 10px;
+            margin-top: 4px;
         }
-
-        th, td {
-            border: 1px solid #ddd;
-            padding: 8px;
+        table.grid-table th,
+        table.grid-table td {
+            border: 1px solid #64BC28;
+            padding: 8px 12px;
+        }
+        table.grid-table th {
+            background: #00284B;
+            color: #ffffff;
+            font-size: 12px;
             text-align: left;
         }
-
-        th {
-            background-color: #f2f2f2;
+        table.grid-table td {
+            font-size: 12.5px;
+            color: #495057;
+        }
+        table.grid-table tr.overall-row td {
+            font-weight: bold;
+            color: #10263A;
         }
 
+        .focus-list {
+            display: flex;
+            flex-direction: column;
+        }
         .focus-item {
-            margin-bottom: 8px;
+            border: 3px solid #64BC28;
+            border-radius: 8px;
+            padding: 10px 16px;
+            margin-bottom: 12px;
+            font-size: 12.5px;
+            color: #495057;
+            line-height: 1.5;
+        }
+        .focus-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .page-break {
+            page-break-before: always;
+        }
+
+        .report-footer {
+            margin-top: 32px;
+            text-align: center;
+            font-size: 10px;
+            color: #adb5bd;
         }
     </style>
 </head>
-
 <body>
+<div class="report">
 
-    <h1>Leadership Compass Admin Report</h1>
-
-    <!-- Shows which organisation/department this report represents. -->
-    <div class="filter-info">
-        <strong>Organisation:</strong>
-        <span th:text="${organisation}">All</span>
-        <br />
-
-        <strong>Department:</strong>
-        <span th:text="${department}">All</span>
+    <div class="report-header">
+        <div class="logo-cell">
+            <img th:src="'data:image/png;base64,' + ${logoImage}" alt="TGG Logo" class="logo" />
+        </div>
+        <div class="header-text">
+            <h1>Leadership Compass</h1>
+            <p>Admin Report</p>
+        </div>
+        <div class="header-spacer"></div>
     </div>
 
-
-    <!-- Assessment participation summary. -->
-    <h2>Assessment Overview</h2>
-
-    <div class="metric">
-        <strong>Total Participants:</strong>
-        <span th:text="${totalUsers}">0</span>
+    <div class="respondent">
+        <p class="respondent-name" th:text="${organisation}"></p>
+        <p class="respondent-role" th:text="${department}"></p>
     </div>
 
-    <div class="metric">
-        <strong>Completed Assessments:</strong>
-        <span th:text="${completedAssessments}">0</span>
+    <h2 class="section-title">Assessment Overview</h2>
+    <div class="metric-row">
+        <div class="metric-cell">
+            <p class="metric-value" th:text="${totalUsers}">0</p>
+            <p class="metric-label">Total Participants</p>
+        </div>
+        <div class="metric-cell">
+            <p class="metric-value" th:text="${completedAssessments}">0</p>
+            <p class="metric-label">Completed Assessments</p>
+        </div>
+        <div class="metric-cell">
+            <p class="metric-value" th:text="${#numbers.formatDecimal(completionRate, 1, 2)} + '%'">0.00%</p>
+            <p class="metric-label">Completion Rate</p>
+        </div>
     </div>
 
-    <div class="metric">
-        <strong>Assessment Completion Rate:</strong>
-        <span th:text="${#numbers.formatDecimal(completionRate, 1, 2)}">0.00</span>%
-    </div>
+    <h2 class="section-title">Average Leadership Scores</h2>
 
-
-    <!-- Aggregated leadership assessment scores. -->
-    <h2>Average Leadership Scores</h2>
-
-    <table>
+    <table class="grid-table">
         <tr>
             <th>Leadership Area</th>
             <th>Average Score</th>
         </tr>
-
-        <tr>
+        <tr class="overall-row">
             <td>Overall Leadership Score</td>
-            <td>
-                <span th:text="${#numbers.formatDecimal(averageLeadershipScore, 1, 2)}">0.00</span>
-                / 250
-            </td>
+            <td th:text="${#numbers.formatDecimal(averageLeadershipScore, 1, 2)} + ' / 250'">0.00 / 250</td>
         </tr>
-
         <tr>
             <td>Caring Time</td>
-            <td>
-                <span th:text="${#numbers.formatDecimal(averageCaringTimeScore, 1, 2)}">0.00</span>
-                / 50
-            </td>
+            <td th:text="${#numbers.formatDecimal(averageCaringTimeScore, 1, 2)} + ' / 50'">0.00 / 50</td>
         </tr>
-
         <tr>
             <td>Receiving Value</td>
-            <td>
-                <span th:text="${#numbers.formatDecimal(averageReceivingValueScore, 1, 2)}">0.00</span>
-                / 50
-            </td>
+            <td th:text="${#numbers.formatDecimal(averageReceivingValueScore, 1, 2)} + ' / 50'">0.00 / 50</td>
         </tr>
-
         <tr>
             <td>Acts of Support</td>
-            <td>
-                <span th:text="${#numbers.formatDecimal(averageActsOfSupportScore, 1, 2)}">0.00</span>
-                / 50
-            </td>
+            <td th:text="${#numbers.formatDecimal(averageActsOfSupportScore, 1, 2)} + ' / 50'">0.00 / 50</td>
         </tr>
-
         <tr>
             <td>Words of Recognition</td>
-            <td>
-                <span th:text="${#numbers.formatDecimal(averageWordsOfRecognitionScore, 1, 2)}">0.00</span>
-                / 50
-            </td>
+            <td th:text="${#numbers.formatDecimal(averageWordsOfRecognitionScore, 1, 2)} + ' / 50'">0.00 / 50</td>
         </tr>
-
         <tr>
             <td>Psychological Touch</td>
-            <td>
-                <span th:text="${#numbers.formatDecimal(averagePsychologicalTouchScore, 1, 2)}">0.00</span>
-                / 50
-            </td>
+            <td th:text="${#numbers.formatDecimal(averagePsychologicalTouchScore, 1, 2)} + ' / 50'">0.00 / 50</td>
         </tr>
     </table>
 
-    <!-- Aggregated progress through participants' current five-week development plans. -->
-    <h2>Development Plan Progress</h2>
+    <h2 class="section-title">Development Plan Progress</h2>
 
-    <div class="metric">
-        <strong>Current Plan Completion:</strong>
-        <span th:text="${#numbers.formatDecimal(developmentPlanCompletionRate, 1, 2)}">
-            0.00
-        </span>%
-    </div>
+    <p>
+    Current Plan Completion: 
+    <span th:text="${#numbers.formatDecimal(developmentPlanCompletionRate, 1, 2)} + '%'">0.00%</span>
+    </p>
 
-    <table>
+    <table class="grid-table">
         <tr>
             <th>Development Plan Week</th>
             <th>Actions Completed</th>
         </tr>
-
-        <tr th:each="week : ${developmentProgressByWeek}">
-            <td th:text="${week.key}">Week 1</td>
-            <td>
-                <span th:text="${#numbers.formatDecimal(week.value, 1, 2)}">
-                    0.00
-                </span>%
-            </td>
+        <tr class="overall-row">
+            <td>Week 1</td>
+            <td>0.00%</td>
         </tr>
     </table>
 
-    <!-- Displays the three lowest-scoring leadership areas. -->
-    <h2>Top Skill Gaps</h2>
+    <h2 class="section-title page-break">Top Skill Gaps</h2>
 
-    <table>
+    <table class="grid-table">
         <tr>
             <th>Leadership Area</th>
             <th>Average Score</th>
         </tr>
-
         <tr th:each="gap : ${skillGaps}">
             <td th:text="${gap.key}">Leadership Area</td>
             <td th:text="${#numbers.formatDecimal(gap.value, 1, 2)}">0.00</td>
         </tr>
     </table>
 
+    <h2 class="section-title">Recommended Focus Areas</h2>
 
-    <!-- Recommended focus areas based on the identified skill gaps. -->
-    <h2>Recommended Focus Areas</h2>
-
-    <div
-        class="focus-item"
-        th:each="focus : ${recommendedFocus}"
-        th:text="${focus}">
-        Recommended focus area
+    <div class="focus-list">
+        <div class="focus-item" th:each="focus : ${recommendedFocus}" th:text="${focus}">
+            Recommended focus area
+        </div>
     </div>
 
+    <div class="report-footer">
+        Generated by Leadership Compass for The Guinea Group (TGG)
+    </div>
+
+</div>
 </body>
 </html>
