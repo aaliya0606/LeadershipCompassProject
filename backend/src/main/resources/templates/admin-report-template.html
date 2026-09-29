@@ -247,9 +247,9 @@
             <th>Development Plan Week</th>
             <th>Actions Completed</th>
         </tr>
-        <tr class="overall-row">
-            <td>Week 1</td>
-            <td>0.00%</td>
+        <tr class="overall-row" th:each="week : ${developmentProgressByWeek}">
+            <td th:text="${week.key}">Week</td>
+            <td th:text="${#numbers.formatDecimal(week.value, 1, 2)} + '%'">0.00%</td>
         </tr>
     </table>
 

@@ -121,6 +121,9 @@ public class AdminDashboardService {
         // development plan progress calculations.
         long totalUsers = users.size();
 
+        long participantsWithDevelopmentPlans =
+        countParticipantsWithDevelopmentPlans(users);
+
         // Calculate development progress for the same users included by the
         // selected organisation and department filters.
         double developmentPlanCompletionRate =
@@ -155,6 +158,7 @@ public class AdminDashboardService {
                         0,
                         completionRate,
                         developmentPlanCompletionRate,
+                        participantsWithDevelopmentPlans,
                         0,
                         0,
                         0,
@@ -225,6 +229,7 @@ public class AdminDashboardService {
                         completedAssessments,
                         completionRate,
                         developmentPlanCompletionRate,
+                        participantsWithDevelopmentPlans,
                         averageOverall,
                         averageCaringTime,
                         averageReceivingValue,
@@ -282,6 +287,24 @@ public class AdminDashboardService {
 
            return ((double) completedActions / totalActions) * 100;
    }
+
+        /**
+         * Counts how many selected users currently have at least one
+         * development plan.
+         *
+         * @param users users included by the current organisation/department filters
+         * @return number of participants with a development plan
+         */
+        private long countParticipantsWithDevelopmentPlans(List<User> users) {
+
+        return users.stream()
+                .filter(user ->
+                        developmentPlanRepository
+                                .findFirstByUserIdOrderByGeneratedAtDesc(user.getId())
+                                .isPresent()
+                )
+                .count();
+        }   
 
         /**
          * Calculates aggregated completion for each week of the selected users'
