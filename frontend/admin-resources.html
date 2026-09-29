@@ -1,64 +1,357 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Manage Resources | Leadership Compass</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Resource Library | Leadership Compass</title>
 
-  <link
-    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
-    rel="stylesheet"
-  />
-  <link
-    href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap"
-    rel="stylesheet"
-  />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Orbitron:wght@600&family=Oswald:wght@600;700&display=swap" rel="stylesheet">
 
-  <link rel="stylesheet" href="static/style/main.css" />
+  <style>
+    @font-face {
+      font-family: "Conthrax";
+      src: url("static/fonts/conthrax/Conthrax-SemiBold.otf") format("opentype"),
+           url("static/fonts/conthrax-font-family/Conthrax-SemiBold.otf") format("opentype");
+      font-display: swap;
+    }
+
+    :root {
+      --navy:#062f4a;
+      --navy-deep:#03243a;
+      --green:#67d92f;
+      --green-bright:#86e94b;
+      --page:#e6e9e7;
+      --card:#ffffff;
+      --text:#102d40;
+      --muted:#66737c;
+      --shadow:0 10px 28px rgba(10,42,58,.10);
+    }
+
+    * { box-sizing:border-box; }
+
+    body {
+      margin:0;
+      padding-top:72px;
+      background:var(--page);
+      color:var(--text);
+      font-family:"Montserrat",Arial,sans-serif;
+    }
+
+    .custom-navbar {
+      position:fixed;
+      inset:0 0 auto 0;
+      height:72px;
+      z-index:999;
+      background:linear-gradient(90deg,#062f4a 0%,#0b5744 46%,#57d529 100%);
+      border-bottom:3px solid #7ae33d;
+      box-shadow:0 4px 16px rgba(0,0,0,.14);
+    }
+
+    .navbar-inner {
+      width:min(1180px,calc(100% - 36px));
+      height:100%;
+      margin:auto;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:24px;
+    }
+
+    .brand {
+      color:#fff;
+      text-decoration:none;
+      font-family:"Conthrax","Orbitron",Arial,sans-serif;
+      font-size:.86rem;
+      letter-spacing:1.1px;
+    }
+
+    .nav-links { display:flex; height:100%; align-items:stretch; }
+
+    .nav-links a {
+      display:flex;
+      align-items:center;
+      padding:0 15px;
+      color:rgba(255,255,255,.94);
+      text-decoration:none;
+      font-family:"Conthrax","Orbitron",Arial,sans-serif;
+      font-size:.62rem;
+      border-left:1px solid rgba(255,255,255,.10);
+    }
+
+    .nav-links a:hover,
+    .nav-links a.active {
+      background:rgba(255,255,255,.11);
+      color:#fff;
+    }
+
+    .page-shell {
+      max-width:1120px;
+      margin:auto;
+      padding:42px 24px 70px;
+    }
+
+    .hero {
+      display:grid;
+      grid-template-columns:minmax(0,1.35fr) minmax(250px,.65fr);
+      gap:28px;
+      align-items:center;
+      padding:38px 40px;
+      margin-bottom:28px;
+      border-radius:12px;
+      background:linear-gradient(120deg,rgba(5,43,65,.98),rgba(14,95,66,.95) 55%,rgba(92,211,45,.94));
+      color:#fff;
+      box-shadow:0 16px 36px rgba(5,43,65,.18);
+    }
+
+    .hero-kicker {
+      color:#a9f07e;
+      text-transform:uppercase;
+      letter-spacing:3px;
+      font-family:"Conthrax","Orbitron",Arial,sans-serif;
+      font-size:.64rem;
+      margin-bottom:11px;
+    }
+
+    .hero h1 {
+      margin:0 0 13px;
+      font:700 clamp(2.35rem,5vw,3.8rem)/1 "Oswald",Arial,sans-serif;
+      text-transform:uppercase;
+    }
+
+    .hero p {
+      margin:0;
+      color:rgba(255,255,255,.88);
+      line-height:1.6;
+      font-size:.93rem;
+    }
+
+    .hero-actions {
+      display:flex;
+      justify-content:center;
+      gap:10px;
+      flex-wrap:wrap;
+    }
+
+    .btn-green,
+    .btn-white,
+    .btn-outline-custom {
+      border-radius:5px;
+      padding:10px 16px;
+      font-family:"Conthrax","Orbitron",Arial,sans-serif;
+      font-size:.64rem;
+    }
+
+    .btn-green {
+      background:var(--green);
+      color:var(--navy-deep);
+      border:1px solid var(--green);
+    }
+
+    .btn-green:hover {
+      background:var(--green-bright);
+      border-color:var(--green-bright);
+      color:var(--navy-deep);
+    }
+
+    .btn-white {
+      background:#fff;
+      color:var(--navy-deep);
+      border:1px solid #fff;
+      text-decoration:none;
+    }
+
+    .btn-outline-custom {
+      background:transparent;
+      color:var(--navy);
+      border:1px solid var(--navy);
+    }
+
+    .resource-card {
+      background:#fff;
+      border-radius:9px;
+      padding:28px;
+      box-shadow:var(--shadow);
+    }
+
+    .resource-heading {
+      display:flex;
+      justify-content:space-between;
+      gap:20px;
+      align-items:flex-start;
+      margin-bottom:24px;
+    }
+
+    .resource-heading h2 {
+      margin:0 0 7px;
+      color:var(--navy);
+      font:700 1.8rem "Oswald",Arial,sans-serif;
+    }
+
+    .resource-heading p {
+      margin:0;
+      color:var(--muted);
+      font-size:.88rem;
+    }
+
+    .filters {
+      display:grid;
+      grid-template-columns:minmax(200px,1fr) minmax(180px,.8fr) auto auto;
+      gap:14px;
+      align-items:end;
+      padding:20px;
+      margin-bottom:22px;
+      background:#f5f7f6;
+      border-radius:7px;
+    }
+
+    .form-label {
+      color:var(--navy);
+      font-weight:700;
+      font-size:.76rem;
+    }
+
+    .form-control,.form-select {
+      border:1px solid #cfd8d3;
+      border-radius:5px;
+      padding:10px 11px;
+      font-family:"Montserrat",Arial,sans-serif;
+      font-size:.85rem;
+    }
+
+    .resource-count {
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      min-height:39px;
+      padding:0 13px;
+      border-radius:30px;
+      background:#e9f8df;
+      color:#3e8d21;
+      font-size:.73rem;
+      font-weight:700;
+      white-space:nowrap;
+    }
+
+    .table-responsive { overflow-x:auto; }
+
+    .resource-table {
+      width:100%;
+      min-width:930px;
+      border-collapse:collapse;
+    }
+
+    .resource-table th {
+      padding:15px 11px;
+      background:#f7f8f7;
+      border-bottom:1px solid #dfe5e2;
+      color:#53636c;
+      font-size:.76rem;
+      white-space:nowrap;
+    }
+
+    .resource-table td {
+      padding:15px 11px;
+      border-bottom:1px solid #e4e9e6;
+      color:#253e4c;
+      font-size:.84rem;
+      vertical-align:middle;
+    }
+
+    .resource-action {
+      border-radius:4px;
+      padding:7px 9px;
+      background:#fff;
+      font-size:.72rem;
+      font-weight:600;
+    }
+
+    .view { border:1px solid #7b888d; color:#59686e; }
+    .edit { border:1px solid #4d91bc; color:#397da7; }
+    .delete { border:1px solid #cf7b87; color:#b75d6a; }
+
+    .modal-content {
+      border:0;
+      border-radius:9px;
+      box-shadow:0 18px 50px rgba(0,0,0,.22);
+    }
+
+    .modal-header {
+      background:linear-gradient(90deg,#062f4a,#0b5744);
+      color:#fff;
+      border-bottom:3px solid var(--green);
+    }
+
+    .modal-title { font-family:"Oswald",Arial,sans-serif; font-weight:700; }
+    .modal-header .btn-close { filter:invert(1); }
+
+    @media(max-width:950px) {
+      .nav-links { display:none; }
+      .hero { grid-template-columns:1fr; }
+      .hero-actions { justify-content:flex-start; }
+      .filters { grid-template-columns:1fr 1fr; }
+    }
+
+    @media(max-width:650px) {
+      .page-shell { padding:27px 15px 55px; }
+      .hero { padding:28px 22px; }
+      .filters { grid-template-columns:1fr; }
+      .resource-card { padding:20px 15px; }
+      .resource-heading { flex-direction:column; }
+    }
+  </style>
 </head>
 
 <body>
-  <nav class="navbar navbar-dark px-4 custom-navbar">
-    <a href="dashboard.html" class="navbar-brand">
-      Leadership Compass — Admin
-    </a>
+  <nav class="custom-navbar">
+    <div class="navbar-inner">
+      <a class="brand" href="admin.html#dashboard">LEADERSHIP COMPASS</a>
 
-    <div>
-      <a href="dashboard.html" class="btn btn-light me-2">Dashboard</a>
-      <button id="logoutBtn" class="btn btn-outline-light">Logout</button>
+      <div class="nav-links">
+        <a href="admin.html#dashboard">Admin Dashboard</a>
+        <a class="active" href="admin-resources.html">Resource Library</a>
+        <a href="admin.html#reports">Reports</a>
+        <a href="#" onclick="logoutAdmin();return false;">Logout</a>
+      </div>
     </div>
   </nav>
 
-  <main class="container mt-5 mb-5">
-    <div class="dashboard-card">
+  <main class="page-shell">
+    <section class="hero">
+      <div>
+        <div class="hero-kicker">Administration</div>
+        <h1>Resource Library</h1>
+        <p>
+          View, upload, edit, classify, and delete resources used across the Leadership Compass platform.
+        </p>
+      </div>
 
-      <div class="d-flex flex-wrap justify-content-between align-items-start gap-3 mb-4">
-        <div>
-          <span class="eyebrow text-uppercase">Admin</span>
-          <h1 class="h3 mb-1">Resource Library</h1>
-          <p class="text-muted mb-0">
-            View, upload, edit, classify, and delete Resource Library files.
-          </p>
-        </div>
-
-        <button
-          id="addResourceBtn"
-          type="button"
-          class="btn btn-success"
-        >
-          Add resource
+      <div class="hero-actions">
+        <a class="btn btn-white" href="admin.html#dashboard">
+          <i class="bi bi-arrow-left me-2"></i>Admin Dashboard
+        </a>
+        <button id="addResourceBtn" class="btn btn-white" type="button">
+          <i class="bi bi-plus-lg me-2"></i>Add Resource
         </button>
+      </div>
+    </section>
+
+    <section class="resource-card">
+      <div class="resource-heading">
+        <div>
+          <h2>Manage Resources</h2>
+          <p>Filter by Leadership Language and file type, or add a new resource.</p>
+        </div>
       </div>
 
       <div id="pageAlert" class="alert d-none" role="alert"></div>
 
-      <div class="row g-3 align-items-end mb-4">
-
-        <div class="col-md-4">
-          <label for="filterLanguage" class="form-label">
-            Leadership language
-          </label>
-
+      <div class="filters">
+        <div>
+          <label class="form-label" for="filterLanguage">Leadership Language</label>
           <select id="filterLanguage" class="form-select">
             <option value="">All languages</option>
             <option value="Words of Recognition">Words of Recognition</option>
@@ -70,11 +363,8 @@
           </select>
         </div>
 
-        <div class="col-md-3">
-          <label for="filterType" class="form-label">
-            Resource type
-          </label>
-
+        <div>
+          <label class="form-label" for="filterType">Resource Type</label>
           <select id="filterType" class="form-select">
             <option value="">All types</option>
             <option value="PDF">PDF</option>
@@ -87,30 +377,16 @@
           </select>
         </div>
 
-        <div class="col-md-3">
-          <button
-            id="refreshBtn"
-            type="button"
-            class="btn btn-primary w-100"
-          >
-            Refresh list
-          </button>
-        </div>
+        <button id="refreshBtn" class="btn btn-green" type="button">
+          <i class="bi bi-arrow-clockwise me-2"></i>Refresh List
+        </button>
 
-        <div class="col-md-2 text-md-end">
-          <span
-            id="resourceCount"
-            class="badge bg-light text-dark"
-          >
-            0 resources
-          </span>
-        </div>
+        <span id="resourceCount" class="resource-count">0 resources</span>
       </div>
 
       <div class="table-responsive">
-        <table class="table table-hover align-middle">
-
-          <thead class="table-light">
+        <table class="resource-table">
+          <thead>
             <tr>
               <th>Order</th>
               <th>Leadership Language</th>
@@ -118,118 +394,47 @@
               <th>Title</th>
               <th>File</th>
               <th>Active</th>
-              <th class="text-end">Actions</th>
+              <th>Actions</th>
             </tr>
           </thead>
-
           <tbody id="resourcesTableBody">
-            <tr>
-              <td colspan="7" class="text-muted">
-                Loading resources...
-              </td>
-            </tr>
+            <tr><td colspan="7" class="text-muted">Loading resources...</td></tr>
           </tbody>
-
         </table>
       </div>
-    </div>
+    </section>
   </main>
 
-  <div
-    class="modal fade"
-    id="resourceModal"
-    tabindex="-1"
-    aria-labelledby="resourceModalLabel"
-    aria-hidden="true"
-  >
-
+  <div class="modal fade" id="resourceModal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-lg modal-dialog-scrollable modal-dialog-centered">
       <div class="modal-content">
-
         <div class="modal-header">
-          <h5 class="modal-title" id="resourceModalLabel">
-            Resource
-          </h5>
-
-          <button
-            type="button"
-            class="btn-close"
-            data-bs-dismiss="modal"
-            aria-label="Close"
-          ></button>
+          <h5 id="resourceModalLabel" class="modal-title">Resource</h5>
+          <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
 
         <div class="modal-body">
-
           <form id="resourceForm">
-
-            <div
-              id="formAlert"
-              class="alert alert-danger d-none"
-            ></div>
+            <div id="formAlert" class="alert alert-danger d-none"></div>
 
             <div class="row g-3">
-
               <div class="col-md-6">
-                <label
-                  for="resourceLeadershipLanguage"
-                  class="form-label"
-                >
-                  Leadership Language
-                </label>
-
-                <select
-                  class="form-select"
-                  id="resourceLeadershipLanguage"
-                  required
-                >
-                  <option value="" disabled selected>
-                    Select a leadership language
-                  </option>
-
-                  <option value="Words of Recognition">
-                    Words of Recognition
-                  </option>
-
-                  <option value="Caring Time">
-                    Caring Time
-                  </option>
-
-                  <option value="Acts of Support">
-                    Acts of Support
-                  </option>
-
-                  <option value="Psychological Touch">
-                    Psychological Touch
-                  </option>
-
-                  <option value="Receiving Value">
-                    Receiving Value
-                  </option>
-
-                  <option value="UNCLASSIFIED">
-                    Unclassified
-                  </option>
+                <label class="form-label" for="resourceLeadershipLanguage">Leadership Language</label>
+                <select id="resourceLeadershipLanguage" class="form-select" required>
+                  <option value="" disabled selected>Select a leadership language</option>
+                  <option value="Words of Recognition">Words of Recognition</option>
+                  <option value="Caring Time">Caring Time</option>
+                  <option value="Acts of Support">Acts of Support</option>
+                  <option value="Psychological Touch">Psychological Touch</option>
+                  <option value="Receiving Value">Receiving Value</option>
+                  <option value="UNCLASSIFIED">Unclassified</option>
                 </select>
               </div>
 
               <div class="col-md-6">
-                <label
-                  for="resourceType"
-                  class="form-label"
-                >
-                  Resource Type
-                </label>
-
-                <select
-                  class="form-select"
-                  id="resourceType"
-                  required
-                >
-                  <option value="" disabled selected>
-                    Select a type
-                  </option>
-
+                <label class="form-label" for="resourceType">Resource Type</label>
+                <select id="resourceType" class="form-select" required>
+                  <option value="" disabled selected>Select a type</option>
                   <option value="PDF">PDF</option>
                   <option value="VIDEO">Video</option>
                   <option value="AUDIO">Audio</option>
@@ -241,128 +446,422 @@
               </div>
 
               <div class="col-12">
-                <label
-                  for="resourceTitle"
-                  class="form-label"
-                >
-                  Title
-                </label>
-
-                <input
-                  type="text"
-                  class="form-control"
-                  id="resourceTitle"
-                  required
-                  maxlength="255"
-                />
+                <label class="form-label" for="resourceTitle">Title</label>
+                <input id="resourceTitle" class="form-control" required maxlength="255">
               </div>
 
               <div class="col-12">
-                <label
-                  for="resourceDescription"
-                  class="form-label"
-                >
-                  Description
-                </label>
-
-                <textarea
-                  class="form-control"
-                  id="resourceDescription"
-                  rows="3"
-                  maxlength="1000"
-                ></textarea>
+                <label class="form-label" for="resourceDescription">Description</label>
+                <textarea id="resourceDescription" class="form-control" rows="3" maxlength="1000"></textarea>
               </div>
 
               <div class="col-md-4">
-                <label
-                  for="resourceDisplayOrder"
-                  class="form-label"
-                >
-                  Display order
-                </label>
-
-                <input
-                  type="number"
-                  class="form-control"
-                  id="resourceDisplayOrder"
-                  min="0"
-                  value="0"
-                />
+                <label class="form-label" for="resourceDisplayOrder">Display Order</label>
+                <input id="resourceDisplayOrder" class="form-control" type="number" min="0" value="0">
               </div>
 
               <div class="col-md-4 d-flex align-items-end">
                 <div class="form-check">
-
-                  <input
-                    class="form-check-input"
-                    type="checkbox"
-                    id="resourceActive"
-                    checked
-                  />
-
-                  <label
-                    class="form-check-label"
-                    for="resourceActive"
-                  >
-                    Active
-                  </label>
-
+                  <input id="resourceActive" class="form-check-input" type="checkbox" checked>
+                  <label class="form-check-label" for="resourceActive">Active</label>
                 </div>
               </div>
 
               <div class="col-12">
-                <label
-                  for="resourceFile"
-                  class="form-label"
-                >
-                  File
-                </label>
-
-                <input
-                  type="file"
-                  class="form-control"
-                  id="resourceFile"
-                />
-
+                <label class="form-label" for="resourceFile">File</label>
+                <input id="resourceFile" class="form-control" type="file">
                 <div class="form-text">
-                  Required when creating a new resource. Leave blank when only editing metadata.
+                  Required when creating a new resource. Leave blank when editing metadata only.
                 </div>
               </div>
-
             </div>
           </form>
         </div>
 
         <div class="modal-footer">
-
-          <button
-            type="button"
-            class="btn btn-secondary"
-            data-bs-dismiss="modal"
-          >
-            Cancel
+          <button class="btn btn-outline-custom" type="button" data-bs-dismiss="modal">Cancel</button>
+          <button id="saveResourceBtn" class="btn btn-green" type="submit" form="resourceForm">
+            Save Resource
           </button>
-
-          <button
-            type="submit"
-            form="resourceForm"
-            class="btn btn-primary"
-            id="saveResourceBtn"
-          >
-            Save resource
-          </button>
-
         </div>
-
       </div>
     </div>
   </div>
 
-  <script
-    src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
-  ></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
-  <script src="static/js/admin-resources.js"></script>
+  <script>
+    const API_BASE =
+    window.location.hostname === "localhost" ||
+    window.location.hostname === "127.0.0.1"
+        ? "http://localhost:8080/api/resources"
+        : "https://leadership-compass-api.ashysand-21bb09f6.australiaeast.azurecontainerapps.io/api/resources";
+        
+    const LOCAL_PREVIEW = window.location.protocol === "file:";
+    const token = localStorage.getItem("token");
+    const role = localStorage.getItem("role");
+
+    if (!LOCAL_PREVIEW && (!token || role !== "ADMIN")) {
+      window.location.href = "index.html";
+    }
+
+    const resourcesTableBody = document.getElementById("resourcesTableBody");
+    const resourceCount = document.getElementById("resourceCount");
+    const pageAlert = document.getElementById("pageAlert");
+    const formAlert = document.getElementById("formAlert");
+    const filterLanguage = document.getElementById("filterLanguage");
+    const filterType = document.getElementById("filterType");
+    const resourceForm = document.getElementById("resourceForm");
+    const resourceModal = new bootstrap.Modal(document.getElementById("resourceModal"));
+
+    let editingResourceId = null;
+    let loadedResources = [];
+
+    let previewResources = [
+      { id:1, displayOrder:0, leadershipLanguage:"Caring Time", resourceType:"PDF", title:"Enhance Your Caring Time", description:"Caring Time resource", originalFileName:"Caring_Time_TestResource.pdf", storageKey:"preview/a.pdf", active:true },
+      { id:2, displayOrder:1, leadershipLanguage:"Words of Recognition", resourceType:"PDF", title:"Upskill Your Leadership", description:"Recognition resource", originalFileName:"Upskill Your Leadership - Internals FINAL.pdf", storageKey:"preview/b.pdf", active:true },
+      { id:3, displayOrder:2, leadershipLanguage:"Psychological Touch", resourceType:"PDF", title:"Upgrade Your Mindset", description:"Mindset resource", originalFileName:"Upgrade Your Mindset - Internals FINAL.pdf", storageKey:"preview/c.pdf", active:true }
+    ];
+
+    function authHeaders(json = true) {
+      const headers = {};
+      if (token) headers.Authorization = "Bearer " + token;
+      if (json) headers["Content-Type"] = "application/json";
+      return headers;
+    }
+
+    function escapeHtml(value) {
+      const div = document.createElement("div");
+      div.textContent = value ?? "";
+      return div.innerHTML;
+    }
+
+    function showPageAlert(message, type = "danger") {
+      pageAlert.textContent = message;
+      pageAlert.className = `alert alert-${type}`;
+      pageAlert.classList.remove("d-none");
+    }
+
+    function hidePageAlert() {
+      pageAlert.classList.add("d-none");
+    }
+
+    function showFormAlert(message) {
+      formAlert.textContent = message;
+      formAlert.classList.remove("d-none");
+    }
+
+    function hideFormAlert() {
+      formAlert.classList.add("d-none");
+    }
+
+    function logoutAdmin() {
+      if (LOCAL_PREVIEW) {
+        alert("Preview mode: logout works when the project is running normally.");
+        return;
+      }
+
+      localStorage.removeItem("token");
+      localStorage.removeItem("role");
+      window.location.href = "index.html";
+    }
+
+    async function loadResources() {
+      hidePageAlert();
+      resourcesTableBody.innerHTML =
+        '<tr><td colspan="7" class="text-muted">Loading resources...</td></tr>';
+
+      if (LOCAL_PREVIEW) {
+        loadedResources = [...previewResources];
+        applyFilters();
+        return;
+      }
+
+      try {
+        const response = await fetch(API_BASE, { headers: authHeaders() });
+
+        if (!response.ok) {
+          throw new Error(await response.text());
+        }
+
+        loadedResources = await response.json();
+        applyFilters();
+      } catch (error) {
+        console.error(error);
+        resourcesTableBody.innerHTML =
+          '<tr><td colspan="7" class="text-danger">Failed to load resources.</td></tr>';
+        showPageAlert(
+          "Could not load resources. Check that the backend is running and you are logged in as an admin."
+        );
+      }
+    }
+
+    function applyFilters() {
+      const language = filterLanguage.value;
+      const type = filterType.value;
+
+      const filtered = loadedResources.filter(item =>
+        (!language || item.leadershipLanguage === language) &&
+        (!type || item.resourceType === type)
+      );
+
+      renderResources(filtered);
+    }
+
+    function renderResources(resources) {
+      resourceCount.textContent =
+        `${resources.length} resource${resources.length === 1 ? "" : "s"}`;
+
+      if (!resources.length) {
+        resourcesTableBody.innerHTML =
+          '<tr><td colspan="7" class="text-muted">No resources found.</td></tr>';
+        return;
+      }
+
+      resourcesTableBody.innerHTML = resources.map(resource => `
+        <tr>
+          <td>${resource.displayOrder ?? ""}</td>
+          <td>${escapeHtml(resource.leadershipLanguage || "UNCLASSIFIED")}</td>
+          <td>${escapeHtml(resource.resourceType || "")}</td>
+          <td>${escapeHtml(resource.title || "")}</td>
+          <td>${escapeHtml(resource.originalFileName || "External link")}</td>
+          <td>
+            <span class="badge ${resource.active ? "bg-success" : "bg-secondary"}">
+              ${resource.active ? "Yes" : "No"}
+            </span>
+          </td>
+          <td>
+            <div class="d-flex gap-2 flex-nowrap">
+              ${(resource.storageKey || resource.resourceUrl)
+                ? `<button class="resource-action view" type="button" onclick="viewResource(${resource.id})">View</button>`
+                : ""}
+              <button class="resource-action edit" type="button" onclick="openEditModal(${resource.id})">Edit</button>
+              <button class="resource-action delete" type="button" onclick="deleteResource(${resource.id})">Delete</button>
+            </div>
+          </td>
+        </tr>
+      `).join("");
+    }
+
+    async function viewResource(id) {
+      if (LOCAL_PREVIEW) {
+        const resource = loadedResources.find(item => item.id === id);
+        alert(`Preview mode: "${resource?.title || "Resource"}" would open from /api/resources/${id}/file.`);
+        return;
+      }
+
+      try {
+        const response = await fetch(`${API_BASE}/${id}/file`, {
+          headers: { Authorization: "Bearer " + token }
+        });
+
+        if (!response.ok) throw new Error(await response.text());
+
+        const blob = await response.blob();
+        const objectUrl = URL.createObjectURL(blob);
+        window.open(objectUrl, "_blank");
+        setTimeout(() => URL.revokeObjectURL(objectUrl), 60000);
+      } catch (error) {
+        console.error(error);
+        showPageAlert("Could not open this resource.");
+      }
+    }
+
+    function resetForm() {
+      editingResourceId = null;
+      resourceForm.reset();
+      document.getElementById("resourceLeadershipLanguage").value = "";
+      document.getElementById("resourceType").value = "";
+      document.getElementById("resourceDisplayOrder").value = "0";
+      document.getElementById("resourceActive").checked = true;
+      hideFormAlert();
+    }
+
+    function openCreateModal() {
+      resetForm();
+      document.getElementById("resourceModalLabel").textContent = "Add Resource";
+      resourceModal.show();
+    }
+
+    function fillEditForm(resource) {
+      editingResourceId = resource.id;
+      document.getElementById("resourceModalLabel").textContent = "Edit Resource";
+      document.getElementById("resourceLeadershipLanguage").value =
+        resource.leadershipLanguage || "UNCLASSIFIED";
+      document.getElementById("resourceType").value = resource.resourceType || "";
+      document.getElementById("resourceTitle").value = resource.title || "";
+      document.getElementById("resourceDescription").value = resource.description || "";
+      document.getElementById("resourceDisplayOrder").value = resource.displayOrder ?? 0;
+      document.getElementById("resourceActive").checked = resource.active !== false;
+      document.getElementById("resourceFile").value = "";
+    }
+
+    async function openEditModal(id) {
+      hideFormAlert();
+
+      if (LOCAL_PREVIEW) {
+        const resource = loadedResources.find(item => item.id === id);
+        if (!resource) return;
+        fillEditForm(resource);
+        resourceModal.show();
+        return;
+      }
+
+      try {
+        const response = await fetch(`${API_BASE}/${id}`, { headers: authHeaders() });
+        if (!response.ok) throw new Error(await response.text());
+        const resource = await response.json();
+        fillEditForm(resource);
+        resourceModal.show();
+      } catch (error) {
+        console.error(error);
+        showPageAlert("Could not load the selected resource.");
+      }
+    }
+
+    async function saveResource(event) {
+      event.preventDefault();
+      hideFormAlert();
+
+      const title = document.getElementById("resourceTitle").value.trim();
+      const description = document.getElementById("resourceDescription").value.trim();
+      const leadershipLanguage = document.getElementById("resourceLeadershipLanguage").value;
+      const resourceType = document.getElementById("resourceType").value;
+      const displayOrder = Number(document.getElementById("resourceDisplayOrder").value);
+      const active = document.getElementById("resourceActive").checked;
+      const fileInput = document.getElementById("resourceFile");
+
+      if (LOCAL_PREVIEW) {
+        if (!editingResourceId) {
+          if (!fileInput.files?.length) {
+            showFormAlert("Please choose a file.");
+            return;
+          }
+
+          const nextId = previewResources.length
+            ? Math.max(...previewResources.map(item => item.id)) + 1
+            : 1;
+
+          previewResources.push({
+            id: nextId,
+            title,
+            description,
+            leadershipLanguage,
+            resourceType,
+            displayOrder,
+            active,
+            originalFileName: fileInput.files[0].name,
+            storageKey: `preview/${fileInput.files[0].name}`
+          });
+        } else {
+          const resource = previewResources.find(item => item.id === editingResourceId);
+          if (resource) {
+            Object.assign(resource, {
+              title, description, leadershipLanguage, resourceType, displayOrder, active
+            });
+          }
+        }
+
+        resourceModal.hide();
+        showPageAlert("Preview resource saved.", "success");
+        await loadResources();
+        return;
+      }
+
+      try {
+        if (!editingResourceId) {
+          if (!fileInput.files?.length) {
+            showFormAlert("Please choose a file.");
+            return;
+          }
+
+          const formData = new FormData();
+          formData.append("file", fileInput.files[0]);
+          formData.append("title", title);
+          formData.append("description", description);
+          formData.append("leadershipLanguage", leadershipLanguage);
+          formData.append("resourceType", resourceType);
+          formData.append("displayOrder", displayOrder);
+          formData.append("active", active);
+
+          const response = await fetch(`${API_BASE}/upload`, {
+            method: "POST",
+            headers: { Authorization: "Bearer " + token },
+            body: formData
+          });
+
+          if (!response.ok) throw new Error(await response.text());
+          resourceModal.hide();
+          showPageAlert("Resource uploaded successfully.", "success");
+          await loadResources();
+          return;
+        }
+
+        const existing = loadedResources.find(item => item.id === editingResourceId);
+
+        const response = await fetch(`${API_BASE}/${editingResourceId}`, {
+          method: "PUT",
+          headers: authHeaders(),
+          body: JSON.stringify({
+            title,
+            description,
+            leadershipLanguage,
+            resourceType,
+            resourceUrl: existing?.resourceUrl ?? null,
+            active,
+            displayOrder
+          })
+        });
+
+        if (!response.ok) throw new Error(await response.text());
+        resourceModal.hide();
+        showPageAlert("Resource updated successfully.", "success");
+        await loadResources();
+      } catch (error) {
+        console.error(error);
+        showFormAlert(
+          editingResourceId ? "Could not update resource." : "Could not upload resource."
+        );
+      }
+    }
+
+    async function deleteResource(id) {
+      const resource = loadedResources.find(item => item.id === id);
+
+      if (!confirm(`Delete "${resource?.title || "this resource"}"?`)) return;
+
+      if (LOCAL_PREVIEW) {
+        previewResources = previewResources.filter(item => item.id !== id);
+        showPageAlert("Preview resource deleted.", "success");
+        await loadResources();
+        return;
+      }
+
+      try {
+        const response = await fetch(`${API_BASE}/${id}`, {
+          method: "DELETE",
+          headers: { Authorization: "Bearer " + token }
+        });
+
+        if (!response.ok) throw new Error(await response.text());
+
+        showPageAlert("Resource deleted successfully.", "success");
+        await loadResources();
+      } catch (error) {
+        console.error(error);
+        showPageAlert("Could not delete resource.");
+      }
+    }
+
+    document.getElementById("addResourceBtn").addEventListener("click", openCreateModal);
+    document.getElementById("refreshBtn").addEventListener("click", loadResources);
+    filterLanguage.addEventListener("change", applyFilters);
+    filterType.addEventListener("change", applyFilters);
+    resourceForm.addEventListener("submit", saveResource);
+
+    loadResources();
+  </script>
+
 
 </body>
 </html>

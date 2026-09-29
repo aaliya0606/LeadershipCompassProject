@@ -16,6 +16,15 @@ public interface SurveyResultRepository extends JpaRepository<SurveyResult, Long
 
     List<SurveyResult> findByUserOrderByGenerateDateAsc(User user);
 
+    List<SurveyResult> findByUserDepartment(String department);
+
+    List<SurveyResult> findByUserOrganisationIgnoreCase(String organisation);
+
+    List<SurveyResult> findByUserOrganisationIgnoreCaseAndUserDepartmentIgnoreCase(
+            String organisation,
+            String department
+    );
+
     // NEW: gets the current user's most recent result, for peer comparison
     Optional<SurveyResult> findFirstByUserOrderByGenerateDateDesc(User user);
 

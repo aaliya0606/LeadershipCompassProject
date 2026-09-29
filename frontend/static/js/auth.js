@@ -42,18 +42,22 @@ if (loginForm) {
                 message.textContent = "Login successful!";
                 message.className = "mt-3 text-center text-success";
 
-                setTimeout(() => {
-                    // Redirect admins to a different page
-                    window.location.href = isAdminLogin ? "admin-dashboard.html" : "dashboard.html"; }, 800);
-            } else {
-                message.textContent = "Login successful!";
-                message.className = "mt-3 text-center text-success";
-            }
-        } catch (error) {
-            message.textContent = "Cannot connect to backend.";
-            message.className = "mt-3 text-center text danger";
-        }
-    });
+        setTimeout(() => {
+          if (data.role === "ADMIN") {
+            window.location.href = "admin.html";
+          } else {
+            window.location.href = "dashboard.html";
+          }
+        }, 800);
+      } else {
+        message.textContent = data.message || "Login failed.";
+        message.className = "mt-3 text-center text-danger";
+      }
+    } catch (error) {
+      message.textContent = "Cannot connect to backend.";
+      message.className = "mt-3 text-center text-danger";
+    }
+  });
 }
 
 // REGISTER
@@ -112,9 +116,6 @@ if (registerForm) {
 
       if (response.ok) {
         message.textContent = "Registration successful. Redirecting to login...";
-        message.style.color = "red";
-        message.style.fontWeight = "bold";
-        message.style.fontSize = "20px";
         message.className = "mt-3 text-center text-success";
 
         setTimeout(() => {
@@ -122,16 +123,10 @@ if (registerForm) {
         }, 1000);
       } else {
         message.textContent = data.message || "Registration failed.";
-        message.style.color = "red";
-        message.style.fontWeight = "bold";
-        message.style.fontSize = "20px";
         message.className = "mt-3 text-center text-danger";
       }
     } catch (error) {
       message.textContent = "Cannot connect to backend.";
-      message.style.color = "red";
-      message.style.fontWeight = "bold";
-      message.style.fontSize = "20px";
       message.className = "mt-3 text-center text-danger";
     }
   });

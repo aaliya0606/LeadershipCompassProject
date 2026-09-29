@@ -36,6 +36,10 @@ public class AuthService {
                 .email(request.getEmail())
                 .password(passwordEncoder.encode(request.getPassword()))
                 .role(role)
+                .department(request.getDepartment())
+                .organisation(request.getOrganisation() == null
+                ? null
+                : request.getOrganisation().trim())
                 .build();
 
         userRepository.save(user);

@@ -1,54 +1,20 @@
 const token = localStorage.getItem("token");
 const role = localStorage.getItem("role");
 
-const tokenStatus = document.getElementById("tokenStatus");
-const userRole = document.getElementById("userRole");
-const logoutBtn = document.getElementById("logoutBtn");
-const backendResponse = document.getElementById("backendResponse");
-const surveyBtn = document.getElementById("surveyBtn");
-const adminSection = document.getElementById("adminSection");
-
-if (surveyBtn) {
-  surveyBtn.addEventListener("click", function() {
-    window.location.href = "survey.html";
-
-  });
-}
-
 if (!token) {
-  window.location.href = "index.html";
-} else {
-  tokenStatus.textContent = "JWT token found: " + token.substring(0, 40) + "...";
-  userRole.textContent = role || "USER";
-
-  if (role === "ADMIN" && adminSection) {
-    adminSection.classList.remove("d-none");
-  }
-
-  let dashboardUrl = "http://localhost:8080/api/dashboard/user";
-
-  if (role === "ADMIN") {
-    dashboardUrl = "http://localhost:8080/api/dashboard/admin";
-  }
-
-  fetch(dashboardUrl, {
-    method: "GET",
-    headers: {
-      "Authorization": "Bearer " + token
-    }
-  })
-    .then(response => response.text())
-    .then(data => {
-      backendResponse.textContent = data;
-    })
-    .catch(error => {
-      backendResponse.textContent = "Unable to connect to protected backend endpoint.";
-      console.error("Dashboard error:", error);
-    });
+    window.location.href = "index.html";
 }
 
-logoutBtn.addEventListener("click", function () {
-  localStorage.removeItem("token");
-  localStorage.removeItem("role");
-  window.location.href = "index.html";
+if (role === "ADMIN") {
+    document.getElementById("adminSection")?.classList.remove("d-none");
+}
+
+document.getElementById("surveyBtn")?.addEventListener("click", () => {
+    window.location.href = "survey.html";
+});
+
+document.getElementById("logoutBtn")?.addEventListener("click", () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("role");
+    window.location.href = "index.html";
 });
