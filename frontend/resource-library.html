@@ -185,6 +185,12 @@
       renderResources(filtered);
     }
 
+    const API_BASE =
+    window.location.hostname === "localhost" ||
+    window.location.hostname === "127.0.0.1"
+        ? "http://localhost:8080"
+        : "https://leadership-compass-api.ashysand-21bb09f6.australiaeast.azurecontainerapps.io";
+
     // Load resources from backend
     async function loadResources() {
       try {
@@ -194,7 +200,7 @@
           return;
         }
 
-        const response = await fetch("http://localhost:8080/api/resources", {
+        const response = await fetch(`${API_BASE}/api/resources`, {
           headers: {
             "Authorization": `Bearer ${token}`,
             "Content-Type": "application/json"
