@@ -1,5 +1,23 @@
 package com.example.leadershipcompass_capstoneprojectbackend.service;
 
+import java.time.Instant;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Optional;
+import java.util.Set;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.server.ResponseStatusException;
+
 import com.example.leadershipcompass_capstoneprojectbackend.dto.DevelopmentPlanActionDto;
 import com.example.leadershipcompass_capstoneprojectbackend.dto.DevelopmentPlanDto;
 import com.example.leadershipcompass_capstoneprojectbackend.dto.DevelopmentPlanSummaryDto;
@@ -17,22 +35,6 @@ import com.example.leadershipcompass_capstoneprojectbackend.repository.UserRepos
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import java.time.Instant;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.LinkedHashMap;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Set;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.http.HttpStatus;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.server.ResponseStatusException;
 
 /**
  * Generates and stores personalised 5-week development plans.
@@ -134,6 +136,14 @@ public class DevelopmentPlanService {
     @Transactional
     public DevelopmentPlanDto generatePlan(String userEmail) {
         User user = getUserByEmail(userEmail);
+        developmentPlanRepository.findFirstByUserIdOrderByGeneratedAtDesc(user.getId())
+            .filter(plan -> !isPlanComplete(plan))
+            .ifPresent(plan -> {
+                throw new ResponseStatusException(
+                    HttpStatus.CONFLICT,
+                    "Complete all actions in your current 5-week plan before generating another.");
+            });
+
         SurveyResult surveyResult = surveyResultRepository.findFirstByUserOrderByGenerateDateDesc(user)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "No survey result found for user."));
         List<Modules> activeModules = modulesRepository.findByActiveTrueOrderByDisplayOrderAscIdAsc();
@@ -156,6 +166,13 @@ public class DevelopmentPlanService {
         plan.replaceWeeks(toEntities(plannedWeeks));
 
         return toDto(developmentPlanRepository.save(plan));
+    }
+
+    private boolean isPlanComplete(DevelopmentPlan plan) {
+        List<DevelopmentPlanAction> actions = plan.getWeeks().stream()
+                .flatMap(week -> week.getActions().stream())
+                .toList();
+        return !actions.isEmpty() && actions.stream().allMatch(DevelopmentPlanAction::isCompleted);
     }
 
     /**
