@@ -131,3 +131,187 @@ if (registerForm) {
     }
   });
 }
+
+
+// Helpers
+
+function getToken() {
+    return localStorage.getItem("token");
+}
+
+function handleSignOut() {
+        localStorage.removeItem("token");
+        localStorage.removeItem("role");
+        window.location.href = "login.html";
+}
+
+async function apiFetch (path, options = {}) {
+    const response = await fetch (`${API_URL}${path}`, {
+        ...options,
+        headers: {
+            "Content-Type": "application.json",
+            "Authorization": `Bearer ${getToken()}`,
+            ...(options.headers || {})
+        }
+    });
+
+    if (response.status === 401) {
+        handleSignOut();
+        throw new Error("Session expired. Please sign in again.");
+    }
+
+    let data = null;
+    try {
+
+        data = await response.json();
+    } catch (e) {
+        // empty - leave as it is
+    }
+
+    if (!response.ok) {
+        // same error shape as login/sign-up
+        throw new Error ((data && data.message) || "Request failed.");
+    }
+    return data;
+
+}
+
+let savedProfile = null;
+function getNameParts(user) {
+    if (user.firstName) {
+        return { firstName; user.firstName, lastName: user.lastName || ""};
+    }
+    const parts = (user.fullName || "").trim().split(/\s+/);
+    return { firstName: parts[0] || "", lastName: parts.slice(1).join(" ") };
+}
+
+function getInitials(firstName, lastName) {
+    return ((firstName[0] || "") + (lastName[0] || "")).toUpperCase();
+}
+
+function showProfileMessage(text, type) {
+    const el = document.getElementById("forMessage");
+    if (!el) return;
+    el.textContent = text;
+    el.className = `mt-3 text-center ${type === "success" : "text-danger"`;
+}
+
+function showFieldErrors(errors) {
+    ["username", "phone"].forEach((field) => {
+        const el = document.getElementById(`${field}Error`);
+        if (el) el.text.Content = errors[field] || "";
+    });
+}
+
+async function loadProfile() {
+    if (!getToken()) {
+        window.location.href = "login.html";
+        return;
+    }
+
+    const user = await apiFetch("/users/me");
+    savedProfile = user;
+
+    const {firstName, lastName } = getNameParts(user);
+    document.getElementById("firstName").value = firstName;
+    document.getElementById("lastName").value = lastName;
+    document.getElementById("email").value = user.email;
+    document.getElementById("username").value = user.username || "";
+    document.getElementById("phone").value = user.phone || "";
+
+    document.getElementById("avatarInitials").textContent = getInitials(firstName, lastName);
+    document.getElementById("sidebarName").textContent = `${firstName} ${lastName}`.trim();
+}
+
+function validateProfile(username, phone) {
+    const errors = {};
+
+    if (!/^[a-zA-Z0-9._-]{3,20}$/.test(username)) {
+        errors.username = "3-20 characters: letters, numbers, . _ -";
+    }
+
+    // Accepts prefixes or 0, special characters allowed
+    const cleaned = phone.replace(/[\s()-]/g, "");
+    if (!/^(\+61|0)[2-478]\d{8}$/.test(cleaned)) {
+        errors.phone = "Enter a valid Australian phone number.";
+    }
+    return errors;
+}
+
+async function isUsernameAvailable(username) {
+    if (savedProfile && username === savedProfile.username) return true;
+    const data = await apiFetch(`/users/check-username=${encodeURIComponent(username)}`);
+    return data.available;
+}
+
+async function saveProfile() {
+    const username = document.getElementById("username").value.trim();
+    const phone = document.getElementById("phone").value.trim();
+
+    try {
+        const errors = validateProfile(username, phone);
+        if(errors.username && !(await isUsernameAvailable(username))) {
+            errors.username = "That username is already taken.";
+        }
+        if (Object.keys(errors).length > 0) {
+            showFieldErrors(errors);
+            return;
+        }
+
+        showFieldErrors({});
+        savedProfile = await apiFetch("/users/me", {
+            method: "PUT",
+            body: JSON.stringify({username, phone})
+        });
+        showProfileMessage("Profile saved.", "success");
+    } catch (error) {
+        showProfileMessage(error.message, "error");
+    }
+}
+
+function cancelProfileChanges() {
+    if (!savedProfile) return;
+    document.getElementById("username").value = savedProfile.username || "";
+    document.getElementById("phone").value = savedProfile.phone || "";
+    showFieldErrors({});
+    showProfileMessage("", "success");
+}
+
+async function changePassword(currentPassword, newPassword, confirmPassword) {
+    if (!currentPassword || !newPassword || !confirmPassword) {
+        return showProfileMessage("Please fill in all password fields.", "error");
+    }
+    if (newPassword.length < 8) {
+        return showProfileMessage("Passwords do not match.", "error");
+    }
+    if (newPassword === currentPassword) {
+        return showProfileMessage("New password do not match.", "error");
+    }
+    if (newPassword === currentPassword) {
+        return showProfileMessage("New password must be different.", "error");
+    }
+
+    try {
+        await apiFetch("/users/me/password", {
+            method: "PUT",
+            body: JSON.stringify({ currentPassword, newPassword })
+        });
+        showProfileMessage("Password updated.", "success");
+    } catch (error) {
+        showProfileMessage(error.message, "error");
+    }
+}
+
+const saveBtn = document.getElementById("saveBtn");
+
+if (saveBtn) {
+    loadProfile().catch((error) => showProfileMessage(error.message, "error"));
+
+    saveBtn.addEventListener("click", saveProfile);
+    document.getElementById("cancelBtn").addEventListener("click", cancelProfileChanges);
+
+    const signOutBtn = document.getElementById("signOutBtn");
+    if (signOutBtn) signOutBtn.addEventListener("click", handleSignOut);
+}
+
+
