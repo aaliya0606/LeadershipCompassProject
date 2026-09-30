@@ -17,6 +17,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 
     <link rel="stylesheet" href="static/style/main.css">
+    <link rel="stylesheet" href="static/style/navbar.css" />
     <link href="https://fonts.googleapis.com/css2?family=Anton&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
 
     
@@ -33,10 +34,11 @@
         </a>
 
         <nav class="nav-links-inline" id="navLinks">
-            <a class="nav-link" href="dashboard.html">Dashboard</a>
+            <a class="nav-link" href="dashboard.html" aria-current="page">Dashboard</a>
             <a class="nav-link" href="5weekplan.html">5 Week Plan</a>
             <a class="nav-link" href="survey.html">Survey</a>
             <a class="nav-link" href="resource-library.html">Resource Library</a>
+            <!-- TODO: add the My Account page file name once it exists -->
             <a class="nav-link" href="">My Account</a>
             <a class="nav-link logout" href="startup.html" id="logoutBtn">Logout</a>
         </nav>
@@ -193,20 +195,7 @@
         <a href="admin-resources.html" class="btn btn-success">Manage Resources</a>
     </div>
 
-    <!--auth status + survey-->
-    <span id="tokenStatus" style="display:none"></span>
-    <div class="status-card">
-        <div class="status-info">
-            <div class="status-item">
-                <span class="label">ROLE</span>
-                <span id="userRole">Loading...</span>
-            </div>
-            <div class="status-item">
-                <span class="label">API STATUS</span>
-                <span id="backendResponse">Waiting for response...</span>
-            </div>
-        </div>
-    </div>
+    
 
 </body>
 </html>

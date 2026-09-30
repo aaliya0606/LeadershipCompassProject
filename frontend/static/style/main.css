@@ -2053,3 +2053,67 @@ tag {
   height: 38px;
   width: auto;
 }
+
+/* empty states (no survey yet/load errors) */
+.empty-state {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 28px 20px;
+  border: 2px dashed rgba(0, 40, 75, 0.18);
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.35);
+  color: rgba(0, 40, 75, 0.6);
+  font-family: 'Montserrat', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  text-align: center;
+  line-height: 1.5;
+}
+
+/* progress card */
+.progress-card.is-empty > :not(h3):not(.insight-subtitle):not(.empty-state) {
+  display: none;
+}
+
+/* radar chart */
+.wheel-container.is-empty .wheel,
+.wheel-container.is-empty .wheel-label {
+  display: none;
+}
+.wheel-container .empty-state {
+  flex: 1;
+  margin-top: 8px;
+}
+/* DASHBOARD: stop the page being wider than the screen */
+.plan-container {
+  grid-template-columns: minmax(0, 1.5fr) minmax(0, 1.5fr) minmax(0, 2fr);
+}
+
+.insights-container {
+  grid-template-columns: minmax(0, 1.5fr) minmax(0, 1.5fr) minmax(0, 2fr);
+}
+
+.plan-container > *,
+.insights-container > *,
+.mini-grid > * {
+  min-width: 0;
+}
+
+.plan h1,
+.plan1 h1 {
+  white-space: normal;
+  font-size: clamp(1.5rem, 2.4vw, 2.5rem);
+  line-height: 1.1;
+}
+
+.wheel canvas,
+.insight-card canvas {
+  max-width: 100%;
+}
+
+@media (max-width: 1100px) {
+  .insights-container {
+    grid-template-columns: 1fr;
+  }
+}

@@ -1,0 +1,121 @@
+/* =========================================================
+   Leadership Compass – desktop navigation
+   Link this AFTER main.css:
+   <link rel="stylesheet" href="static/style/navbar.css" />
+
+   Wide screens (laptops/desktops): tabs always visible,
+   hamburger hidden.
+   Narrow screens (phones/tablets): the existing hamburger
+   behaviour from main.css still applies.
+   ========================================================= */
+
+@media (min-width: 1200px) {
+
+  /* Keep the navbar inside the screen width, padding included */
+  .custom-navbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: nowrap;
+    gap: 1.5rem;
+    box-sizing: border-box;
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .custom-navbar *,
+  .custom-navbar *::before,
+  .custom-navbar *::after {
+    box-sizing: border-box;
+  }
+
+  /* Logo + title never get squashed */
+  .custom-navbar .navbar-brand {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex-shrink: 0;
+  }
+
+  /* Hide the hamburger button on wide screens */
+  .custom-navbar .hamburger {
+    display: none !important;
+  }
+
+  /* Always show the links in a row, allowed to shrink to fit */
+  .custom-navbar .nav-links-inline {
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center;
+    justify-content: flex-end;
+    flex: 1 1 auto;
+    min-width: 0;
+    gap: 0;
+    position: static !important;
+    width: auto !important;
+    height: auto !important;
+    max-height: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    background: none !important;
+    box-shadow: none !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    transform: none !important;
+    overflow: visible !important;
+  }
+
+  /* Spacing and text size shrink smoothly on smaller laptops */
+  .custom-navbar .nav-links-inline .nav-link {
+    position: relative;
+    padding: 0.5rem clamp(0.5rem, 1vw, 1rem);
+    white-space: nowrap;
+    color: rgba(255, 255, 255, 0.72);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    font-weight: 600;
+    font-size: clamp(0.78rem, 0.8vw, 0.9rem);
+    transition: color 0.15s ease;
+  }
+
+  .custom-navbar .nav-links-inline .nav-link:hover,
+  .custom-navbar .nav-links-inline .nav-link:focus-visible {
+    color: #ffffff;
+  }
+
+  .custom-navbar .nav-links-inline .nav-link:focus-visible {
+    outline: 2px solid #ffffff;
+    outline-offset: 2px;
+    border-radius: 4px;
+  }
+
+  /* Current page: white text with a green underline */
+  .custom-navbar .nav-links-inline .nav-link[aria-current="page"] {
+    color: #ffffff;
+  }
+
+  .custom-navbar .nav-links-inline .nav-link[aria-current="page"]::after {
+    content: "";
+    position: absolute;
+    left: clamp(0.5rem, 1vw, 1rem);
+    right: clamp(0.5rem, 1vw, 1rem);
+    bottom: 0.1rem;
+    height: 3px;
+    border-radius: 2px;
+    background: #9be15d;
+  }
+
+  /* Thin divider before Logout, as in the mockup */
+  .custom-navbar .nav-links-inline .nav-link.logout {
+    margin-left: 0.5rem;
+    padding-left: clamp(0.75rem, 1.2vw, 1.5rem);
+    border-left: 1px solid rgba(255, 255, 255, 0.25);
+    cursor: pointer;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .custom-navbar .nav-links-inline .nav-link {
+    transition: none;
+  }
+}

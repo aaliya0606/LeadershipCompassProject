@@ -133,6 +133,38 @@ function ordinal(n) {
 }
 
 
+/* =========================================================
+   EMPTY STATES (NEW 30/09/26)
+   Shared helpers so every "no survey yet" / error message
+   uses the same .empty-state style from main.css.
+   ========================================================= */
+
+function makeEmptyState(text) {
+  const el = document.createElement("div");
+  el.className = "empty-state";
+  el.textContent = text;
+  return el;
+}
+
+function showRadarEmptyState(message) {
+  const container = document.querySelector(".wheel-container");
+  const subtitleEl = document.getElementById("radarSubtitle");
+  if (subtitleEl) subtitleEl.textContent = "Your scores across the five languages";
+  if (!container) return;
+  container.classList.add("is-empty");
+  if (!container.querySelector(".empty-state")) container.appendChild(makeEmptyState(message));
+}
+
+function showProgressEmptyState(message) {
+  const card = document.querySelector(".progress-card");
+  const subtitleEl = document.getElementById("progressSubtitle");
+  if (subtitleEl) subtitleEl.textContent = "Track how your scores change across the 5 weeks.";
+  if (!card) return;
+  card.classList.add("is-empty");
+  if (!card.querySelector(".empty-state")) card.appendChild(makeEmptyState(message));
+}
+
+
 
 async function loadLeadershipRadar() {
   const canvas = document.getElementById("leadershipRadar");
@@ -144,15 +176,23 @@ async function loadLeadershipRadar() {
       method: "GET",
       headers: { "Authorization": "Bearer " + token }
     });
-    if (!res.ok) throw new Error("Request failed: " + res.status);
+
+    //NEW: show empty state instead of throwing (30/09/26)
+    if (!res.ok) {
+      showRadarEmptyState((await userHasSurvey())
+        ? "Could not load your latest scores right now."
+        : "Unlocks once you have completed the survey.");
+      return;
+    }
     const scores = await res.json();
 
     const labels = CATEGORIES.map(c => c.label);
     const values = CATEGORIES.map(c => (scores ? scores[c.key + "Score"] : undefined));
     const hasScores = values.some(v => typeof v === "number");
 
+    //NEW: empty state for users with no survey yet (30/09/26)
     if (!hasScores) {
-      if (subtitleEl) subtitleEl.textContent = "Complete a survey to see your radar chart.";
+      showRadarEmptyState("Unlocks once you have completed the survey.");
       return;
     }
 
@@ -215,7 +255,7 @@ async function loadLeadershipRadar() {
     });
   } catch (err) {
     console.error("Could not load leadership radar scores", err);
-    if (subtitleEl) subtitleEl.textContent = "Could not load your latest scores.";
+    showRadarEmptyState("Could not load your latest scores right now.");
   }
 }
 
@@ -300,6 +340,7 @@ function showNoPlanState(hasSurvey) {
   if (grid) {
     grid.querySelectorAll(":scope > div").forEach(el => el.remove());
     const note = document.createElement("p");
+    note.className = "empty-state"; //NEW: shared empty state style (30/09/26)
     note.style.gridColumn = "1 / -1"; // keeps the message on one line instead of a narrow column
     note.textContent = hasSurvey
       ? "Generate your plan to see your 5 weeks here."
@@ -418,11 +459,17 @@ async function loadProgressOverTime() {
       headers: { "Authorization": "Bearer " + token }
     });
 
-    //NEW: Replaced the previous version with this: for when user hasn't completed the survey yet (28/09/26)
-    const entries = await res.json(); // oldest -> newest
+    //avoid getting stuck on "Loading..." if the request fails 
+    if (!res.ok) {
+      showProgressEmptyState("Could not load your progress right now.");
+      return;
+    }
+
+    //replaced the previous version with this: for when user hasn't completed the survey yet 
+    const entries = await res.json(); 
     if (!entries || !entries.length) {
-      document.getElementById("progressSubtitle").textContent =
-        "Unlocks once you have completed the survey.";
+      //shows one message 
+      showProgressEmptyState("Unlocks once you have completed the survey.");
       return;
     }
 
@@ -534,6 +581,7 @@ function showPeerEmptyState(hasSurvey) {
   if (container) {
     container.innerHTML = "";
     const note = document.createElement("p");
+    note.className = "empty-state"; //NEW: shared empty state style (30/09/26)
     note.textContent = hasSurvey
       ? "Could not load your peer comparison right now."
       : "Unlocks once you have completed the survey.";
@@ -615,11 +663,12 @@ async function loadSuggestedResources() {
     const resources = await response.json();
 
     //NEW: for when user hasn't completed the survey yet (28/09/26)
+    //NEW: added shared empty-state class (30/09/26)
     if (!resources || resources.length === 0) {
       const hasSurvey = await userHasSurvey();
       container.innerHTML = hasSurvey
-        ? '<p class="res-loading">No recommended resources yet.</p>'
-        : '<p class="res-loading">Unlocks once you have completed the survey.</p>';
+        ? '<p class="res-loading empty-state">No recommended resources yet.</p>'
+        : '<p class="res-loading empty-state">Unlocks once you have completed the survey.</p>';
       return;
     }
 
