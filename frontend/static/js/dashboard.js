@@ -11,6 +11,11 @@ logoutBtn.addEventListener("click", function () {
   window.location.href = "index.html";
 });
 
+const API_BASE_URL =
+    window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1"
+        ? "http://localhost:8080"
+        : "https://leadership-compass-api.ashysand-21bb09f6.australiaeast.azurecontainerapps.io";
+
 //NEW: replaced prev version, updated to work on the host 28/09/26
 const API_BASE = API_BASE_URL;
 
