@@ -161,10 +161,11 @@ function handleSignOut() {
 }
 
 async function apiFetch (path, options = {}) {
+    const API_URL = "http://localhost:8080/api";
     const response = await fetch (`${API_URL}${path}`, {
         ...options,
         headers: {
-            "Content-Type": "application.json",
+            "Content-Type": "application/json",
             "Authorization": `Bearer ${getToken()}`,
             ...(options.headers || {})
         }
@@ -233,6 +234,14 @@ async function loadProfile() {
     document.getElementById("email").value = user.email;
     document.getElementById("username").value = user.username || "";
     document.getElementById("phone").value = user.phone || "";
+
+    // Show department field if user is admin
+    const departmentField = document.getElementById("departmentField");
+    const departmentInput = document.getElementById("department");
+    if (user.role === "ADMIN" && departmentField && departmentInput) {
+        departmentField.style.display = "block";
+        departmentInput.value = user.department || "";
+    }
 
     document.getElementById("avatarInitials").textContent = getInitials(firstName, lastName);
     document.getElementById("sidebarName").textContent = `${firstName} ${lastName}`.trim();
@@ -348,6 +357,19 @@ if (roleSelect && departmentGroup) {
     });
 } else {
     console.log("Role select or department group NOT found", {roleSelect, departmentGroup});
+}
+
+// DASHBOARD CONFIG
+const dashboardLink = document.querySelector(".dashboard-link");
+if (dashboardLink){
+    const role = localStorage.getItem("role");
+    if (role === "ADMIN") {
+        dashboardLink.href = "admin.html";
+    } else {
+        dashboardLink.href = "dashboard.html";
+    }
+
+
 }
 
 

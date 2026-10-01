@@ -31,10 +31,10 @@
 
             <div class="avatar-block">
                 <div class="avatar-wrap">
-                    <div class="avatar">UL</div>
+                    <div class="avatar" id="avatarInitials">UL</div>
                     <div class="avatar-edit">✓</div>
                 </div>
-                <div class="avatar-name">User LastName</div>
+                <div class="avatar-name" id="sidebarName">User LastName</div>
             </div>
 
 
@@ -42,9 +42,9 @@
                 <img class="icon" src="static/img/dashboard.png" alt="Dashboard">Return to Dashboard
             </a>
 
-            <a href="startup.html" class="sign-out">
+            <div class="sign-out" id="signOutBtn">
                 <img class="icon" src="static/img/sign-out.png" alt="Sign Out">Sign Out
-            </a>
+            </div>
         </aside>
 
         <main class="main">
@@ -53,39 +53,49 @@
             <div class="grid">
                 <div class="field">
                     <label>First Name</label>
-                    <div class="input-wrap"><input type="text" value="User"></div>
+                    <div class="input-wrap"><input type="text" id="firstName" value="" disabled></div>
                 </div>
                 <div class="field">
                     <label>Last Name</label>
-                    <div class="input-wrap"><input type="text" value="LastName"></div>
+                    <div class="input-wrap"><input type="text" id="lastName" value="" disabled></div>
                 </div>
 
                 <div class="field">
                     <label>Username</label>
-                    <div class="input-wrap"><input type="text" value="usern@m3"></div>
+                    <div class="input-wrap"><input type="text" id="username" value=""></div>
+                    <small id="usernameError" class="text-danger"></small>
                 </div>
                 <div class="field">
                     <label>Password</label>
-                    <div class="input-wrap"><input type="password" value="******"><span class="pencil">&#9998;</span></div>
+                    <div class="input-wrap"><input type="password" value="••••••••" disabled><span class="pencil">&#9998;</span></div>
                 </div>
 
                 <div class="field">
                     <label>E-mail</label>
-                    <div class="input-wrap"><input type="text" value="user.lastname@leadershipcompass.com"><span class="pencil">&#9998;</span></div>
+                    <div class="input-wrap"><input type="text" id="email" value="" disabled><span class="pencil">&#9998;</span></div>
                 </div>
 
                 <div class="field">
                     <label>Phone Number</label>
-                    <div class="input-wrap"><input type="text" value="+61 307 156 023"><span class="pencil">&#9998;</span></div>
+                    <div class="input-wrap"><input type="text" id="phone" value=""></div>
+                    <small id="phoneError" class="text-danger"></small>
+                </div>
+
+                <div class="field" id="departmentField" style="display: none;">
+                    <label>Department</label>
+                    <div class="input-wrap"><input type="text" id="department" value="" disabled></div>
                 </div>
             </div>
 
+            <p id="forMessage"></p>
+
             <div class="actions">
-                <button class="btn-save">Save</button>
-                <button class="btn-cancel">Cancel</button>
+                <button class="btn-save" id="saveBtn">Save</button>
+                <button class="btn-cancel" id="cancelBtn">Cancel</button>
             </div>
         </main>
     </div>
 
+    <script src="static/js/auth.js"></script>
 </body>
 </html>
