@@ -225,7 +225,7 @@ async function loadProfile() {
         return;
     }
 
-    const user = await apiFetch("/users/me");
+    const user = await apiFetch("/profile/");
     savedProfile = user;
 
     const {firstName, lastName } = getNameParts(user);
