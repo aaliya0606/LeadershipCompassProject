@@ -1,3 +1,4 @@
+console.log("auth.js loaded");
 const BASE_URL = "http://localhost:8080/api/auth";
 
 // LOGIN
@@ -77,12 +78,19 @@ if (registerForm) {
     const password = document.getElementById("registerPassword").value;
     const confirmPassword = document.getElementById("confirmPassword").value;
     const role = document.getElementById("registerRole").value;
+    const department = document.getElementById("registerDepartment").value;
     const message = document.getElementById("registerMessage");
 
     try {
 
         if (!fullName || !email || !password || !confirmPassword) {
             message.textContent = "Please fill in all fields.";
+            message.className = "mt-3 text-center text-danger";
+            return;
+        }
+
+        if (role === "ADMIN" && !department) {
+            message.textContent = "Please select a department for admin role.";
             message.className = "mt-3 text-center text-danger";
             return;
         }
@@ -99,17 +107,24 @@ if (registerForm) {
             return;
         }
 
+      const requestBody = {
+        fullName: fullName,
+        email: email,
+        password: password,
+        role: role
+      };
+
+      // Only include department if admin role is selected
+      if (role === "ADMIN" && department) {
+        requestBody.department = department;
+      }
+
       const response = await fetch(`${BASE_URL}/register`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json"
         },
-        body: JSON.stringify({
-          fullName: fullName,
-          email: email,
-          password: password,
-          role: role
-        })
+        body: JSON.stringify(requestBody)
       });
 
       const data = await response.json();
@@ -179,7 +194,7 @@ async function apiFetch (path, options = {}) {
 let savedProfile = null;
 function getNameParts(user) {
     if (user.firstName) {
-        return { firstName; user.firstName, lastName: user.lastName || ""};
+        return { firstName: user.firstName, lastName: user.lastName || ""};
     }
     const parts = (user.fullName || "").trim().split(/\s+/);
     return { firstName: parts[0] || "", lastName: parts.slice(1).join(" ") };
@@ -193,7 +208,7 @@ function showProfileMessage(text, type) {
     const el = document.getElementById("forMessage");
     if (!el) return;
     el.textContent = text;
-    el.className = `mt-3 text-center ${type === "success" : "text-danger"`;
+    el.className = `mt-3 text-center ${type === "success" ? "text-success" : "text-danger"}`;
 }
 
 function showFieldErrors(errors) {
@@ -312,6 +327,27 @@ if (saveBtn) {
 
     const signOutBtn = document.getElementById("signOutBtn");
     if (signOutBtn) signOutBtn.addEventListener("click", handleSignOut);
+}
+
+// Toggle department field visibility on sign-up page
+const roleSelect = document.getElementById("registerRole");
+const departmentGroup = document.getElementById("departmentGroup");
+
+if (roleSelect && departmentGroup) {
+    console.log("Role select and department group found");
+    roleSelect.addEventListener("change", function() {
+        console.log("Role changed to:", roleSelect.value);
+        if (roleSelect.value === "ADMIN") {
+            console.log("Showing department field");
+            departmentGroup.style.display = "";
+        } else {
+            console.log("Hiding department field");
+            departmentGroup.style.display = "none";
+            document.getElementById("registerDepartment").value = "";
+        }
+    });
+} else {
+    console.log("Role select or department group NOT found", {roleSelect, departmentGroup});
 }
 
 
