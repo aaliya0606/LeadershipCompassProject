@@ -1,406 +1,1557 @@
 <!doctype html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>360° Feedback | Leadership Compass</title>
 
+    <!-- Bootstrap Icons -->
     <link
-        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
         rel="stylesheet"
-    />
-    <link rel="stylesheet" href="static/style/main.css" />
+        href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css"
+    >
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Orbitron:wght@600&family=Oswald:wght@600;700&display=swap"
+        rel="stylesheet"
+    >
+
+    <!--
+        Existing project CSS.
+        main.css is included because the shared navbar depends on it.
+    -->
+    <link rel="stylesheet" href="static/style/main.css">
+    <link rel="stylesheet" href="static/style/navbar.css">
+
+    <style>
+
+        /* =========================================================
+           PAGE-SPECIFIC VARIABLES
+           ========================================================= */
+
+        :root {
+            --feedback-navy: #062f4a;
+            --feedback-navy-deep: #03243a;
+            --feedback-green: #67d92f;
+            --feedback-green-bright: #86e94b;
+            --feedback-green-soft: #e9f8df;
+            --feedback-page: #e6e9e7;
+            --feedback-card: #ffffff;
+            --feedback-text: #102d40;
+            --feedback-muted: #66737c;
+            --feedback-line: #dfe6e2;
+            --feedback-shadow: 0 10px 28px rgba(10, 42, 58, 0.10);
+        }
+
+
+        /* =========================================================
+           PAGE
+           ========================================================= */
+
+        body {
+            background: var(--feedback-page);
+            color: var(--feedback-text);
+            font-family: "Montserrat", Arial, Helvetica, sans-serif;
+        }
+
+
+        /*
+         * Everything on this page is scoped under feedback360-page
+         * where possible so main.css does not change the layout.
+         */
+
+        .feedback360-page {
+            width: 100%;
+            min-height: 100vh;
+        }
+
+
+        .feedback360-shell {
+            width: min(1120px, calc(100% - 48px));
+            margin: 0 auto;
+            padding: 42px 0 70px;
+        }
+
+
+        /* =========================================================
+           HERO
+           ========================================================= */
+
+        /*
+         * Intentionally NOT called .hero.
+         *
+         * main.css also contains hero-related styles, so using a
+         * unique name prevents the stretching problem.
+         */
+
+        .feedback360-hero {
+            position: relative;
+            overflow: hidden;
+
+            display: grid;
+            grid-template-columns:
+                minmax(0, 1.35fr)
+                minmax(260px, 0.65fr);
+
+            gap: 28px;
+            align-items: center;
+
+            padding: 38px 40px;
+            margin-bottom: 26px;
+
+            border-radius: 12px;
+
+            background:
+                linear-gradient(
+                    120deg,
+                    rgba(5, 43, 65, 0.98) 0%,
+                    rgba(14, 95, 66, 0.95) 55%,
+                    rgba(92, 211, 45, 0.94) 100%
+                );
+
+            color: #ffffff;
+
+            box-shadow:
+                0 16px 36px rgba(5, 43, 65, 0.18);
+        }
+
+
+        .feedback360-hero::after {
+            content: "";
+
+            position: absolute;
+
+            width: 320px;
+            height: 320px;
+
+            right: -130px;
+            bottom: -190px;
+
+            border-radius: 50%;
+
+            border:
+                1px solid rgba(255, 255, 255, 0.18);
+
+            box-shadow:
+                0 0 0 26px rgba(255, 255, 255, 0.035),
+                0 0 0 58px rgba(255, 255, 255, 0.025);
+
+            pointer-events: none;
+        }
+
+
+        .feedback360-hero-copy,
+        .feedback360-hero-side {
+            position: relative;
+            z-index: 1;
+        }
+
+
+        .feedback360-kicker {
+            margin-bottom: 11px;
+
+            color: #a9f07e;
+
+            text-transform: uppercase;
+            letter-spacing: 3px;
+
+            font-family:
+                "Orbitron",
+                Arial,
+                sans-serif;
+
+            font-size: 0.63rem;
+            font-weight: 600;
+        }
+
+
+        .feedback360-hero h1 {
+            margin: 0 0 14px;
+
+            color: #ffffff;
+
+            font-family:
+                "Oswald",
+                "Arial Narrow",
+                Arial,
+                sans-serif;
+
+            font-size:
+                clamp(2.5rem, 6vw, 4.2rem);
+
+            font-weight: 700;
+            line-height: 0.98;
+
+            text-transform: uppercase;
+        }
+
+
+        .feedback360-hero-copy > p {
+            max-width: 720px;
+            margin: 0;
+
+            color:
+                rgba(255, 255, 255, 0.88);
+
+            line-height: 1.65;
+            font-size: 0.94rem;
+        }
+
+
+        .feedback360-hero-side {
+            padding: 23px;
+
+            border-radius: 9px;
+
+            background:
+                rgba(255, 255, 255, 0.13);
+
+            border:
+                1px solid rgba(255, 255, 255, 0.22);
+
+            backdrop-filter: blur(4px);
+        }
+
+
+        .feedback360-hero-side-title {
+            margin-bottom: 10px;
+
+            color: #ffffff;
+
+            font-family:
+                "Oswald",
+                Arial,
+                sans-serif;
+
+            font-size: 1.3rem;
+            font-weight: 700;
+        }
+
+
+        .feedback360-hero-side p {
+            margin: 0;
+
+            color:
+                rgba(255, 255, 255, 0.82);
+
+            font-size: 0.82rem;
+            line-height: 1.55;
+        }
+
+
+        /* =========================================================
+           HOW IT WORKS
+           ========================================================= */
+
+        .feedback360-how {
+            display: grid;
+            grid-template-columns:
+                repeat(3, minmax(0, 1fr));
+
+            gap: 14px;
+
+            margin-bottom: 26px;
+        }
+
+
+        .feedback360-step {
+            position: relative;
+
+            min-width: 0;
+
+            padding:
+                20px 20px 19px 58px;
+
+            border-radius: 8px;
+
+            background: #ffffff;
+
+            box-shadow:
+                var(--feedback-shadow);
+
+            border:
+                1px solid rgba(13, 60, 77, 0.07);
+        }
+
+
+        .feedback360-step-number {
+            position: absolute;
+
+            top: 20px;
+            left: 18px;
+
+            width: 30px;
+            height: 30px;
+
+            display: grid;
+            place-items: center;
+
+            border-radius: 50%;
+
+            background:
+                var(--feedback-green);
+
+            color:
+                var(--feedback-navy-deep);
+
+            font-weight: 800;
+            font-size: 0.79rem;
+        }
+
+
+        .feedback360-step strong {
+            display: block;
+
+            margin-bottom: 5px;
+
+            color:
+                var(--feedback-navy);
+
+            font-size: 0.86rem;
+        }
+
+
+        .feedback360-step span {
+            color:
+                var(--feedback-muted);
+
+            font-size: 0.77rem;
+            line-height: 1.45;
+        }
+
+
+        /* =========================================================
+           MAIN CARD
+           ========================================================= */
+
+        .feedback360-card {
+            padding: 30px;
+
+            border-radius: 10px;
+
+            background:
+                var(--feedback-card);
+
+            box-shadow:
+                var(--feedback-shadow);
+
+            border:
+                1px solid rgba(13, 60, 77, 0.07);
+        }
+
+
+        .feedback360-card-heading {
+            display: flex;
+
+            align-items: flex-start;
+            justify-content: space-between;
+
+            gap: 22px;
+
+            margin-bottom: 24px;
+            padding-bottom: 22px;
+
+            border-bottom:
+                1px solid var(--feedback-line);
+        }
+
+
+        .feedback360-card-heading h2 {
+            margin: 0 0 8px;
+
+            color:
+                var(--feedback-navy);
+
+            font-family:
+                "Oswald",
+                "Arial Narrow",
+                Arial,
+                sans-serif;
+
+            font-size: 2rem;
+            font-weight: 700;
+        }
+
+
+        .feedback360-card-heading p {
+            max-width: 760px;
+
+            margin: 0;
+
+            color:
+                var(--feedback-muted);
+
+            font-size: 0.88rem;
+            line-height: 1.55;
+        }
+
+
+        /* =========================================================
+           STATUS BADGE
+           ========================================================= */
+
+        .feedback360-status-badge {
+            display: none;
+
+            align-items: center;
+
+            gap: 7px;
+
+            padding: 7px 11px;
+
+            border-radius: 30px;
+
+            background: #e5f6db;
+            color: #34801d;
+
+            font-size: 0.72rem;
+            font-weight: 800;
+
+            text-transform: uppercase;
+            white-space: nowrap;
+        }
+
+
+        .feedback360-status-badge::before {
+            content: "";
+
+            width: 7px;
+            height: 7px;
+
+            border-radius: 50%;
+
+            background: #43a822;
+        }
+
+
+        /*
+         * feedback360.js may replace the className with Bootstrap's
+         * badge classes. These ensure the badge still looks correct
+         * even without Bootstrap.
+         */
+
+        #surveyStatusBadge.badge {
+            display: inline-flex;
+            align-items: center;
+
+            padding: 7px 11px;
+
+            border-radius: 30px;
+
+            font-size: 0.72rem;
+            font-weight: 800;
+
+            text-transform: uppercase;
+        }
+
+
+        #surveyStatusBadge.bg-success {
+            background: #e5f6db !important;
+            color: #34801d !important;
+        }
+
+
+        #surveyStatusBadge.bg-secondary {
+            background: #edf0ef !important;
+            color: #66737c !important;
+        }
+
+
+        /* =========================================================
+           EMPTY STATE
+           ========================================================= */
+
+        .feedback360-empty {
+            display: grid;
+
+            grid-template-columns:
+                auto minmax(0, 1fr) auto;
+
+            gap: 18px;
+
+            align-items: center;
+
+            padding: 22px;
+
+            border-radius: 8px;
+
+            background: #f4f8f2;
+
+            border:
+                1px solid #dcebd6;
+        }
+
+
+        .feedback360-empty-icon {
+            width: 50px;
+            height: 50px;
+
+            display: grid;
+            place-items: center;
+
+            border-radius: 50%;
+
+            background: #e1f7d6;
+            color: #49aa27;
+
+            font-size: 1.35rem;
+        }
+
+
+        .feedback360-empty h3 {
+            margin: 0 0 5px;
+
+            color:
+                var(--feedback-navy);
+
+            font-family:
+                "Oswald",
+                Arial,
+                sans-serif;
+
+            font-size: 1.25rem;
+        }
+
+
+        .feedback360-empty p {
+            margin: 0;
+
+            color:
+                var(--feedback-muted);
+
+            font-size: 0.82rem;
+            line-height: 1.5;
+        }
+
+
+        /* =========================================================
+           METRICS
+           ========================================================= */
+
+        .feedback360-metrics {
+            display: grid;
+
+            /*
+             * Three cards only.
+             * Survey/database ID has intentionally been removed.
+             */
+            grid-template-columns:
+                repeat(3, minmax(0, 1fr));
+
+            gap: 14px;
+
+            margin-bottom: 22px;
+        }
+
+
+        .feedback360-metric {
+            position: relative;
+            overflow: hidden;
+
+            min-width: 0;
+            min-height: 126px;
+
+            padding: 20px 18px;
+
+            border-radius: 7px;
+
+            background: #ffffff;
+
+            border:
+                1px solid #dfe6e2;
+        }
+
+
+        .feedback360-metric::before {
+            content: "";
+
+            position: absolute;
+
+            inset: 0 auto 0 0;
+
+            width: 4px;
+
+            background:
+                var(--feedback-green);
+        }
+
+
+        .feedback360-metric-label {
+            margin-bottom: 10px;
+
+            color:
+                var(--feedback-muted);
+
+            font-size: 0.72rem;
+            font-weight: 600;
+        }
+
+
+        .feedback360-metric-value {
+            color:
+                var(--feedback-navy);
+
+            font-family:
+                "Oswald",
+                Arial,
+                sans-serif;
+
+            font-size: 1.75rem;
+            font-weight: 700;
+
+            line-height: 1.1;
+
+            overflow-wrap: anywhere;
+        }
+
+
+        .feedback360-metric-sub {
+            margin-top: 7px;
+
+            color:
+                var(--feedback-muted);
+
+            font-size: 0.71rem;
+        }
+
+
+        /* =========================================================
+           SHARE PANEL
+           ========================================================= */
+
+        .feedback360-share {
+            padding: 20px;
+            margin-bottom: 20px;
+
+            border-radius: 8px;
+
+            background: #f5f7f6;
+        }
+
+
+        .feedback360-share label {
+            display: block;
+
+            margin-bottom: 6px;
+
+            color:
+                var(--feedback-navy);
+
+            font-weight: 800;
+            font-size: 0.82rem;
+        }
+
+
+        .feedback360-share p {
+            margin: 0 0 12px;
+
+            color:
+                var(--feedback-muted);
+
+            font-size: 0.78rem;
+            line-height: 1.5;
+        }
+
+
+        .feedback360-link-row {
+            display: grid;
+
+            grid-template-columns:
+                minmax(0, 1fr) auto;
+
+            gap: 9px;
+        }
+
+
+        .feedback360-link-row input {
+            width: 100%;
+            min-width: 0;
+
+            padding: 11px 12px;
+
+            border:
+                1px solid #cfd8d3;
+
+            border-radius: 5px;
+
+            background: #ffffff;
+
+            color: #314955;
+
+            font:
+                0.80rem "Montserrat",
+                Arial,
+                sans-serif;
+        }
+
+
+        /* =========================================================
+           BUTTONS
+           ========================================================= */
+
+        .feedback360-btn {
+            display: inline-flex;
+
+            align-items: center;
+            justify-content: center;
+
+            gap: 8px;
+
+            padding: 11px 16px;
+
+            border-radius: 5px;
+
+            border:
+                1px solid transparent;
+
+            text-decoration: none;
+
+            cursor: pointer;
+
+            font-family:
+                "Montserrat",
+                Arial,
+                sans-serif;
+
+            font-size: 0.76rem;
+            font-weight: 700;
+
+            transition:
+                0.18s ease;
+        }
+
+
+        .feedback360-btn:disabled {
+            opacity: 0.65;
+            cursor: not-allowed;
+        }
+
+
+        .feedback360-btn-primary {
+            background:
+                var(--feedback-green);
+
+            border-color:
+                var(--feedback-green);
+
+            color:
+                var(--feedback-navy-deep);
+        }
+
+
+        .feedback360-btn-primary:hover:not(:disabled) {
+            background:
+                var(--feedback-green-bright);
+
+            border-color:
+                var(--feedback-green-bright);
+
+            color:
+                var(--feedback-navy-deep);
+
+            transform:
+                translateY(-1px);
+        }
+
+
+        .feedback360-btn-secondary {
+            background: #ffffff;
+
+            border-color:
+                var(--feedback-navy);
+
+            color:
+                var(--feedback-navy);
+        }
+
+
+        .feedback360-btn-secondary:hover {
+            background:
+                var(--feedback-navy);
+
+            color: #ffffff;
+        }
+
+
+        .feedback360-actions {
+            display: flex;
+
+            gap: 10px;
+
+            flex-wrap: wrap;
+        }
+
+
+        /* =========================================================
+           HISTORY
+           ========================================================= */
+
+        .feedback360-history {
+            margin-top: 30px;
+            padding-top: 26px;
+
+            border-top:
+                1px solid var(--feedback-line);
+        }
+
+
+        .feedback360-history-heading {
+            margin-bottom: 18px;
+        }
+
+
+        .feedback360-history-heading h3 {
+            margin: 0 0 6px;
+
+            color:
+                var(--feedback-navy);
+
+            font-family:
+                "Oswald",
+                Arial,
+                sans-serif;
+
+            font-size: 1.55rem;
+            font-weight: 700;
+        }
+
+
+        .feedback360-history-heading p {
+            margin: 0;
+
+            color:
+                var(--feedback-muted);
+
+            font-size: 0.82rem;
+            line-height: 1.5;
+        }
+
+
+        /*
+         * Generic history styling so elements generated by
+         * feedback360.js still look consistent.
+         */
+
+        #surveyHistoryContainer > * {
+            max-width: 100%;
+        }
+
+
+        #surveyHistoryContainer .card,
+        #surveyHistoryContainer > div {
+            border:
+                1px solid #dfe6e2;
+
+            border-radius: 7px;
+
+            background: #ffffff;
+        }
+
+
+        /* =========================================================
+           ERROR MESSAGE
+           ========================================================= */
+
+        .feedback360-error {
+            display: none;
+
+            margin-bottom: 18px;
+            padding: 13px 15px;
+
+            border-radius: 6px;
+
+            background: #fff0f0;
+
+            border: 1px solid #efcaca;
+
+            color: #8a3030;
+
+            font-size: 0.82rem;
+        }
+
+
+        /* =========================================================
+           RESPONSIVE
+           ========================================================= */
+
+        @media (max-width: 900px) {
+
+            .feedback360-hero {
+                grid-template-columns: 1fr;
+            }
+
+
+            .feedback360-how {
+                grid-template-columns: 1fr;
+            }
+
+
+            .feedback360-metrics {
+                grid-template-columns:
+                    repeat(3, minmax(0, 1fr));
+            }
+
+        }
+
+
+        @media (max-width: 700px) {
+
+            .feedback360-shell {
+                width:
+                    min(100% - 28px, 1120px);
+
+                padding:
+                    28px 0 50px;
+            }
+
+
+            .feedback360-hero {
+                padding: 28px 24px;
+            }
+
+
+            .feedback360-hero h1 {
+                font-size: 2.6rem;
+            }
+
+
+            .feedback360-card {
+                padding: 22px 18px;
+            }
+
+
+            .feedback360-card-heading {
+                flex-direction: column;
+            }
+
+
+            .feedback360-metrics {
+                grid-template-columns: 1fr;
+            }
+
+
+            .feedback360-empty {
+                grid-template-columns: 1fr;
+            }
+
+
+            .feedback360-link-row {
+                grid-template-columns: 1fr;
+            }
+
+
+            .feedback360-link-row button {
+                width: 100%;
+            }
+
+
+            .feedback360-actions {
+                flex-direction: column;
+            }
+
+
+            .feedback360-actions button {
+                width: 100%;
+            }
+
+        }
+
+    </style>
+
 </head>
+
+
 <body>
-    <nav class="navbar navbar-dark bg-primary px-4">
-        <a href="dashboard.html" class="navbar-brand text-decoration-none">
-            Leadership Compass
+
+    <!-- =========================================================
+         SHARED NAVBAR
+         ========================================================= -->
+
+    <header class="navbar-dark px-4 custom-navbar">
+
+        <a
+            href="dashboard.html"
+            class="navbar-brand d-flex align-items-center gap-2"
+        >
+
+            <img
+                src="static/img/TGG-logo.png"
+                alt="TGG Logo"
+                class="navbar-logo"
+            >
+
+            <span class="brand-title">
+                Leadership Compass
+            </span>
+
         </a>
-        <button id="logoutBtn" class="btn btn-light" type="button">
-            Logout
+
+
+        <nav
+            class="nav-links-inline"
+            id="navLinks"
+        >
+
+            <a
+                class="nav-link"
+                href="dashboard.html"
+            >
+                Dashboard
+            </a>
+
+            <a
+                class="nav-link"
+                href="5weekplan.html"
+            >
+                5 Week Plan
+            </a>
+
+            <a
+                class="nav-link"
+                href="survey.html"
+            >
+                Survey
+            </a>
+
+            <a
+                class="nav-link"
+                href="resource-library.html"
+            >
+                Resource Library
+            </a>
+
+            <a
+                class="nav-link"
+                href="feedback360.html"
+                aria-current="page"
+            >
+                360° Feedback
+            </a>
+
+            <a
+                class="nav-link"
+                href=""
+            >
+                My Account
+            </a>
+
+            <a
+                class="nav-link logout"
+                href="startup.html"
+                id="logoutBtn"
+            >
+                Logout
+            </a>
+
+        </nav>
+
+
+        <button
+            class="hamburger"
+            id="hamburgerBtn"
+            type="button"
+            aria-label="Toggle menu"
+            onclick="toggleNav()"
+        >
+
+            <span></span>
+            <span></span>
+            <span></span>
+
         </button>
-    </nav>
 
-    <main class="container py-5">
-        <a href="dashboard.html" class="d-inline-block mb-4">
-            ← Back to Dashboard
-        </a>
-
-        <h1 class="mb-4">360° Feedback</h1>
-
-        <div class="row g-4">
-                        <!-- =====================================
-                 360 FEEDBACK
-                 ===================================== -->
-
-            <div class="col-12">
-
-                <div class="card shadow-sm">
-
-                    <div class="card-body">
+    </header>
 
 
-                        <!-- Heading -->
+    <!-- =========================================================
+         360 PAGE
+         ========================================================= -->
 
-                        <div
-                            class="
-                                d-flex
-                                justify-content-between
-                                align-items-start
-                                flex-wrap
-                                gap-3
-                            "
-                        >
+    <main class="feedback360-page">
 
-                            <div>
-
-                                <h3 class="card-title mb-2">
-                                    360° Feedback
-                                </h3>
-
-                                <p class="text-muted mb-0">
-                                    Gather anonymous feedback
-                                    from colleagues and teammates
-                                    to better understand your
-                                    leadership strengths,
-                                    behaviours and development
-                                    areas.
-                                </p>
-
-                            </div>
+        <div class="feedback360-shell">
 
 
-                            <span
-                                id="surveyStatusBadge"
-                                class="badge bg-secondary"
-                                style="display: none;"
-                            >
-                                ACTIVE
-                            </span>
+            <!-- =================================================
+                 HERO
+                 ================================================= -->
 
+            <section class="feedback360-hero">
+
+                <div class="feedback360-hero-copy">
+
+                    <div class="feedback360-kicker">
+                        Leadership Development
+                    </div>
+
+                    <h1>
+                        360° Feedback
+                    </h1>
+
+                    <p>
+                        Understand how others experience your leadership.
+                        Invite colleagues and teammates to provide anonymous
+                        feedback and use their perspectives to identify
+                        strengths and opportunities for growth.
+                    </p>
+
+                </div>
+
+
+                <div class="feedback360-hero-side">
+
+                    <div class="feedback360-hero-side-title">
+                        Why 360° feedback?
+                    </div>
+
+                    <p>
+                        Your own view of your leadership is only one
+                        perspective. Feedback from the people around you can
+                        help reveal patterns, strengths and development areas
+                        that may otherwise be difficult to see.
+                    </p>
+
+                </div>
+
+            </section>
+
+
+            <!-- =================================================
+                 HOW IT WORKS
+                 ================================================= -->
+
+            <section class="feedback360-how">
+
+                <div class="feedback360-step">
+
+                    <div class="feedback360-step-number">
+                        1
+                    </div>
+
+                    <strong>
+                        Create your survey
+                    </strong>
+
+                    <span>
+                        Generate your unique anonymous
+                        360° feedback link.
+                    </span>
+
+                </div>
+
+
+                <div class="feedback360-step">
+
+                    <div class="feedback360-step-number">
+                        2
+                    </div>
+
+                    <strong>
+                        Share the link
+                    </strong>
+
+                    <span>
+                        Send the link to colleagues,
+                        teammates or people you work with.
+                    </span>
+
+                </div>
+
+
+                <div class="feedback360-step">
+
+                    <div class="feedback360-step-number">
+                        3
+                    </div>
+
+                    <strong>
+                        Review your feedback
+                    </strong>
+
+                    <span>
+                        View anonymous responses and identify
+                        patterns in how others experience your leadership.
+                    </span>
+
+                </div>
+
+            </section>
+
+
+            <!-- =================================================
+                 ERROR
+                 ================================================= -->
+
+            <div
+                id="pageError"
+                class="feedback360-error"
+            ></div>
+
+
+            <!-- =================================================
+                 MAIN SURVEY CARD
+                 ================================================= -->
+
+            <section class="feedback360-card">
+
+                <div class="feedback360-card-heading">
+
+                    <div>
+
+                        <h2>
+                            Your Feedback Survey
+                        </h2>
+
+                        <p>
+                            Create and manage your current 360° feedback
+                            survey. Your feedback link can be shared with
+                            multiple people and responses remain anonymous.
+                        </p>
+
+                    </div>
+
+
+                    <!--
+                        Required by feedback360.js.
+                        JavaScript updates the status and visibility.
+                    -->
+
+                    <span
+                        id="surveyStatusBadge"
+                        class="feedback360-status-badge"
+                        style="display: none;"
+                    >
+                        ACTIVE
+                    </span>
+
+                </div>
+
+
+                <!-- =================================================
+                     NO ACTIVE SURVEY
+                     ================================================= -->
+
+                <div id="no360SurveyState">
+
+                    <div class="feedback360-empty">
+
+                        <div class="feedback360-empty-icon">
+                            <i class="bi bi-people"></i>
                         </div>
 
 
-                        <hr>
+                        <div>
 
+                            <h3>
+                                Start collecting feedback
+                            </h3>
 
-                        <!-- =================================
-                             NO ACTIVE SURVEY
-                             ================================= -->
-
-                        <div id="no360SurveyState">
-
-                            <h5>
-                                Start a 360° feedback period
-                            </h5>
-
-                            <p class="text-muted">
-                                Create a feedback link and share
-                                it with colleagues or teammates.
-                                Your survey will remain active
-                                for 30 days.
+                            <p>
+                                You don't currently have an active
+                                360° feedback survey. Create one to
+                                generate a unique link that you can
+                                share with reviewers.
                             </p>
 
-                            <button
-                                id="generate360Btn"
-                                type="button"
-                                class="btn btn-primary"
-                            >
-                                Create 360° Feedback Link
-                            </button>
-
                         </div>
 
 
-                        <!-- =================================
-                             ACTIVE SURVEY
-                             ================================= -->
-
-                        <div
-                            id="active360SurveyState"
-                            style="display: none;"
+                        <button
+                            id="generate360Btn"
+                            type="button"
+                            class="
+                                feedback360-btn
+                                feedback360-btn-primary
+                            "
                         >
+                            <i class="bi bi-plus-lg"></i>
 
-
-                            <div class="mb-4">
-
-                                <h5>
-                                    Current Feedback Period
-                                </h5>
-
-                                <p class="text-muted">
-                                    Your survey is currently
-                                    accepting anonymous responses.
-                                </p>
-
-                            </div>
-
-
-                            <!-- Summary Cards -->
-
-                            <div class="row g-3 mb-4">
-
-
-                                <!-- Status -->
-
-                                <div class="col-md-3">
-
-                                    <div
-                                        class="
-                                            border
-                                            rounded
-                                            p-3
-                                            h-100
-                                        "
-                                    >
-
-                                        <p class="text-muted mb-1">
-                                            Status
-                                        </p>
-
-                                        <h4
-                                            id="surveyStatus"
-                                            class="mb-0"
-                                        >
-                                            ACTIVE
-                                        </h4>
-
-                                    </div>
-
-                                </div>
-
-
-                                <!-- Responses -->
-
-                                <div class="col-md-3">
-
-                                    <div
-                                        class="
-                                            border
-                                            rounded
-                                            p-3
-                                            h-100
-                                        "
-                                    >
-
-                                        <p class="text-muted mb-1">
-                                            Responses
-                                        </p>
-
-                                        <h4
-                                            id="responseCount"
-                                            class="mb-0"
-                                        >
-                                            0
-                                        </h4>
-
-                                    </div>
-
-                                </div>
-
-
-                                <!-- Expiry -->
-
-                                <div class="col-md-3">
-
-                                    <div
-                                        class="
-                                            border
-                                            rounded
-                                            p-3
-                                            h-100
-                                        "
-                                    >
-
-                                        <p class="text-muted mb-1">
-                                            Expires
-                                        </p>
-
-                                        <h4
-                                            id="surveyExpiry"
-                                            class="mb-0"
-                                        >
-                                            -
-                                        </h4>
-
-                                    </div>
-
-                                </div>
-
-
-                                <!-- Survey ID -->
-
-                                <div class="col-md-3">
-
-                                    <div
-                                        class="
-                                            border
-                                            rounded
-                                            p-3
-                                            h-100
-                                        "
-                                    >
-
-                                        <p class="text-muted mb-1">
-                                            Survey
-                                        </p>
-
-                                        <h4
-                                            id="surveyIdDisplay"
-                                            class="mb-0"
-                                        >
-                                            -
-                                        </h4>
-
-                                    </div>
-
-                                </div>
-
-                            </div>
-
-
-                            <!-- Share Link -->
-
-                            <div class="mb-4">
-
-                                <label
-                                    for="surveyLink"
-                                    class="form-label fw-semibold"
-                                >
-                                    Shareable Feedback Link
-                                </label>
-
-                                <p class="text-muted small">
-                                    Share this link with people
-                                    you would like feedback from.
-                                    Reviewers do not need an
-                                    account and responses are
-                                    stored anonymously.
-                                </p>
-
-
-                                <div class="input-group">
-
-                                    <input
-                                        type="text"
-                                        id="surveyLink"
-                                        class="form-control"
-                                        readonly
-                                    />
-
-
-                                    <button
-                                        id="copySurveyLinkBtn"
-                                        type="button"
-                                        class="
-                                            btn
-                                            btn-outline-secondary
-                                        "
-                                    >
-                                        Copy Link
-                                    </button>
-
-                                </div>
-
-                            </div>
-
-
-                            <!-- Actions -->
-
-                            <div
-                                class="
-                                    d-flex
-                                    gap-2
-                                    flex-wrap
-                                "
-                            >
-
-                                <button
-                                    id="view360ResultsBtn"
-                                    type="button"
-                                    class="btn btn-primary"
-                                >
-                                    View Results
-                                </button>
-
-
-                                <button
-                                    id="copySurveyLinkSecondaryBtn"
-                                    type="button"
-                                    class="
-                                        btn
-                                        btn-outline-primary
-                                    "
-                                >
-                                    Copy Feedback Link
-                                </button>
-
-                            </div>
-
-                        </div>
-
-
-                        <!-- =================================
-                             SURVEY HISTORY
-                             ================================= -->
-
-                        <hr class="my-4">
-
-
-                        <section id="surveyHistorySection">
-
-                            <div
-                                class="
-                                    d-flex
-                                    justify-content-between
-                                    align-items-center
-                                    flex-wrap
-                                    gap-3
-                                    mb-3
-                                "
-                            >
-
-                                <div>
-
-                                    <h4 class="mb-1">
-                                        Previous 360° Surveys
-                                    </h4>
-
-                                    <p class="text-muted mb-0">
-                                        Review feedback from
-                                        previous survey periods
-                                        and compare your
-                                        leadership development
-                                        over time.
-                                    </p>
-
-                                </div>
-
-                            </div>
-
-
-                            <div id="surveyHistoryContainer">
-
-                                <p class="text-muted">
-                                    Loading previous surveys...
-                                </p>
-
-                            </div>
-
-                        </section>
-
+                            Create 360° Feedback Link
+                        </button>
 
                     </div>
 
                 </div>
 
-            </div>
+
+                <!-- =================================================
+                     ACTIVE SURVEY
+                     ================================================= -->
+
+                <div
+                    id="active360SurveyState"
+                    style="display: none;"
+                >
 
 
+                    <!-- =============================================
+                         SURVEY METRICS
+
+                         NOTE:
+                         Survey ID is deliberately NOT displayed.
+                         feedback360.js can still keep the ID internally
+                         in current360SurveyId for results navigation.
+                         ============================================= -->
+
+                    <div class="feedback360-metrics">
+
+
+                        <!-- STATUS -->
+
+                        <div class="feedback360-metric">
+
+                            <div class="feedback360-metric-label">
+                                Status
+                            </div>
+
+                            <div
+                                id="surveyStatus"
+                                class="feedback360-metric-value"
+                            >
+                                ACTIVE
+                            </div>
+
+                            <div class="feedback360-metric-sub">
+                                Current feedback period
+                            </div>
+
+                        </div>
+
+
+                        <!-- RESPONSES -->
+
+                        <div class="feedback360-metric">
+
+                            <div class="feedback360-metric-label">
+                                Responses
+                            </div>
+
+                            <div
+                                id="responseCount"
+                                class="feedback360-metric-value"
+                            >
+                                0
+                            </div>
+
+                            <div class="feedback360-metric-sub">
+                                Anonymous responses received
+                            </div>
+
+                        </div>
+
+
+                        <!-- EXPIRY -->
+
+                        <div class="feedback360-metric">
+
+                            <div class="feedback360-metric-label">
+                                Expires
+                            </div>
+
+                            <div
+                                id="surveyExpiry"
+                                class="feedback360-metric-value"
+                            >
+                                —
+                            </div>
+
+                            <div class="feedback360-metric-sub">
+                                Survey availability
+                            </div>
+
+                        </div>
+
+
+                    </div>
+
+
+                    <!-- =================================================
+                         SHARE LINK
+                         ================================================= -->
+
+                    <div class="feedback360-share">
+
+                        <label for="surveyLink">
+                            Your anonymous feedback link
+                        </label>
+
+                        <p>
+                            Share this link with the people you would
+                            like to receive feedback from. Reviewers
+                            do not need to log in.
+                        </p>
+
+
+                        <div class="feedback360-link-row">
+
+                            <!-- Required by feedback360.js -->
+
+                            <input
+                                type="text"
+                                id="surveyLink"
+                                readonly
+                                aria-label="360 degree feedback survey link"
+                            >
+
+
+                            <!-- Required by feedback360.js -->
+
+                            <button
+                                id="copySurveyLinkBtn"
+                                type="button"
+                                class="
+                                    feedback360-btn
+                                    feedback360-btn-secondary
+                                "
+                            >
+
+                                <i class="bi bi-copy"></i>
+
+                                Copy Link
+
+                            </button>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- =================================================
+                         ACTIONS
+                         ================================================= -->
+
+                    <div class="feedback360-actions">
+
+
+                        <!-- Required by feedback360.js -->
+
+                        <button
+                            id="view360ResultsBtn"
+                            type="button"
+                            class="
+                                feedback360-btn
+                                feedback360-btn-primary
+                            "
+                        >
+
+                            <i class="bi bi-bar-chart-line"></i>
+
+                            View Results
+
+                        </button>
+
+
+                        <!-- Required by feedback360.js -->
+
+                        <button
+                            id="copySurveyLinkSecondaryBtn"
+                            type="button"
+                            class="
+                                feedback360-btn
+                                feedback360-btn-secondary
+                            "
+                        >
+
+                            <i class="bi bi-share"></i>
+
+                            Copy Feedback Link
+
+                        </button>
+
+                    </div>
+
+
+                </div>
+
+
+                <!-- =================================================
+                     SURVEY HISTORY
+                     ================================================= -->
+
+                <section
+                    id="surveyHistorySection"
+                    class="feedback360-history"
+                >
+
+                    <div class="feedback360-history-heading">
+
+                        <h3>
+                            Previous 360° Surveys
+                        </h3>
+
+                        <p>
+                            Review feedback from previous survey
+                            periods and compare your leadership
+                            development over time.
+                        </p>
+
+                    </div>
+
+
+                    <!--
+                        Required by feedback360.js.
+                        Historical surveys are inserted here.
+                    -->
+
+                    <div id="surveyHistoryContainer">
+
+                        <p
+                            style="
+                                margin: 0;
+                                color: #66737c;
+                                font-size: 0.82rem;
+                            "
+                        >
+                            Loading previous surveys...
+                        </p>
+
+                    </div>
+
+                </section>
+
+
+            </section>
+
         </div>
-        </div>
+
     </main>
 
+    <!-- =========================================================
+         NAVBAR
+         ========================================================= -->
+
+    <script>
+
+        function toggleNav() {
+
+            const nav =
+                document.getElementById("navLinks");
+
+            const hamburger =
+                document.getElementById("hamburgerBtn");
+
+
+            if (nav) {
+                nav.classList.toggle("open");
+            }
+
+
+            if (hamburger) {
+                hamburger.classList.toggle("open");
+            }
+
+        }
+
+    </script>
+
     <script src="static/js/feedback360.js"></script>
+
 </body>
+
 </html>
