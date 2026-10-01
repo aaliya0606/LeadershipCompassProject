@@ -784,23 +784,31 @@ html, body {
 
 .adminLogin {
     display: flex;
+    justify-content: flex-end;
+    align-items: center;
     height: 100vh;
-    padding-top: 10px;
+    padding: 10px 5% 0;
     background-image: url('../img/login-signup page.png');
     background-size: cover;
-    background-position: center;
+    background-position: center center;
     background-repeat: no-repeat;
+    background-attachment: fixed;
+    position: relative;
 }
 
-/* login page */
+/* sign-up page */
 .sign-up {
     display: flex;
+    justify-content: flex-end;
+    align-items: center;
     height: 100vh;
-    padding-top: 80px;
+    padding: 10px 5% 0;
     background-image: url('../img/login-signup page.png');
     background-size: cover;
-    background-position: center;
+    background-position: center center;
     background-repeat: no-repeat;
+    background-attachment: fixed;
+    position: relative;
 }
 
 /* signup page */
@@ -913,10 +921,6 @@ html, body {
 }
 
 .adminreturn-btn {
-    position: absolute;
-    bottom: 180px;
-    left: 78%;
-    transform: translateX(-5%);
     font-family: 'Conthrax', sans-serif;
     font-size: 13px;
     font-weight: 600;
@@ -924,7 +928,6 @@ html, body {
     text-transform: uppercase;
     color: #ffffff;
     text-decoration: none;
-    z-index: 10;
 }
 
 .adminreturn-btn:hover {
@@ -932,9 +935,6 @@ html, body {
 }
 
 .return-btn-signup {
-    position: absolute;
-    top: 870px;
-    left: 1325px;
     font-family: 'Conthrax', sans-serif;
     font-size: 13px;
     font-weight: 600;
@@ -942,7 +942,6 @@ html, body {
     text-transform: uppercase;
     color: #ffffff;
     text-decoration: none;
-    z-index: 10;
 }
 
 /* MAIN CONFIGURATION - LOGIN */
@@ -955,11 +954,10 @@ html, body {
 }
 
 .sign-up-form {
-    position: absolute;
-    top: 500px;
-    left: 1180px;
-    transform: translateY(-50%);
+    position: relative;
     width: 380px;
+    max-width: 90%;
+    margin-right: 5%;
 }
 
 
@@ -1086,8 +1084,7 @@ html, body {
 /* SIGN UP CONFIGURATION */
 .login-link {
     text-align: center;
-    margin-top: 670px;
-    margin-left: 1230px;
+    margin-top: 10px;
     font-size: 13px;
     color: rgba(255, 255, 255, 0.7);
     font-family: 'Conthrax', sans-serif;
@@ -1099,8 +1096,12 @@ html, body {
     font-weight: 600;
 }
 
-.login-link:hover {
+.login-link a:hover {
     text-decoration: underline;
+}
+
+.return-btn-signup:hover {
+    color: #6abf3a;
 }
 
 
