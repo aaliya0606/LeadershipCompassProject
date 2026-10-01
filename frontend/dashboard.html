@@ -1,9 +1,7 @@
 <!doctype html>
 
 <html lang="en">
-
 <head>
-
     <meta charset="UTF-8" />
 
     <meta
@@ -15,265 +13,191 @@
         Dashboard | Leadership Compass
     </title>
 
-    <link
-        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
-        rel="stylesheet"
-    />
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 
-    <link
-        rel="stylesheet"
-        href="static/style/main.css"
-    />
+    <link rel="stylesheet" href="static/style/main.css">
+    <link rel="stylesheet" href="static/style/navbar.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Anton&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
 
+    
+    <style>.d-none{display:none;}</style>
+
+    <script src="static/js/dashboard.js" defer></script>
 </head>
-
-
 <body>
 
-    <!-- =========================================
-         NAVIGATION
-         ========================================= -->
-
-    <nav class="navbar navbar-dark bg-primary px-4">
-
-        <span class="navbar-brand">
-            Leadership Compass
-        </span>
-
-        <a href="user-profile-new.html" class="btn btn-light">
-            My Profile
+    <header class="navbar-dark px-4 custom-navbar">
+        <a href="dashboard.html" class="navbar-brand d-flex align-items-center gap-2">
+            <img src="static/img/TGG-logo.png" alt="TGG Logo" class="navbar-logo" />
+            <span class="brand-title"> Leadership Compass </span>
         </a>
 
-        <button
-            id="logoutBtn"
-            class="btn btn-light"
-            type="button"
-        >
-            Logout
+        <nav class="nav-links-inline" id="navLinks">
+            <a class="nav-link" href="dashboard.html" aria-current="page">Dashboard</a>
+            <a class="nav-link" href="5weekplan.html">5 Week Plan</a>
+            <a class="nav-link" href="survey.html">Survey</a>
+            <a class="nav-link" href="resource-library.html">Resource Library</a>
+            <!-- 360 Feedback nav link — added 2/10, confirm with Miko before next edit -->
+            <a class="nav-link" href="feedback360.html">360° Feedback</a>
+            <!-- TODO: add the My Account page file name once it exists -->
+            <a class="nav-link" href="">My Account</a>
+            <a class="nav-link logout" href="startup.html" id="logoutBtn">Logout</a>
+        </nav>
+
+        <button class="hamburger" id="hamburgerBtn" aria-label="Toggle menu" onclick="toggleNav()">
+            <span></span>
+            <span></span>
+            <span></span>
         </button>
+    </header>
 
-    </nav>
+    <div class="title">
+        <h1>MY DASHBOARD</h1>
+        <a href="survey.html"><button id="surveyBtn" type="button">START THE SURVEY →</button></a>
+    </div>
 
+    <!--main content-->
+    <div class="plan-container">
 
-    <!-- =========================================
-         MAIN DASHBOARD
-         ========================================= -->
+        <!--current and upcoming-->
+        <div class="plan">
+            <h3>CURRENT FOCUS</h3>
+            <tag id="currentFocusTag">WEEK 2 • ACTIVE</tag>
+            <h1 id="currentFocusTitle">CARING TIME</h1>
+            <p id="currentFocusDesc">Dedicate intentional time to demonstrating genuine care for your team. Build trust through consistent, 
+                present leadership.</p>
+        </div>
 
-    <main class="container py-5">
+        <div class="plan1" id="comingUpCard">
+            <h3>COMING UP</h3>
+            <h1 id="comingUpTitle">ACTS OF SUPPORT</h1>
+            <p id="comingUpDesc">Translate care into visible action. Identify and remove blockers so 
+                your people can do their best work.</p>
+            <a href="5weekplan.html" class="view-plan-btn">View full development plan →</a>
+        </div>
 
-
-        <!-- Welcome -->
-
-        <section class="mb-5">
-
-            <h1 class="mb-2">
-                Welcome to your Dashboard
-            </h1>
-
-            <p class="text-muted">
-                Track your leadership development,
-                complete assessments and gather
-                feedback from the people you work with.
-            </p>
-
-        </section>
-
-
-        <!-- =========================================
-             MAIN USER CARDS
-             ========================================= -->
-
-        <div class="row g-4">
-
-
-            <!-- Leadership Assessment -->
-
-            <div class="col-md-6">
-
-                <div class="card h-100 shadow-sm">
-
-                    <div class="card-body">
-
-                        <h3 class="card-title">
-                            Leadership Assessment
-                        </h3>
-
-                        <p class="text-muted">
-                            Complete your Leadership
-                            Compass assessment to
-                            understand your leadership
-                            profile, strengths and
-                            development areas.
-                        </p>
-
-                        <button
-                            id="surveyBtn"
-                            type="button"
-                            class="btn btn-primary"
-                        >
-                            Start Assessment
-                        </button>
-
-                    </div>
-
-                </div>
-
+        <!--leadership languages-->
+        <div class="wheel-container">
+            <h3>The 5 Leadership Languages</h3>
+            <div class="insight-subtitle" id="radarSubtitle">Loading your latest scores&hellip;</div>
+            <div class="wheel">
+                <canvas id="leadershipRadar" role="img" aria-label="Radar chart of your five leadership language scores, each out of 50">Loading your leadership language scores.</canvas>
             </div>
-
-
-            <!-- Development Plan -->
-
-            <div class="col-md-6">
-
-                <div class="card h-100 shadow-sm">
-
-                    <div class="card-body">
-
-                        <h3 class="card-title">
-                            Development Plan
-                        </h3>
-
-                        <p class="text-muted">
-                            View and work through your
-                            personalised leadership
-                            development activities and
-                            track your progress.
-                        </p>
-
-                        <a
-                            href="development-plan.html"
-                            class="btn btn-outline-primary"
-                        >
-                            View Development Plan
-                        </a>
-
-                    </div>
-
-                </div>
-
+            <div class="wheel-label">
+                <span id="radarPointName">Hover a point</span>
+                <span id="radarPointScore"></span>
             </div>
-            
-            <!-- Link to 360 Feedback page -->
-             
-            <div class="col-md-6">
-            <div class="card h-100 shadow-sm">
-                <div class="card-body">
-                    <h3 class="card-title">360° Feedback</h3>
-                    <p class="text-muted">
-                        Create a feedback link, share it with colleagues, and view
-                        anonymous responses from current and previous surveys.
-                    </p>
-                    <a href="feedback360.html" class="btn btn-outline-primary">
-                        Manage 360° Feedback
-                    </a>
+        </div>
+
+        <!--weeks overview-->
+        <div class="overview">
+            <div class="mini-grid" id="weekOverviewGrid">
+                <h3>5 Week Overview</h3>
+                <div>
+                    <h5>Week 1<br><p>Words of Recognition</p></h5>
+                </div>
+                <div class="coloured">
+                    <h5>Week 2<br><p>Caring Time</p></h5>
+                </div>
+                <div class="coloured">
+                    <h5>Week 3<br><p>Acts of Support</p></h5>
+                </div>
+                <div class="coloured">
+                    <h5>Week 4<br><p>Psychological Touch</p></h5>
+                </div>
+                <div class="coloured">
+                    <h5>Week 5<br><p>Receiving Value</p></h5>
                 </div>
             </div>
         </div>
 
-        <!-- =========================================
-             ADMIN SECTION
-             ========================================= -->
+    </div>
 
-        <section
-            id="adminSection"
-            class="mt-5 d-none"
-        >
+    <!--progress over time + peer comparison-->
+    <div class="insights-container">
 
-            <hr />
+        <div class="insight-card progress-card">
+            <h3>Progress over time</h3>
+            <div class="insight-subtitle" id="progressSubtitle">Loading your submissions&hellip;</div>
 
-            <h2 class="mb-3">
-                Admin Tools
-            </h2>
-
-            <p class="text-muted">
-                Manage Leadership Compass content and resources.
-            </p>
-
-
-            <div class="row g-4">
-
-
-                <!-- Learning Modules -->
-
-                <div class="col-md-6">
-
-                    <div class="card h-100 shadow-sm">
-
-                        <div class="card-body">
-
-                            <h4>
-                                Learning Modules
-                            </h4>
-
-                            <p class="text-muted">
-                                Manage learning resources,
-                                leadership content and
-                                development modules.
-                            </p>
-
-                            <a
-                                href="admin-modules.html"
-                                class="btn btn-success"
-                            >
-                                Manage Modules
-                            </a>
-
-                        </div>
-
-                    </div>
-
+            <div class="metric-row">
+                <div class="metric-tile">
+                    <div class="metric-label">Latest score</div>
+                    <div class="metric-value" id="progressLatestScore">&ndash;</div>
                 </div>
-
-
-                <!-- Resources -->
-
-                <div class="col-md-6">
-
-                    <div class="card h-100 shadow-sm">
-
-                        <div class="card-body">
-
-                            <h4>
-                                Resources
-                            </h4>
-
-                            <p class="text-muted">
-                                Manage resources available
-                                through the Leadership Compass
-                                resource library.
-                            </p>
-
-                            <a
-                                href="admin-resources.html"
-                                class="btn btn-success"
-                            >
-                                Manage Resources
-                            </a>
-
-                        </div>
-
-                    </div>
-
+                <div class="metric-tile">
+                    <div class="metric-label" id="progressDeltaLabel">Since last survey</div>
+                    <div class="metric-value" id="progressDelta">&ndash;</div>
                 </div>
-
-
+                <div class="metric-tile">
+                    <div class="metric-label">Score band</div>
+                    <div class="metric-value" id="progressBand" style="font-size:16px;">&ndash;</div>
+                </div>
             </div>
 
-        </section>
+            <div class="chart-label">Overall score</div>
+            <div style="position:relative; width:100%; height:170px; margin-bottom:8px;">
+                <canvas id="overallChart" role="img" aria-label="Line chart of your overall leadership score across the 5-week program">Loading overall score trend.</canvas>
+            </div>
+            <div class="chart-note">Bands: below 150 getting started &middot; 150&ndash;189 building momentum &middot; 190+ strong intent</div>
 
+            <div class="chart-label">By leadership language</div>
+            <div style="position:relative; width:100%; height:190px; margin-bottom:14px;">
+                <canvas id="languageChart" role="img" aria-label="Multi-line chart of your five leadership language scores across the 5-week program">Loading language breakdown.</canvas>
+            </div>
 
-    </main>
+            <div class="legend-row">
+                <span class="legend-item"><span class="legend-swatch" style="background:#64BC28;"></span>Caring time <span id="legendCaringTime"></span></span>
+                <span class="legend-item"><span class="legend-swatch" style="background:#00284B;"></span>Psych. touch <span id="legendPsychologicalTouch"></span></span>
+                <span class="legend-item"><span class="legend-swatch" style="background:#2a78d6;"></span>Acts of support <span id="legendActsOfSupport"></span></span>
+                <span class="legend-item"><span class="legend-swatch" style="background:#e87ba4;"></span>Receiving value <span id="legendReceivingValue"></span></span>
+                <span class="legend-item"><span class="legend-swatch" style="background:#eb6834;"></span>Words of recognition <span id="legendWordsOfRecognition"></span></span>
+            </div>
+        </div>
 
+        <div class="insight-card peer-card">
+            <div>
+                <h3>Peer comparison</h3>
+                <div class="insight-subtitle">Vs. everyone at your organisation</div>
 
-    <!-- =========================================
-         JAVASCRIPT
-         ========================================= -->
+                <div class="peer-headline">
+                    <span class="peer-headline-num" id="peerOverallPercentile">&ndash;</span>
+                    <span class="peer-headline-label">percentile overall</span>
+                </div>
 
-    <script
-        src="static/js/dashboard.js"
-    ></script>
+                <div id="peerRows"></div>
+            </div>
 
+            <div class="peer-footer">Percentiles are recalculated after every organisation-wide survey window closes.</div>
+        </div>
+
+    </div>
+
+    <!--leadership resources-->
+    <div class="resources-section">
+        <div class="resources">
+            <div class="resources-header">
+                <h3>Leadership Resources</h3>
+                <a href="resource-library.html" class="resources-explore">Explore Resource Library →</a>
+            </div>
+
+            <div id="resourcesList">
+                <p class="res-loading">Loading your recommended resources&hellip;</p>
+            </div>
+        </div>
+    </div>
+
+    
+    <div id="adminSection" class="mt-4 d-none">
+        <hr />
+        <h4>Admin tools</h4>
+        <p class="text-muted">Manage learning modules across all books and categories.</p>
+        <a href="admin-modules.html" class="btn btn-success">Manage learning modules</a>
+        <a href="admin-resources.html" class="btn btn-success">Manage Resources</a>
+    </div>
+
+    
 
 </body>
-
 </html>

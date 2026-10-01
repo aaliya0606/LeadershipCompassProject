@@ -2,7 +2,8 @@ const API_BASE =
     window.location.hostname === "localhost" ||
     window.location.hostname === "127.0.0.1"
         ? "http://localhost:8080"
-        : "https://leadership-compass-api.ashysand-21bb09f6.australiaeast.azurecontainerapps.io/api/admin/modules";
+    : "https://leadership-compass-api.ashysand-21bb09f6.australiaeast.azurecontainerapps.io";
+const MODULES_API = `${API_BASE}/api/admin/modules`;
 const token = localStorage.getItem("token");
 const role = localStorage.getItem("role");
 
@@ -84,7 +85,7 @@ async function loadModules() {
   });
 
   try {
-    const response = await fetch(`${API_BASE}?${params.toString()}`, {
+    const response = await fetch(`${MODULES_API}?${params.toString()}`, {
       headers: authHeaders()
     });
 
@@ -158,7 +159,7 @@ async function openEditModal(id) {
   moduleModalLabel.textContent = "Edit learning module";
 
   try {
-    const response = await fetch(`${API_BASE}/${id}`, {
+    const response = await fetch(`${MODULES_API}/${id}`, {
       headers: authHeaders()
     });
 
@@ -208,7 +209,7 @@ async function saveModule(event) {
 
   const payload = buildPayload();
   const isEdit = editingModuleId !== null;
-  const url = isEdit ? `${API_BASE}/${editingModuleId}` : API_BASE;
+  const url = isEdit ? `${MODULES_API}/${editingModuleId}` : MODULES_API;
   const method = isEdit ? "PUT" : "POST";
 
   try {
@@ -240,7 +241,7 @@ async function deleteModule(id) {
   }
 
   try {
-    const response = await fetch(`${API_BASE}/${id}`, {
+    const response = await fetch(`${MODULES_API}/${id}`, {
       method: "DELETE",
       headers: authHeaders()
     });

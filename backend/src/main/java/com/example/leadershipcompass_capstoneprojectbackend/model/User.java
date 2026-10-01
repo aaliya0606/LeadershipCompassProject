@@ -39,5 +39,16 @@ public class User {
     private String department;
 
     @Column
-    private String organisation;    
+    private String organisation;
+
+    /**
+     * When true, plan emails are not sent. Null is treated as still subscribed
+     * so existing rows stay opted in when the column is added.
+     */
+    @Column(name = "email_opt_out")
+    private Boolean emailOptOut;
+
+    /** Secret used by the unsubscribe link. Null until the first email is prepared. */
+    @Column(name = "unsubscribe_token", unique = true, length = 64)
+    private String unsubscribeToken;
 }

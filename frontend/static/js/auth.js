@@ -1,4 +1,3 @@
-console.log("auth.js loaded");
 const BASE_URL = "http://localhost:8080/api/auth";
 
 // LOGIN
@@ -13,7 +12,7 @@ if (loginForm) {
         const message = document.getElementById("loginMessage");
 
         // Detect if it is ADMIN page
-        const isAdminLogin= window.location.pathname.includes("adminLogin");
+        const isAdminLogin = window.location.pathname.toLowerCase().includes("adminlogin");
 
         try {
             const response = await fetch(`${BASE_URL}/login`, {
@@ -68,17 +67,17 @@ if (registerForm) {
   registerForm.addEventListener("submit", async function (event) {
     event.preventDefault();
 
-    //const fullName = document.getElementById("registerFullName").value;
-
-    const firstName = document.getElementById("registerFirstName").value;
-    const lastName = document.getElementById("registerLastName").value;
-    const fullName = `${firstName} ${lastName}`.trim();
+        const fullNameField = document.getElementById("registerFullName");
+        const firstNameField = document.getElementById("registerFirstName");
+        const lastNameField = document.getElementById("registerLastName");
+        const fullName = fullNameField
+            ? fullNameField.value.trim()
+            : `${firstNameField?.value || ""} ${lastNameField?.value || ""}`.trim();
 
     const email = document.getElementById("registerEmail").value;
     const password = document.getElementById("registerPassword").value;
     const confirmPassword = document.getElementById("confirmPassword").value;
     const role = document.getElementById("registerRole").value;
-    const department = document.getElementById("registerDepartment").value;
     const message = document.getElementById("registerMessage");
 
     try {
@@ -107,24 +106,17 @@ if (registerForm) {
             return;
         }
 
-      const requestBody = {
-        fullName: fullName,
-        email: email,
-        password: password,
-        role: role
-      };
-
-      // Only include department if admin role is selected
-      if (role === "ADMIN" && department) {
-        requestBody.department = department;
-      }
-
       const response = await fetch(`${BASE_URL}/register`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json"
         },
-        body: JSON.stringify(requestBody)
+        body: JSON.stringify({
+          fullName: fullName,
+          email: email,
+          password: password,
+          role: "USER"
+        })
       });
 
       const data = await response.json();
@@ -161,7 +153,6 @@ function handleSignOut() {
 }
 
 async function apiFetch (path, options = {}) {
-    const API_URL = "http://localhost:8080/api";
     const response = await fetch (`${API_URL}${path}`, {
         ...options,
         headers: {
@@ -195,7 +186,7 @@ async function apiFetch (path, options = {}) {
 let savedProfile = null;
 function getNameParts(user) {
     if (user.firstName) {
-        return { firstName: user.firstName, lastName: user.lastName || ""};
+        return { firstName: user.firstName, lastName: user.lastName || "" };
     }
     const parts = (user.fullName || "").trim().split(/\s+/);
     return { firstName: parts[0] || "", lastName: parts.slice(1).join(" ") };
@@ -215,7 +206,7 @@ function showProfileMessage(text, type) {
 function showFieldErrors(errors) {
     ["username", "phone"].forEach((field) => {
         const el = document.getElementById(`${field}Error`);
-        if (el) el.text.Content = errors[field] || "";
+        if (el) el.textContent = errors[field] || "";
     });
 }
 
@@ -225,7 +216,7 @@ async function loadProfile() {
         return;
     }
 
-    const user = await apiFetch("/profile/");
+    const user = await apiFetch("/users/me");
     savedProfile = user;
 
     const {firstName, lastName } = getNameParts(user);
