@@ -40,26 +40,10 @@ const navBurgerBtn    = document.getElementById('hamburgerBtn');
 // -------------------------------------------------------------------------
 // Initialise Navigation Bar
 // -------------------------------------------------------------------------
-async function initSidebarNav() {
-  items.forEach(function (item) {
-    item.addEventListener('click', function () {
-      items.forEach(function (i) { i.classList.remove('active'); });
-      panels.forEach(function (p) { p.classList.remove('active'); });
-
-      item.classList.add('active');
-
-      var panelId = 'panel-' + item.getAttribute('data-panel');
-      var panel = document.getElementById(panelId);
-      if (panel) panel.classList.add('active');
-    });
-  });
-}
-
-// Hamburger Button 
-document.getElementById('hamburgerBtn').addEventListener('click', function () {
+function toggleNav() {
   document.getElementById('navLinks').classList.toggle('open');
-  this.classList.toggle('open');
-});
+  document.getElementById('hamburgerBtn').classList.toggle('open');
+}
 
 // -------------------------------------------------------------------------
 // Load questions from backend on page load
