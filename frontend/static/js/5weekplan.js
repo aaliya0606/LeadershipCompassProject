@@ -372,7 +372,10 @@ function showGateModal(message, title, href, linkText) {
 async function extractError(response) {
   try {
     const data = await response.json();
-    return data.message || data.error || `Request failed with status ${response.status}`;
+    if (response.status === 429) {
+      return data.detail || data.message || "Too many plan generations. Please wait before generating another plan.";
+    }
+    return data.detail || data.message || data.error || `Request failed with status ${response.status}`;
   } catch (error) {
     return `Request failed with status ${response.status}`;
   }
