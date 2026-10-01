@@ -1566,6 +1566,659 @@ html, body {
   font-size: 1rem;
 }
 
+/* dashboard */
+@font-face {
+    font-family: 'Montserrat';
+    src: url(../fonts/33107994939.ttf) format('truetype');
+}
+ 
+@font-face {
+    font-family: 'Brittany';
+    src: url(../fonts/BrittanySignatureScript.ttf) format('truetype');
+}
+ 
+@font-face {
+    font-family: 'Anton';
+    src: url(../fonts/Anton-Regular.ttf) format('truetype');
+}
+
+header.custom-navbar {
+  padding: 2px 1.5rem;
+  flex-wrap: wrap;              
+  line-height: 1.5;                               
+  justify-content: space-between; 
+}
+
+header.custom-navbar .navbar-brand {
+  
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding-top: 0.3125rem;
+  padding-bottom: 0.3125rem;
+  margin-right: 1rem;
+  font-size: 1.25rem;
+  text-decoration: none;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+ 
+/* nav links — inline in header */
+.nav-links-inline {
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+    max-width: 0;
+    max-height: 0;   
+    opacity: 0;
+    transition: max-width 0.5s cubic-bezier(0.4, 0, 0.2, 1),
+                max-height 0.5s cubic-bezier(0.4, 0, 0.2, 1),
+                opacity 0.35s ease;
+    white-space: nowrap;
+    flex: 1;
+    padding-left: 120px;
+}
+ 
+.nav-links-inline.open {
+    max-width: 1000px;
+    max-height: 100px; /* comfortably taller than a single row of links */
+    opacity: 1;
+}
+ 
+.nav-link {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: rgba(229, 232, 232, 0.75);
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    text-decoration: none;
+    padding: 20px 16px;
+    border-bottom: 3px solid transparent;
+    flex-shrink: 0;
+    transition: color 0.2s ease, border-color 0.2s ease;
+    background: none;
+    border-top: none;
+    border-left: none;
+    border-right: none;
+    cursor: pointer;
+}
+ 
+.nav-link:hover {
+    color: #96DA5F;
+    border-bottom-color: #96DA5F;
+}
+ 
+.nav-link.logout {
+    color: rgba(229, 232, 232, 0.6);
+    border-left: 1px solid rgba(255, 255, 255, 0.15);
+    padding-left: 18px;
+    margin-left: 4px;
+}
+ 
+.nav-link.logout:hover {
+    color: #ff8a8a;
+    border-bottom-color: #ff8a8a;
+}
+ 
+
+.hamburger {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 5px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    width: 36px;
+    height: 36px;
+    padding: 0;
+    margin-left: auto;
+    flex-shrink: 0;
+}
+ 
+.hamburger span {
+    display: block;
+    width: 28px;
+    height: 3px;
+    background: #fff;
+    border-radius: 2px;
+    transition: all 0.35s ease;
+}
+ 
+.hamburger.open span:nth-child(1) {
+    transform: translateY(8px) rotate(45deg);
+}
+ 
+.hamburger.open span:nth-child(2) {
+    opacity: 0;
+    transform: scaleX(0);
+}
+ 
+.hamburger.open span:nth-child(3) {
+    transform: translateY(-8px) rotate(-45deg);
+}
+ 
+.title h1 {
+    font-family: 'Conthrax';
+    padding: 45px;
+    color: #00284B;
+}
+ 
+.title {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-right: 49px;
+}
+ 
+.plan-container {
+    overflow: visible;
+    display: grid;
+    grid-template-columns: 1.5fr 1.5fr 2fr; 
+    column-gap: 23px;
+    row-gap: 23px;
+    padding-left: 40px;
+    padding-right: 40px;
+}
+ 
+.plan {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+ 
+/* wheel */ 
+.wheel-label {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 12px;
+    min-height: 40px;
+    text-align: center;
+    gap: 4px;
+}
+ 
+#radarPointName {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.85vw;
+    font-weight: 600;
+    color: #00284B;
+}
+ 
+#radarPointScore {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.7vw;
+    color: #64BC28;
+}
+ 
+.wheel svg {
+    overflow: visible;
+    width: 100%;
+    height: 100%;
+}
+ 
+.wheel-container {
+    grid-column: 3;
+    grid-row: 1 / span 2;
+    border-radius: 55px;
+    background-color: #ffffff;
+    border: 1px solid rgba(0, 40, 75, 0.10);
+    box-shadow: 0 6px 24px rgba(0, 40, 75, 0.10), 0 1px 4px rgba(0, 40, 75, 0.06);
+    height: 63vh;
+    padding: 20px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    overflow: visible;
+}
+
+.wheel-container .insight-subtitle {
+    margin-bottom: 8px;
+}
+ 
+.wheel {
+    overflow: visible;
+    flex: 1;
+    min-height: 0;
+    min-width: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding-top: 20px;
+}
+ 
+.wheel-container > h3 {
+    margin-bottom: 10px;
+}
+ 
+.wheel canvas {
+    overflow: visible;
+}
+ 
+.overview {
+    grid-column: 1/3;
+    grid-row: 2;
+    background-color: #ffffff;
+    border: 1px solid rgba(0, 40, 75, 0.10);
+    border-radius: 30px;
+    padding: 30px;
+    box-sizing: border-box;
+    align-self: stretch;
+    box-shadow: 0 4px 16px rgba(0, 40, 75, 0.09);
+}
+ 
+.plan, .plan1 {
+    padding: 30px;
+    min-height: 250px;
+    border-radius: 30px;
+    background-color: #96DA5F;
+    border: 1px solid rgba(0, 40, 75, 0.12);
+    box-shadow: 0 4px 18px rgba(0, 40, 75, 0.13), 0 1px 4px rgba(0, 40, 75, 0.07);
+}
+ 
+tag {
+    font-size: 0.8em;
+    color: #00284B;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 700;
+    opacity: 0.75;
+}
+ 
+.plan h1, .plan1 h1 {
+    white-space: nowrap;
+    font-family: 'Anton', sans-serif;
+    margin: 0;
+    color: #00284B;
+}
+ 
+.plan1 h1 {
+    margin-top: 30px;
+    margin-bottom: 10px;
+}
+ 
+
+.plan h3, .plan1 h3 {
+    padding: 1px;
+    color: #00284B;
+    font-family: 'Montserrat', sans-serif;
+}
+ 
+
+.plan p, .plan1 p {
+    font-family: 'Montserrat', sans-serif;
+    color: #00284B;
+    font-size: 1vw;
+    opacity: 0.8;
+}
+ 
+.view-plan-btn {
+    display: inline-block;
+    margin-top: 20px;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 1rem;
+    font-weight: 600;
+    color: #00284B;
+    text-decoration: none;
+    letter-spacing: 0.04em;
+    transition: color 0.2s ease;
+}
+ 
+.view-plan-btn:hover {
+    color: #64BC28;
+}
+ 
+/* mini grid (weeks overview) */
+.mini-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr; 
+    column-gap: 23px;
+    row-gap: 23px;
+}
+ 
+.mini-grid div {
+    align-self: stretch;
+}
+ 
+.mini-grid h5 {
+    height: 100%;
+    padding-top: 15px;
+    padding-left: 20px;
+    padding-right: 20px;
+    padding-bottom: 20px; 
+    min-height: 20px;
+    border-radius: 30px;
+    background-color: #E5E8E8;
+    border: 1px solid rgba(0, 40, 75, 0.12);
+    box-sizing: border-box;
+    font-family: 'Montserrat', sans-serif;
+    color: rgba(0, 40, 75, 0.4);
+}
+ 
+.mini-grid h5 p {
+    font-size: 14px;
+    font-weight: normal;
+    margin-top: 8px;
+    color: rgba(0, 40, 75, 0.4);
+    opacity: 1;
+}
+ 
+.mini-grid h3 {
+    grid-column: 1/-1;
+}
+ 
+.mini-grid .coloured h5 {
+    color: #00284B;
+    background-color: #96DA5F;
+    border-color: rgba(0, 40, 75, 0.12);
+}
+ 
+.mini-grid .coloured h5 p {
+    color: #00284B;
+    opacity: 0.8;
+}
+
+/* progress over time + peer comparison */
+.insights-container {
+    display: grid;
+    grid-template-columns: 1.5fr 1.5fr 2fr;
+    column-gap: 23px;
+    row-gap: 23px;
+    padding: 23px 40px 0;
+    align-items: stretch;
+}
+
+.progress-card {
+    grid-column: 1 / 3;
+}
+
+.insight-card {
+    background: #ffffff;
+    border: 1px solid rgba(0, 40, 75, 0.10);
+    border-radius: 30px;
+    box-shadow: 0 4px 16px rgba(0, 40, 75, 0.09);
+    padding: 28px 32px 30px;
+}
+
+.insight-card h3 {
+    font-family: 'Anton', sans-serif;
+    color: #00284B;
+    font-size: 1.15rem;
+    margin-bottom: 4px;
+    letter-spacing: 0.01em;
+}
+
+.insight-subtitle {
+    font-size: 13px;
+    color: rgba(0, 40, 75, 0.55);
+    margin-bottom: 20px;
+}
+
+.metric-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 12px;
+    margin-bottom: 24px;
+}
+
+.metric-tile {
+    background: #E5E8E8;
+    border-radius: 16px;
+    padding: 14px 16px;
+}
+
+.metric-tile .metric-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: rgba(0, 40, 75, 0.5);
+    margin-bottom: 4px;
+}
+
+.metric-tile .metric-value {
+    font-size: 22px;
+    font-weight: 700;
+    color: #00284B;
+    font-family: 'Anton', sans-serif;
+}
+
+.metric-tile .metric-value small {
+    font-size: 12px;
+    color: rgba(0, 40, 75, 0.45);
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 600;
+}
+
+.chart-label {
+    font-size: 13px;
+    font-weight: 600;
+    color: #00284B;
+    margin-bottom: 8px;
+}
+
+.chart-note {
+    font-size: 11px;
+    color: rgba(0, 40, 75, 0.45);
+    margin-bottom: 22px;
+}
+
+.legend-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px 16px;
+    margin-top: 4px;
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    color: #00284B;
+}
+
+.legend-swatch {
+    width: 10px;
+    height: 10px;
+    border-radius: 2px;
+    display: inline-block;
+}
+
+.peer-card {
+    display: flex;
+    flex-direction: column;
+    grid-column: 3;
+}
+
+.peer-headline {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+    margin-bottom: 22px;
+}
+
+.peer-headline .peer-headline-num {
+    font-family: 'Anton', sans-serif;
+    font-size: 32px;
+    color: #00284B;
+}
+
+.peer-headline .peer-headline-label {
+    font-size: 13px;
+    color: rgba(0, 40, 75, 0.55);
+}
+
+.peer-row {
+    background: #F1F3F2;
+    border-radius: 14px;
+    padding: 11px 16px 13px;
+    margin-bottom: 10px;
+}
+
+.peer-row:last-child {
+    margin-bottom: 0;
+}
+
+.peer-row-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 7px;
+}
+
+.peer-row-name {
+    font-size: 12.5px;
+    font-weight: 600;
+    color: #00284B;
+}
+
+.peer-row-pct {
+    font-size: 12px;
+    color: rgba(0, 40, 75, 0.55);
+}
+
+.peer-track {
+    position: relative;
+    width: 100%;
+    height: 8px;
+    background: #E5E8E8;
+    border-radius: 99px;
+}
+
+.peer-fill {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    border-radius: 99px;
+    background: linear-gradient(90deg, #64BC28, #96DA5F);
+}
+
+.peer-footer {
+    margin-top: auto;
+    padding-top: 16px;
+    border-top: 1px solid rgba(0, 40, 75, 0.10);
+    font-size: 11.5px;
+    color: rgba(0, 40, 75, 0.45);
+    line-height: 1.5;
+}
+
+@media (max-width: 1100px) {
+    .insights-container {
+        grid-template-columns: 1fr;
+    }
+    .progress-card,
+    .peer-card {
+        grid-column: 1;
+    }
+}
+ 
+/* leadership resources */
+.resources {
+    box-shadow: 0 4px 16px rgba(0, 40, 75, 0.09);
+    background-color: #96DA5F;
+    border: 1px solid rgba(0, 40, 75, 0.12);
+    border-radius: 30px;
+    padding: 28px 36px 32px;
+    box-sizing: border-box;
+}
+ 
+.resources-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 24px;
+}
+ 
+.resources-header h3 {
+    margin: 0;
+    font-family: 'Anton', sans-serif;
+    font-size: 1.15rem;
+    color: #00284B;
+    letter-spacing: 0.01em;
+}
+ 
+.resources-explore {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    color: #00284B;
+    text-decoration: none;
+    letter-spacing: 0.04em;
+    opacity: 0.7;
+    transition: opacity 0.2s ease;
+}
+ 
+.resources-explore:hover {
+    opacity: 1;
+}
+ 
+.res-row {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 18px 0;
+    border-top: 1px solid rgba(0, 40, 75, 0.15);
+    text-decoration: none;
+    transition: opacity 0.2s ease;
+}
+ 
+.res-row:last-of-type {
+    border-bottom: 1px solid rgba(0, 40, 75, 0.15);
+}
+ 
+.res-row:hover {
+    opacity: 0.7;
+}
+ 
+.res-title {
+    flex: 1;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+    color: #00284B;
+    line-height: 1.35;
+}
+ 
+.res-arrow {
+    font-size: 17px;
+    color: #00284B;
+    opacity: 0.45;
+    flex-shrink: 0;
+    transition: transform 0.2s ease, opacity 0.2s ease;
+}
+ 
+.res-row:hover .res-arrow {
+    transform: translateX(4px);
+    opacity: 1;
+}
+ 
+.resources-section {
+    padding: 23px 40px;
+    margin-top: 18px;
+}
+ 
+/* start survey */
+#surveyBtn {
+    font-family: 'Conthrax', sans-serif;
+    background-color: #64bc28;
+    color: #e5e8e8;
+    border: none;
+    border-radius: 30px;
+    padding: 14px 28px;
+    font-size: 0.9rem;
+    cursor: pointer;
+    letter-spacing: 0.05em;
+    transition: all 0.3s ease;
+    margin-top: 20px;
+}
+ 
+#surveyBtn:hover {
+    background-color: #96da5f;
+    color: #013664;
+}
+
 /* MOBILE PHONE OVERRIDES FOR NAVBAR */
 
 @media (max-width: 768px) {
@@ -1617,4 +2270,90 @@ html, body {
   }
 }
 
+.custom-navbar {
+  padding: 2px 40px;
+  display: flex;
+  align-items: center;
+  gap: 0;
+  position: relative;
+}
 
+
+.brand-title {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 700;
+  font-size: 1.1rem;
+  color: #e5e8e8;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.navbar-logo {
+  height: 38px;
+  width: auto;
+}
+
+/* empty states (no survey yet/load errors) */
+.empty-state {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 28px 20px;
+  border: 2px dashed rgba(0, 40, 75, 0.18);
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.35);
+  color: rgba(0, 40, 75, 0.6);
+  font-family: 'Montserrat', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  text-align: center;
+  line-height: 1.5;
+}
+
+/* progress card */
+.progress-card.is-empty > :not(h3):not(.insight-subtitle):not(.empty-state) {
+  display: none;
+}
+
+/* radar chart */
+.wheel-container.is-empty .wheel,
+.wheel-container.is-empty .wheel-label {
+  display: none;
+}
+.wheel-container .empty-state {
+  flex: 1;
+  margin-top: 8px;
+}
+/* DASHBOARD: stop the page being wider than the screen */
+.plan-container {
+  grid-template-columns: minmax(0, 1.5fr) minmax(0, 1.5fr) minmax(0, 2fr);
+}
+
+.insights-container {
+  grid-template-columns: minmax(0, 1.5fr) minmax(0, 1.5fr) minmax(0, 2fr);
+}
+
+.plan-container > *,
+.insights-container > *,
+.mini-grid > * {
+  min-width: 0;
+}
+
+.plan h1,
+.plan1 h1 {
+  white-space: normal;
+  font-size: clamp(1.5rem, 2.4vw, 2.5rem);
+  line-height: 1.1;
+}
+
+.wheel canvas,
+.insight-card canvas {
+  max-width: 100%;
+}
+
+@media (max-width: 1100px) {
+  .insights-container {
+    grid-template-columns: 1fr;
+  }
+}
