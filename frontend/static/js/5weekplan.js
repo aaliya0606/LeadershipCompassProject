@@ -1,7 +1,13 @@
-const API_BASE = "http://localhost:8080/api/development-plans";
+const API_BASE =
+  window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1"
+    ? "http://localhost:8080"
+    : "https://leadership-compass-api.ashysand-21bb09f6.australiaeast.azurecontainerapps.io";
+const PLAN_API = `${API_BASE}/api/development-plans`;
 const token = localStorage.getItem("token");
 
 const logoutBtn = document.getElementById("logoutBtn");
+const hamburgerBtn = document.getElementById("hamburgerBtn");
+const navLinks = document.getElementById("navLinks");
 const generatePlanBtn = document.getElementById("generatePlanBtn");
 const weeksContainer = document.getElementById("weeksContainer");
 const planMeta = document.getElementById("planMeta");
@@ -25,12 +31,45 @@ if (logoutBtn) {
   });
 }
 
+if (hamburgerBtn && navLinks) {
+  hamburgerBtn.addEventListener("click", () => {
+    navLinks.classList.toggle("open");
+    hamburgerBtn.classList.toggle("open");
+  });
+}
+
 if (generatePlanBtn) {
   generatePlanBtn.addEventListener("click", async () => {
     generatePlanBtn.disabled = true;
-    showAlert("Generating your personalised plan...", "info");
     try {
-      const response = await fetch(`${API_BASE}/generate`, {
+      const currentPlanComplete = await checkCurrentPlanCompletion();
+      if (currentPlanComplete !== true) {
+        showGateModal(
+          currentPlanComplete === false
+            ? "Finish every action in your current 5-week plan before generating another."
+            : "We couldn't verify your current plan. Check your connection and try again; another plan will not be generated until completion is confirmed.",
+          "Finish your current plan first",
+          "#development-plan",
+          "Go to Current Plan"
+        );
+        return;
+      }
+
+      const assessmentComplete = await checkAssessmentCompletion();
+      if (assessmentComplete !== true) {
+        showGateModal(
+          assessmentComplete === false
+            ? "Complete and submit the assessment survey before generating your personalised 5-week development plan."
+            : "We couldn't verify your assessment status. Check your connection and try again; your plan will not be generated until completion is confirmed.",
+          "Complete your assessment first",
+          "survey.html",
+          "Go to Assessment"
+        );
+        return;
+      }
+
+      showAlert("Generating your personalised plan...", "info");
+      const response = await fetch(`${PLAN_API}/generate`, {
         method: "POST",
         headers: {
           Authorization: `Bearer ${token}`
@@ -38,7 +77,17 @@ if (generatePlanBtn) {
       });
 
       if (!response.ok) {
-        throw new Error(await extractError(response));
+        const errorMessage = await extractError(response);
+        if (response.status === 409 && errorMessage.includes("Complete all actions")) {
+          showGateModal(
+            "Finish every action in your current 5-week plan before generating another.",
+            "Finish your current plan first",
+            "#development-plan",
+            "Go to Current Plan"
+          );
+          return;
+        }
+        throw new Error(errorMessage);
       }
 
       const plan = await response.json();
@@ -68,7 +117,7 @@ async function loadCurrentPlan() {
   planLoading.classList.remove("d-none");
   hideProgress();
   try {
-    const response = await fetch(`${API_BASE}/current`, {
+    const response = await fetch(`${PLAN_API}/current`, {
       headers: {
         Authorization: `Bearer ${token}`
       }
@@ -116,6 +165,7 @@ function renderPlan(plan) {
     .map((week) => {
       const actions = normalizeActions(week.actions);
       const completedCount = actions.filter((action) => action.completed).length;
+      const weekComplete = actions.length > 0 && completedCount === actions.length;
       const actionItems = actions
         .map((action) => {
           const inputId = `action-${week.weekNumber}-${action.index}`;
@@ -140,7 +190,7 @@ function renderPlan(plan) {
 
       return `
         <div class="col-lg-6">
-          <div class="card week-card h-100">
+          <div class="card week-card h-100${weekComplete ? " is-week-complete" : ""}">
             <div class="card-body">
               <div class="d-flex justify-content-between align-items-start gap-3 mb-3">
                 <div>
@@ -163,6 +213,27 @@ function renderPlan(plan) {
         </div>`;
     })
     .join("");
+
+  maybeShowPlanCompletionCelebration(plan);
+}
+
+function maybeShowPlanCompletionCelebration(plan) {
+  if (!plan.id) {
+    return;
+  }
+
+  const actions = (plan.weeks || []).flatMap((week) => normalizeActions(week.actions));
+  const planComplete = actions.length > 0 && actions.every((action) => action.completed);
+  const celebrationKey = `leadershipCompass:plan-completion-celebrated:${plan.id}`;
+  if (!planComplete || localStorage.getItem(celebrationKey)) {
+    return;
+  }
+
+  localStorage.setItem(celebrationKey, "true");
+  const modalElement = document.getElementById("planCompleteModal");
+  if (modalElement) {
+    bootstrap.Modal.getOrCreateInstance(modalElement).show();
+  }
 }
 
 async function toggleAction(checkbox) {
@@ -179,7 +250,7 @@ async function toggleAction(checkbox) {
 
   try {
     const response = await fetch(
-      `${API_BASE}/${currentPlan.id}/weeks/${weekNumber}/actions/${actionIndex}`,
+      `${PLAN_API}/${currentPlan.id}/weeks/${weekNumber}/actions/${actionIndex}`,
       {
         method: "PATCH",
         headers: {
@@ -237,10 +308,74 @@ function hideProgress() {
   planProgressFill.style.width = "0%";
 }
 
+async function checkAssessmentCompletion() {
+  try {
+    const response = await fetch(`${API_BASE}/api/survey/history`, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    });
+
+    if (!response.ok) {
+      return null;
+    }
+
+    const history = await response.json();
+    return Array.isArray(history) ? history.length > 0 : null;
+  } catch (error) {
+    console.error("Unable to verify assessment completion:", error);
+    return null;
+  }
+}
+
+async function checkCurrentPlanCompletion() {
+  try {
+    const response = await fetch(`${PLAN_API}/current`, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    });
+
+    if (response.status === 404) {
+      return true;
+    }
+    if (!response.ok) {
+      return null;
+    }
+
+    const plan = await response.json();
+    const actions = (plan.weeks || []).flatMap((week) => normalizeActions(week.actions));
+    return actions.length > 0 && actions.every((action) => action.completed);
+  } catch (error) {
+    console.error("Unable to verify current plan completion:", error);
+    return null;
+  }
+}
+
+function showGateModal(message, title, href, linkText) {
+  const modalElement = document.getElementById("assessmentRequiredModal");
+  const modalTitle = document.getElementById("assessmentRequiredTitle");
+  const modalMessage = document.getElementById("assessmentRequiredMessage");
+  const modalLink = document.getElementById("assessmentRequiredLink");
+  if (!modalElement || !modalTitle || !modalMessage || !modalLink) {
+    window.alert(message);
+    return;
+  }
+
+  modalTitle.textContent = title;
+  modalMessage.textContent = message;
+  modalLink.href = href;
+  modalLink.textContent = linkText;
+  bootstrap.Modal.getOrCreateInstance(modalElement).show();
+}
+
 async function extractError(response) {
   try {
     const data = await response.json();
-    return data.message || data.error || `Request failed with status ${response.status}`;
+    if (response.status === 429) {
+      return data.detail || data.message || "Too many plan generations. Please wait before generating another plan.";
+    }
+    return data.detail || data.message || data.error || `Request failed with status ${response.status}`;
   } catch (error) {
     return `Request failed with status ${response.status}`;
   }

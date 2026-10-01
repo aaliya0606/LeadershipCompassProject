@@ -28,6 +28,8 @@ public class AdminDashboardResponse {
 
     private double developmentPlanCompletionRate;
 
+    private long participantsWithDevelopmentPlans;
+
     private double averageLeadershipScore;
 
     private double averageCaringTimeScore;

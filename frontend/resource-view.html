@@ -41,7 +41,12 @@
   </main>
 
   <script>
-    const apiBaseUrl = 'http://localhost:8080/api/resources';
+    
+    const apiBaseUrl =
+    window.location.hostname === "localhost" ||
+    window.location.hostname === "127.0.0.1"
+        ? "http://localhost:8080/api/resources"
+        : "https://leadership-compass-api.ashysand-21bb09f6.australiaeast.azurecontainerapps.io/api/resources";
 
     function escapeHtml(value) {
       return String(value ?? '').replace(/[&<>'"]/g, character => ({

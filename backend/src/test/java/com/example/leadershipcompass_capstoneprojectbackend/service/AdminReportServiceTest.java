@@ -39,6 +39,7 @@ class AdminReportServiceTest {
                         3,
                         21.43,
                         50.00,
+                        2,
                         177.67,
                         38.00,
                         36.67,

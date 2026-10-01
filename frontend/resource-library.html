@@ -9,6 +9,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Anton&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
   <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
   <link rel="stylesheet" href="static/style/main.css" />
+  <link rel="stylesheet" href="static/style/ai-chatbot.css" />
 </head>
 
 <body>
@@ -33,7 +34,7 @@
   </header>
 
   <main class="container mt-5">
-    <div class="dashboard-card mb-5">
+    <div class="dashboard-card resource-library-hero mb-5">
       <div class="row align-items-center gx-5">
         <div class="col-lg-8">
           <span class="eyebrow text-uppercase">Resource Library</span>
@@ -44,7 +45,7 @@
       </div>
     </div>
 
-    <div class="dashboard-card p-4 mb-5">
+    <div class="dashboard-card resource-filters-card p-4 mb-5">
       <div class="row gx-3 align-items-end mb-4">
         <div class="col-md-5">
           <input type="text" class="form-control" placeholder="Search resources..." id="searchInput">
@@ -69,7 +70,7 @@
           </select>
         </div>
         <div class="col-md-2 text-md-end">
-          <span class="badge bg-light text-dark">8 resources</span>
+          <span class="badge resource-count">8 resources</span>
         </div>
       </div>
 
@@ -93,6 +94,24 @@
       'acts of support': 'badge-soft-primary',
       'words of recognition': 'badge-soft-success',
       'psychological touch': 'badge-soft-info'
+    };
+
+    const languageToneMap = {
+      'caring time': 'tone-green',
+      'receiving value': 'tone-blue',
+      'acts of support': 'tone-orange',
+      'words of recognition': 'tone-purple',
+      'psychological touch': 'tone-teal'
+    };
+
+    const resourceIconMap = {
+      article: 'article',
+      video: 'play_circle',
+      podcast: 'headphones',
+      template: 'description',
+      ebook: 'menu_book',
+      book: 'menu_book',
+      document: 'description'
     };
 
     // Map resource types to action button text
@@ -121,19 +140,25 @@
     // Create resource card HTML
     function createResourceCard(resource) {
       const languageClass = languageBadgeMap[resource.leadershipLanguage?.toLowerCase()] || 'badge-soft-primary';
+      const languageTone = languageToneMap[resource.leadershipLanguage?.toLowerCase()] || 'tone-navy';
       const typeDisplay = formatResourceType(resource.resourceType);
       const actionText = actionButtonMap[resource.resourceType?.toLowerCase()] || 'View';
+      const resourceIcon = resourceIconMap[resource.resourceType?.toLowerCase()] || 'auto_awesome';
       const description = resource.description || 'No description available';
 
       return `
         <div class="col-md-4 mb-4">
-          <div class="card h-100">
+          <div class="card resource-card h-100 ${languageTone}">
             <div class="card-body">
+              <div class="resource-card-topline">
+                <span class="resource-icon material-symbols-outlined" aria-hidden="true">${resourceIcon}</span>
+                <span class="resource-type-label">${typeDisplay}</span>
+              </div>
               <h5 class="card-title">${resource.title}</h5>
               <p class="card-text">${description}</p>
               <span class="badge badge-pill ${languageClass}">${resource.leadershipLanguage || 'General'}</span>
               <span class="badge badge-pill badge-soft-secondary ms-1">${typeDisplay}</span>
-              <button class="btn btn-sm btn-outline-primary mt-3" onclick="handleResourceAction(${resource.id})">
+              <button class="btn btn-sm resource-action-button mt-3" onclick="handleResourceAction(${resource.id})">
                 ${actionText}
               </button>
             </div>
@@ -156,7 +181,7 @@
       }
 
       // Update resource count
-      const resourceCount = document.querySelector('.badge.bg-light');
+      const resourceCount = document.querySelector('.resource-count');
       if (resourceCount) {
         resourceCount.textContent = `${resources.length} resource${resources.length !== 1 ? 's' : ''}`;
       }
@@ -185,6 +210,12 @@
       renderResources(filtered);
     }
 
+    const API_BASE =
+    window.location.hostname === "localhost" ||
+    window.location.hostname === "127.0.0.1"
+        ? "http://localhost:8080"
+        : "https://leadership-compass-api.ashysand-21bb09f6.australiaeast.azurecontainerapps.io";
+
     // Load resources from backend
     async function loadResources() {
       try {
@@ -194,7 +225,7 @@
           return;
         }
 
-        const response = await fetch("http://localhost:8080/api/resources", {
+        const response = await fetch(`${API_BASE}/api/resources`, {
           headers: {
             "Authorization": `Bearer ${token}`,
             "Content-Type": "application/json"
@@ -236,5 +267,6 @@
       if (filterType) filterType.addEventListener('change', filterResources);
     });
   </script>
+  <script src="static/js/ai-chatbot.js"></script>
 </body>
 </html>

@@ -1544,6 +1544,11 @@
           <div class="content-card">
             <h3>Current Plan Completion</h3>
 
+            <p class="score-note">
+              Participants with Development Plans:
+              <strong id="participantsWithDevelopmentPlans">—</strong>
+            </p>
+
             <div class="month-bar">
               <div class="month-label">
                 <span>Completed Development Actions</span>
@@ -1985,7 +1990,15 @@
 
   <script>
     const MINIMUM_GROUP_SIZE = 6;
-    const API_BASE = "http://localhost:8080";
+
+    //CHANGE THE API TO POINT TO THE AZURE STATIC APP
+    const API_BASE =
+        window.location.hostname === "localhost" ||
+        window.location.hostname === "127.0.0.1"
+            ? "http://localhost:8080"
+            : "https://leadership-compass-api.ashysand-21bb09f6.australiaeast.azurecontainerapps.io";
+
+
     const DASHBOARD_API = `${API_BASE}/api/admin/dashboard`;
     const MODULES_API = `${API_BASE}/api/admin/modules`;
 
@@ -2182,6 +2195,9 @@
 
       document.getElementById("developmentPlanCompletionBar").style.width =
         `${Math.min(Math.max(developmentPlanCompletion, 0), 100)}%`;
+      
+      document.getElementById("participantsWithDevelopmentPlans").textContent =
+        `${data.participantsWithDevelopmentPlans ?? 0} of ${data.totalUsers}`;
 
       document.getElementById("participantsNote").textContent =
         department.toLowerCase() === "all"

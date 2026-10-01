@@ -3,7 +3,10 @@ package com.example.leadershipcompass_capstoneprojectbackend.controller;
 import com.example.leadershipcompass_capstoneprojectbackend.dto.DevelopmentPlanDto;
 import com.example.leadershipcompass_capstoneprojectbackend.dto.DevelopmentPlanSummaryDto;
 import com.example.leadershipcompass_capstoneprojectbackend.dto.ToggleDevelopmentPlanActionRequest;
+import com.example.leadershipcompass_capstoneprojectbackend.service.AiBrainUsageLimiter;
+import com.example.leadershipcompass_capstoneprojectbackend.service.AiBrainUsageLimiter.Action;
 import com.example.leadershipcompass_capstoneprojectbackend.service.DevelopmentPlanService;
+import com.example.leadershipcompass_capstoneprojectbackend.service.PlanEmailService;
 import jakarta.validation.Valid;
 import java.security.Principal;
 import java.util.List;
@@ -38,6 +41,8 @@ import org.springframework.web.bind.annotation.RestController;
 public class DevelopmentPlanController {
 
     private final DevelopmentPlanService developmentPlanService;
+    private final PlanEmailService planEmailService;
+    private final AiBrainUsageLimiter usageLimiter;
 
     /**
      * Returns the authenticated user's most recent saved development plan.
@@ -82,8 +87,11 @@ public class DevelopmentPlanController {
      */
     @PostMapping("/generate")
     public ResponseEntity<DevelopmentPlanDto> generatePlan(Principal principal) {
-        DevelopmentPlanDto plan = developmentPlanService.generatePlan(principal.getName());
-        return ResponseEntity.status(HttpStatus.CREATED).body(plan);
+        try (AiBrainUsageLimiter.Permit ignored = usageLimiter.acquire(Action.PLAN, principal.getName())) {
+            DevelopmentPlanDto plan = developmentPlanService.generatePlan(principal.getName());
+            planEmailService.sendWelcome(plan.getId());
+            return ResponseEntity.status(HttpStatus.CREATED).body(plan);
+        }
     }
 
     /**

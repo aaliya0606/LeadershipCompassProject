@@ -244,6 +244,118 @@ p {
   min-height: 220px;
 }
 
+.dashboard-card.resource-library-hero {
+  position: relative;
+  overflow: hidden;
+  padding: 2.5rem;
+  border: 0;
+  color: white;
+  background: linear-gradient(115deg, #64bc28 0%, #278b59 48%, #00284b 100%);
+  box-shadow: 0 16px 36px rgba(0, 40, 75, 0.18);
+}
+
+.dashboard-card.resource-library-hero .eyebrow,
+.dashboard-card.resource-library-hero h1,
+.dashboard-card.resource-library-hero p {
+  position: relative;
+  z-index: 1;
+  color: white !important;
+}
+
+.dashboard-card.resource-library-hero h1 {
+  max-width: 760px;
+  font-size: clamp(2rem, 4vw, 3.2rem);
+}
+
+.dashboard-card.resource-library-hero .lead {
+  max-width: 760px;
+  opacity: 0.95;
+}
+
+.dashboard-card.resource-filters-card {
+  border-top: 5px solid var(--brand-light-green);
+  background: linear-gradient(135deg, #eef8e7 0%, #f7fbff 52%, #e4f3d9 100%);
+  box-shadow: 0 12px 30px rgba(0, 40, 75, 0.1);
+}
+
+.resource-count {
+  padding: 0.65rem 0.85rem;
+  color: var(--brand-dark);
+  background: #e3f4d5;
+  border: 1px solid #c8e8b1;
+  font-weight: 700;
+}
+
+#resourceContainer .resource-card {
+  --resource-accent: var(--brand-green);
+  min-height: 250px;
+  overflow: hidden;
+  border: 1px solid color-mix(in srgb, var(--resource-accent) 30%, white);
+  border-top: 5px solid var(--resource-accent);
+  border-radius: 14px;
+  background: linear-gradient(155deg, white 55%, color-mix(in srgb, var(--resource-accent) 10%, white));
+  box-shadow: 0 8px 20px rgba(0, 40, 75, 0.08);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+#resourceContainer .resource-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 14px 28px rgba(0, 40, 75, 0.14);
+}
+
+#resourceContainer .resource-card.tone-green { --resource-accent: #64a92f; }
+#resourceContainer .resource-card.tone-blue { --resource-accent: #3188bd; }
+#resourceContainer .resource-card.tone-orange { --resource-accent: #dc8b35; }
+#resourceContainer .resource-card.tone-purple { --resource-accent: #8764b5; }
+#resourceContainer .resource-card.tone-teal { --resource-accent: #2d9b91; }
+#resourceContainer .resource-card.tone-navy { --resource-accent: #315c7a; }
+
+.resource-card-topline {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+}
+
+.resource-icon {
+  display: inline-grid;
+  width: 42px;
+  height: 42px;
+  place-items: center;
+  color: var(--resource-accent);
+  background: color-mix(in srgb, var(--resource-accent) 14%, white);
+  border-radius: 12px;
+  font-size: 1.5rem;
+}
+
+.resource-type-label {
+  padding: 0.35rem 0.65rem;
+  color: var(--resource-accent);
+  background: color-mix(in srgb, var(--resource-accent) 12%, white);
+  border-radius: 999px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.resource-card .card-title {
+  color: var(--brand-dark);
+}
+
+.resource-action-button {
+  color: white;
+  background: var(--resource-accent);
+  border: 1px solid var(--resource-accent);
+  font-weight: 700;
+}
+
+.resource-action-button:hover,
+.resource-action-button:focus {
+  color: white;
+  filter: brightness(0.9);
+}
+
 .resource-view-shell {
   max-width: 1080px;
   padding-top: 3rem;
@@ -431,6 +543,15 @@ p {
   position: relative;
 }
 
+.anton-logo {
+    width: 180px;
+    height: 100px;
+    position: absolute;
+    left: 50%;
+    top: -0.25%;
+    transform: translateX(-50%);
+}
+
 .navbar-brand {
   text-decoration: none;
   display: flex;
@@ -561,30 +682,40 @@ h1, h4, h5, h6 {
   padding: 3rem;
 }
 
-.dashboard-card.hero-card .btn-hero {
+.dashboard-card.hero-card .hero-action-button {
   background: white;
-  border-color: white;
+  border: 1px solid white;
   color: var(--brand-green);
   font-weight: 700;
+  box-shadow: 0 4px 0 rgba(0, 40, 75, 0.2);
+  text-decoration: none;
 }
 
-.dashboard-card.hero-card .btn-hero:hover,
-.dashboard-card.hero-card .btn-hero:focus {
+.dashboard-card.hero-card .hero-action-button:hover,
+.dashboard-card.hero-card .hero-action-button:focus {
   background: var(--brand-light-green);
   border-color: var(--brand-light-green);
   color: var(--brand-dark);
+  transform: translateY(-1px);
 }
 
-.dashboard-card.hero-card .btn-outline-dark {
-  border-color: white;
+.dashboard-card.hero-card p strong {
   color: white;
+  font-weight: 800;
+  text-decoration: underline;
+  text-decoration-color: var(--brand-light-green);
+  text-decoration-thickness: 2px;
+  text-underline-offset: 3px;
 }
 
-.dashboard-card.hero-card .btn-outline-dark:hover,
-.dashboard-card.hero-card .btn-outline-dark:focus {
-  background: white;
-  border-color: white;
-  color: var(--brand-dark);
+.dashboard-card.hero-card .lead {
+  color: rgba(255, 255, 255, 0.94) !important;
+  opacity: 1;
+}
+
+.dashboard-card.hero-card .hero-panel {
+  border: 3px solid white;
+  box-shadow: 0 0 0 5px rgba(255, 255, 255, 0.42), 0 14px 28px rgba(0, 20, 35, 0.18);
 }
 
 #development-plan {
@@ -607,6 +738,28 @@ h1, h4, h5, h6 {
   box-shadow: 0 14px 30px rgba(0, 40, 75, 0.09);
 }
 
+#development-plan .week-card.is-week-complete {
+  background-color: #f2faeb;
+  border-color: #d6ebc8;
+  border-top-color: var(--brand-green);
+  box-shadow: 0 10px 24px rgba(100, 188, 40, 0.14);
+}
+
+#development-plan .week-card.is-week-complete .list-group-item {
+  background-color: transparent;
+}
+
+.plan-complete-modal {
+  border: 2px solid var(--brand-light-green);
+  border-radius: 16px;
+}
+
+.plan-celebration-mark {
+  font-size: 3rem;
+  line-height: 1;
+  margin: 0.25rem 0 1rem;
+}
+
 #development-plan .week-card h5 {
   font-size: 1.45rem;
   line-height: 1.15;
@@ -624,6 +777,10 @@ h1, h4, h5, h6 {
 }
 
 @media (max-width: 767px) {
+  .dashboard-card.resource-library-hero {
+    padding: 1.5rem;
+  }
+
   .dashboard-card.hero-card {
     padding: 1.5rem;
   }
@@ -729,23 +886,45 @@ html, body {
 /* login page */
 .login {
     display: flex;
+    justify-content: flex-end;
+    align-items: center;
     height: 100vh;
-    padding-top: 80px;
+    padding: 10px 5% 0;
     background-image: url('../img/login-signup page.png');
     background-size: cover;
-    background-position: center;
+    background-position: center center;
     background-repeat: no-repeat;
+    background-attachment: fixed;
+    position: relative;
 }
 
-/* login page */
-.sign-up {
+.adminLogin {
     display: flex;
+    justify-content: flex-end;
+    align-items: center;
     height: 100vh;
-    padding-top: 80px;
+    padding: 10px 5% 0;
     background-image: url('../img/login-signup page.png');
     background-size: cover;
-    background-position: center;
+    background-position: center center;
     background-repeat: no-repeat;
+    background-attachment: fixed;
+    position: relative;
+}
+
+/* sign-up page */
+.sign-up {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    height: 100vh;
+    padding: 10px 5% 0;
+    background-image: url('../img/login-signup page.png');
+    background-size: cover;
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    position: relative;
 }
 
 /* signup page */
@@ -804,19 +983,33 @@ html, body {
 
 /* Top Right Logo */
 .social-icons {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    justify-content: center;
     position: absolute;
-    top: -8px;
-    right: 24px;
-    width: 220px;
-    height: auto;
-    z-index: 10;
+    right: 20px;
+    top: 15px;
 }
 
-/* login button - return to startup */
-.return-btn {
-    position: absolute;
-    top: 850px;
-    left: 1325px;
+.social-icons a img {
+    height: 40px;
+    width: 40px;
+}
+
+/* Own card for bottom links/button */
+
+.bottom-links {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-top: 20px;
+    align-items: center;
+}
+
+/* return button for sign in */
+.adminlogin-btn {
     font-family: 'Conthrax', sans-serif;
     font-size: 13px;
     font-weight: 600;
@@ -824,29 +1017,63 @@ html, body {
     text-transform: uppercase;
     color: #ffffff;
     text-decoration: none;
-    z-index: 10;
+}
+.return-btn {
+    font-family: 'Conthrax', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: #ffffff;
+    text-decoration: none;
 }
 
 .return-btn:hover {
     color: #6abf3a;
 }
 
+.adminlogin-btn:hover {
+    color: #6abf3a;
+}
+
+.adminreturn-btn {
+    font-family: 'Conthrax', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: #ffffff;
+    text-decoration: none;
+}
+
+.adminreturn-btn:hover {
+    color: #6abf3a;
+}
+
+.return-btn-signup {
+    font-family: 'Conthrax', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: #ffffff;
+    text-decoration: none;
+}
+
 /* MAIN CONFIGURATION - LOGIN */
 
 .login-form {
-    position: absolute;
-    top: 400px;
-    left: 1180px;
-    transform: translateY(-50%);
+    position: relative;
     width: 380px;
+    max-width: 90%;
+    margin-right: 5%;
 }
 
 .sign-up-form {
-    position: absolute;
-    top: 190px;
-    left: 1180px;
-    transform: translateY(-50%);
+    position: relative;
     width: 380px;
+    max-width: 90%;
+    margin-right: 5%;
 }
 
 
@@ -874,8 +1101,18 @@ html, body {
     letter-spacing: 1px;
 }
 
+.field-row {
+    display: flex;
+    gap: 16px;
+}
+
+.field-row .field-group {
+    flex: 1;
+}
+
 .field-input {
     width: 100%;
+    height: 50px;
     background: #ffffff;
     border: 1px solid rgba(255, 255, 255, 0.3);
     border-radius: 10px;
@@ -942,8 +1179,8 @@ html, body {
 
 .signup-link {
     text-align: center;
-    margin-top: 690px;
-    margin-left: 1230px;
+    margin-top: 10px;
+    margin-left: 0px;
     font-size: 13px;
     color: rgba(255, 255, 255, 0.7);
     font-family: 'Conthrax', sans-serif;
@@ -963,8 +1200,7 @@ html, body {
 /* SIGN UP CONFIGURATION */
 .login-link {
     text-align: center;
-    margin-top: 735px;
-    margin-left: 1230px;
+    margin-top: 10px;
     font-size: 13px;
     color: rgba(255, 255, 255, 0.7);
     font-family: 'Conthrax', sans-serif;
@@ -976,8 +1212,12 @@ html, body {
     font-weight: 600;
 }
 
-.login-link:hover {
+.login-link a:hover {
     text-decoration: underline;
+}
+
+.return-btn-signup:hover {
+    color: #6abf3a;
 }
 
 
