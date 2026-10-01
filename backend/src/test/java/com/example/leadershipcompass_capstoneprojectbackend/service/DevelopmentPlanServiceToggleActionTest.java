@@ -1,15 +1,27 @@
 package com.example.leadershipcompass_capstoneprojectbackend.service;
 
+import java.time.Instant;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import static org.mockito.ArgumentMatchers.any;
+import org.mockito.Mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.server.ResponseStatusException;
 
 import com.example.leadershipcompass_capstoneprojectbackend.dto.DevelopmentPlanDto;
 import com.example.leadershipcompass_capstoneprojectbackend.model.DevelopmentPlan;
@@ -22,17 +34,6 @@ import com.example.leadershipcompass_capstoneprojectbackend.repository.ModulesRe
 import com.example.leadershipcompass_capstoneprojectbackend.repository.SurveyResultRepository;
 import com.example.leadershipcompass_capstoneprojectbackend.repository.UserRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import java.time.Instant;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.http.HttpStatus;
-import org.springframework.web.server.ResponseStatusException;
 
 /**
  * Unit tests for checking and unchecking development-plan actions.
@@ -150,6 +151,26 @@ class DevelopmentPlanServiceToggleActionTest {
         assertEquals(HttpStatus.NOT_FOUND, exception.getStatusCode());
         assertEquals("Action not found.", exception.getReason());
     }
+
+        @Test
+        void shouldRejectGeneratingAnotherPlanUntilCurrentPlanIsComplete() {
+        User user = testUser();
+        DevelopmentPlan currentPlan = testPlan(user);
+        when(userRepository.findByEmail(user.getEmail())).thenReturn(Optional.of(user));
+        when(developmentPlanRepository.findFirstByUserIdOrderByGeneratedAtDesc(user.getId()))
+            .thenReturn(Optional.of(currentPlan));
+
+        ResponseStatusException exception = assertThrows(
+            ResponseStatusException.class,
+            () -> developmentPlanService.generatePlan(user.getEmail()));
+
+        assertEquals(HttpStatus.CONFLICT, exception.getStatusCode());
+        assertEquals(
+            "Complete all actions in your current 5-week plan before generating another.",
+            exception.getReason());
+        verify(surveyResultRepository, never()).findFirstByUserOrderByGenerateDateDesc(user);
+        verify(modulesRepository, never()).findByActiveTrueOrderByDisplayOrderAscIdAsc();
+        }
 
     private User testUser() {
         return User.builder()

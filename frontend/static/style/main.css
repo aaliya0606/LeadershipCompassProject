@@ -570,30 +570,40 @@ h1, h4, h5, h6 {
   padding: 3rem;
 }
 
-.dashboard-card.hero-card .btn-hero {
+.dashboard-card.hero-card .hero-action-button {
   background: white;
-  border-color: white;
+  border: 1px solid white;
   color: var(--brand-green);
   font-weight: 700;
+  box-shadow: 0 4px 0 rgba(0, 40, 75, 0.2);
+  text-decoration: none;
 }
 
-.dashboard-card.hero-card .btn-hero:hover,
-.dashboard-card.hero-card .btn-hero:focus {
+.dashboard-card.hero-card .hero-action-button:hover,
+.dashboard-card.hero-card .hero-action-button:focus {
   background: var(--brand-light-green);
   border-color: var(--brand-light-green);
   color: var(--brand-dark);
+  transform: translateY(-1px);
 }
 
-.dashboard-card.hero-card .btn-outline-dark {
-  border-color: white;
+.dashboard-card.hero-card p strong {
   color: white;
+  font-weight: 800;
+  text-decoration: underline;
+  text-decoration-color: var(--brand-light-green);
+  text-decoration-thickness: 2px;
+  text-underline-offset: 3px;
 }
 
-.dashboard-card.hero-card .btn-outline-dark:hover,
-.dashboard-card.hero-card .btn-outline-dark:focus {
-  background: white;
-  border-color: white;
-  color: var(--brand-dark);
+.dashboard-card.hero-card .lead {
+  color: rgba(255, 255, 255, 0.94) !important;
+  opacity: 1;
+}
+
+.dashboard-card.hero-card .hero-panel {
+  border: 3px solid white;
+  box-shadow: 0 0 0 5px rgba(255, 255, 255, 0.42), 0 14px 28px rgba(0, 20, 35, 0.18);
 }
 
 #development-plan {
@@ -614,6 +624,28 @@ h1, h4, h5, h6 {
   border-top: 6px solid var(--brand-green);
   border-radius: 12px;
   box-shadow: 0 14px 30px rgba(0, 40, 75, 0.09);
+}
+
+#development-plan .week-card.is-week-complete {
+  background-color: #f2faeb;
+  border-color: #d6ebc8;
+  border-top-color: var(--brand-green);
+  box-shadow: 0 10px 24px rgba(100, 188, 40, 0.14);
+}
+
+#development-plan .week-card.is-week-complete .list-group-item {
+  background-color: transparent;
+}
+
+.plan-complete-modal {
+  border: 2px solid var(--brand-light-green);
+  border-radius: 16px;
+}
+
+.plan-celebration-mark {
+  font-size: 3rem;
+  line-height: 1;
+  margin: 0.25rem 0 1rem;
 }
 
 #development-plan .week-card h5 {
