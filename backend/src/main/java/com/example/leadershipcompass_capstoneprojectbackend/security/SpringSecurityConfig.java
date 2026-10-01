@@ -1,5 +1,6 @@
 package com.example.leadershipcompass_capstoneprojectbackend.security;
 
+import jakarta.servlet.DispatcherType;
 import java.util.List;
 
 import lombok.RequiredArgsConstructor;
@@ -45,6 +46,12 @@ public class SpringSecurityConfig {
 
                 .authorizeHttpRequests(auth -> auth
 
+                        // A missing plan throws 404. Spring then dispatches to
+                        // /error; if that dispatch is denied the browser sees 403
+                        // and the plan page cannot show its empty state.
+                        .dispatcherTypeMatchers(DispatcherType.ERROR).permitAll()
+                        .requestMatchers("/error").permitAll()
+
                         // =================================================
                         // CORS PREFLIGHT
                         // =================================================
@@ -59,6 +66,17 @@ public class SpringSecurityConfig {
                         .requestMatchers(
                                 "/api/auth/register",
                                 "/api/auth/login"
+                        ).permitAll()
+
+                        // One-click and link unsubscribe from plan emails.
+                        // No login: the link is opened from the recipient's inbox.
+                        .requestMatchers(
+                                HttpMethod.GET,
+                                "/api/email/unsubscribe"
+                        ).permitAll()
+                        .requestMatchers(
+                                HttpMethod.POST,
+                                "/api/email/unsubscribe"
                         ).permitAll()
 
                         // =================================================
@@ -170,6 +188,24 @@ public class SpringSecurityConfig {
                                 "/api/dashboard/suggested-modules",
                                 "/api/dashboard/peer-comparison",
                                 "/api/dashboard/latest-scores"
+                        ).hasAnyRole(
+                                "USER",
+                                "ADMIN"
+                        )
+
+                        // =================================================
+                        // DEVELOPMENT PLANS
+                        // =================================================
+
+                        .requestMatchers(
+                                "/api/development-plans/**"
+                        ).hasAnyRole(
+                                "USER",
+                                "ADMIN"
+                        )
+
+                        .requestMatchers(
+                                "/api/email/subscription"
                         ).hasAnyRole(
                                 "USER",
                                 "ADMIN"
