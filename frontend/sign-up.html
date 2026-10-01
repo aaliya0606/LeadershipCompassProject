@@ -53,7 +53,6 @@
                 <label for="registerLastName" class="field-label">Last Name</label>
                 <input type="text" id="registerLastName" class="field-input" placeholder="Enter last name"/>
             </div>
-
         </div>
 
 
@@ -75,13 +74,27 @@
             <input type="password" id="confirmPassword" class="field-input" placeholder="Re-enter your password" />
         </div>
 
-        <!-- ROLE -->
-        <div class="field-group">
-            <label for="registerRole" class="field-label">Role</label>
-            <select id="registerRole" class="field-input">
-                <option value="USER" selected>User</option>
-                <option value="ADMIN">Admin</option>
-            </select>
+
+        <!-- ROLE AND DEPARTMENT -->
+        <div class="field-row">
+            <div class="field-group">
+                <label for="registerRole" class="field-label">Role</label>
+                <select id="registerRole" class="field-input">
+                    <option value="USER" selected>User</option>
+                    <option value="ADMIN">Admin</option>
+                </select>
+            </div>
+
+            <div class="field-group" id="departmentGroup" style="display: none;">
+                <label for="registerDepartment" class="field-label">Department</label>
+                <select id="registerDepartment" class="field-input">
+                    <option value="" selected disabled>Select one</option>
+                    <option value="OPERATIONS">Operations</option>
+                    <option value="SALES">Sales</option>
+                    <option value="HUMAN RESOURCES">Human Resources</option>
+                    <option value="IT">IT</option>
+                </select>
+            </div>
         </div>
 
         <button type="submit" class="btn-login">Sign Up</button>
