@@ -1,15 +1,17 @@
 package com.example.leadershipcompass_capstoneprojectbackend.service;
 
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
+
 import com.example.leadershipcompass_capstoneprojectbackend.dto.AuthResponse;
 import com.example.leadershipcompass_capstoneprojectbackend.dto.LoginRequest;
 import com.example.leadershipcompass_capstoneprojectbackend.dto.RegisterRequest;
 import com.example.leadershipcompass_capstoneprojectbackend.model.Role;
 import com.example.leadershipcompass_capstoneprojectbackend.model.User;
-import com.example.leadershipcompass_capstoneprojectbackend.security.JwtUtil;
 import com.example.leadershipcompass_capstoneprojectbackend.repository.UserRepository;
+import com.example.leadershipcompass_capstoneprojectbackend.security.JwtUtil;
+
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
@@ -25,17 +27,12 @@ public class AuthService {
             throw new RuntimeException("Email is already registered");
         }
 
-        Role role = Role.USER;
-
-        if (request.getRole() != null && request.getRole().equalsIgnoreCase("ADMIN")) {
-            role = Role.ADMIN;
-        }
-
         User user = User.builder()
                 .fullName(request.getFullName())
                 .email(request.getEmail())
                 .password(passwordEncoder.encode(request.getPassword()))
-                .role(role)
+                // Public registration must never grant administrator privileges.
+                .role(Role.USER)
                 .department(request.getDepartment())
                 .organisation(request.getOrganisation() == null
                 ? null

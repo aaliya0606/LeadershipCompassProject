@@ -1,4 +1,8 @@
-const BASE_URL = "http://localhost:8080/api/auth";
+const API_BASE_URL =
+    window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1"
+        ? "http://localhost:8080"
+        : "https://leadership-compass-api.ashysand-21bb09f6.australiaeast.azurecontainerapps.io";
+const BASE_URL = `${API_BASE_URL}/api/auth`;
 
 // LOGIN
 const loginForm = document.getElementById("loginForm");
@@ -12,7 +16,7 @@ if (loginForm) {
         const message = document.getElementById("loginMessage");
 
         // Detect if it is ADMIN page
-        const isAdminLogin= window.location.pathname.includes("adminLogin");
+        const isAdminLogin = window.location.pathname.toLowerCase().includes("adminlogin");
 
         try {
             const response = await fetch(`${BASE_URL}/login`, {
@@ -67,16 +71,16 @@ if (registerForm) {
   registerForm.addEventListener("submit", async function (event) {
     event.preventDefault();
 
-    //const fullName = document.getElementById("registerFullName").value;
-
-    const firstName = document.getElementById("registerFirstName").value;
-    const lastName = document.getElementById("registerLastName").value;
-    const fullName = `${firstName} ${lastName}`.trim();
+        const fullNameField = document.getElementById("registerFullName");
+        const firstNameField = document.getElementById("registerFirstName");
+        const lastNameField = document.getElementById("registerLastName");
+        const fullName = fullNameField
+            ? fullNameField.value.trim()
+            : `${firstNameField?.value || ""} ${lastNameField?.value || ""}`.trim();
 
     const email = document.getElementById("registerEmail").value;
     const password = document.getElementById("registerPassword").value;
     const confirmPassword = document.getElementById("confirmPassword").value;
-    const role = document.getElementById("registerRole").value;
     const message = document.getElementById("registerMessage");
 
     try {
@@ -108,7 +112,7 @@ if (registerForm) {
           fullName: fullName,
           email: email,
           password: password,
-          role: role
+          role: "USER"
         })
       });
 
@@ -179,7 +183,7 @@ async function apiFetch (path, options = {}) {
 let savedProfile = null;
 function getNameParts(user) {
     if (user.firstName) {
-        return { firstName; user.firstName, lastName: user.lastName || ""};
+        return { firstName: user.firstName, lastName: user.lastName || "" };
     }
     const parts = (user.fullName || "").trim().split(/\s+/);
     return { firstName: parts[0] || "", lastName: parts.slice(1).join(" ") };
@@ -193,13 +197,13 @@ function showProfileMessage(text, type) {
     const el = document.getElementById("forMessage");
     if (!el) return;
     el.textContent = text;
-    el.className = `mt-3 text-center ${type === "success" : "text-danger"`;
+    el.className = `mt-3 text-center ${type === "success" ? "text-success" : "text-danger"}`;
 }
 
 function showFieldErrors(errors) {
     ["username", "phone"].forEach((field) => {
         const el = document.getElementById(`${field}Error`);
-        if (el) el.text.Content = errors[field] || "";
+        if (el) el.textContent = errors[field] || "";
     });
 }
 
