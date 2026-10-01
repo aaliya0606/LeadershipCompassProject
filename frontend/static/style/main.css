@@ -770,12 +770,15 @@ html, body {
 /* login page */
 .login {
     display: flex;
+    justify-content: flex-end;
+    align-items: center;
     height: 100vh;
-    padding-top: 10px;
+    padding: 10px 5% 0;
     background-image: url('../img/login-signup page.png');
     background-size: cover;
-    background-position: center;
+    background-position: center center;
     background-repeat: no-repeat;
+    background-attachment: fixed;
     position: relative;
 }
 
@@ -872,13 +875,17 @@ html, body {
 
 /* Own card for bottom links/button */
 
+.bottom-links {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-top: 20px;
+    align-items: center;
+}
 
 /* return button for sign in */
 .adminlogin-btn {
-    position: absolute;
-    bottom: 220px;
-    left: 75%;
-    transform: translateX(-5%);
     font-family: 'Conthrax', sans-serif;
     font-size: 13px;
     font-weight: 600;
@@ -886,13 +893,8 @@ html, body {
     text-transform: uppercase;
     color: #ffffff;
     text-decoration: none;
-    z-index: 10;
 }
 .return-btn {
-    position: absolute;
-    bottom: 170px;
-    left: 78%;
-    transform: translateX(-5%);
     font-family: 'Conthrax', sans-serif;
     font-size: 13px;
     font-weight: 600;
@@ -900,7 +902,6 @@ html, body {
     text-transform: uppercase;
     color: #ffffff;
     text-decoration: none;
-    z-index: 10;
 }
 
 .return-btn:hover {
@@ -947,11 +948,10 @@ html, body {
 /* MAIN CONFIGURATION - LOGIN */
 
 .login-form {
-    position: absolute;
-    top: 450px;
-    left: 1180px;
-    transform: translateY(-50%);
+    position: relative;
     width: 380px;
+    max-width: 90%;
+    margin-right: 5%;
 }
 
 .sign-up-form {
