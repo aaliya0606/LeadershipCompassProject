@@ -244,6 +244,118 @@ p {
   min-height: 220px;
 }
 
+.dashboard-card.resource-library-hero {
+  position: relative;
+  overflow: hidden;
+  padding: 2.5rem;
+  border: 0;
+  color: white;
+  background: linear-gradient(115deg, #64bc28 0%, #278b59 48%, #00284b 100%);
+  box-shadow: 0 16px 36px rgba(0, 40, 75, 0.18);
+}
+
+.dashboard-card.resource-library-hero .eyebrow,
+.dashboard-card.resource-library-hero h1,
+.dashboard-card.resource-library-hero p {
+  position: relative;
+  z-index: 1;
+  color: white !important;
+}
+
+.dashboard-card.resource-library-hero h1 {
+  max-width: 760px;
+  font-size: clamp(2rem, 4vw, 3.2rem);
+}
+
+.dashboard-card.resource-library-hero .lead {
+  max-width: 760px;
+  opacity: 0.95;
+}
+
+.dashboard-card.resource-filters-card {
+  border-top: 5px solid var(--brand-light-green);
+  background: linear-gradient(135deg, #eef8e7 0%, #f7fbff 52%, #e4f3d9 100%);
+  box-shadow: 0 12px 30px rgba(0, 40, 75, 0.1);
+}
+
+.resource-count {
+  padding: 0.65rem 0.85rem;
+  color: var(--brand-dark);
+  background: #e3f4d5;
+  border: 1px solid #c8e8b1;
+  font-weight: 700;
+}
+
+#resourceContainer .resource-card {
+  --resource-accent: var(--brand-green);
+  min-height: 250px;
+  overflow: hidden;
+  border: 1px solid color-mix(in srgb, var(--resource-accent) 30%, white);
+  border-top: 5px solid var(--resource-accent);
+  border-radius: 14px;
+  background: linear-gradient(155deg, white 55%, color-mix(in srgb, var(--resource-accent) 10%, white));
+  box-shadow: 0 8px 20px rgba(0, 40, 75, 0.08);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+#resourceContainer .resource-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 14px 28px rgba(0, 40, 75, 0.14);
+}
+
+#resourceContainer .resource-card.tone-green { --resource-accent: #64a92f; }
+#resourceContainer .resource-card.tone-blue { --resource-accent: #3188bd; }
+#resourceContainer .resource-card.tone-orange { --resource-accent: #dc8b35; }
+#resourceContainer .resource-card.tone-purple { --resource-accent: #8764b5; }
+#resourceContainer .resource-card.tone-teal { --resource-accent: #2d9b91; }
+#resourceContainer .resource-card.tone-navy { --resource-accent: #315c7a; }
+
+.resource-card-topline {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+}
+
+.resource-icon {
+  display: inline-grid;
+  width: 42px;
+  height: 42px;
+  place-items: center;
+  color: var(--resource-accent);
+  background: color-mix(in srgb, var(--resource-accent) 14%, white);
+  border-radius: 12px;
+  font-size: 1.5rem;
+}
+
+.resource-type-label {
+  padding: 0.35rem 0.65rem;
+  color: var(--resource-accent);
+  background: color-mix(in srgb, var(--resource-accent) 12%, white);
+  border-radius: 999px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.resource-card .card-title {
+  color: var(--brand-dark);
+}
+
+.resource-action-button {
+  color: white;
+  background: var(--resource-accent);
+  border: 1px solid var(--resource-accent);
+  font-weight: 700;
+}
+
+.resource-action-button:hover,
+.resource-action-button:focus {
+  color: white;
+  filter: brightness(0.9);
+}
+
 .resource-view-shell {
   max-width: 1080px;
   padding-top: 3rem;
@@ -665,6 +777,10 @@ h1, h4, h5, h6 {
 }
 
 @media (max-width: 767px) {
+  .dashboard-card.resource-library-hero {
+    padding: 1.5rem;
+  }
+
   .dashboard-card.hero-card {
     padding: 1.5rem;
   }
