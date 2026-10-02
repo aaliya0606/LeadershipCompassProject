@@ -1,8 +1,5 @@
-const API_BASE_URL =
-    window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1"
-        ? "http://localhost:8080"
-        : "https://leadership-compass-api.ashysand-21bb09f6.australiaeast.azurecontainerapps.io";
-const BASE_URL = `${API_BASE_URL}/api/auth`;
+const BASE_URL = "http://localhost:8080/api/auth";
+const API_URL = "http://localhost:8080/api";
 
 // LOGIN
 const loginForm = document.getElementById("loginForm");
@@ -83,12 +80,27 @@ if (registerForm) {
     const email = document.getElementById("registerEmail").value;
     const password = document.getElementById("registerPassword").value;
     const confirmPassword = document.getElementById("confirmPassword").value;
+    const role = document.getElementById("registerRole").value;
+    const department = document.getElementById("registerDepartment").value;
+    const organisation = document.getElementById("registerOrganisation").value.trim();
     const message = document.getElementById("registerMessage");
 
     try {
 
         if (!fullName || !email || !password || !confirmPassword) {
             message.textContent = "Please fill in all fields.";
+            message.className = "mt-3 text-center text-danger";
+            return;
+        }
+
+        if (role === "ADMIN" && !organisation) {
+            message.textContent = "Please enter an organisation for admin role.";
+            message.className = "mt-3 text-center text-danger";
+            return;
+        }
+
+        if (role === "ADMIN" && !department) {
+            message.textContent = "Please select a department for admin role.";
             message.className = "mt-3 text-center text-danger";
             return;
         }
@@ -105,17 +117,25 @@ if (registerForm) {
             return;
         }
 
+      const requestBody = {
+        fullName: fullName,
+        email: email,
+        password: password,
+        role: role
+      };
+
+      // Only include organisation and department if admin role is selected
+      if (role === "ADMIN") {
+        requestBody.organisation = organisation;
+        requestBody.department = department;
+      }
+
       const response = await fetch(`${BASE_URL}/register`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json"
         },
-        body: JSON.stringify({
-          fullName: fullName,
-          email: email,
-          password: password,
-          role: "USER"
-        })
+        body: JSON.stringify(requestBody)
       });
 
       const data = await response.json();
@@ -155,7 +175,7 @@ async function apiFetch (path, options = {}) {
     const response = await fetch (`${API_URL}${path}`, {
         ...options,
         headers: {
-            "Content-Type": "application.json",
+            "Content-Type": "application/json",
             "Authorization": `Bearer ${getToken()}`,
             ...(options.headers || {})
         }
@@ -215,7 +235,7 @@ async function loadProfile() {
         return;
     }
 
-    const user = await apiFetch("/users/me");
+    const user = await apiFetch("/profile");
     savedProfile = user;
 
     const {firstName, lastName } = getNameParts(user);
@@ -224,6 +244,23 @@ async function loadProfile() {
     document.getElementById("email").value = user.email;
     document.getElementById("username").value = user.username || "";
     document.getElementById("phone").value = user.phone || "";
+
+    // Show organisation and department fields if user is admin
+    const organisationField = document.getElementById("organisationField");
+    const organisationInput = document.getElementById("organisation");
+    const departmentField = document.getElementById("departmentField");
+    const departmentInput = document.getElementById("department");
+
+    if (user.role === "ADMIN") {
+        if (organisationField && organisationInput) {
+            organisationField.style.display = "block";
+            organisationInput.value = user.organisation || "";
+        }
+        if (departmentField && departmentInput) {
+            departmentField.style.display = "block";
+            departmentInput.value = user.department || "";
+        }
+    }
 
     document.getElementById("avatarInitials").textContent = getInitials(firstName, lastName);
     document.getElementById("sidebarName").textContent = `${firstName} ${lastName}`.trim();
@@ -265,7 +302,7 @@ async function saveProfile() {
         }
 
         showFieldErrors({});
-        savedProfile = await apiFetch("/users/me", {
+        savedProfile = await apiFetch("/profile", {
             method: "PUT",
             body: JSON.stringify({username, phone})
         });
@@ -298,7 +335,7 @@ async function changePassword(currentPassword, newPassword, confirmPassword) {
     }
 
     try {
-        await apiFetch("/users/me/password", {
+        await apiFetch("/profile/password", {
             method: "PUT",
             body: JSON.stringify({ currentPassword, newPassword })
         });
@@ -318,6 +355,44 @@ if (saveBtn) {
 
     const signOutBtn = document.getElementById("signOutBtn");
     if (signOutBtn) signOutBtn.addEventListener("click", handleSignOut);
+}
+
+// Toggle organisation and department fields on sign-up page
+const roleSelect = document.getElementById("registerRole");
+const departmentGroup = document.getElementById("departmentGroup");
+const organisationGroup = document.getElementById("organisationGroup");
+
+if (roleSelect && departmentGroup && organisationGroup) {
+    console.log("Role select, department group, and organisation group found");
+    roleSelect.addEventListener("change", function() {
+        console.log("Role changed to:", roleSelect.value);
+        if (roleSelect.value === "ADMIN") {
+            console.log("Showing organisation and department fields");
+            organisationGroup.style.display = "";
+            departmentGroup.style.display = "";
+        } else {
+            console.log("Hiding organisation and department fields");
+            organisationGroup.style.display = "none";
+            departmentGroup.style.display = "none";
+            document.getElementById("registerOrganisation").value = "";
+            document.getElementById("registerDepartment").value = "";
+        }
+    });
+} else {
+    console.log("Role select, department group, or organisation group NOT found", {roleSelect, departmentGroup, organisationGroup});
+}
+
+// DASHBOARD CONFIG
+const dashboardLink = document.querySelector(".dashboard-link");
+if (dashboardLink){
+    const role = localStorage.getItem("role");
+    if (role === "ADMIN") {
+        dashboardLink.href = "admin.html";
+    } else {
+        dashboardLink.href = "dashboard.html";
+    }
+
+
 }
 
 

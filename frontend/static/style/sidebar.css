@@ -186,6 +186,26 @@ nav{flex:1;}
     cursor: pointer;
 }
 
+.return-dashboard {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 12px 10px;
+    color: #a3adb3;
+    font-size: 14.5px;
+    margin-top: auto;
+    text-decoration: none;
+    cursor: pointer;
+    border-radius: 8px;
+    transition: background-color 0.2s ease;
+}
+
+
+.return-dashboard:hover {
+    background-color: rgba(100, 188, 40, 0.1);
+    color: var(--brand-dark);
+}
+
 .sign-out {
     display: flex;
     align-items: center;
@@ -193,7 +213,15 @@ nav{flex:1;}
     padding: 12px 10px;
     color: #a3adb3;
     font-size: 14.5px;
-    margin-top: 20px;
+    margin-top: 12px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+
+.sign-out:hover {
+    background-color: rgba(100, 188, 40, 0.1);
+    color: var(--brand-dark);
 }
 
 .main {
