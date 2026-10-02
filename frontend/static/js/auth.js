@@ -384,15 +384,17 @@ if (roleSelect && departmentGroup && organisationGroup) {
 
 // DASHBOARD CONFIG
 const dashboardLink = document.querySelector(".dashboard-link");
-if (dashboardLink){
+
+if (dashboardLink) {
     const role = localStorage.getItem("role");
-    if (role === "ADMIN") {
+
+    if (role === "TGG_ADMIN") {
         dashboardLink.href = "admin.html";
+    } else if (role === "ADMIN") {
+        dashboardLink.href = "organisation-admin.html";
     } else {
         dashboardLink.href = "dashboard.html";
     }
-
-
 }
 
 

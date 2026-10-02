@@ -24,7 +24,7 @@ const moduleModal = new bootstrap.Modal(moduleModalEl);
 
 let editingModuleId = null;
 
-if (!token || role !== "ADMIN") {
+if (!token || role !== "TGG_ADMIN") {
   window.location.href = "index.html";
 }
 

@@ -501,7 +501,9 @@
     const token = localStorage.getItem("token");
     const role = localStorage.getItem("role");
 
-    if (!LOCAL_PREVIEW && (!token || role !== "ADMIN")) {
+    //This page is intended for authenticated TGG_ADMIN users only.
+
+    if (!LOCAL_PREVIEW && (!token || role !== "TGG_ADMIN")) {
       window.location.href = "index.html";
     }
 

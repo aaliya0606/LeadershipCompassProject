@@ -257,7 +257,8 @@ public class SpringSecurityConfig {
                                 "/api/resources/**"
                         ).hasAnyRole(
                                 "USER",
-                                "ADMIN"
+                                "ADMIN",
+                                "TGG_ADMIN"
                         )
 
                         // Resource management is admin-only.
