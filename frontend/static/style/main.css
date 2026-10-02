@@ -1259,14 +1259,14 @@ html, body {
   padding: 1vh; 
 } */
 
-.survey-container {
+/* .survey-container {
   background: #96DA5F;
   border-radius: 1vh;
   box-shadow: 40px 40px 0px -5px #64BC28, 50px 50px 10px -5px rgba(0, 0, 0, 0.2), 10px 10px 10px 0px rgba(0, 0, 0, 0.2);
   min-width: 55%;
   max-width: 55%;
   min-height: 45%;
-  /* max-height REMOVED — was clipping the questions */
+  /* max-height REMOVED — was clipping the questions 
   justify-content: center;
   align-items: stretch;
   display: flex;
@@ -1274,7 +1274,7 @@ html, body {
   margin: auto;
   gap: 1em;
   padding: 2rem;
-}
+} */
 
 /* Survey question styles */
 /* .survey-container {
@@ -1284,7 +1284,7 @@ html, body {
   padding: 2rem;
 } */
 
-/* Survey question styles */
+Survey question styles
 .survey-container {
   overflow-y: auto;
 }
