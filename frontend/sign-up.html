@@ -73,31 +73,31 @@
         </div>
 
 
-        <!-- ROLE AND ORGANISATION -->
+        <!-- ORGANISATION AND DEPARTMENT -->
         <div class="field-row">
             <div class="field-group">
-                <label for="registerRole" class="field-label">Role</label>
-                <select id="registerRole" class="field-input">
-                    <option value="USER" selected>User</option>
-                    <option value="ADMIN">Admin</option>
-                </select>
-            </div>
-
-            <div class="field-group" id="organisationGroup" style="display: none;">
                 <label for="registerOrganisation" class="field-label">Organisation</label>
                 <input type="text" id="registerOrganisation" class="field-input" placeholder="Enter organisation name"/>
             </div>
+
+            <div class="field-group">
+                <label for="registerDepartment" class="field-label">Department</label>
+                <select id="registerDepartment" class="field-input">
+                    <option value="" selected disabled>Select one</option>
+                    <option value="OPERATIONS">Operations</option>
+                    <option value="SALES">Sales</option>
+                    <option value="HUMAN RESOURCES">Human Resources</option>
+                    <option value="IT">IT</option>
+                </select>
+            </div>
         </div>
 
-        <!-- DEPARTMENT (ADMIN ONLY) -->
-        <div class="field-group" id="departmentGroup" style="display: none;">
-            <label for="registerDepartment" class="field-label">Department</label>
-            <select id="registerDepartment" class="field-input">
-                <option value="" selected disabled>Select one</option>
-                <option value="OPERATIONS">Operations</option>
-                <option value="SALES">Sales</option>
-                <option value="HUMAN RESOURCES">Human Resources</option>
-                <option value="IT">IT</option>
+        <!-- ROLE -->
+        <div class="field-group">
+            <label for="registerRole" class="field-label">Role</label>
+            <select id="registerRole" class="field-input">
+                <option value="USER" selected>User</option>
+                <option value="ADMIN">Admin</option>
             </select>
         </div>
 

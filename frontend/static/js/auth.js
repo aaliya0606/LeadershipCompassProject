@@ -93,14 +93,14 @@ if (registerForm) {
             return;
         }
 
-        if (role === "ADMIN" && !organisation) {
-            message.textContent = "Please enter an organisation for admin role.";
+        if (!organisation) {
+            message.textContent = "Please enter an organisation.";
             message.className = "mt-3 text-center text-danger";
             return;
         }
 
-        if (role === "ADMIN" && !department) {
-            message.textContent = "Please select a department for admin role.";
+        if (!department) {
+            message.textContent = "Please select a department.";
             message.className = "mt-3 text-center text-danger";
             return;
         }
@@ -121,14 +121,10 @@ if (registerForm) {
         fullName: fullName,
         email: email,
         password: password,
-        role: role
+        role: role,
+        organisation: organisation,
+        department: department
       };
-
-      // Only include organisation and department if admin role is selected
-      if (role === "ADMIN") {
-        requestBody.organisation = organisation;
-        requestBody.department = department;
-      }
 
       const response = await fetch(`${BASE_URL}/register`, {
         method: "POST",
@@ -245,21 +241,19 @@ async function loadProfile() {
     document.getElementById("username").value = user.username || "";
     document.getElementById("phone").value = user.phone || "";
 
-    // Show organisation and department fields if user is admin
+    // Show organisation and department fields for all users
     const organisationField = document.getElementById("organisationField");
     const organisationInput = document.getElementById("organisation");
     const departmentField = document.getElementById("departmentField");
     const departmentInput = document.getElementById("department");
 
-    if (user.role === "ADMIN") {
-        if (organisationField && organisationInput) {
-            organisationField.style.display = "block";
-            organisationInput.value = user.organisation || "";
-        }
-        if (departmentField && departmentInput) {
-            departmentField.style.display = "block";
-            departmentInput.value = user.department || "";
-        }
+    if (organisationField && organisationInput) {
+        organisationField.style.display = "block";
+        organisationInput.value = user.organisation || "";
+    }
+    if (departmentField && departmentInput) {
+        departmentField.style.display = "block";
+        departmentInput.value = user.department || "";
     }
 
     document.getElementById("avatarInitials").textContent = getInitials(firstName, lastName);
@@ -357,30 +351,7 @@ if (saveBtn) {
     if (signOutBtn) signOutBtn.addEventListener("click", handleSignOut);
 }
 
-// Toggle organisation and department fields on sign-up page
-const roleSelect = document.getElementById("registerRole");
-const departmentGroup = document.getElementById("departmentGroup");
-const organisationGroup = document.getElementById("organisationGroup");
-
-if (roleSelect && departmentGroup && organisationGroup) {
-    console.log("Role select, department group, and organisation group found");
-    roleSelect.addEventListener("change", function() {
-        console.log("Role changed to:", roleSelect.value);
-        if (roleSelect.value === "ADMIN") {
-            console.log("Showing organisation and department fields");
-            organisationGroup.style.display = "";
-            departmentGroup.style.display = "";
-        } else {
-            console.log("Hiding organisation and department fields");
-            organisationGroup.style.display = "none";
-            departmentGroup.style.display = "none";
-            document.getElementById("registerOrganisation").value = "";
-            document.getElementById("registerDepartment").value = "";
-        }
-    });
-} else {
-    console.log("Role select, department group, or organisation group NOT found", {roleSelect, departmentGroup, organisationGroup});
-}
+// Organisation and department are now required for all users, no need to toggle visibility
 
 // DASHBOARD CONFIG
 const dashboardLink = document.querySelector(".dashboard-link");
