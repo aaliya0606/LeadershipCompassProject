@@ -176,6 +176,24 @@ public class SpringSecurityConfig {
                         )
 
                         .requestMatchers(
+                                "/api/dashboard/user",
+                                "/api/dashboard/suggested-modules",
+                                "/api/dashboard/peer-comparison",
+                                "/api/dashboard/latest-scores"
+                        ).hasAnyRole(
+                                "USER",
+                                "ADMIN"
+                        )
+
+                        // USER PROFILE
+                        .requestMatchers(
+                                "/api/profile"
+                        ).hasAnyRole(
+                                "USER",
+                                "ADMIN"
+                        )
+
+                        .requestMatchers(
                                 "/api/survey/admin/**"
                         ).hasRole("ADMIN")
 
