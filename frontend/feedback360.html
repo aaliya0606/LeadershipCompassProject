@@ -22,10 +22,7 @@
         rel="stylesheet"
     >
 
-    <!--
-        Existing project CSS.
-        main.css is included because the shared navbar depends on it.
-    -->
+    <!-- Existing project CSS -->
     <link rel="stylesheet" href="static/style/main.css">
     <link rel="stylesheet" href="static/style/navbar.css">
 
@@ -60,17 +57,10 @@
             font-family: "Montserrat", Arial, Helvetica, sans-serif;
         }
 
-
-        /*
-         * Everything on this page is scoped under feedback360-page
-         * where possible so main.css does not change the layout.
-         */
-
         .feedback360-page {
             width: 100%;
             min-height: 100vh;
         }
-
 
         .feedback360-shell {
             width: min(1120px, calc(100% - 48px));
@@ -82,13 +72,6 @@
         /* =========================================================
            HERO
            ========================================================= */
-
-        /*
-         * Intentionally NOT called .hero.
-         *
-         * main.css also contains hero-related styles, so using a
-         * unique name prevents the stretching problem.
-         */
 
         .feedback360-hero {
             position: relative;
@@ -121,7 +104,6 @@
                 0 16px 36px rgba(5, 43, 65, 0.18);
         }
 
-
         .feedback360-hero::after {
             content: "";
 
@@ -145,13 +127,11 @@
             pointer-events: none;
         }
 
-
         .feedback360-hero-copy,
         .feedback360-hero-side {
             position: relative;
             z-index: 1;
         }
-
 
         .feedback360-kicker {
             margin-bottom: 11px;
@@ -169,7 +149,6 @@
             font-size: 0.63rem;
             font-weight: 600;
         }
-
 
         .feedback360-hero h1 {
             margin: 0 0 14px;
@@ -191,7 +170,6 @@
             text-transform: uppercase;
         }
 
-
         .feedback360-hero-copy > p {
             max-width: 720px;
             margin: 0;
@@ -202,7 +180,6 @@
             line-height: 1.65;
             font-size: 0.94rem;
         }
-
 
         .feedback360-hero-side {
             padding: 23px;
@@ -218,7 +195,6 @@
             backdrop-filter: blur(4px);
         }
 
-
         .feedback360-hero-side-title {
             margin-bottom: 10px;
 
@@ -232,7 +208,6 @@
             font-size: 1.3rem;
             font-weight: 700;
         }
-
 
         .feedback360-hero-side p {
             margin: 0;
@@ -251,6 +226,7 @@
 
         .feedback360-how {
             display: grid;
+
             grid-template-columns:
                 repeat(3, minmax(0, 1fr));
 
@@ -258,7 +234,6 @@
 
             margin-bottom: 26px;
         }
-
 
         .feedback360-step {
             position: relative;
@@ -278,7 +253,6 @@
             border:
                 1px solid rgba(13, 60, 77, 0.07);
         }
-
 
         .feedback360-step-number {
             position: absolute;
@@ -304,7 +278,6 @@
             font-size: 0.79rem;
         }
 
-
         .feedback360-step strong {
             display: block;
 
@@ -315,7 +288,6 @@
 
             font-size: 0.86rem;
         }
-
 
         .feedback360-step span {
             color:
@@ -345,7 +317,6 @@
                 1px solid rgba(13, 60, 77, 0.07);
         }
 
-
         .feedback360-card-heading {
             display: flex;
 
@@ -360,7 +331,6 @@
             border-bottom:
                 1px solid var(--feedback-line);
         }
-
 
         .feedback360-card-heading h2 {
             margin: 0 0 8px;
@@ -377,7 +347,6 @@
             font-size: 2rem;
             font-weight: 700;
         }
-
 
         .feedback360-card-heading p {
             max-width: 760px;
@@ -417,7 +386,6 @@
             white-space: nowrap;
         }
 
-
         .feedback360-status-badge::before {
             content: "";
 
@@ -428,13 +396,6 @@
 
             background: #43a822;
         }
-
-
-        /*
-         * feedback360.js may replace the className with Bootstrap's
-         * badge classes. These ensure the badge still looks correct
-         * even without Bootstrap.
-         */
 
         #surveyStatusBadge.badge {
             display: inline-flex;
@@ -450,12 +411,10 @@
             text-transform: uppercase;
         }
 
-
         #surveyStatusBadge.bg-success {
             background: #e5f6db !important;
             color: #34801d !important;
         }
-
 
         #surveyStatusBadge.bg-secondary {
             background: #edf0ef !important;
@@ -487,7 +446,6 @@
                 1px solid #dcebd6;
         }
 
-
         .feedback360-empty-icon {
             width: 50px;
             height: 50px;
@@ -503,7 +461,6 @@
             font-size: 1.35rem;
         }
 
-
         .feedback360-empty h3 {
             margin: 0 0 5px;
 
@@ -517,7 +474,6 @@
 
             font-size: 1.25rem;
         }
-
 
         .feedback360-empty p {
             margin: 0;
@@ -534,21 +490,26 @@
            METRICS
            ========================================================= */
 
+        /*
+         * Only two cards are displayed:
+         *
+         * 1. Responses
+         * 2. Expires
+         *
+         * The status is already shown by the green status badge.
+         * The internal survey ID is also intentionally not displayed.
+         */
+
         .feedback360-metrics {
             display: grid;
 
-            /*
-             * Three cards only.
-             * Survey/database ID has intentionally been removed.
-             */
             grid-template-columns:
-                repeat(3, minmax(0, 1fr));
+                repeat(2, minmax(0, 1fr));
 
             gap: 14px;
 
             margin-bottom: 22px;
         }
-
 
         .feedback360-metric {
             position: relative;
@@ -567,7 +528,6 @@
                 1px solid #dfe6e2;
         }
 
-
         .feedback360-metric::before {
             content: "";
 
@@ -581,7 +541,6 @@
                 var(--feedback-green);
         }
 
-
         .feedback360-metric-label {
             margin-bottom: 10px;
 
@@ -591,7 +550,6 @@
             font-size: 0.72rem;
             font-weight: 600;
         }
-
 
         .feedback360-metric-value {
             color:
@@ -609,7 +567,6 @@
 
             overflow-wrap: anywhere;
         }
-
 
         .feedback360-metric-sub {
             margin-top: 7px;
@@ -634,7 +591,6 @@
             background: #f5f7f6;
         }
 
-
         .feedback360-share label {
             display: block;
 
@@ -647,7 +603,6 @@
             font-size: 0.82rem;
         }
 
-
         .feedback360-share p {
             margin: 0 0 12px;
 
@@ -658,7 +613,6 @@
             line-height: 1.5;
         }
 
-
         .feedback360-link-row {
             display: grid;
 
@@ -667,7 +621,6 @@
 
             gap: 9px;
         }
-
 
         .feedback360-link-row input {
             width: 100%;
@@ -726,12 +679,10 @@
                 0.18s ease;
         }
 
-
         .feedback360-btn:disabled {
             opacity: 0.65;
             cursor: not-allowed;
         }
-
 
         .feedback360-btn-primary {
             background:
@@ -743,7 +694,6 @@
             color:
                 var(--feedback-navy-deep);
         }
-
 
         .feedback360-btn-primary:hover:not(:disabled) {
             background:
@@ -759,7 +709,6 @@
                 translateY(-1px);
         }
 
-
         .feedback360-btn-secondary {
             background: #ffffff;
 
@@ -770,14 +719,12 @@
                 var(--feedback-navy);
         }
 
-
         .feedback360-btn-secondary:hover {
             background:
                 var(--feedback-navy);
 
             color: #ffffff;
         }
-
 
         .feedback360-actions {
             display: flex;
@@ -800,11 +747,9 @@
                 1px solid var(--feedback-line);
         }
 
-
         .feedback360-history-heading {
             margin-bottom: 18px;
         }
-
 
         .feedback360-history-heading h3 {
             margin: 0 0 6px;
@@ -821,7 +766,6 @@
             font-weight: 700;
         }
 
-
         .feedback360-history-heading p {
             margin: 0;
 
@@ -832,16 +776,9 @@
             line-height: 1.5;
         }
 
-
-        /*
-         * Generic history styling so elements generated by
-         * feedback360.js still look consistent.
-         */
-
         #surveyHistoryContainer > * {
             max-width: 100%;
         }
-
 
         #surveyHistoryContainer .card,
         #surveyHistoryContainer > div {
@@ -886,19 +823,16 @@
                 grid-template-columns: 1fr;
             }
 
-
             .feedback360-how {
                 grid-template-columns: 1fr;
             }
 
-
             .feedback360-metrics {
                 grid-template-columns:
-                    repeat(3, minmax(0, 1fr));
+                    repeat(2, minmax(0, 1fr));
             }
 
         }
-
 
         @media (max-width: 700px) {
 
@@ -910,51 +844,41 @@
                     28px 0 50px;
             }
 
-
             .feedback360-hero {
                 padding: 28px 24px;
             }
-
 
             .feedback360-hero h1 {
                 font-size: 2.6rem;
             }
 
-
             .feedback360-card {
                 padding: 22px 18px;
             }
-
 
             .feedback360-card-heading {
                 flex-direction: column;
             }
 
-
             .feedback360-metrics {
                 grid-template-columns: 1fr;
             }
-
 
             .feedback360-empty {
                 grid-template-columns: 1fr;
             }
 
-
             .feedback360-link-row {
                 grid-template-columns: 1fr;
             }
-
 
             .feedback360-link-row button {
                 width: 100%;
             }
 
-
             .feedback360-actions {
                 flex-direction: column;
             }
-
 
             .feedback360-actions button {
                 width: 100%;
@@ -1218,8 +1142,8 @@
 
 
                     <!--
-                        Required by feedback360.js.
-                        JavaScript updates the status and visibility.
+                        Status is shown here only.
+                        The duplicated status metric card has been removed.
                     -->
 
                     <span
@@ -1293,35 +1217,12 @@
                     <!-- =============================================
                          SURVEY METRICS
 
-                         NOTE:
-                         Survey ID is deliberately NOT displayed.
-                         feedback360.js can still keep the ID internally
-                         in current360SurveyId for results navigation.
+                         Status is displayed in the green badge above.
+
+                         Survey ID remains internal and is not displayed.
                          ============================================= -->
 
                     <div class="feedback360-metrics">
-
-
-                        <!-- STATUS -->
-
-                        <div class="feedback360-metric">
-
-                            <div class="feedback360-metric-label">
-                                Status
-                            </div>
-
-                            <div
-                                id="surveyStatus"
-                                class="feedback360-metric-value"
-                            >
-                                ACTIVE
-                            </div>
-
-                            <div class="feedback360-metric-sub">
-                                Current feedback period
-                            </div>
-
-                        </div>
 
 
                         <!-- RESPONSES -->
@@ -1390,8 +1291,6 @@
 
                         <div class="feedback360-link-row">
 
-                            <!-- Required by feedback360.js -->
-
                             <input
                                 type="text"
                                 id="surveyLink"
@@ -1399,8 +1298,6 @@
                                 aria-label="360 degree feedback survey link"
                             >
 
-
-                            <!-- Required by feedback360.js -->
 
                             <button
                                 id="copySurveyLinkBtn"
@@ -1428,9 +1325,6 @@
 
                     <div class="feedback360-actions">
 
-
-                        <!-- Required by feedback360.js -->
-
                         <button
                             id="view360ResultsBtn"
                             type="button"
@@ -1446,8 +1340,6 @@
 
                         </button>
 
-
-                        <!-- Required by feedback360.js -->
 
                         <button
                             id="copySurveyLinkSecondaryBtn"
@@ -1494,11 +1386,6 @@
                     </div>
 
 
-                    <!--
-                        Required by feedback360.js.
-                        Historical surveys are inserted here.
-                    -->
-
                     <div id="surveyHistoryContainer">
 
                         <p
@@ -1521,6 +1408,7 @@
         </div>
 
     </main>
+
 
     <!-- =========================================================
          NAVBAR
@@ -1550,6 +1438,8 @@
 
     </script>
 
+
+    <!-- Existing backend integration -->
     <script src="static/js/feedback360.js"></script>
 
 </body>
