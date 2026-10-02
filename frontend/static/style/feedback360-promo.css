@@ -1,0 +1,275 @@
+/* =========================================
+   360° FEEDBACK DASHBOARD PROMO
+   ========================================= */
+
+.feedback360-promo {
+    width: calc(100% - 80px);
+    margin: 30px 40px;
+    padding: 28px 34px;
+
+    position: relative;
+    overflow: hidden;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 30px;
+
+    /*
+     * Leadership Compass gradient:
+     * Navy -> deep green -> brand green
+     */
+    background:
+        linear-gradient(
+            110deg,
+            #00284B 0%,
+            #155f4c 55%,
+            #64BC28 100%
+        );
+
+    border-radius: 30px;
+
+    box-shadow:
+        0 6px 24px rgba(0, 40, 75, 0.14);
+}
+
+
+/* =========================================
+   DECORATIVE BACKGROUND RING
+   ========================================= */
+
+.feedback360-promo::after {
+    content: "";
+
+    position: absolute;
+
+    width: 240px;
+    height: 240px;
+
+    right: -60px;
+    top: -105px;
+
+    border:
+        35px solid rgba(255, 255, 255, 0.07);
+
+    border-radius: 50%;
+
+    pointer-events: none;
+
+    z-index: 0;
+}
+
+
+/* =========================================
+   TEXT CONTENT
+   ========================================= */
+
+.feedback360-promo-text {
+    position: relative;
+    z-index: 1;
+
+    max-width: 720px;
+}
+
+
+.feedback360-promo-label {
+    display: block;
+
+    margin-bottom: 8px;
+
+    color: #b8f48d;
+
+    font-family:
+        "Montserrat",
+        sans-serif;
+
+    font-size: 11px;
+    font-weight: 700;
+
+    letter-spacing: 1.5px;
+
+    text-transform: uppercase;
+}
+
+
+.feedback360-promo h2 {
+    margin: 0 0 8px;
+
+    color: #ffffff;
+
+    font-family:
+        "Anton",
+        sans-serif;
+
+    font-size: 28px;
+    font-weight: 400;
+
+    letter-spacing: 0.5px;
+}
+
+
+.feedback360-promo p {
+    margin: 0;
+
+    max-width: 650px;
+
+    color:
+        rgba(255, 255, 255, 0.82);
+
+    font-family:
+        "Montserrat",
+        sans-serif;
+
+    font-size: 13px;
+
+    line-height: 1.6;
+}
+
+
+/* =========================================
+   BUTTON
+   ========================================= */
+
+.feedback360-promo-btn {
+    position: relative;
+    z-index: 1;
+
+    flex-shrink: 0;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    gap: 10px;
+
+    padding: 13px 20px;
+
+    background: #96DA5F;
+
+    color: #00284B;
+
+    border:
+        1px solid #96DA5F;
+
+    border-radius: 6px;
+
+    text-decoration: none;
+
+    font-family:
+        "Montserrat",
+        sans-serif;
+
+    font-size: 12px;
+    font-weight: 700;
+
+    letter-spacing: 0.4px;
+
+    transition:
+        background 0.2s ease,
+        color 0.2s ease,
+        border-color 0.2s ease,
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+
+/* Button hover */
+
+.feedback360-promo-btn:hover {
+    background: #ffffff;
+
+    color: #00284B;
+
+    border-color: #ffffff;
+
+    transform:
+        translateY(-2px);
+
+    box-shadow:
+        0 6px 16px rgba(0, 40, 75, 0.20);
+}
+
+
+/* Arrow */
+
+.feedback360-promo-btn .feedback360-arrow {
+    display: inline-block;
+
+    font-size: 17px;
+
+    transition:
+        transform 0.2s ease;
+}
+
+
+.feedback360-promo-btn:hover .feedback360-arrow {
+    transform:
+        translateX(4px);
+}
+
+
+/* =========================================
+   MOBILE
+   ========================================= */
+
+@media (max-width: 750px) {
+
+    .feedback360-promo {
+        width:
+            calc(100% - 28px);
+
+        margin:
+            24px 14px;
+
+        padding:
+            26px 24px;
+
+        flex-direction: column;
+
+        align-items: flex-start;
+
+        gap: 24px;
+
+        border-radius: 20px;
+    }
+
+
+    /* Move decorative ring slightly on mobile */
+
+    .feedback360-promo::after {
+        width: 190px;
+        height: 190px;
+
+        right: -70px;
+        top: -80px;
+
+        border-width: 28px;
+    }
+
+
+    .feedback360-promo-text {
+        max-width: 100%;
+    }
+
+
+    .feedback360-promo h2 {
+        font-size: 25px;
+    }
+
+
+    .feedback360-promo p {
+        font-size: 12px;
+    }
+
+
+    .feedback360-promo-btn {
+        width: 100%;
+
+        padding:
+            14px 18px;
+
+        text-align: center;
+    }
+
+}
