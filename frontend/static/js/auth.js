@@ -34,7 +34,7 @@ if (loginForm) {
 
             if (response.ok && data.token) {
                 // if page is admin and if the account has Role Admin
-                if (isAdminLogin && data.role !== "ADMIN") {
+                if (isAdminLogin && !["ADMIN", "TGG_ADMIN"].includes(data.role)) {
                     message.textContent = "This account does not have admin access.";
                     message.className = "mt-3 text-center text-danger";
                     return;
@@ -47,8 +47,10 @@ if (loginForm) {
                 message.className = "mt-3 text-center text-success";
 
         setTimeout(() => {
-          if (data.role === "ADMIN") {
+          if (data.role === "TGG_ADMIN") {
             window.location.href = "admin.html";
+          } else if (data.role === "ADMIN") {
+            window.location.href = "organisation-admin.html";
           } else {
             window.location.href = "dashboard.html";
           }

@@ -1387,9 +1387,7 @@
         <a class="active" href="#dashboard">Dashboard</a>
         <a href="#leadershipProfile">Leadership Profile</a>
         <a href="#skillGaps">Skill Gaps</a>
-        <a href="#learningModules">Modules</a>
         <!-- <a href="#feedback360">360° Results</a>  Commented out for now, as 360° results are not currently available in the admin dashboard. -->
-        <a href="admin-resources.html" onclick="saveAdminFilters()">Resource Library</a>
         <a href="#reports">Reports</a>
         <a href="#" onclick="logoutAdmin(); return false;">Logout</a>
       </div>
@@ -1404,9 +1402,7 @@
     <a href="#dashboard" onclick="closeMenu()">Dashboard</a>
     <a href="#leadershipProfile" onclick="closeMenu()">Leadership Profile</a>
     <a href="#skillGaps" onclick="closeMenu()">Skill Gaps</a>
-    <a href="#learningModules" onclick="closeMenu()">Learning Modules</a>
     <!-- <a href="#feedback360" onclick="closeMenu()">360° Results</a> --> <!-- Commented out for now, as 360° results are not currently available in the admin dashboard. -->
-    <a href="admin-resources.html" onclick="saveAdminFilters(); closeMenu()">Resource Library</a>
     <a href="#reports" onclick="closeMenu()">Reports</a>
     <a href="#" onclick="logoutAdmin(); return false;">Logout</a>
   </div>
@@ -1419,25 +1415,16 @@
       <div class="dashboard-hero">
         <div class="dashboard-header">
           <div class="section-kicker">The Leadership Compass</div>
-          <h1>Administrative Dashboard</h1>
+          <h1>Organisation Dashboard</h1>
           <p>
-            View aggregated leadership assessment results across the organisation and departments.
+            View aggregated leadership assessment results across your organisation and departments.
           </p>
         </div>
 
         <div class="filter-card">
-          <div class="filter-title">View organisation results</div>
-          <label for="organisationFilter">Organisation</label>
-          <input
-            id="organisationFilter"
-            class="department-select"
-            type="text"
-            placeholder="All Organisations"
-            autocomplete="off"
-            onchange="adminFilterChanged()"
-          >
+          <div class="filter-title">View department results</div>
 
-          <label for="departmentFilter" style="margin-top:14px;">Department</label>
+          <label for="departmentFilter">Department</label>
           <select id="departmentFilter" class="department-select" onchange="adminFilterChanged()">
             <option value="all">All Departments</option>
             <option value="Operations">Operations</option>
@@ -1447,7 +1434,7 @@
           </select>
 
           <p class="filter-note">
-            Filter by Organisation, then Department. Leave Organisation blank to view all organisations.
+            View aggregated results for all departments or select a department within your organisation.
           </p>
         </div>
       </div>
@@ -1674,110 +1661,6 @@
 
       </div>
 
-        <!-- LEARNING MODULES -->
-        <section id="learningModules" class="section-block">
-          <div class="section-heading">
-            <h2>Learning Modules</h2>
-            <p>
-              View and manage the learning content available across the Leadership Compass system.
-            </p>
-          </div>
-
-          <div class="modules-card">
-            <div class="modules-card-header">
-              <div>
-                <h3>Module Management</h3>
-                <p>Sort, review, add, edit, and remove learning modules from one place.</p>
-              </div>
-
-              <button class="btn btn-green" type="button" onclick="toggleAddModule()">
-                <i class="bi bi-plus-lg me-2"></i>Add Module
-              </button>
-            </div>
-
-            <div id="moduleAlert" class="px-4 pt-3" style="display:none;"></div>
-
-            <div id="moduleAddPanel" class="module-add-panel">
-              <div class="module-form-grid">
-                <div>
-                  <label for="newModuleCategory">Category</label>
-                  <select id="newModuleCategory">
-                    <option>Caring Time</option>
-                    <option>Receiving Value</option>
-                    <option>Acts of Support</option>
-                    <option>Words of Recognition</option>
-                    <option>Psychological Touch</option>
-                  </select>
-                </div>
-
-                <div>
-                  <label for="newModuleBook">Book</label>
-                  <input id="newModuleBook" type="text" placeholder="Enter book or course name">
-                </div>
-
-                <div>
-                  <label for="newModuleTitle">Title</label>
-                  <input id="newModuleTitle" type="text" placeholder="Enter module title">
-                </div>
-
-                <div>
-                  <label for="newModuleOrder">Order</label>
-                  <input id="newModuleOrder" type="number" value="1" min="1">
-                </div>
-              </div>
-
-              <div class="module-form-actions">
-                <button class="btn btn-green" type="button" onclick="addModule()">Save Module</button>
-                <button class="btn btn-outline-custom" type="button" onclick="toggleAddModule()">Cancel</button>
-              </div>
-            </div>
-
-            <div class="module-controls">
-              <div class="module-control">
-                <label for="moduleSort">Sort by</label>
-                <select id="moduleSort">
-                  <option value="id">Module ID</option>
-                  <option value="category">Category</option>
-                  <option value="book">Book</option>
-
-                </select>
-              </div>
-
-              <div class="module-control">
-                <label for="moduleDirection">Direction</label>
-                <select id="moduleDirection">
-                  <option value="asc">Ascending</option>
-                  <option value="desc">Descending</option>
-                </select>
-              </div>
-
-              <button class="btn btn-green" type="button" onclick="loadModules()">
-                <i class="bi bi-arrow-clockwise me-2"></i>Refresh List
-              </button>
-
-              <span id="moduleCount" class="module-count">0 modules</span>
-            </div>
-
-            <div class="module-table-wrap">
-              <table class="module-table">
-                <thead>
-                  <tr>
-                    <th>ID</th>
-                    <th>Category</th>
-                    <th>Book</th>
-                    <th>Title</th>
-                    <th>Order</th>
-                    <th>Active</th>
-                    <th>Actions</th>
-                  </tr>
-                </thead>
-                <tbody id="moduleTableBody">
-                  <!-- Populated by JavaScript -->
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </section>
         <!-- 360 FEEDBACK RESULTS TEMPORARILY REMOVED FROM ADMIN DASHBOARD
           <div class="section-heading">
             <h2>360° Feedback Results</h2>
@@ -1903,47 +1786,12 @@
           </div>
         </section>
         360 FEEDBACK RESULTS TEMPORARILY REMOVED FROM ADMIN DASHBOARD -->
-        <!-- RESOURCE LIBRARY -->
-        <section id="resourceLibrary" class="section-block">
-          <div class="section-heading">
-            <h2>Resource Library</h2>
-            <p>
-              Manage supporting leadership resources from the dedicated Admin Resource Library page.
-            </p>
-          </div>
-
-          <div class="resource-library-panel">
-            <div class="resource-library-copy">
-              <h3>Manage Leadership Resources</h3>
-              <p>
-                View, upload, edit, classify, and remove resources used across the Leadership Compass platform. Resources can be organised by leadership language and resource type.
-              </p>
-
-              <div class="resource-library-features">
-                <span class="resource-library-feature">PDFs</span>
-                <span class="resource-library-feature">Videos</span>
-                <span class="resource-library-feature">Audio</span>
-                <span class="resource-library-feature">eBooks</span>
-                <span class="resource-library-feature">Documents</span>
-                <span class="resource-library-feature">Images</span>
-              </div>
-            </div>
-
-            <div class="resource-library-actions">
-              <a class="resource-library-button" href="admin-resources.html" onclick="saveAdminFilters()">
-                <i class="bi bi-folder2-open"></i>
-                Open Resource Library
-              </a>
-            </div>
-          </div>
-        </section>
-
         <!-- REPORTS -->
         <section id="reports" class="section-block">
           <div class="section-heading">
             <h2>Reports</h2>
             <p>
-              Export the current aggregated Admin Dashboard view as CSV or PDF using the selected Organisation and Department filters.
+              Export the current aggregated Organisation Dashboard view as CSV or PDF using the selected Department filter.
             </p>
           </div>
 
@@ -1999,8 +1847,7 @@
             : "https://leadership-compass-api.ashysand-21bb09f6.australiaeast.azurecontainerapps.io";
 
 
-    const DASHBOARD_API = `${API_BASE}/api/admin/dashboard`;
-    const MODULES_API = `${API_BASE}/api/admin/modules`;
+    const DASHBOARD_API = `${API_BASE}/api/organisation-admin/dashboard`;
 
     const LOCAL_PREVIEW = window.location.protocol === "file:";
     const token = localStorage.getItem("token");
@@ -2009,7 +1856,7 @@
     // When double-clicking this file for UI testing, allow the page to open
     // without redirecting to index.html. Normal app authentication is still
     // enforced when the page is served over http/https.
-    if (!LOCAL_PREVIEW && (!token || role !== "TGG_ADMIN")) {
+    if (!LOCAL_PREVIEW && (!token || role !== "ADMIN")) {
       window.location.href = "index.html";
     }
 
@@ -2324,20 +2171,11 @@
     }
 
     const ADMIN_FILTER_STORAGE = {
-      organisation: "adminDashboardOrganisation",
-      department: "adminDashboardDepartment"
+      department: "organisationAdminDashboardDepartment"
     };
 
     function saveAdminFilters() {
-      const organisationInput = document.getElementById("organisationFilter");
       const departmentSelect = document.getElementById("departmentFilter");
-
-      if (organisationInput) {
-        sessionStorage.setItem(
-          ADMIN_FILTER_STORAGE.organisation,
-          organisationInput.value
-        );
-      }
 
       if (departmentSelect) {
         sessionStorage.setItem(
@@ -2348,18 +2186,9 @@
     }
 
     function restoreAdminFilters() {
-      const organisationInput = document.getElementById("organisationFilter");
       const departmentSelect = document.getElementById("departmentFilter");
-
-      const savedOrganisation =
-        sessionStorage.getItem(ADMIN_FILTER_STORAGE.organisation);
-
       const savedDepartment =
         sessionStorage.getItem(ADMIN_FILTER_STORAGE.department);
-
-      if (organisationInput && savedOrganisation !== null) {
-        organisationInput.value = savedOrganisation;
-      }
 
       if (
         departmentSelect &&
@@ -2376,23 +2205,15 @@
     }
 
     function getCurrentFilters() {
-      const organisation =
-        document.getElementById("organisationFilter").value.trim() || "all";
       const department =
         document.getElementById("departmentFilter").value || "all";
 
-      return { organisation, department };
+      return { department };
     }
 
     function buildDashboardParams() {
-      const { organisation, department } = getCurrentFilters();
+      const { department } = getCurrentFilters();
       const params = new URLSearchParams();
-
-      // The new backend handover supports:
-      // ?organisation={organisation}&department={department}
-      if (organisation && organisation.toLowerCase() !== "all") {
-        params.set("organisation", organisation);
-      }
 
       params.set("department", department);
       return params;
@@ -2402,20 +2223,17 @@
       const scope = document.getElementById("reportScope");
       if (!scope) return;
 
-      const { organisation, department } = getCurrentFilters();
-
-      const organisationText =
-        organisation.toLowerCase() === "all" ? "All Organisations" : organisation;
+      const { department } = getCurrentFilters();
 
       const departmentText =
         department.toLowerCase() === "all" ? "All Departments" : department;
 
       scope.innerHTML =
-        `<strong>Current report scope:</strong> ${escapeHtml(organisationText)} · ${escapeHtml(departmentText)}`;
+        `<strong>Current report scope:</strong> Your Organisation · ${escapeHtml(departmentText)}`;
     }
 
     async function loadAdminDashboard() {
-      const { organisation, department } = getCurrentFilters();
+      const { department } = getCurrentFilters();
       const params = buildDashboardParams();
       updateReportScope();
       setDashboardState("loading");
@@ -2469,7 +2287,7 @@
         return;
       }
 
-      const { organisation, department } = getCurrentFilters();
+      const { department } = getCurrentFilters();
       const params = buildDashboardParams();
 
       const isPdf = format === "pdf";
@@ -2501,11 +2319,6 @@
         const objectUrl = URL.createObjectURL(blob);
         const link = document.createElement("a");
 
-        const orgPart =
-          organisation.toLowerCase() === "all"
-            ? "all-organisations"
-            : organisation.replace(/[^a-z0-9]+/gi, "-").toLowerCase();
-
         const deptPart =
           department.toLowerCase() === "all"
             ? "all-departments"
@@ -2513,7 +2326,7 @@
 
         link.href = objectUrl;
         link.download =
-          `leadership-compass-report-${orgPart}-${deptPart}.${isPdf ? "pdf" : "csv"}`;
+          `leadership-compass-organisation-report-${deptPart}.${isPdf ? "pdf" : "csv"}`;
 
         document.body.appendChild(link);
         link.click();
@@ -2536,226 +2349,9 @@
       return downloadAdminReport("pdf");
     }
 
-    // ============================================================
-    // REAL ADMIN LEARNING MODULES BACKEND
-    // /api/admin/modules
-    // ============================================================
 
-    function showModuleAlert(message, type = "danger") {
-      const alert = document.getElementById("moduleAlert");
-      alert.innerHTML = `<div class="alert alert-${type} mb-0" role="alert">${escapeHtml(message)}</div>`;
-      alert.style.display = "block";
-    }
 
-    function hideModuleAlert() {
-      document.getElementById("moduleAlert").style.display = "none";
-    }
 
-    async function loadModules() {
-      hideModuleAlert();
-      const tbody = document.getElementById("moduleTableBody");
-      tbody.innerHTML = '<tr><td colspan="7" class="text-muted">Loading modules...</td></tr>';
-
-      const sortBy = document.getElementById("moduleSort").value;
-      const direction = document.getElementById("moduleDirection").value;
-
-      if (LOCAL_PREVIEW) {
-        const modules = [...previewModules].sort((a, b) => {
-          let first = a[sortBy];
-          let second = b[sortBy];
-
-          if (typeof first === "string") {
-            first = first.toLowerCase();
-            second = String(second).toLowerCase();
-          }
-
-          if (first < second) return direction === "asc" ? -1 : 1;
-          if (first > second) return direction === "asc" ? 1 : -1;
-          return 0;
-        });
-
-        renderModules(modules);
-        return;
-      }
-
-      const params = new URLSearchParams({
-        sortBy,
-        direction
-      });
-
-      try {
-        const response = await fetch(`${MODULES_API}?${params.toString()}`, {
-          headers: authHeaders()
-        });
-        if (!response.ok) throw new Error(await response.text());
-        const modules = await response.json();
-        renderModules(modules);
-      } catch (error) {
-        console.error("Modules error:", error);
-        tbody.innerHTML = '<tr><td colspan="7" class="text-danger">Failed to load modules.</td></tr>';
-        showModuleAlert("Could not load learning modules. Check the backend and admin login.");
-      }
-    }
-
-    function renderModules(modules) {
-      const tbody = document.getElementById("moduleTableBody");
-      document.getElementById("moduleCount").textContent =
-        `${modules.length} module${modules.length === 1 ? "" : "s"}`;
-
-      if (!modules.length) {
-        tbody.innerHTML = '<tr><td colspan="7" class="text-muted">No modules found.</td></tr>';
-        return;
-      }
-
-      tbody.innerHTML = modules.map(module => `
-        <tr>
-          <td>${module.id}</td>
-          <td>${escapeHtml(module.category)}</td>
-          <td>${escapeHtml(module.book)}</td>
-          <td>${escapeHtml(module.title)}</td>
-          <td>${module.displayOrder ?? ""}</td>
-          <td><span class="active-pill">${module.active ? "Yes" : "No"}</span></td>
-          <td>
-            <div class="module-action-group">
-              <button class="module-action module-edit" type="button" onclick="editModule(${module.id})">Edit</button>
-              <button class="module-action module-delete" type="button" onclick="deleteModule(${module.id})">Delete</button>
-            </div>
-          </td>
-        </tr>
-      `).join("");
-    }
-
-    function toggleAddModule() {
-      document.getElementById("moduleAddPanel").classList.toggle("show");
-    }
-
-    async function addModule() {
-      hideModuleAlert();
-      const category = document.getElementById("newModuleCategory").value;
-      const book = document.getElementById("newModuleBook").value.trim();
-      const title = document.getElementById("newModuleTitle").value.trim();
-      const displayOrder = Number(document.getElementById("newModuleOrder").value) || 1;
-
-      if (!book || !title) {
-        showModuleAlert("Please enter a book and module title.", "warning");
-        return;
-      }
-
-      const payload = {
-        category,
-        book,
-        title,
-        description: "",
-        displayOrder,
-        active: true,
-        sourceChapters: [],
-        checklist: [],
-        quotesAndConcepts: [],
-        activities: []
-      };
-
-      if (LOCAL_PREVIEW) {
-        const nextId = previewModules.length
-          ? Math.max(...previewModules.map(module => module.id)) + 1
-          : 1;
-
-        previewModules.push({ id: nextId, ...payload });
-        document.getElementById("newModuleBook").value = "";
-        document.getElementById("newModuleTitle").value = "";
-        document.getElementById("newModuleOrder").value = "1";
-        document.getElementById("moduleAddPanel").classList.remove("show");
-        showModuleAlert("Module added in preview mode.", "success");
-        await loadModules();
-        return;
-      }
-
-      try {
-        const response = await fetch(MODULES_API, {
-          method: "POST",
-          headers: authHeaders(true),
-          body: JSON.stringify(payload)
-        });
-        if (!response.ok) throw new Error(await response.text());
-
-        document.getElementById("newModuleBook").value = "";
-        document.getElementById("newModuleTitle").value = "";
-        document.getElementById("newModuleOrder").value = "1";
-        document.getElementById("moduleAddPanel").classList.remove("show");
-        showModuleAlert("Module created successfully.", "success");
-        await loadModules();
-      } catch (error) {
-        console.error("Create module error:", error);
-        showModuleAlert("Could not create the module.");
-      }
-    }
-
-    async function editModule(id) {
-      hideModuleAlert();
-
-      if (LOCAL_PREVIEW) {
-        const module = previewModules.find(item => item.id === id);
-        if (!module) return;
-
-        const title = prompt("Edit module title:", module.title || "");
-        if (title === null || !title.trim()) return;
-
-        module.title = title.trim();
-        showModuleAlert("Module updated in preview mode.", "success");
-        await loadModules();
-        return;
-      }
-
-      try {
-        const getResponse = await fetch(`${MODULES_API}/${id}`, { headers: authHeaders() });
-        if (!getResponse.ok) throw new Error(await getResponse.text());
-        const module = await getResponse.json();
-
-        const title = prompt("Edit module title:", module.title || "");
-        if (title === null || !title.trim()) return;
-
-        const payload = { ...module, title: title.trim() };
-        const putResponse = await fetch(`${MODULES_API}/${id}`, {
-          method: "PUT",
-          headers: authHeaders(true),
-          body: JSON.stringify(payload)
-        });
-        if (!putResponse.ok) throw new Error(await putResponse.text());
-
-        showModuleAlert("Module updated successfully.", "success");
-        await loadModules();
-      } catch (error) {
-        console.error("Edit module error:", error);
-        showModuleAlert("Could not update the module.");
-      }
-    }
-
-    async function deleteModule(id) {
-      const confirmed = confirm("Delete this learning module? This cannot be undone.");
-      if (!confirmed) return;
-
-      if (LOCAL_PREVIEW) {
-        previewModules = previewModules.filter(item => item.id !== id);
-        showModuleAlert("Module deleted in preview mode.", "success");
-        await loadModules();
-        return;
-      }
-
-      try {
-        const response = await fetch(`${MODULES_API}/${id}`, {
-          method: "DELETE",
-          headers: authHeaders()
-        });
-        if (!response.ok) throw new Error(await response.text());
-        showModuleAlert("Module deleted successfully.", "success");
-        await loadModules();
-      } catch (error) {
-        console.error("Delete module error:", error);
-        showModuleAlert("Could not delete the module.");
-      }
-    }
-
-    document.getElementById("moduleSort").addEventListener("change", loadModules);
-    document.getElementById("moduleDirection").addEventListener("change", loadModules);
 
     // ============================================================
     // 360° FEEDBACK UI
@@ -3019,7 +2615,6 @@
     restoreAdminFilters();
     updateReportScope();
     loadAdminDashboard();
-    loadModules();
     //initialiseAdmin360FromUrl();
   </script>
 

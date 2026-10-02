@@ -145,11 +145,18 @@ public class SpringSecurityConfig {
 
                         .requestMatchers(
                                 "/api/admin/**"
+                        ).hasRole("TGG_ADMIN")
+
+                        // =================================================
+                        // ORGANISATION ADMIN
+                        // =================================================
+                        .requestMatchers(
+                                "/api/organisation-admin/**"
                         ).hasRole("ADMIN")
 
                         .requestMatchers(
                                 "/api/dashboard/admin"
-                        ).hasRole("ADMIN")
+                        ).hasRole("TGG_ADMIN")
 
                         // =================================================
                         // REPORTS
@@ -177,7 +184,7 @@ public class SpringSecurityConfig {
 
                         .requestMatchers(
                                 "/api/survey/admin/**"
-                        ).hasRole("ADMIN")
+                        ).hasRole("TGG_ADMIN")
 
                         // =================================================
                         // USER DASHBOARD
@@ -239,17 +246,17 @@ public class SpringSecurityConfig {
                         .requestMatchers(
                                 HttpMethod.POST,
                                 "/api/resources/**"
-                        ).hasRole("ADMIN")
+                        ).hasRole("TGG_ADMIN")
 
                         .requestMatchers(
                                 HttpMethod.PUT,
                                 "/api/resources/**"
-                        ).hasRole("ADMIN")
+                        ).hasRole("TGG_ADMIN")
 
                         .requestMatchers(
                                 HttpMethod.DELETE,
                                 "/api/resources/**"
-                        ).hasRole("ADMIN")
+                        ).hasRole("TGG_ADMIN")
 
                         // =================================================
                         // SWAGGER
