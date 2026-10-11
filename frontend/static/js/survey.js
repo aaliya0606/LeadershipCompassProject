@@ -178,7 +178,23 @@ function goNext(prefix) {
 // -------------------------------------------------------------------------
 // Go back to previous part
 // -------------------------------------------------------------------------
+function saveCurrentAnswers() {
+  const category = categories[currentPart - 1];
+  if (!category) return;
+
+  questions
+    .filter(q => q.category === category.prefix)
+    .forEach(q => {
+      const questionKey = category.prefix + "_" + q.questionId;
+      const selected = document.querySelector(`input[name="${questionKey}"]:checked`);
+      if (selected) {
+        answers[questionKey] = parseInt(selected.value);
+      }
+    });
+}
+
 function goBack() {
+  saveCurrentAnswers();
   currentPart--;
   renderPart();
   window.scrollTo(0, 0);
