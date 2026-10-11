@@ -43,4 +43,8 @@ public interface SurveyResultRepository extends JpaRepository<SurveyResult, Long
 
     @Query("SELECT r.psychologicalTouchScore FROM SurveyResult r")
     List<Integer> findAllPsychologicalTouchScores();
+
+    // NEW: all overall (total) scores, needed to calculate the overall percentile
+    @Query("SELECT r.overallScore FROM SurveyResult r WHERE r.overallScore IS NOT NULL")
+    List<Integer> findAllOverallScores();
 }

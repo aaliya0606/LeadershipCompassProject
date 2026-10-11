@@ -117,6 +117,8 @@ public class SurveyService{
         return history;
     }
 
+
+
     @Transactional
     public SurveyQuestions addQuestion(String questionText, String category){
         validateCategory(category);
@@ -319,6 +321,9 @@ public class SurveyService{
         response.setYourPsychologicalTouchScore(latest.getPsychologicalTouchScore());
         response.setPsychologicalTouchPercentile(calculatePercentile(latest.getPsychologicalTouchScore(),
             surveyResultRepository.findAllPsychologicalTouchScores()));
+
+        response.setOverallPercentile(calculatePercentile(latest.getOverallScore(),
+            surveyResultRepository.findAllOverallScores()));
 
         return response;
     }

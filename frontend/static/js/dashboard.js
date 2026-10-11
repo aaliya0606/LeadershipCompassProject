@@ -31,10 +31,17 @@ function capitalize(key) {
   return key.charAt(0).toUpperCase() + key.slice(1);
 }
 
+// function bandForScore(score) {
+//   if (score >= 190) return "Strong intent";
+//   if (score >= 150) return "Building momentum";
+//   return "Getting started";
+// }
+
 function bandForScore(score) {
-  if (score >= 190) return "Strong intent";
-  if (score >= 150) return "Building momentum";
-  return "Getting started";
+  if (score >= 200) return "High";
+  if (score >= 150) return "Strong intent";
+  if (score >= 100) return "Needs attention";
+  return "Blind spot";
 }
 
 function ordinal(n) {
@@ -291,7 +298,7 @@ async function loadDevelopmentPlan() {
     }
     const plan = await res.json();
     
-    console.log("[dev plan] /api/development-plans/current response:", plan);
+    // console.log("[dev plan] /api/development-plans/current response:", plan);
 
     const weeks = (plan.weeks || []).slice().sort((a, b) => a.weekNumber - b.weekNumber);
     if (!weeks.length) {
@@ -526,11 +533,17 @@ async function loadPeerComparison() {
 
     if (!rows.length) return;
 
+    // Use the backend's true overall percentile when available; otherwise fall back to the average
+    const hasOverall = typeof data.overallPercentile === "number";
+    const headlinePercentile = hasOverall
+      ? data.overallPercentile
+      : Math.round(rows.reduce((sum, r) => sum + r.percentile, 0) / rows.length);
+    document.getElementById("peerOverallPercentile").textContent = ordinal(headlinePercentile);
 
-    const avgPercentile = Math.round(
-      rows.reduce((sum, r) => sum + r.percentile, 0) / rows.length
-    );
-    document.getElementById("peerOverallPercentile").textContent = ordinal(avgPercentile);
+    const headlineLabel = document.querySelector(".peer-headline-label");
+    if (headlineLabel) {
+      headlineLabel.textContent = hasOverall ? "percentile overall" : "average percentile across languages";
+    }
 
     const container = document.getElementById("peerRows");
     container.innerHTML = "";
