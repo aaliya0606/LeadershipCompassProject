@@ -99,24 +99,21 @@ public class SpringSecurityConfig {
                                 HttpMethod.GET,
                                 "/api/360/surveys/me"
                         ).hasAnyRole(
-                                "USER",
-                                "ADMIN"
+                                "USER"
                         )
 
                         .requestMatchers(
                                 HttpMethod.GET,
                                 "/api/360/surveys/me/history"
                         ).hasAnyRole(
-                                "USER",
-                                "ADMIN"
+                                "USER"
                         )
 
                         .requestMatchers(
                                 HttpMethod.GET,
                                 "/api/360/surveys/{surveyId}/results"
                         ).hasAnyRole(
-                                "USER",
-                                "ADMIN"
+                                "USER"
                         )
 
                         // =================================================
@@ -147,12 +144,6 @@ public class SpringSecurityConfig {
                                 "/api/admin/**"
                         ).hasRole("TGG_ADMIN")
 
-                        // =================================================
-                        // ORGANISATION ADMIN
-                        // =================================================
-                        .requestMatchers(
-                                "/api/organisation-admin/**"
-                        ).hasRole("ADMIN")
 
                         .requestMatchers(
                                 "/api/dashboard/admin"
@@ -165,8 +156,7 @@ public class SpringSecurityConfig {
                         .requestMatchers(
                                 "/api/reports/**"
                         ).hasAnyRole(
-                                "USER",
-                                "ADMIN"
+                                "USER"
                         )
 
                         // =================================================
@@ -178,8 +168,7 @@ public class SpringSecurityConfig {
                                 "/api/survey/submit",
                                 "/api/survey/history"
                         ).hasAnyRole(
-                                "USER",
-                                "ADMIN"
+                                "USER"
                         )
 
                         .requestMatchers(
@@ -188,16 +177,14 @@ public class SpringSecurityConfig {
                                 "/api/dashboard/peer-comparison",
                                 "/api/dashboard/latest-scores"
                         ).hasAnyRole(
-                                "USER",
-                                "ADMIN"
+                                "USER"
                         )
 
                         // USER PROFILE
                         .requestMatchers(
                                 "/api/profile"
                         ).hasAnyRole(
-                                "USER",
-                                "ADMIN"
+                                "USER"
                         )
 
                         .requestMatchers(
@@ -214,8 +201,7 @@ public class SpringSecurityConfig {
                                 "/api/dashboard/peer-comparison",
                                 "/api/dashboard/latest-scores"
                         ).hasAnyRole(
-                                "USER",
-                                "ADMIN"
+                                "USER"
                         )
 
                         // =================================================
@@ -225,15 +211,13 @@ public class SpringSecurityConfig {
                         .requestMatchers(
                                 "/api/development-plans/**"
                         ).hasAnyRole(
-                                "USER",
-                                "ADMIN"
+                                "USER"
                         )
 
                         .requestMatchers(
                                 "/api/email/subscription"
                         ).hasAnyRole(
-                                "USER",
-                                "ADMIN"
+                                "USER"
                         )
 
                         // =================================================
@@ -243,8 +227,7 @@ public class SpringSecurityConfig {
                         .requestMatchers(
                                 "/api/ai-brain/**"
                         ).hasAnyRole(
-                                "USER",
-                                "ADMIN"
+                                "USER"
                         )
 
                         // =================================================
@@ -257,7 +240,6 @@ public class SpringSecurityConfig {
                                 "/api/resources/**"
                         ).hasAnyRole(
                                 "USER",
-                                "ADMIN",
                                 "TGG_ADMIN"
                         )
 

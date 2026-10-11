@@ -52,10 +52,14 @@ if (loginForm) {
         setTimeout(() => {
           if (data.role === "TGG_ADMIN") {
             window.location.href = "admin.html";
-          } else if (data.role === "ADMIN") {
-            window.location.href = "organisation-admin.html";
-          } else {
+          } else if (data.role === "USER") {
             window.location.href = "dashboard.html";
+          } else {
+            // Legacy ADMIN accounts no longer have dashboard access.
+            localStorage.removeItem("token");
+            localStorage.removeItem("role");
+            message.textContent = "This account no longer has dashboard access.";
+            message.className = "mt-3 text-center text-danger";
           }
         }, 800);
       } else {
@@ -86,7 +90,8 @@ if (registerForm) {
     const email = document.getElementById("registerEmail").value;
     const password = document.getElementById("registerPassword").value;
     const confirmPassword = document.getElementById("confirmPassword").value;
-    const role = document.getElementById("registerRole").value;
+    // Public registration is USER-only; the Admin dropdown is disabled.
+    const role = "USER";
     const department = document.getElementById("registerDepartment").value;
     const organisation = document.getElementById("registerOrganisation").value.trim();
     const message = document.getElementById("registerMessage");
@@ -367,10 +372,11 @@ if (dashboardLink) {
 
     if (role === "TGG_ADMIN") {
         dashboardLink.href = "admin.html";
-    } else if (role === "ADMIN") {
-        dashboardLink.href = "organisation-admin.html";
-    } else {
+    } else if (role === "USER") {
         dashboardLink.href = "dashboard.html";
+    } else {
+        // Do not provide a dashboard link for retired roles.
+        dashboardLink.removeAttribute("href");
     }
 }
 
