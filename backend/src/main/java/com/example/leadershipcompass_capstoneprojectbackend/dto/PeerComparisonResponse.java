@@ -17,6 +17,11 @@ public class PeerComparisonResponse {
     private int yourPsychologicalTouchScore;
     private int psychologicalTouchPercentile;
 
+    private int overallPercentile;
+
+    public int getOverallPercentile() { return overallPercentile; }
+    public void setOverallPercentile(int overallPercentile) { this.overallPercentile = overallPercentile; }
+
     public int getYourCaringTimeScore() { return yourCaringTimeScore; }
     public void setYourCaringTimeScore(int yourCaringTimeScore) { this.yourCaringTimeScore = yourCaringTimeScore; }
 
