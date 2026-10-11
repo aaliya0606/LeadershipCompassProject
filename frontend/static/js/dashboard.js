@@ -533,11 +533,17 @@ async function loadPeerComparison() {
 
     if (!rows.length) return;
 
+    // Use the backend's true overall percentile when available; otherwise fall back to the average
+    const hasOverall = typeof data.overallPercentile === "number";
+    const headlinePercentile = hasOverall
+      ? data.overallPercentile
+      : Math.round(rows.reduce((sum, r) => sum + r.percentile, 0) / rows.length);
+    document.getElementById("peerOverallPercentile").textContent = ordinal(headlinePercentile);
 
-    const avgPercentile = Math.round(
-      rows.reduce((sum, r) => sum + r.percentile, 0) / rows.length
-    );
-    document.getElementById("peerOverallPercentile").textContent = ordinal(avgPercentile);
+    const headlineLabel = document.querySelector(".peer-headline-label");
+    if (headlineLabel) {
+      headlineLabel.textContent = hasOverall ? "percentile overall" : "average percentile across languages";
+    }
 
     const container = document.getElementById("peerRows");
     container.innerHTML = "";
