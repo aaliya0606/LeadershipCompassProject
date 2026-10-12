@@ -1,0 +1,314 @@
+
+@media (max-width: 960px) {
+
+
+  html {
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+  }
+
+  body {
+    overflow-x: hidden;
+  }
+
+  
+  header.custom-navbar {
+    padding: 8px 16px;
+    flex-wrap: nowrap;
+  }
+
+  .nav-links-inline {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    flex-direction: column;
+    align-items: stretch;
+    padding-left: 0;
+    max-width: 100%;
+    max-height: 0;
+    opacity: 1;
+    overflow: hidden;
+    background: linear-gradient(180deg, #00284B, #64BC28);
+    transition: max-height 0.4s ease;
+    z-index: 100;
+  }
+
+  .nav-links-inline.open {
+    max-width: 100%;
+    max-height: 480px;
+  }
+
+  .nav-link {
+    padding: 14px 20px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+    width: 100%;
+  }
+
+  .nav-link.logout {
+    border-left: none;
+    border-top: 1px solid rgba(255, 255, 255, 0.15);
+    margin-left: 0;
+    padding-left: 20px;
+  }
+
+  /* ---------- Page title + survey button ---------- */
+  .title {
+    flex-wrap: wrap;
+    gap: 12px;
+    padding: 0 24px 16px;
+  }
+
+  .title h1 {
+    padding: 28px 0 0;
+    font-size: clamp(1.6rem, 6vw, 2.2rem);
+  }
+
+  #surveyBtn {
+    margin-top: 0;
+  }
+
+
+  .plan-container {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    column-gap: 16px;
+    row-gap: 16px;
+    padding-left: 24px;
+    padding-right: 24px;
+  }
+
+  .plan,
+  .plan1 {
+    min-height: 0;
+  }
+
+  
+  .plan p,
+  .plan1 p {
+    font-size: 14px;
+  }
+
+  .wheel-container {
+    grid-column: 1 / -1;
+    grid-row: auto;
+    height: auto;
+    border-radius: 30px;
+  }
+
+  .wheel {
+    position: relative;
+    flex: none;
+    height: 340px;
+    padding-top: 8px;
+  }
+
+  .wheel canvas {
+    max-height: 100%;
+  }
+
+  #radarPointName {
+    font-size: 14px;
+  }
+
+  #radarPointScore {
+    font-size: 12px;
+  }
+
+  .overview {
+    grid-column: 1 / -1;
+    grid-row: auto;
+    padding: 24px;
+  }
+
+  .mini-grid {
+    column-gap: 12px;
+    row-gap: 12px;
+  }
+
+  .mini-grid h5 {
+    padding: 12px 14px 14px;
+    border-radius: 20px;
+    font-size: 0.95rem;
+  }
+
+  .mini-grid h5 p {
+    font-size: 12px;
+  }
+
+  
+  .insights-container {
+    grid-template-columns: minmax(0, 1fr);
+    column-gap: 16px;
+    row-gap: 16px;
+    padding: 16px 24px 0;
+  }
+
+  .progress-card,
+  .peer-card {
+    grid-column: 1;
+  }
+
+  .insight-card {
+    padding: 22px 20px 24px;
+    border-radius: 24px;
+  }
+
+  
+  .feedback360-promo {
+    max-width: 100%;
+    box-sizing: border-box;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+  }
+
+  /* ---------- Resources ---------- */
+  .resources-section {
+    padding: 16px 24px;
+    margin-top: 8px;
+  }
+
+  .resources {
+    padding: 22px 20px 24px;
+    border-radius: 24px;
+  }
+
+  .resources-header {
+    flex-wrap: wrap;
+    gap: 6px 16px;
+  }
+
+  /* ---------- Admin tools ---------- */
+  #adminSection {
+    padding: 0 24px 24px;
+  }
+}
+
+
+
+@media (max-width: 600px) {
+
+  /* Navbar */
+  .navbar-logo {
+    height: 30px;
+  }
+
+  .brand-title {
+    font-size: 0.9rem;
+  }
+
+
+  .title {
+    padding: 0 16px 14px;
+  }
+
+  .title h1 {
+    padding-top: 20px;
+  }
+
+  .title a,
+  #surveyBtn {
+    width: 100%;
+  }
+
+  
+  .plan-container {
+    grid-template-columns: minmax(0, 1fr);
+    row-gap: 14px;
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+
+  .plan,
+  .plan1 {
+    padding: 22px;
+    border-radius: 24px;
+  }
+
+  .plan1 h1 {
+    margin-top: 12px;
+  }
+
+  .wheel-container {
+    padding: 18px 12px;
+    border-radius: 24px;
+  }
+
+  .wheel {
+    height: 280px;
+  }
+
+  /* 5-week overview: 2 columns, last week spans both */
+  .overview {
+    padding: 20px 16px;
+    border-radius: 24px;
+  }
+
+  .mini-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    column-gap: 10px;
+    row-gap: 10px;
+  }
+
+  .mini-grid > div:last-child {
+    grid-column: 1 / -1;
+  }
+
+  /* Progress + peer cards */
+  .insights-container {
+    row-gap: 14px;
+    padding: 14px 16px 0;
+  }
+
+  .insight-card {
+    padding: 20px 16px 22px;
+  }
+
+  .metric-row {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 8px;
+  }
+
+  .metric-tile {
+    padding: 10px;
+    border-radius: 12px;
+  }
+
+  .metric-tile .metric-label {
+    font-size: 10px;
+  }
+
+  .metric-tile .metric-value {
+    font-size: 18px;
+  }
+
+
+  #progressBand {
+    font-size: 13px !important;
+  }
+
+  .legend-row {
+    gap: 8px 12px;
+  }
+
+  .peer-headline .peer-headline-num {
+    font-size: 28px;
+  }
+
+  /* Resources */
+  .resources-section {
+    padding: 14px 16px 24px;
+  }
+
+  .resources {
+    padding: 20px 16px 22px;
+  }
+
+  .res-title {
+    font-size: 14px;
+  }
+
+  #adminSection {
+    padding: 0 16px 24px;
+  }
+}
