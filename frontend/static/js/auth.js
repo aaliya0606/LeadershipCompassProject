@@ -7,6 +7,33 @@ const API_ROOT =
 const BASE_URL = `${API_ROOT}/api/auth`;
 const API_URL = `${API_ROOT}/api`;
 
+function finishLogin(data, isAdminLogin, message) {
+    if (isAdminLogin && !["ADMIN", "TGG_ADMIN"].includes(data.role)) {
+        message.textContent = "This account does not have admin access.";
+        message.className = "mt-3 text-center text-danger";
+        return;
+    }
+
+    localStorage.setItem("token", data.token);
+    localStorage.setItem("role", data.role || "USER");
+
+    message.textContent = "Login successful!";
+    message.className = "mt-3 text-center text-success";
+
+    setTimeout(() => {
+        if (data.role === "TGG_ADMIN") {
+            window.location.href = "admin.html";
+        } else if (data.role === "USER") {
+            window.location.href = "dashboard.html";
+        } else {
+            localStorage.removeItem("token");
+            localStorage.removeItem("role");
+            message.textContent = "This account no longer has dashboard access.";
+            message.className = "mt-3 text-center text-danger";
+        }
+    }, 800);
+}
+
 // LOGIN
 const loginForm = document.getElementById("loginForm");
 
@@ -36,41 +63,105 @@ if (loginForm) {
             const data = await response.json();
 
             if (response.ok && data.token) {
-                // if page is admin and if the account has Role Admin
-                if (isAdminLogin && !["ADMIN", "TGG_ADMIN"].includes(data.role)) {
-                    message.textContent = "This account does not have admin access.";
-                    message.className = "mt-3 text-center text-danger";
-                    return;
-                }
-
-                localStorage.setItem("token", data.token);
-                localStorage.setItem("role", data.role || "USER");
-
-                message.textContent = "Login successful!";
-                message.className = "mt-3 text-center text-success";
-
-        setTimeout(() => {
-          if (data.role === "TGG_ADMIN") {
-            window.location.href = "admin.html";
-          } else if (data.role === "USER") {
-            window.location.href = "dashboard.html";
-          } else {
-            // Legacy ADMIN accounts no longer have dashboard access.
-            localStorage.removeItem("token");
-            localStorage.removeItem("role");
-            message.textContent = "This account no longer has dashboard access.";
+                finishLogin(data, isAdminLogin, message);
+            } else {
+                message.textContent = data.message || "Login failed.";
+                message.className = "mt-3 text-center text-danger";
+            }
+        } catch (error) {
+            message.textContent = "Cannot connect to backend.";
             message.className = "mt-3 text-center text-danger";
-          }
-        }, 800);
-      } else {
-        message.textContent = data.message || "Login failed.";
+        }
+    });
+}
+
+const forgotPasswordForm = document.getElementById("forgotPasswordForm");
+
+if (forgotPasswordForm) {
+    forgotPasswordForm.addEventListener("submit", async function (event) {
+        event.preventDefault();
+        const email = document.getElementById("forgotEmail").value.trim();
+        const message = document.getElementById("forgotMessage");
+        if (!email) {
+            message.textContent = "Enter the email on your account.";
+            message.className = "mt-3 text-center text-danger";
+            return;
+        }
+        try {
+            const response = await fetch(`${BASE_URL}/forgot-password`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ email: email })
+            });
+            const data = await response.json();
+            message.textContent = data.message || "If an account exists for that email, a reset link has been sent.";
+            message.className = response.ok
+                ? "mt-3 text-center text-success"
+                : "mt-3 text-center text-danger";
+        } catch (error) {
+            message.textContent = "Cannot connect to backend.";
+            message.className = "mt-3 text-center text-danger";
+        }
+    });
+}
+
+const resetPasswordForm = document.getElementById("resetPasswordForm");
+
+if (resetPasswordForm) {
+    const token = new URLSearchParams(window.location.search).get("token");
+    const message = document.getElementById("resetMessage");
+    if (!token) {
+        message.textContent = "This reset link is invalid or has expired.";
         message.className = "mt-3 text-center text-danger";
-      }
-    } catch (error) {
-      message.textContent = "Cannot connect to backend.";
-      message.className = "mt-3 text-center text-danger";
     }
-  });
+
+    resetPasswordForm.addEventListener("submit", async function (event) {
+        event.preventDefault();
+        const password = document.getElementById("resetPassword").value;
+        const confirmPassword = document.getElementById("resetConfirmPassword").value;
+        if (!token) {
+            message.textContent = "This reset link is invalid or has expired.";
+            message.className = "mt-3 text-center text-danger";
+            return;
+        }
+        if (password.length < 8) {
+            message.textContent = "Password must be at least 8 characters.";
+            message.className = "mt-3 text-center text-danger";
+            return;
+        }
+        if (password !== confirmPassword) {
+            message.textContent = "Passwords do not match.";
+            message.className = "mt-3 text-center text-danger";
+            return;
+        }
+        try {
+            const response = await fetch(`${BASE_URL}/reset-password`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    token: token,
+                    password: password
+                })
+            });
+            const data = await response.json();
+            message.textContent = data.message || "Password could not be reset.";
+            message.className = response.ok
+                ? "mt-3 text-center text-success"
+                : "mt-3 text-center text-danger";
+            if (response.ok) {
+                setTimeout(() => {
+                    window.location.href = "login.html";
+                }, 1200);
+            }
+        } catch (error) {
+            message.textContent = "Cannot connect to backend.";
+            message.className = "mt-3 text-center text-danger";
+        }
+    });
 }
 
 // REGISTER
@@ -95,8 +186,39 @@ if (registerForm) {
     const department = document.getElementById("registerDepartment").value;
     const organisation = document.getElementById("registerOrganisation").value.trim();
     const message = document.getElementById("registerMessage");
+    const codeGroup = document.getElementById("signupCodeGroup");
 
     try {
+        if (codeGroup && !codeGroup.hidden) {
+            const code = document.getElementById("signupCode").value.trim();
+            if (!/^\d{6}$/.test(code)) {
+                message.textContent = "Enter the 6-digit code from your email.";
+                message.className = "mt-3 text-center text-danger";
+                return;
+            }
+            const verifyResponse = await fetch(`${BASE_URL}/verify-signup`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    email: email,
+                    code: code
+                })
+            });
+            const verifyData = await verifyResponse.json();
+            if (verifyResponse.ok && !verifyData.twoFactorRequired) {
+                message.textContent = verifyData.message || "Email confirmed. Redirecting to sign in...";
+                message.className = "mt-3 text-center text-success";
+                setTimeout(() => {
+                    window.location.href = "login.html";
+                }, 1000);
+            } else {
+                message.textContent = verifyData.message || "That code is invalid or has expired.";
+                message.className = "mt-3 text-center text-danger";
+            }
+            return;
+        }
 
         if (!fullName || !email || !password || !confirmPassword) {
             message.textContent = "Please fill in all fields.";
@@ -146,6 +268,16 @@ if (registerForm) {
       });
 
       const data = await response.json();
+
+      if (response.ok && data.twoFactorRequired) {
+        codeGroup.hidden = false;
+        const signupButton = document.getElementById("signupButton");
+        if (signupButton) signupButton.textContent = "Confirm email";
+        message.textContent = data.message || "Enter the code sent to your email.";
+        message.className = "mt-3 text-center text-success";
+        document.getElementById("signupCode")?.focus();
+        return;
+      }
 
       if (response.ok) {
         message.textContent = "Registration successful. Redirecting to login...";

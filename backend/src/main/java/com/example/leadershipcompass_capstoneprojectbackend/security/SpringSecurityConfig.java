@@ -65,7 +65,10 @@ public class SpringSecurityConfig {
                         // =================================================
                         .requestMatchers(
                                 "/api/auth/register",
-                                "/api/auth/login"
+                                "/api/auth/login",
+                                "/api/auth/verify-signup",
+                                "/api/auth/forgot-password",
+                                "/api/auth/reset-password"
                         ).permitAll()
 
                         // One-click and link unsubscribe from plan emails.

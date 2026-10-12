@@ -6,8 +6,8 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 
 /**
- * Sends plan email through Microsoft 365 SMTP (smtp.office365.com, port 587, STARTTLS).
- * The mailbox username and app password come from the environment when TGG provides them.
+ * Sends email through SMTP (Gmail by default, or another host such as Microsoft 365).
+ * The mailbox username and app password come from the environment.
  */
 public class SmtpPlanMailTransport implements PlanMailTransport {
 
@@ -27,8 +27,10 @@ public class SmtpPlanMailTransport implements PlanMailTransport {
             helper.setTo(message.toAddress());
             helper.setSubject(message.subject());
             helper.setText(message.textBody(), message.htmlBody());
-            mimeMessage.setHeader("List-Unsubscribe", "<" + message.unsubscribeUrl() + ">");
-            mimeMessage.setHeader("List-Unsubscribe-Post", "List-Unsubscribe=One-Click");
+            if (message.unsubscribeUrl() != null && !message.unsubscribeUrl().isBlank()) {
+                mimeMessage.setHeader("List-Unsubscribe", "<" + message.unsubscribeUrl() + ">");
+                mimeMessage.setHeader("List-Unsubscribe-Post", "List-Unsubscribe=One-Click");
+            }
             mailSender.send(mimeMessage);
             return mimeMessage.getMessageID();
         } catch (RuntimeException ex) {

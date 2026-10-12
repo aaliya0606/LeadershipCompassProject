@@ -13,4 +13,7 @@ public class AuthResponse {
     private String role;
     private String message;
     private String tokenPreview;
+
+    /** True when sign-up was saved and the email confirmation code is still required. */
+    private boolean twoFactorRequired;
 }

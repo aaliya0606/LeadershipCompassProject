@@ -10,7 +10,7 @@ package com.example.leadershipcompass_capstoneprojectbackend.service;
  * @param subject        subject line
  * @param textBody       plain-text body, including the unsubscribe link
  * @param htmlBody       HTML body, including the unsubscribe link
- * @param unsubscribeUrl absolute URL the recipient can open to opt out
+ * @param unsubscribeUrl absolute URL the recipient can open to opt out, or null for account email
  */
 public record PlanMailMessage(
         String fromAddress,

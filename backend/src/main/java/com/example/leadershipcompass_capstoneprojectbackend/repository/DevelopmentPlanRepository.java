@@ -4,6 +4,7 @@ import com.example.leadershipcompass_capstoneprojectbackend.model.DevelopmentPla
 import java.util.List;
 import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 
 /**
  * Persistence access for generated {@link DevelopmentPlan} records.
@@ -37,4 +38,18 @@ public interface DevelopmentPlanRepository extends JpaRepository<DevelopmentPlan
      * @return plan when found for that user
      */
     Optional<DevelopmentPlan> findByIdAndUserId(Long id, Long userId);
+
+    /**
+     * Newest plan for each user. Older snapshots are ignored by the nudge job.
+     *
+     * @return one current plan per user who has a plan
+     */
+    @Query("""
+            SELECT plan FROM DevelopmentPlan plan
+            WHERE plan.generatedAt = (
+                SELECT MAX(newer.generatedAt) FROM DevelopmentPlan newer
+                WHERE newer.user.id = plan.user.id
+            )
+            """)
+    List<DevelopmentPlan> findLatestPerUser();
 }

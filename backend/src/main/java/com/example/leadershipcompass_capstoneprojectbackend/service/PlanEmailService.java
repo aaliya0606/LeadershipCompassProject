@@ -7,15 +7,13 @@ import com.example.leadershipcompass_capstoneprojectbackend.model.User;
 import com.example.leadershipcompass_capstoneprojectbackend.repository.DevelopmentPlanRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.ObjectProvider;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 /**
- * Sends plan emails through M365 SMTP or Graph when that transport is configured.
+ * Sends plan emails through the shared outbound mailer when it is configured.
  * Failures and a missing transport are recorded or skipped without failing plan generation.
  */
 @Service
@@ -26,26 +24,17 @@ public class PlanEmailService {
     private final DevelopmentPlanRepository developmentPlanRepository;
     private final EmailSendService emailSendService;
     private final EmailSubscriptionService emailSubscriptionService;
-    private final ObjectProvider<PlanMailTransport> mailTransport;
-    private final String mailFrom;
-    private final String mailFromName;
-    private final String replyTo;
+    private final OutboundMailService outboundMailService;
 
     public PlanEmailService(
             DevelopmentPlanRepository developmentPlanRepository,
             EmailSendService emailSendService,
             EmailSubscriptionService emailSubscriptionService,
-            ObjectProvider<PlanMailTransport> mailTransport,
-            @Value("${app.mail.from:no-reply@theguineagroup.com.au}") String mailFrom,
-            @Value("${app.mail.from-name:Leadership Compass}") String mailFromName,
-            @Value("${app.mail.reply-to:theteam@theguineagroup.com.au}") String replyTo) {
+            OutboundMailService outboundMailService) {
         this.developmentPlanRepository = developmentPlanRepository;
         this.emailSendService = emailSendService;
         this.emailSubscriptionService = emailSubscriptionService;
-        this.mailTransport = mailTransport;
-        this.mailFrom = mailFrom;
-        this.mailFromName = mailFromName;
-        this.replyTo = replyTo;
+        this.outboundMailService = outboundMailService;
     }
 
     /**
@@ -103,9 +92,8 @@ public class PlanEmailService {
         if (emailSendService.hasSent(planId, kind, weekNumber)) {
             return;
         }
-        PlanMailTransport transport = mailTransport.getIfAvailable();
-        if (transport == null) {
-            log.info("Skipping {} email for plan {} because M365 mail is not configured yet.", kind, planId);
+        if (!outboundMailService.isConfigured()) {
+            log.info("Skipping {} email for plan {} because mail is not configured.", kind, planId);
             return;
         }
         DevelopmentPlan plan = developmentPlanRepository.findById(planId)
@@ -122,23 +110,19 @@ public class PlanEmailService {
         String html = "<p>" + escape(intro) + "</p><p>" + escape(detail) + "</p>"
                 + "<p>You are receiving this because you have a Leadership Compass account. "
                 + "<a href=\"" + escape(unsubscribeUrl) + "\">Unsubscribe</a></p>";
-        PlanMailMessage message = new PlanMailMessage(
-                mailFrom,
-                mailFromName,
-                replyTo,
-                user.getEmail(),
-                subject,
-                text,
-                html,
-                unsubscribeUrl);
         try {
-            String providerMessageId = transport.send(message);
+            String providerMessageId = outboundMailService.send(
+                    user.getEmail(),
+                    subject,
+                    text,
+                    html,
+                    unsubscribeUrl);
             emailSendService.record(
                     plan,
                     kind,
                     weekNumber,
                     user.getEmail(),
-                    mailFrom,
+                    outboundMailService.fromAddress(),
                     subject,
                     EmailSendStatus.SENT,
                     providerMessageId,
@@ -150,7 +134,7 @@ public class PlanEmailService {
                     kind,
                     weekNumber,
                     user.getEmail(),
-                    mailFrom,
+                    outboundMailService.fromAddress(),
                     subject,
                     EmailSendStatus.FAILED,
                     null,

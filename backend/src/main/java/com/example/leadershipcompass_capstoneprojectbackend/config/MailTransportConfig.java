@@ -15,7 +15,7 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.web.client.RestClient;
 
 /**
- * Registers the M365 transport only when mail is enabled and credentials are present.
+ * Registers the SMTP or Graph transport only when mail is enabled and credentials are present.
  */
 @Configuration
 public class MailTransportConfig {
@@ -46,12 +46,12 @@ public class MailTransportConfig {
         return args -> {
             boolean enabled = env.getProperty("app.mail.enabled", Boolean.class, false);
             if (!enabled) {
-                log.info("Plan email is off until M365 SMTP or Graph credentials are configured.");
+                log.info("Outbound email is off until SMTP or Graph credentials are configured.");
                 return;
             }
             if (transport.getIfAvailable() == null) {
                 log.warn(
-                        "Plan email is enabled but {} credentials are incomplete, so sends will be skipped.",
+                        "Outbound email is enabled but {} credentials are incomplete, so sends will be skipped.",
                         env.getProperty("app.mail.provider", "smtp"));
             }
         };

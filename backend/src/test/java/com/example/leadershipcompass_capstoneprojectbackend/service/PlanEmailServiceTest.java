@@ -1,9 +1,9 @@
 package com.example.leadershipcompass_capstoneprojectbackend.service;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -20,7 +20,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.beans.factory.ObjectProvider;
 
 @ExtendWith(MockitoExtension.class)
 class PlanEmailServiceTest {
@@ -35,10 +34,7 @@ class PlanEmailServiceTest {
     private EmailSubscriptionService emailSubscriptionService;
 
     @Mock
-    private ObjectProvider<PlanMailTransport> mailTransport;
-
-    @Mock
-    private PlanMailTransport transport;
+    private OutboundMailService outboundMailService;
 
     private PlanEmailService planEmailService;
 
@@ -48,20 +44,17 @@ class PlanEmailServiceTest {
                 developmentPlanRepository,
                 emailSendService,
                 emailSubscriptionService,
-                mailTransport,
-                "no-reply@theguineagroup.com.au",
-                "Leadership Compass",
-                "theteam@theguineagroup.com.au");
+                outboundMailService);
     }
 
     @Test
     void skipsSendWhenMailIsNotConfigured() {
         when(emailSendService.hasSent(10L, EmailSendKind.WELCOME, 0)).thenReturn(false);
-        when(mailTransport.getIfAvailable()).thenReturn(null);
+        when(outboundMailService.isConfigured()).thenReturn(false);
 
         planEmailService.sendWelcome(10L);
 
-        verify(transport, never()).send(any());
+        verify(outboundMailService, never()).send(any(), any(), any(), any(), any());
         verify(emailSendService, never()).record(
                 any(), any(), anyInt(), any(), any(), any(), any(), any(), any());
     }
@@ -70,13 +63,13 @@ class PlanEmailServiceTest {
     void skipsSendWhenUserHasUnsubscribed() {
         DevelopmentPlan plan = plan();
         when(emailSendService.hasSent(10L, EmailSendKind.WELCOME, 0)).thenReturn(false);
-        when(mailTransport.getIfAvailable()).thenReturn(transport);
+        when(outboundMailService.isConfigured()).thenReturn(true);
         when(developmentPlanRepository.findById(10L)).thenReturn(Optional.of(plan));
         when(emailSubscriptionService.isOptedOut(plan.getUser())).thenReturn(true);
 
         planEmailService.sendWelcome(10L);
 
-        verify(transport, never()).send(any());
+        verify(outboundMailService, never()).send(any(), any(), any(), any(), any());
         verify(emailSendService, never()).record(
                 any(), any(), anyInt(), any(), any(), any(), any(), any(), any());
     }
@@ -85,22 +78,26 @@ class PlanEmailServiceTest {
     void sendsThroughConfiguredTransportAndRecordsMetadataOnly() {
         DevelopmentPlan plan = plan();
         when(emailSendService.hasSent(10L, EmailSendKind.WELCOME, 0)).thenReturn(false);
-        when(mailTransport.getIfAvailable()).thenReturn(transport);
+        when(outboundMailService.isConfigured()).thenReturn(true);
+        when(outboundMailService.fromAddress()).thenReturn("no-reply@theguineagroup.com.au");
         when(developmentPlanRepository.findById(10L)).thenReturn(Optional.of(plan));
         when(emailSubscriptionService.isOptedOut(plan.getUser())).thenReturn(false);
         when(emailSubscriptionService.unsubscribeUrl(plan.getUser()))
                 .thenReturn("http://localhost:8080/api/email/unsubscribe?token=abc");
-        when(transport.send(any())).thenReturn("provider-1");
+        when(outboundMailService.send(any(), any(), any(), any(), any())).thenReturn("provider-1");
 
         planEmailService.sendWelcome(10L);
 
-        ArgumentCaptor<PlanMailMessage> message = ArgumentCaptor.forClass(PlanMailMessage.class);
-        verify(transport).send(message.capture());
-        assertEquals("no-reply@theguineagroup.com.au", message.getValue().fromAddress());
-        assertEquals("theteam@theguineagroup.com.au", message.getValue().replyTo());
-        assertEquals("leader@example.com", message.getValue().toAddress());
-        assertTrue(message.getValue().textBody().contains("/api/email/unsubscribe?token=abc"));
-        assertTrue(message.getValue().htmlBody().contains("/api/email/unsubscribe?token=abc"));
+        ArgumentCaptor<String> text = ArgumentCaptor.forClass(String.class);
+        ArgumentCaptor<String> html = ArgumentCaptor.forClass(String.class);
+        verify(outboundMailService).send(
+                eq("leader@example.com"),
+                eq("Your 5-week Leadership Compass plan is ready"),
+                text.capture(),
+                html.capture(),
+                eq("http://localhost:8080/api/email/unsubscribe?token=abc"));
+        assertTrue(text.getValue().contains("/api/email/unsubscribe?token=abc"));
+        assertTrue(html.getValue().contains("/api/email/unsubscribe?token=abc"));
         verify(emailSendService).record(
                 plan,
                 EmailSendKind.WELCOME,

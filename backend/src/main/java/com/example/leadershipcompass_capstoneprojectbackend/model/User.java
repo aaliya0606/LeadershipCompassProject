@@ -8,6 +8,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import java.time.Instant;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -51,4 +52,31 @@ public class User {
     /** Secret used by the unsubscribe link. Null until the first email is prepared. */
     @Column(name = "unsubscribe_token", unique = true, length = 64)
     private String unsubscribeToken;
+
+    /** SHA-256 hex of the current password-reset token. Null when no reset is pending. */
+    @Column(name = "password_reset_token_hash", length = 64)
+    private String passwordResetTokenHash;
+
+    /** When the current password-reset token stops working. */
+    @Column(name = "password_reset_expires_at")
+    private Instant passwordResetExpiresAt;
+
+    /**
+     * False until the sign-up email code is confirmed. Null means the account
+     * was created before confirmation existed and can still sign in.
+     */
+    @Column(name = "email_verified")
+    private Boolean emailVerified;
+
+    /** SHA-256 hex of the current sign-up code. Null when no code is pending. */
+    @Column(name = "signup_code_hash", length = 64)
+    private String signupCodeHash;
+
+    /** When the current sign-up code stops working. */
+    @Column(name = "signup_code_expires_at")
+    private Instant signupCodeExpiresAt;
+
+    /** Failed attempts against the current sign-up code. */
+    @Column(name = "signup_code_attempts")
+    private Integer signupCodeAttempts;
 }

@@ -106,7 +106,12 @@
         </div>
         -->
 
-        <button type="submit" class="btn-login">Sign Up</button>
+        <div class="field-group" id="signupCodeGroup" hidden>
+            <label for="signupCode" class="field-label">Email code</label>
+            <input type="text" id="signupCode" class="field-input" inputmode="numeric" autocomplete="one-time-code" maxlength="6" placeholder="6-digit code" />
+        </div>
+
+        <button type="submit" class="btn-login" id="signupButton">Sign Up</button>
 
         <p id="registerMessage"></p>
 

@@ -6,7 +6,7 @@ import org.springframework.core.env.Environment;
 import org.springframework.core.type.AnnotatedTypeMetadata;
 
 /**
- * True only when plan email is switched on and the selected M365 provider has credentials.
+ * True only when outbound email is switched on and the selected provider has credentials.
  */
 public class ConfiguredMailCondition implements Condition {
 

@@ -14,4 +14,5 @@ build/
 
 # Environment files
 .env
+backend/config/local.properties
 .vscode/

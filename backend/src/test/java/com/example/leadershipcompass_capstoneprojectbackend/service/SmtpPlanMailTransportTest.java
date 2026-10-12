@@ -1,5 +1,6 @@
 package com.example.leadershipcompass_capstoneprojectbackend.service;
 
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -46,5 +47,28 @@ class SmtpPlanMailTransportTest {
         assertTrue(message.contains("List-Unsubscribe"));
         assertTrue(message.contains("List-Unsubscribe=One-Click"));
         assertTrue(message.contains("unsubscribe?token=abc"));
+    }
+
+    @Test
+    void omitsUnsubscribeHeadersWhenTheMessageHasNoUnsubscribeLink() throws Exception {
+        MimeMessage mimeMessage = new MimeMessage(Session.getInstance(new Properties()));
+        when(mailSender.createMimeMessage()).thenReturn(mimeMessage);
+        SmtpPlanMailTransport transport = new SmtpPlanMailTransport(mailSender);
+
+        transport.send(new PlanMailMessage(
+                "leader@gmail.com",
+                "Leadership Compass",
+                "theteam@theguineagroup.com.au",
+                "leader@example.com",
+                "Your sign-in code",
+                "Your code is 123456.",
+                "<p>Your code is 123456.</p>",
+                null));
+
+        verify(mailSender).send(mimeMessage);
+        ByteArrayOutputStream raw = new ByteArrayOutputStream();
+        mimeMessage.writeTo(raw);
+        String message = raw.toString(StandardCharsets.UTF_8);
+        assertFalse(message.contains("List-Unsubscribe"));
     }
 }
