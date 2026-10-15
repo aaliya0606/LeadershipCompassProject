@@ -381,8 +381,11 @@ async function loadProfile() {
     document.getElementById("firstName").value = firstName;
     document.getElementById("lastName").value = lastName;
     document.getElementById("email").value = user.email;
-    document.getElementById("username").value = user.username || "";
-    document.getElementById("phone").value = user.phone || "";
+
+    const roleField = document.getElementById("role");
+    if (roleField) {
+        roleField.value = user.role || "";
+    }
 
     // Show organisation and department fields for all users
     const organisationField = document.getElementById("organisationField");
@@ -482,13 +485,9 @@ async function changePassword(currentPassword, newPassword, confirmPassword) {
     }
 }
 
-const saveBtn = document.getElementById("saveBtn");
-
-if (saveBtn) {
+// Load profile if we're on the profile page (check for firstName field)
+if (document.getElementById("firstName")) {
     loadProfile().catch((error) => showProfileMessage(error.message, "error"));
-
-    saveBtn.addEventListener("click", saveProfile);
-    document.getElementById("cancelBtn").addEventListener("click", cancelProfileChanges);
 
     const signOutBtn = document.getElementById("signOutBtn");
     if (signOutBtn) signOutBtn.addEventListener("click", handleSignOut);
