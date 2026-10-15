@@ -42,6 +42,23 @@ function ordinal(n) {
   return n + (s[(v - 20) % 10] || s[v] || s[0]);
 }
 
+function wrapLabel(text, maxChars) {
+  const words = String(text).split(" ");
+  const lines = [];
+  let line = "";
+  words.forEach(word => {
+    const next = line ? line + " " + word : word;
+    if (next.length > maxChars && line) {
+      lines.push(line);
+      line = word;
+    } else {
+      line = next;
+    }
+  });
+  if (line) lines.push(line);
+  return lines;
+}
+
 
 /* =========================================================
    EMPTY STATES (NEW 30/09/26)
@@ -143,8 +160,17 @@ async function loadLeadershipRadar() {
             grid: { color: "#E5E8E8" },
             angleLines: { color: "rgba(0,40,75,0.15)" },
             pointLabels: {
-              font: { size: 11, family: "Montserrat, Arial, sans-serif" },
-              color: "#00284B"
+              padding: () => (window.innerWidth <= 960 ? 4 : 5),
+              font: () => ({
+                size: window.innerWidth <= 380 ? 9 : window.innerWidth <= 600 ? 10 : 11,
+                family: "Montserrat, Arial, sans-serif",
+                lineHeight: 1.15
+              }),
+              color: "#00284B",
+              callback: (label) => {
+                if (window.innerWidth > 960) return label;
+                return wrapLabel(label, window.innerWidth <= 600 ? 10 : 14);
+              }
             }
           }
         },
