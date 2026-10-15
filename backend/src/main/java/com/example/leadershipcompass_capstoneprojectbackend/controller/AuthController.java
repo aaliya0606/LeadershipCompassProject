@@ -14,6 +14,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
+import com.example.leadershipcompass_capstoneprojectbackend.dto.VerifyAdminLoginRequest;
 
 /**
  * REST controller responsible for handling authentication-related requests.
@@ -104,6 +105,41 @@ public class AuthController {
                     .body(new AuthResponse(null, null, ex.getReason(), null, true));
         }
     }
+
+    /**
+     * Completes two-factor authentication for TGG administrators.
+     *
+     * The administrator must first provide valid login credentials
+     * to receive a temporary challenge token and emailed code.
+     *
+     * This endpoint validates both values before issuing a JWT.
+     *
+     * @param request temporary challenge token and six-digit email code
+     * @return JWT authentication response when verification succeeds
+     */
+    @PostMapping("/verify-admin-login")
+    public ResponseEntity<AuthResponse> verifyAdminLogin(
+            @RequestBody VerifyAdminLoginRequest request) {
+
+        try {
+            return ResponseEntity.ok(
+                    authService.verifyAdminLoginCode(
+                            request.getChallengeToken(),
+                            request.getCode()));
+
+        } catch (ResponseStatusException ex) {
+
+            // Return a controlled error without exposing verification details.
+            return ResponseEntity.status(ex.getStatusCode())
+                    .body(new AuthResponse(
+                            null,
+                            null,
+                            ex.getReason(),
+                            null,
+                            true));
+        }
+    }
+
 
     /**
      * Asks for a password reset email. The response is the same whether or not the account exists.
