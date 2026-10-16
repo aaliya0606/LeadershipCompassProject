@@ -67,6 +67,7 @@ public class SpringSecurityConfig {
                                 "/api/auth/register",
                                 "/api/auth/login",
                                 "/api/auth/verify-signup",
+                                "/api/auth/verify-admin-login",
                                 "/api/auth/forgot-password",
                                 "/api/auth/reset-password"
                         ).permitAll()
@@ -151,6 +152,16 @@ public class SpringSecurityConfig {
                         .requestMatchers(
                                 "/api/dashboard/admin"
                         ).hasRole("TGG_ADMIN")
+                        /**
+                         * Allows administrators to submit their email verification code
+                         * before receiving an authentication JWT.
+                         *
+                         * The verification service still validates the temporary challenge
+                         * token, six-digit code, expiration and attempt limits.
+                         */
+                        .requestMatchers(
+                                "/api/auth/verify-admin-login")
+                                .permitAll()
 
                         // =================================================
                         // REPORTS

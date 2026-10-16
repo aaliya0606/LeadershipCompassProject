@@ -8,7 +8,7 @@ const BASE_URL = `${API_ROOT}/api/auth`;
 const API_URL = `${API_ROOT}/api`;
 
 function finishLogin(data, isAdminLogin, message) {
-    if (isAdminLogin && !["ADMIN", "TGG_ADMIN"].includes(data.role)) {
+    if (isAdminLogin && !["TGG_ADMIN"].includes(data.role)) {
         message.textContent = "This account does not have admin access.";
         message.className = "mt-3 text-center text-danger";
         return;
@@ -33,6 +33,14 @@ function finishLogin(data, isAdminLogin, message) {
         }
     }, 800);
 }
+
+/**
+ * Temporary administrator challenge token.
+ *
+ * Stored in JavaScript memory rather than localStorage.
+ * This token is not a JWT and cannot access protected endpoints.
+ */
+let pendingAdminChallengeToken = null;
 
 // LOGIN
 const loginForm = document.getElementById("loginForm");
@@ -63,16 +71,130 @@ if (loginForm) {
             const data = await response.json();
 
             if (response.ok && data.token) {
-                finishLogin(data, isAdminLogin, message);
-            } else {
-                message.textContent = data.message || "Login failed.";
-                message.className = "mt-3 text-center text-danger";
-            }
+            // Regular users continue using the existing login process.
+            finishLogin(data, isAdminLogin, message);
+
+        } else if (
+            response.ok &&
+            isAdminLogin &&
+            data.twoFactorRequired &&
+            data.challengeToken &&
+            data.role === "TGG_ADMIN"
+        ) {
+            /*
+            * The administrator's password was accepted.
+            * Store the temporary challenge token in memory only.
+            * Do not store a JWT or grant dashboard access yet.
+            */
+            pendingAdminChallengeToken = data.challengeToken;
+
+            loginForm.hidden = true;
+
+            const verificationForm =
+                document.getElementById("adminVerificationForm");
+
+            verificationForm.hidden = false;
+
+            document.getElementById("adminVerificationCode").focus();
+
+        } else {
+            message.textContent = data.message || "Login failed.";
+            message.className = "mt-3 text-center text-danger";
+        }
+
+
+
+
         } catch (error) {
             message.textContent = "Cannot connect to backend.";
             message.className = "mt-3 text-center text-danger";
         }
     });
+}
+
+/**
+ * Completes TGG administrator two-factor authentication.
+ *
+ * Submits the temporary challenge token and emailed six-digit code.
+ * The administrator receives a JWT only after successful verification.
+ */
+const adminVerificationForm =
+    document.getElementById("adminVerificationForm");
+
+if (adminVerificationForm) {
+
+    adminVerificationForm.addEventListener("submit", async function (event) {
+        event.preventDefault();
+
+        const code = document
+            .getElementById("adminVerificationCode")
+            .value.trim();
+
+        const message =
+            document.getElementById("adminVerificationMessage");
+
+        if (!pendingAdminChallengeToken || !/^\d{6}$/.test(code)) {
+            message.textContent = "Enter a valid six-digit code.";
+            return;
+        }
+
+        try {
+            const response = await fetch(
+                `${BASE_URL}/verify-admin-login`,
+                {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        challengeToken: pendingAdminChallengeToken,
+                        code: code
+                    })
+                }
+            );
+
+            const data = await response.json();
+
+            if (
+                response.ok &&
+                data.token &&
+                data.role === "TGG_ADMIN"
+            ) {
+                // Remove the pending challenge from browser memory.
+                pendingAdminChallengeToken = null;
+
+                // Reuse the existing login and redirect functionality.
+                finishLogin(data, true, message);
+
+            } else {
+                message.textContent =
+                    data.message || "Invalid or expired verification code.";
+
+                message.className = "mt-3 text-center text-danger";
+            }
+
+        } catch (error) {
+            message.textContent = "Cannot connect to backend.";
+            message.className = "mt-3 text-center text-danger";
+        }
+    });
+
+    /**
+     * Cancels the current verification screen.
+     * Returning to login requires a new password authentication.
+     */
+    document.getElementById("backToAdminLogin")
+        .addEventListener("click", function () {
+
+            pendingAdminChallengeToken = null;
+
+            adminVerificationForm.reset();
+            adminVerificationForm.hidden = true;
+
+            document.getElementById("loginForm").hidden = false;
+            document.getElementById("loginPassword").value = "";
+            document.getElementById("loginMessage").textContent = "";
+        });
 }
 
 const forgotPasswordForm = document.getElementById("forgotPasswordForm");

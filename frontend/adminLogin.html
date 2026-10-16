@@ -59,6 +59,49 @@
             <a href="startup.html" class="adminreturn-btn">return</a>
         </div>
     </form>
+    <!--
+    TGG administrator email verification.
+    Hidden until the administrator's password has been validated.
+    No JWT is issued until this form is successfully submitted.
+    -->
+    <form class="login-form" id="adminVerificationForm" hidden>
+        <h2 class="signin-title">Verify Your Login</h2>
+
+        <p>
+            We've sent a six-digit verification code to your
+            registered administrator email address.
+        </p>
+
+        <div class="field-group">
+            <label for="adminVerificationCode" class="field-label">
+                Verification Code
+            </label>
+
+            <input
+                type="text"
+                id="adminVerificationCode"
+                class="field-input"
+                placeholder="Enter six-digit code"
+                inputmode="numeric"
+                autocomplete="one-time-code"
+                maxlength="6"
+                pattern="[0-9]{6}"
+                required
+            />
+        </div>
+
+        <button type="submit" class="btn-login">
+            Verify & Sign In
+        </button>
+
+        <p id="adminVerificationMessage" aria-live="polite"></p>
+
+        <div class="bottom-links">
+            <button type="button" id="backToAdminLogin" class="btn-login">
+                Back to Login
+            </button>
+        </div>
+    </form>
 </div>
 
 <script src="static/js/auth.js"></script>

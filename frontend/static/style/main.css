@@ -912,6 +912,11 @@ html, body {
     position: relative;
 }
 
+/* Ensure inactive authentication forms are not displayed. */
+[hidden] {
+    display: none !important;
+}
+
 /* sign-up page */
 .sign-up {
     display: flex;
